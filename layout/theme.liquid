@@ -1,121 +1,91 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<!--
-  --------------------------------------------------------------------
-  #  Eclipse v4.0.0
-  #  Documentation: https://help.fluorescent.co/eclipse
-  #  Purchase: https://themes.shopify.com/themes/eclipse
-  #  A product by Fluorescent: https://fluorescent.co/
-  --------------------------------------------------------------------
--->
+  <title>{{ page_title }}{% unless page_title contains shop.name %} — {{ shop.name }}{% endunless %}</title>
 
-{% liquid
-  if settings.corner_rounding_card > 0
-    assign cards_are_rounded = true
-  else
-    assign cards_are_rounded = false
-  endif
+  {% if page_description %}
+    <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
 
-  if settings.corner_rounding_image_thumbnail > 0
-    assign image_thumbnails_are_rounded = true
-  else
-    assign image_thumbnails_are_rounded = false
-  endif
-%}
+  {{ 'enigma-base.css' | asset_url | stylesheet_tag }}
+  {{ 'enigma-animations.css' | asset_url | stylesheet_tag }}
 
-<html class="no-js" lang="{{ request.locale.iso_code }}">
-  <head>
-    {%- liquid
-      render 'standard-page-meta'
-      render 'standard-link-elements'
-      render 'standard-title-tag'
-      render 'social-meta-tags'
+  {{ content_for_header }}
 
-      # TODO: Investigate the order of these - does setup happen first so that the document classes
-      # can be dealt with as soon as possible? We're thinking that setting vars should be first so
-      # that fonts can be handled right away and poossibly avoid a flash.
-      #
-      # We might need to break things up in addition to reordering.
-      render 'theme-setup'
-      render 'theme-setting-vars'
-      render 'theme-globals'
+  {%- liquid
+    assign body_font = settings.body_font
+    assign heading_font = settings.heading_font
+  -%}
 
-      if request.design_mode
-        render 'inline-scripts', load_all: true
-      endif
+  <style>
+    :root {
+      --color-bg: #0a0a0a;
+      --color-bg-secondary: #111111;
+      --color-bg-card: rgba(255, 255, 255, 0.03);
+      --color-border: rgba(255, 255, 255, 0.08);
+      --color-text: #ffffff;
+      --color-text-muted: rgba(255, 255, 255, 0.5);
+      --color-text-subtle: rgba(255, 255, 255, 0.3);
+      --color-accent: #14b8a6;
+      --color-accent-hover: #0d9488;
+      --color-accent-glow: rgba(20, 184, 166, 0.15);
+      --color-accent-bright: #2dd4bf;
+      --color-success: #10b981;
+      --color-glass: rgba(255, 255, 255, 0.05);
+      --color-glass-border: rgba(255, 255, 255, 0.1);
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-heading: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-      echo content_for_header
-    -%}
-          <link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-/>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <!-- Enigma Custom Theme CSS -->
-    {{ 'enigma.css' | asset_url | stylesheet_tag }}
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
 
-      <!-- Google Tag Manager -->
-      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      
-      })(window,document,'script','dataLayer','GTM-WP3HWH4W');</script>
-  </head>
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; height: auto; display: block; }
+    button { font-family: inherit; cursor: pointer; }
 
-  <body class="template-{{ request.page_type | handle }} image-thumbnails-are-rounded--{{ image_thumbnails_are_rounded }} cards-are-rounded--{{ cards_are_rounded }}">
-    <a href="#main" class="header__skip-to-content btn btn--style-outline" tabindex="1">
-      {{ 'general.accessibility.skip_to_content' | t }}
-    </a>
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
 
-    <div class="page">
-      {% if settings.enable_page_transitions -%}
-        {% render 'page-transition-overlay' %}
-      {%- endif %}
+    @media (min-width: 768px) {
+      .container { padding: 0 40px; }
+    }
+  </style>
 
-      {% sections 'header-group' %}
-      {% sections 'overlay-group' %}
+  {% comment %} Google Fonts — Inter {% endcomment %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
+</head>
 
-      <div class="header-overlay" data-header-overlay>
-        <div class="header-overlay__inner"></div>
-      </div>
+<body>
+  {% section 'header' %}
 
-      <main id="main" class="main">
-        {{ content_for_layout }}
-      </main>
+  <main id="main-content" role="main">
+    {{ content_for_layout }}
+  </main>
 
-      {% sections 'footer-group' %}
+  {% section 'footer' %}
 
-      {% render 'flash-alert' %}
-
-      {%- render 'enigma-cart-drawer' -%}
-    </div>
-  </body>
-
-  <script defer="defer" src="{{ 'global-disclosure.js' | asset_url }}"></script>
-  <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP3HWH4W"
-
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-  {%- comment -%}
-    Suggested approach to defer non-critical CSS.
-      - https://web.dev/articles/defer-non-critical-css
-  {%- endcomment -%}
-  <link
-    rel="preload"
-    fetchpriority="low"
-    href="{{ 'theme-deferred.css' | asset_url }}"
-    as="style"
-    onload="this.onload=null;this.rel='stylesheet'"
-  >
-  <noscript><link rel="stylesheet" href="{{ 'theme-deferred.css' | asset_url }}"></noscript>
+  {{ 'enigma-app.js' | asset_url | script_tag }}
+</body>
 </html>

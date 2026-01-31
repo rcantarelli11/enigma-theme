@@ -1,0 +1,591 @@
+<section class="cycle-hero">
+  <div class="cycle-hero__bg">
+    <div class="cycle-hero__gradient"></div>
+    <div class="cycle-hero__noise"></div>
+  </div>
+
+  <div class="container">
+    <div class="cycle-hero__layout">
+      <!-- Left: Copy -->
+      <div class="cycle-hero__copy" data-animate="fade-up">
+        <span class="cycle-hero__badge" data-animate="fade-up" data-delay="100">The Performance System</span>
+        <h1 class="cycle-hero__title" data-animate="fade-up" data-delay="200">
+          {{ section.settings.heading | default: 'The Complete Performance Cycle' }}
+        </h1>
+        <p class="cycle-hero__subtitle" data-animate="fade-up" data-delay="300">
+          {{ section.settings.subheading | default: '5 phases. One cycle. Everything your body needs — from first rep to full recovery.' }}
+        </p>
+        <div class="cycle-hero__actions" data-animate="fade-up" data-delay="400">
+          <a href="{{ section.settings.button_link | default: '/collections/all' }}" class="btn btn-primary btn-lg">
+            {{ section.settings.button_text | default: 'Shop The Cycle' }}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="{{ section.settings.secondary_link | default: '#cycle-breakdown' }}" class="btn btn-ghost btn-lg">
+            {{ section.settings.secondary_text | default: 'Explore Each Phase' }}
+          </a>
+        </div>
+      </div>
+
+      <!-- Right: Cycle Visualization -->
+      <div class="cycle-hero__visual" data-animate="fade-up" data-delay="300">
+        <div class="cycle-wheel" id="cycleWheel">
+          <!-- SVG Circle Ring -->
+          <svg class="cycle-wheel__ring" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background ring -->
+            <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+            <!-- Animated glow ring -->
+            <circle cx="250" cy="250" r="200" fill="none" stroke="url(#tealGrad)" stroke-width="2" stroke-dasharray="1257" stroke-dashoffset="1257" class="cycle-wheel__progress"/>
+            <!-- Connector lines between nodes -->
+            <path class="cycle-wheel__path" d="M250,50 L432,155 L432,345 L250,450 L68,345 L68,155 Z" fill="none" stroke="rgba(20,184,166,0.1)" stroke-width="1"/>
+            <defs>
+              <radialGradient id="nodeGlow">
+                <stop offset="0%" stop-color="rgba(20,184,166,0.4)"/>
+                <stop offset="100%" stop-color="rgba(20,184,166,0)"/>
+              </radialGradient>
+              <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#14b8a6"/>
+                <stop offset="50%" stop-color="#2dd4bf"/>
+                <stop offset="100%" stop-color="#14b8a6"/>
+              </linearGradient>
+            </defs>
+          </svg>
+
+          <!-- Phase Nodes — positioned absolutely around the circle -->
+          {% assign phases = "Energy,Hydration,Protein,Creatine,Recovery" | split: "," %}
+          {% assign icons = "⚡,💧,🥛,💪,🧘" | split: "," %}
+          {% assign angles = "270,342,54,126,198" | split: "," %}
+
+          {% for phase in phases %}
+            {% assign idx = forloop.index0 %}
+            <button class="cycle-node" data-phase="{{ idx }}" data-angle="{{ angles[idx] }}"
+              style="--angle: {{ angles[idx] }}deg;"
+              aria-label="{{ phase }} phase">
+              <span class="cycle-node__glow"></span>
+              <span class="cycle-node__icon">{{ icons[idx] }}</span>
+              <span class="cycle-node__label">{{ phase }}</span>
+            </button>
+          {% endfor %}
+
+          <!-- Center content — changes on hover/active -->
+          <div class="cycle-wheel__center" id="cycleCenter">
+            <div class="cycle-center__default">
+              <svg class="cycle-center__logo" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="23" stroke="rgba(20,184,166,0.3)" stroke-width="1"/>
+                <text x="24" y="28" text-anchor="middle" fill="#2dd4bf" font-family="Playfair Display" font-size="16" font-weight="700">E</text>
+              </svg>
+              <span class="cycle-center__text">The Cycle</span>
+            </div>
+            <div class="cycle-center__detail" id="cycleDetail" aria-hidden="true">
+              <span class="cycle-detail__icon" id="detailIcon"></span>
+              <span class="cycle-detail__name" id="detailName"></span>
+              <span class="cycle-detail__desc" id="detailDesc"></span>
+            </div>
+          </div>
+
+          <!-- Animated particles -->
+          <div class="cycle-wheel__particles" id="cycleParticles"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cycle-hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 0 80px;
+    overflow: hidden;
+  }
+
+  .cycle-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .cycle-hero__gradient {
+    position: absolute;
+    top: 50%;
+    right: -10%;
+    transform: translateY(-50%);
+    width: 900px;
+    height: 900px;
+    background: radial-gradient(circle, rgba(20, 184, 166, 0.08) 0%, transparent 70%);
+    animation: cycle-pulse 10s ease-in-out infinite;
+  }
+
+  .cycle-hero__noise {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 30% 40%, rgba(20, 184, 166, 0.04) 0%, transparent 50%),
+      radial-gradient(circle at 70% 60%, rgba(20, 184, 166, 0.03) 0%, transparent 50%);
+  }
+
+  @keyframes cycle-pulse {
+    0%, 100% { opacity: 0.6; transform: translateY(-50%) scale(1); }
+    50% { opacity: 1; transform: translateY(-50%) scale(1.05); }
+  }
+
+  .cycle-hero__layout {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  @media (min-width: 960px) {
+    .cycle-hero__layout {
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+  }
+
+  /* Copy */
+  .cycle-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: rgba(20, 184, 166, 0.08);
+    border: 1px solid rgba(20, 184, 166, 0.15);
+    border-radius: 100px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    font-family: var(--font-body);
+    color: var(--color-accent-bright);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .cycle-hero__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+
+  .cycle-hero__subtitle {
+    margin-top: 24px;
+    font-size: clamp(1rem, 1.8vw, 1.2rem);
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    max-width: 480px;
+    font-weight: 300;
+  }
+
+  .cycle-hero__actions {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    font-family: var(--font-body);
+    border: none;
+    border-radius: var(--radius);
+    transition: all var(--transition);
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .btn-lg { padding: 16px 36px; }
+
+  .btn-primary {
+    background: var(--color-accent);
+    color: white;
+    box-shadow: 0 0 30px rgba(20, 184, 166, 0.2), 0 0 60px rgba(20, 184, 166, 0.1);
+  }
+
+  .btn-primary:hover {
+    background: var(--color-accent-hover);
+    box-shadow: 0 0 40px rgba(20, 184, 166, 0.3), 0 0 80px rgba(20, 184, 166, 0.15);
+    transform: translateY(-2px);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+  }
+
+  .btn-ghost:hover {
+    color: var(--color-text);
+    border-color: rgba(20, 184, 166, 0.3);
+    background: rgba(20, 184, 166, 0.05);
+  }
+
+  /* Cycle Wheel */
+  .cycle-wheel {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1;
+    margin: 0 auto;
+  }
+
+  .cycle-wheel__ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .cycle-wheel__progress {
+    animation: ring-draw 3s ease-out 0.5s forwards;
+  }
+
+  @keyframes ring-draw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Phase Nodes */
+  .cycle-node {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 2;
+    /* Position using CSS custom property --angle */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle)));
+  }
+
+  @media (max-width: 600px) {
+    .cycle-node {
+      width: 64px;
+      height: 64px;
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-140px) rotate(calc(-1 * var(--angle)));
+    }
+  }
+
+  .cycle-node__glow {
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(20, 184, 166, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .cycle-node:hover .cycle-node__glow,
+  .cycle-node.active .cycle-node__glow {
+    opacity: 1;
+  }
+
+  .cycle-node__icon {
+    font-size: 1.75rem;
+    line-height: 1;
+    filter: grayscale(0.3);
+    transition: all 0.3s ease;
+  }
+
+  .cycle-node:hover .cycle-node__icon,
+  .cycle-node.active .cycle-node__icon {
+    filter: grayscale(0);
+    transform: scale(1.15);
+  }
+
+  .cycle-node__label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    font-family: var(--font-body);
+    color: var(--color-text-muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+  }
+
+  .cycle-node:hover .cycle-node__label,
+  .cycle-node.active .cycle-node__label {
+    color: var(--color-accent-bright);
+  }
+
+  /* Center */
+  .cycle-wheel__center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 1;
+  }
+
+  .cycle-center__default {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    transition: opacity 0.3s ease;
+  }
+
+  .cycle-center__text {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .cycle-center__detail {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cycle-center__detail.visible {
+    display: flex;
+  }
+
+  .cycle-detail__icon {
+    font-size: 2rem;
+  }
+
+  .cycle-detail__name {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .cycle-detail__desc {
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+    max-width: 160px;
+    line-height: 1.4;
+  }
+
+  /* Animated sequence glow */
+  .cycle-node[data-phase="0"] { animation: node-reveal 0.6s ease 0.8s both; }
+  .cycle-node[data-phase="1"] { animation: node-reveal 0.6s ease 1.0s both; }
+  .cycle-node[data-phase="2"] { animation: node-reveal 0.6s ease 1.2s both; }
+  .cycle-node[data-phase="3"] { animation: node-reveal 0.6s ease 1.4s both; }
+  .cycle-node[data-phase="4"] { animation: node-reveal 0.6s ease 1.6s both; }
+
+  @keyframes node-reveal {
+    from { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-180px) rotate(calc(-1 * var(--angle))) scale(0.5); }
+    to { opacity: 1; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle))) scale(1); }
+  }
+
+  @media (max-width: 600px) {
+    @keyframes node-reveal {
+      from { opacity: 0; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-120px) rotate(calc(-1 * var(--angle))) scale(0.5); }
+      to { opacity: 1; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-140px) rotate(calc(-1 * var(--angle))) scale(1); }
+    }
+  }
+
+  /* Sequential auto-highlight */
+  .cycle-node.auto-active .cycle-node__glow { opacity: 1; }
+  .cycle-node.auto-active .cycle-node__icon { filter: grayscale(0); transform: scale(1.2); }
+  .cycle-node.auto-active .cycle-node__label { color: var(--color-accent-bright); }
+
+  /* Particles */
+  .cycle-wheel__particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .cycle-particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--color-accent-bright);
+    opacity: 0;
+    animation: particle-float 4s ease-in-out infinite;
+  }
+
+  @keyframes particle-float {
+    0% { opacity: 0; transform: translateY(0) scale(0); }
+    20% { opacity: 0.6; transform: translateY(-10px) scale(1); }
+    80% { opacity: 0.3; transform: translateY(-40px) scale(0.5); }
+    100% { opacity: 0; transform: translateY(-60px) scale(0); }
+  }
+
+  /* Mobile: stack with visual on top */
+  @media (max-width: 959px) {
+    .cycle-hero__layout {
+      text-align: center;
+    }
+    .cycle-hero__subtitle {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .cycle-hero__actions {
+      justify-content: center;
+    }
+    .cycle-hero__visual {
+      order: -1;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const phases = [
+      { name: 'Energy', icon: '⚡', desc: 'Fuel the session. Pre-workout ignition.' },
+      { name: 'Hydration', icon: '💧', desc: 'Sustain the work. Peak performance hydration.' },
+      { name: 'Protein', icon: '🥛', desc: 'Rebuild after. Premium whey protein.' },
+      { name: 'Creatine', icon: '💪', desc: 'Strengthen & repair. Pure creatine monohydrate.' },
+      { name: 'Recovery', icon: '🧘', desc: 'Rest & reset. Ashwagandha adaptogen.' }
+    ];
+
+    const nodes = document.querySelectorAll('.cycle-node');
+    const center = document.getElementById('cycleCenter');
+    const detail = document.getElementById('cycleDetail');
+    const detailIcon = document.getElementById('detailIcon');
+    const detailName = document.getElementById('detailName');
+    const detailDesc = document.getElementById('detailDesc');
+    const defaultCenter = center?.querySelector('.cycle-center__default');
+
+    let autoInterval;
+    let currentAuto = 0;
+    let userInteracting = false;
+
+    function showPhase(idx) {
+      if (!detail || !defaultCenter) return;
+      const phase = phases[idx];
+      detailIcon.textContent = phase.icon;
+      detailName.textContent = phase.name;
+      detailDesc.textContent = phase.desc;
+      detail.classList.add('visible');
+      detail.setAttribute('aria-hidden', 'false');
+      defaultCenter.style.display = 'none';
+    }
+
+    function hidePhase() {
+      if (!detail || !defaultCenter) return;
+      detail.classList.remove('visible');
+      detail.setAttribute('aria-hidden', 'true');
+      defaultCenter.style.display = '';
+    }
+
+    // Auto-cycle animation
+    function startAutoCycle() {
+      autoInterval = setInterval(function() {
+        if (userInteracting) return;
+        nodes.forEach(n => n.classList.remove('auto-active'));
+        nodes[currentAuto]?.classList.add('auto-active');
+        showPhase(currentAuto);
+        currentAuto = (currentAuto + 1) % 5;
+      }, 2500);
+    }
+
+    // Node interactions
+    nodes.forEach(function(node) {
+      const idx = parseInt(node.dataset.phase);
+
+      node.addEventListener('mouseenter', function() {
+        userInteracting = true;
+        nodes.forEach(n => n.classList.remove('auto-active'));
+        showPhase(idx);
+      });
+
+      node.addEventListener('mouseleave', function() {
+        userInteracting = false;
+        hidePhase();
+      });
+
+      node.addEventListener('click', function() {
+        userInteracting = true;
+        nodes.forEach(n => { n.classList.remove('active'); n.classList.remove('auto-active'); });
+        node.classList.add('active');
+        showPhase(idx);
+      });
+    });
+
+    // Spawn particles
+    const particleContainer = document.getElementById('cycleParticles');
+    if (particleContainer) {
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        p.className = 'cycle-particle';
+        p.style.left = (20 + Math.random() * 60) + '%';
+        p.style.top = (20 + Math.random() * 60) + '%';
+        p.style.animationDelay = (Math.random() * 4) + 's';
+        p.style.animationDuration = (3 + Math.random() * 3) + 's';
+        particleContainer.appendChild(p);
+      }
+    }
+
+    // Start auto-cycle after intro animations
+    setTimeout(startAutoCycle, 2500);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Cycle Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Complete Performance Cycle"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "5 phases. One cycle. Everything your body needs — from first rep to full recovery."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Primary Button",
+      "default": "Shop The Cycle"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Primary Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_text",
+      "label": "Secondary Button",
+      "default": "Explore Each Phase"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cycle Hero"
+    }
+  ]
+}
+{% endschema %}

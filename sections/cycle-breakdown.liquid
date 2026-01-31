@@ -1,0 +1,351 @@
+<section class="cycle-breakdown" id="cycle-breakdown">
+  {% for block in section.blocks %}
+    <div class="phase-section" data-phase="{{ forloop.index0 }}" data-animate="fade-up" {{ block.shopify_attributes }}>
+      <div class="container">
+        <div class="phase-section__layout {% if forloop.index0 == 1 or forloop.index0 == 3 %}phase-section--reversed{% endif %}">
+          <!-- Image -->
+          <div class="phase-section__media">
+            <div class="phase-section__img-wrap">
+              {% if block.settings.image %}
+                {{ block.settings.image | image_url: width: 800 | image_tag: class: 'phase-section__img', loading: 'lazy' }}
+              {% else %}
+                <div class="phase-section__placeholder">
+                  <span class="phase-section__placeholder-icon">{{ block.settings.icon }}</span>
+                </div>
+              {% endif %}
+              <div class="phase-section__img-glow"></div>
+            </div>
+          </div>
+
+          <!-- Copy -->
+          <div class="phase-section__content">
+            <div class="phase-section__phase-tag">
+              <span class="phase-tag__icon">{{ block.settings.icon }}</span>
+              <span class="phase-tag__label">Phase {{ forloop.index }} of 5</span>
+            </div>
+            <h2 class="phase-section__title">{{ block.settings.title }}</h2>
+            <p class="phase-section__desc">{{ block.settings.description }}</p>
+
+            {% if block.settings.features %}
+              <ul class="phase-section__features">
+                {% assign features = block.settings.features | split: '|' %}
+                {% for feature in features %}
+                  <li class="phase-feature">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    {{ feature | strip }}
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+
+            {% if block.settings.product %}
+              <a href="{{ block.settings.product.url }}" class="phase-section__cta">
+                Shop {{ block.settings.title }}
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase connector line -->
+      {% unless forloop.last %}
+        <div class="phase-connector">
+          <svg width="2" height="80" viewBox="0 0 2 80"><line x1="1" y1="0" x2="1" y2="80" stroke="rgba(20,184,166,0.15)" stroke-width="2" stroke-dasharray="4 4"/></svg>
+        </div>
+      {% endunless %}
+    </div>
+  {% endfor %}
+</section>
+
+<style>
+  .cycle-breakdown {
+    padding: 40px 0 80px;
+  }
+
+  .phase-section {
+    padding: 80px 0;
+    position: relative;
+  }
+
+  .phase-section__layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .phase-section__layout {
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+    }
+
+    .phase-section--reversed {
+      direction: rtl;
+    }
+
+    .phase-section--reversed > * {
+      direction: ltr;
+    }
+  }
+
+  /* Media */
+  .phase-section__media {
+    position: relative;
+  }
+
+  .phase-section__img-wrap {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    background: var(--color-bg-secondary);
+  }
+
+  .phase-section__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .phase-section__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-bg-secondary) 0%, rgba(20,184,166,0.05) 100%);
+  }
+
+  .phase-section__placeholder-icon {
+    font-size: 5rem;
+    opacity: 0.4;
+  }
+
+  .phase-section__img-glow {
+    position: absolute;
+    bottom: -20%;
+    left: 10%;
+    width: 80%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(20, 184, 166, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  /* Content */
+  .phase-section__content {
+    max-width: 480px;
+  }
+
+  .phase-section__phase-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .phase-tag__icon {
+    font-size: 1.5rem;
+  }
+
+  .phase-tag__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent-bright);
+    font-family: var(--font-body);
+  }
+
+  .phase-section__title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .phase-section__desc {
+    font-size: 1.0625rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .phase-section__features {
+    list-style: none;
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .phase-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9375rem;
+    color: var(--color-text-muted);
+  }
+
+  .phase-feature svg {
+    flex-shrink: 0;
+  }
+
+  .phase-section__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 32px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-accent-bright);
+    transition: all var(--transition);
+    font-family: var(--font-body);
+  }
+
+  .phase-section__cta:hover {
+    gap: 12px;
+    color: #fff;
+  }
+
+  /* Connector */
+  .phase-connector {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0 0;
+    opacity: 0.5;
+  }
+
+  /* Scroll animations */
+  .phase-section {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .phase-section.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.phase-section').forEach(function(el) {
+      observer.observe(el);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Cycle Breakdown",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "phase",
+      "name": "Phase",
+      "settings": [
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon Emoji",
+          "default": "⚡"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Phase Title",
+          "default": "Energy"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Fuel the session. Engineered for explosive energy without the crash."
+        },
+        {
+          "type": "text",
+          "id": "features",
+          "label": "Features (pipe separated)",
+          "default": "300mg natural caffeine|Zero artificial sweeteners|No jitters, no crash"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product Image"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cycle Breakdown",
+      "blocks": [
+        {
+          "type": "phase",
+          "settings": {
+            "icon": "⚡",
+            "title": "Energy",
+            "description": "Fuel the session. Engineered for explosive energy without the crash. Clean stimulants, laser focus, zero compromise.",
+            "features": "300mg natural caffeine|Zero artificial sweeteners|No jitters, no crash"
+          }
+        },
+        {
+          "type": "phase",
+          "settings": {
+            "icon": "💧",
+            "title": "Hydration",
+            "description": "Sustain the work. Electrolyte-rich hydration that keeps you performing at peak capacity through every set.",
+            "features": "Full electrolyte spectrum|Rapid absorption formula|Refreshing natural flavors"
+          }
+        },
+        {
+          "type": "phase",
+          "settings": {
+            "icon": "🥛",
+            "title": "Protein",
+            "description": "Rebuild after. Premium whey protein isolate that delivers clean, fast-absorbing protein exactly when your muscles need it.",
+            "features": "25g protein per serving|Whey isolate, minimal lactose|Smooth texture, no grit"
+          }
+        },
+        {
+          "type": "phase",
+          "settings": {
+            "icon": "💪",
+            "title": "Creatine",
+            "description": "Strengthen & repair. Pure creatine monohydrate for increased strength, power output, and faster recovery between sessions.",
+            "features": "5g pure creatine monohydrate|Micronized for absorption|Unflavored — mix with anything"
+          }
+        },
+        {
+          "type": "phase",
+          "settings": {
+            "icon": "🧘",
+            "title": "Recovery",
+            "description": "Rest & reset. Ashwagandha adaptogen complex that reduces cortisol, improves sleep quality, and prepares your body for the next cycle.",
+            "features": "KSM-66® Ashwagandha|Clinically-dosed adaptogens|Better sleep, lower stress"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
