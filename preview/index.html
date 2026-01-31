@@ -3,27 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Enigma — The Complete Performance Cycle</title>
+  <title>Enigma — The Complete Performance System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
   <style>
-    /* ========== DESIGN TOKENS ========== */
     :root {
       --color-bg: #0a0a0a;
       --color-bg-secondary: #111111;
       --color-bg-card: rgba(255, 255, 255, 0.03);
-      --color-border: rgba(255, 255, 255, 0.08);
-      --color-text: #ffffff;
-      --color-text-muted: rgba(255, 255, 255, 0.5);
-      --color-text-subtle: rgba(255, 255, 255, 0.3);
+      --color-border: rgba(255, 255, 255, 0.06);
+      --color-text: #f5f5f5;
+      --color-text-muted: rgba(245, 245, 245, 0.5);
+      --color-text-subtle: rgba(245, 245, 245, 0.3);
       --color-accent: #14b8a6;
       --color-accent-hover: #0d9488;
       --color-accent-glow: rgba(20, 184, 166, 0.15);
       --color-accent-bright: #2dd4bf;
       --color-success: #10b981;
-      --color-glass: rgba(255, 255, 255, 0.05);
-      --color-glass-border: rgba(255, 255, 255, 0.1);
+      --color-glass: rgba(255, 255, 255, 0.04);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
       --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --font-heading: 'Playfair Display', Georgia, serif;
       --radius: 12px;
@@ -32,7 +31,6 @@
       --ease-smooth: cubic-bezier(0.4, 0, 0, 1);
     }
 
-    /* ========== RESET & BASE ========== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -47,27 +45,33 @@
     .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
     @media (min-width: 768px) { .container { padding: 0 40px; } }
 
-    /* ========== SMOOTH SCROLL REVEAL SYSTEM ========== */
-    [data-reveal] {
-      opacity: 0;
-      will-change: transform, opacity;
-    }
+    /* ========== SCROLL REVEAL ========== */
+    [data-reveal] { opacity: 0; will-change: transform, opacity; }
     [data-reveal="up"] { transform: translateY(60px); }
     [data-reveal="down"] { transform: translateY(-60px); }
     [data-reveal="left"] { transform: translateX(-60px); }
     [data-reveal="right"] { transform: translateX(60px); }
     [data-reveal="scale"] { transform: scale(0.92); }
     [data-reveal="fade"] { transform: none; }
-
     [data-reveal].revealed {
       opacity: 1;
       transform: translateY(0) translateX(0) scale(1);
       transition: opacity 1s var(--ease-out), transform 1.2s var(--ease-out);
     }
-
-    /* Stagger children */
     [data-stagger] > [data-reveal].revealed {
       transition-delay: calc(var(--stagger-index, 0) * 120ms);
+    }
+
+    /* ========== ANNOUNCEMENT BAR ========== */
+    .announcement-bar {
+      background: rgba(20, 184, 166, 0.06);
+      border-bottom: 1px solid rgba(20, 184, 166, 0.08);
+      padding: 10px 0;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--color-accent-bright);
+      letter-spacing: 0.04em;
     }
 
     /* ========== HEADER ========== */
@@ -79,11 +83,7 @@
       border-bottom: 1px solid rgba(255,255,255,0.03);
       transition: all 0.5s var(--ease-smooth);
     }
-    .header.scrolled {
-      padding: 14px 0;
-      background: rgba(10, 10, 10, 0.85);
-      border-bottom-color: rgba(255,255,255,0.06);
-    }
+    .header.scrolled { padding: 14px 0; background: rgba(10, 10, 10, 0.85); }
     .header__inner { display: flex; align-items: center; justify-content: space-between; }
     .header__logo {
       font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700;
@@ -134,15 +134,13 @@
       box-shadow: 0 0 50px rgba(20,184,166,0.25), 0 8px 32px rgba(0,0,0,0.4);
       transform: translateY(-3px);
     }
-    .btn-primary:active { transform: translateY(-1px); }
     .btn-ghost {
       background: transparent; color: var(--color-text-muted);
       border: 1px solid var(--color-border);
     }
     .btn-ghost:hover {
-      color: var(--color-text);
-      border-color: rgba(20,184,166,0.3); background: rgba(20,184,166,0.05);
-      transform: translateY(-2px);
+      color: var(--color-text); border-color: rgba(20,184,166,0.3);
+      background: rgba(20,184,166,0.05); transform: translateY(-2px);
     }
 
     /* ========== CYCLE HERO ========== */
@@ -166,52 +164,37 @@
       0% { transform: translate(0, 0) scale(1); }
       100% { transform: translate(30px, -20px) scale(1.08); }
     }
-
-    /* Grain overlay */
     .cycle-hero__grain {
       position: absolute; inset: 0; opacity: 0.02;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-size: 128px; pointer-events: none;
+      pointer-events: none;
     }
-
     .cycle-hero__layout {
       position: relative; z-index: 1;
       display: grid; grid-template-columns: 1fr; gap: 60px; align-items: center;
     }
-    @media (min-width: 960px) {
-      .cycle-hero__layout { grid-template-columns: 1fr 1fr; gap: 80px; }
-    }
+    @media (min-width: 960px) { .cycle-hero__layout { grid-template-columns: 1fr 1fr; gap: 80px; } }
 
-    /* Hero copy with character-level animation feel */
     .cycle-hero__badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 10px 22px;
+      display: inline-flex; padding: 10px 22px;
       background: rgba(20,184,166,0.06); border: 1px solid rgba(20,184,166,0.12);
-      border-radius: 100px;
-      font-size: 0.75rem; font-weight: 600;
-      color: var(--color-accent-bright);
-      letter-spacing: 0.08em; text-transform: uppercase;
-      margin-bottom: 28px;
-      backdrop-filter: blur(8px);
+      border-radius: 100px; font-size: 0.75rem; font-weight: 600;
+      color: var(--color-accent-bright); letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 28px; backdrop-filter: blur(8px);
     }
     .cycle-hero__title {
       font-family: var(--font-heading);
       font-size: clamp(3rem, 5.5vw, 4.75rem);
       font-weight: 700; line-height: 1.02; letter-spacing: -0.02em;
     }
-    .cycle-hero__title .title-line {
-      display: block; overflow: hidden;
-    }
+    .cycle-hero__title .title-line { display: block; overflow: hidden; }
     .cycle-hero__title .title-line span {
-      display: inline-block;
-      transform: translateY(110%);
+      display: inline-block; transform: translateY(110%);
       animation: title-rise 1s var(--ease-out) forwards;
     }
     .cycle-hero__title .title-line:nth-child(2) span { animation-delay: 0.1s; }
     .cycle-hero__title .title-line:nth-child(3) span { animation-delay: 0.2s; }
-    @keyframes title-rise {
-      to { transform: translateY(0); }
-    }
+    @keyframes title-rise { to { transform: translateY(0); } }
 
     .cycle-hero__subtitle {
       margin-top: 28px;
@@ -229,7 +212,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ========== CYCLE WHEEL — Premium ========== */
+    /* ========== CYCLE WHEEL ========== */
     .cycle-wheel {
       position: relative; width: 100%; max-width: 520px;
       aspect-ratio: 1; margin: 0 auto;
@@ -239,31 +222,21 @@
       from { opacity: 0; transform: scale(0.85) rotate(-10deg); }
       to { opacity: 1; transform: scale(1) rotate(0deg); }
     }
-
     .cycle-wheel__ring { position: absolute; inset: 0; width: 100%; height: 100%; }
-
-    /* Orbiting dot on the ring */
     .cycle-orbit-dot {
       position: absolute; top: 50%; left: 50%; width: 6px; height: 6px;
       margin: -3px 0 0 -3px; border-radius: 50%;
       background: var(--color-accent-bright);
       box-shadow: 0 0 12px var(--color-accent-bright), 0 0 30px rgba(20,184,166,0.3);
+      offset-path: circle(200px); offset-distance: 0%;
       animation: orbit 8s linear infinite;
-      transform-origin: 0 0;
-      offset-path: circle(200px);
-      offset-distance: 0%;
     }
-    @keyframes orbit {
-      to { offset-distance: 100%; }
-    }
-
+    @keyframes orbit { to { offset-distance: 100%; } }
     .cycle-wheel__progress {
       stroke-dasharray: 1257; stroke-dashoffset: 1257;
       animation: ring-draw 2.5s var(--ease-out) 0.6s forwards;
     }
     @keyframes ring-draw { to { stroke-dashoffset: 0; } }
-
-    /* Connecting lines animate */
     .cycle-wheel__connections line {
       stroke-dasharray: 200; stroke-dashoffset: 200;
       animation: line-draw 1.5s var(--ease-out) forwards;
@@ -283,52 +256,40 @@
       transition: all 0.5s var(--ease-out); z-index: 2;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle)));
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.04);
     }
     @media (max-width: 600px) {
-      .cycle-node {
-        width: 68px; height: 68px;
+      .cycle-node { width: 68px; height: 68px;
         transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-145px) rotate(calc(-1 * var(--angle)));
       }
     }
     .cycle-node__glow {
       position: absolute; inset: -16px; border-radius: 50%;
       background: radial-gradient(circle, rgba(20,184,166,0.3) 0%, transparent 70%);
-      opacity: 0; transition: opacity 0.5s var(--ease-out);
-      filter: blur(4px);
+      opacity: 0; transition: opacity 0.5s var(--ease-out); filter: blur(4px);
     }
     .cycle-node:hover .cycle-node__glow,
     .cycle-node.active .cycle-node__glow,
     .cycle-node.auto-active .cycle-node__glow { opacity: 1; }
-
     .cycle-node:hover, .cycle-node.active, .cycle-node.auto-active {
-      background: rgba(20,184,166,0.08);
-      border-color: rgba(20,184,166,0.2);
+      background: rgba(20,184,166,0.08); border-color: rgba(20,184,166,0.2);
       box-shadow: 0 0 40px rgba(20,184,166,0.15);
     }
-
     .cycle-node__icon {
       font-size: 1.75rem; line-height: 1;
-      transition: all 0.5s var(--ease-out);
-      filter: grayscale(0.4) brightness(0.8);
+      transition: all 0.5s var(--ease-out); filter: grayscale(0.4) brightness(0.8);
     }
     .cycle-node:hover .cycle-node__icon,
     .cycle-node.active .cycle-node__icon,
-    .cycle-node.auto-active .cycle-node__icon {
-      filter: grayscale(0) brightness(1); transform: scale(1.2);
-    }
+    .cycle-node.auto-active .cycle-node__icon { filter: grayscale(0) brightness(1); transform: scale(1.2); }
     .cycle-node__label {
-      font-size: 0.625rem; font-weight: 600;
-      color: var(--color-text-subtle);
+      font-size: 0.625rem; font-weight: 600; color: var(--color-text-subtle);
       letter-spacing: 0.06em; text-transform: uppercase;
       transition: color 0.4s; white-space: nowrap;
     }
     .cycle-node:hover .cycle-node__label,
     .cycle-node.active .cycle-node__label,
     .cycle-node.auto-active .cycle-node__label { color: var(--color-accent-bright); }
-
-    /* Staggered entrance */
     .cycle-node { opacity: 0; }
     .cycle-node[data-phase="0"] { animation: node-pop 0.8s var(--ease-out) 0.9s both; }
     .cycle-node[data-phase="1"] { animation: node-pop 0.8s var(--ease-out) 1.05s both; }
@@ -345,56 +306,37 @@
         to { opacity: 1; transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-145px) rotate(calc(-1 * var(--angle))) scale(1); }
       }
     }
-
-    /* Center hub */
     .cycle-wheel__center {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       text-align: center; z-index: 1; width: 140px; height: 140px;
       display: flex; align-items: center; justify-content: center;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(20,184,166,0.04) 0%, transparent 70%);
+      border-radius: 50%; background: radial-gradient(circle, rgba(20,184,166,0.04) 0%, transparent 70%);
       border: 1px solid rgba(20,184,166,0.06);
     }
     .cycle-center__default {
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       transition: all 0.5s var(--ease-out);
     }
-    .cycle-center__text {
-      font-family: var(--font-heading); font-size: 0.875rem;
-      color: var(--color-text-subtle); font-style: italic;
-    }
+    .cycle-center__text { font-family: var(--font-heading); font-size: 0.875rem; color: var(--color-text-subtle); font-style: italic; }
     .cycle-center__detail {
       position: absolute; display: flex; flex-direction: column; align-items: center; gap: 4px;
-      opacity: 0; transform: scale(0.9);
-      transition: all 0.4s var(--ease-out); pointer-events: none;
+      opacity: 0; transform: scale(0.9); transition: all 0.4s var(--ease-out); pointer-events: none;
     }
-    .cycle-center__detail.visible {
-      opacity: 1; transform: scale(1); pointer-events: auto;
-    }
+    .cycle-center__detail.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
     .cycle-detail__icon { font-size: 1.75rem; }
-    .cycle-detail__name {
-      font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; color: #fff;
-    }
-    .cycle-detail__desc {
-      font-size: 0.75rem; color: var(--color-text-muted); max-width: 130px; line-height: 1.4;
-    }
-
-    /* Floating particles */
+    .cycle-detail__name { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; }
+    .cycle-detail__desc { font-size: 0.7rem; color: var(--color-text-muted); max-width: 130px; line-height: 1.4; }
     .cycle-wheel__particles { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-    .cycle-particle {
-      position: absolute; border-radius: 50%;
-      background: var(--color-accent-bright); opacity: 0;
+    .cycle-particle { position: absolute; border-radius: 50%; background: var(--color-accent-bright); opacity: 0; }
+    .cycle-particle--sm { width: 2px; height: 2px; animation: pdrift 6s ease-in-out infinite; }
+    .cycle-particle--md { width: 3px; height: 3px; animation: pdrift 5s ease-in-out infinite; }
+    .cycle-particle--lg { width: 4px; height: 4px; animation: pdrift 7s ease-in-out infinite; box-shadow: 0 0 8px var(--color-accent-bright); }
+    @keyframes pdrift {
+      0% { opacity: 0; transform: translate(0,0) scale(0); }
+      15% { opacity: 0.5; transform: translate(5px,-15px) scale(1); }
+      85% { opacity: 0.15; transform: translate(-10px,-50px) scale(0.6); }
+      100% { opacity: 0; transform: translate(-5px,-65px) scale(0); }
     }
-    .cycle-particle--sm { width: 2px; height: 2px; animation: particle-drift 6s ease-in-out infinite; }
-    .cycle-particle--md { width: 3px; height: 3px; animation: particle-drift 5s ease-in-out infinite; }
-    .cycle-particle--lg { width: 4px; height: 4px; animation: particle-drift 7s ease-in-out infinite; box-shadow: 0 0 8px var(--color-accent-bright); }
-    @keyframes particle-drift {
-      0% { opacity: 0; transform: translate(0, 0) scale(0); }
-      15% { opacity: 0.5; transform: translate(5px, -15px) scale(1); }
-      85% { opacity: 0.15; transform: translate(-10px, -50px) scale(0.6); }
-      100% { opacity: 0; transform: translate(-5px, -65px) scale(0); }
-    }
-
     @media (max-width: 959px) {
       .cycle-hero__layout { text-align: center; }
       .cycle-hero__subtitle { margin-left: auto; margin-right: auto; }
@@ -402,28 +344,39 @@
       .cycle-hero__visual { order: -1; max-width: 420px; margin: 0 auto; }
     }
 
+    /* ========== CYCLE INTRO ========== */
+    .cycle-intro {
+      padding: 120px 0 40px;
+      text-align: center;
+    }
+    .cycle-intro__title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 700; line-height: 1.1;
+      max-width: 700px; margin: 0 auto;
+    }
+    .cycle-intro__desc {
+      margin-top: 24px;
+      font-size: 1.0625rem; color: var(--color-text-muted);
+      line-height: 1.75; font-weight: 300;
+      max-width: 640px; margin-left: auto; margin-right: auto;
+    }
+
     /* ========== PHASE SECTIONS ========== */
     .cycle-breakdown { padding: 20px 0 60px; }
     .phase-section { padding: 100px 0; position: relative; }
-
-    .phase-section__layout {
-      display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center;
-    }
+    .phase-section__layout { display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; }
     @media (min-width: 768px) {
       .phase-section__layout { grid-template-columns: 1fr 1fr; gap: 100px; }
       .phase-section--reversed { direction: rtl; }
       .phase-section--reversed > * { direction: ltr; }
     }
-
-    /* Image with parallax wrapper */
-    .phase-section__media { position: relative; }
     .phase-section__img-wrap {
       position: relative; border-radius: var(--radius-lg); overflow: hidden;
       aspect-ratio: 4/5; background: var(--color-bg-secondary);
       transition: transform 0.8s var(--ease-out);
     }
     .phase-section__img-wrap:hover { transform: scale(1.02); }
-
     .phase-section__placeholder {
       width: 100%; height: 100%;
       display: flex; align-items: center; justify-content: center;
@@ -435,18 +388,13 @@
       background: linear-gradient(135deg, transparent 40%, rgba(20,184,166,0.06) 100%);
       animation: shimmer 3s ease-in-out infinite alternate;
     }
-    @keyframes shimmer {
-      0% { opacity: 0.3; } 100% { opacity: 0.8; }
-    }
+    @keyframes shimmer { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
     .phase-section__placeholder-icon { font-size: 5rem; opacity: 0.3; position: relative; z-index: 1; }
-
-    /* Glow that parallaxes */
     .phase-section__img-glow {
       position: absolute; bottom: -30%; left: 5%; width: 90%; height: 70%;
       background: radial-gradient(ellipse, rgba(20,184,166,0.08) 0%, transparent 70%);
       pointer-events: none; z-index: -1; filter: blur(20px);
     }
-
     .phase-section__content { max-width: 460px; }
     .phase-section__phase-tag { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 24px; }
     .phase-tag__icon { font-size: 1.5rem; }
@@ -454,13 +402,20 @@
       width: 28px; height: 28px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 0.6875rem; font-weight: 700;
-      border: 1px solid rgba(20,184,166,0.2);
-      color: var(--color-accent-bright);
+      border: 1px solid rgba(20,184,166,0.2); color: var(--color-accent-bright);
       background: rgba(20,184,166,0.06);
     }
     .phase-tag__label {
       font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--color-accent-bright);
+    }
+    .phase-tag__time {
+      font-size: 0.6875rem; color: var(--color-text-subtle);
+      font-weight: 400; letter-spacing: 0;
+      text-transform: none;
+      margin-left: 4px;
+      padding-left: 12px;
+      border-left: 1px solid var(--color-border);
     }
     .phase-section__title {
       font-family: var(--font-heading);
@@ -475,8 +430,7 @@
     }
     .phase-feature {
       display: flex; align-items: center; gap: 12px;
-      font-size: 0.9375rem; color: var(--color-text-muted);
-      transition: color 0.3s;
+      font-size: 0.9375rem; color: var(--color-text-muted); transition: color 0.3s;
     }
     .phase-feature:hover { color: var(--color-text); }
     .phase-feature__check {
@@ -484,8 +438,13 @@
       display: flex; align-items: center; justify-content: center;
       border-radius: 50%; background: rgba(20,184,166,0.1);
     }
+    .phase-section__transition {
+      margin-top: 36px; font-size: 0.8125rem; font-style: italic;
+      color: var(--color-accent-bright); opacity: 0.7;
+      font-family: var(--font-heading);
+    }
     .phase-section__cta {
-      display: inline-flex; align-items: center; gap: 8px; margin-top: 36px;
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 24px;
       font-size: 0.9375rem; font-weight: 600; color: var(--color-accent-bright);
       transition: all 0.4s var(--ease-out); position: relative;
     }
@@ -496,20 +455,12 @@
     }
     .phase-section__cta:hover { gap: 14px; color: #fff; }
     .phase-section__cta:hover::after { width: calc(100% - 30px); }
-
-    /* Connector - animated dashes */
-    .phase-connector {
-      display: flex; justify-content: center; padding: 24px 0 0; opacity: 0.4;
-    }
-    .phase-connector svg line {
-      animation: dash-flow 2s linear infinite;
-    }
-    @keyframes dash-flow {
-      to { stroke-dashoffset: -16; }
-    }
+    .phase-connector { display: flex; justify-content: center; padding: 24px 0 0; opacity: 0.4; }
+    .phase-connector svg line { animation: dash-flow 2s linear infinite; }
+    @keyframes dash-flow { to { stroke-dashoffset: -16; } }
 
     /* ========== BUNDLE CTA ========== */
-    .bundle-cta { padding: 40px 0 120px; }
+    .bundle-cta { padding: 60px 0 40px; }
     .bundle-cta__card {
       position: relative; padding: 72px 56px; border-radius: 24px;
       background: linear-gradient(145deg, rgba(20,184,166,0.05) 0%, rgba(20,184,166,0.01) 100%);
@@ -553,32 +504,62 @@
       border-radius: 100px; font-size: 0.8125rem; color: var(--color-text-muted);
       transition: all 0.3s var(--ease-out);
     }
-    .bundle-phase:hover {
-      background: rgba(20,184,166,0.06); border-color: rgba(20,184,166,0.15);
-      color: var(--color-text);
-    }
+    .bundle-phase:hover { background: rgba(20,184,166,0.06); border-color: rgba(20,184,166,0.15); color: var(--color-text); }
     .bundle-phase span { font-weight: 500; }
-    .bundle-arrow { flex-shrink: 0; transition: opacity 0.3s; }
-    @media (max-width: 768px) {
-      .bundle-arrow { display: none; }
-      .bundle-cta__card { padding: 52px 28px; }
-    }
-    .bundle-cta__pricing {
-      display: flex; align-items: baseline; justify-content: center;
-      gap: 14px; margin-top: 36px;
-    }
-    .bundle-price__compare {
-      font-size: 1.25rem; color: var(--color-text-subtle); text-decoration: line-through;
-    }
-    .bundle-price__current {
-      font-family: var(--font-heading); font-size: 2.75rem; font-weight: 700;
-    }
+    .bundle-arrow { flex-shrink: 0; }
+    @media (max-width: 768px) { .bundle-arrow { display: none; } .bundle-cta__card { padding: 52px 28px; } }
+    .bundle-cta__pricing { display: flex; align-items: baseline; justify-content: center; gap: 14px; margin-top: 36px; }
+    .bundle-price__compare { font-size: 1.25rem; color: var(--color-text-subtle); text-decoration: line-through; }
+    .bundle-price__current { font-family: var(--font-heading); font-size: 2.75rem; font-weight: 700; }
     .bundle-price__savings {
       font-size: 0.8125rem; font-weight: 600; color: var(--color-success);
       background: rgba(16,185,129,0.08); padding: 5px 14px; border-radius: 100px;
       border: 1px solid rgba(16,185,129,0.15);
     }
     .bundle-cta__btn { margin-top: 36px; }
+    .bundle-cta__trust {
+      margin-top: 28px; font-size: 0.8125rem; color: var(--color-text-subtle);
+      display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;
+    }
+    .bundle-cta__trust span { display: flex; align-items: center; gap: 6px; }
+
+    /* ========== BRAND STRIP ========== */
+    .brand-strip {
+      padding: 120px 0;
+      text-align: center;
+      position: relative;
+    }
+    .brand-strip::before {
+      content: ''; position: absolute; top: 0; left: 10%; right: 10%;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+    }
+    .brand-strip::after {
+      content: ''; position: absolute; bottom: 0; left: 10%; right: 10%;
+      height: 1px; background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+    }
+    .brand-strip__title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-weight: 700; line-height: 1.1;
+      max-width: 700px; margin: 0 auto;
+    }
+    .brand-strip__desc {
+      margin-top: 24px; font-size: 1.0625rem; color: var(--color-text-muted);
+      line-height: 1.75; font-weight: 300;
+      max-width: 600px; margin-left: auto; margin-right: auto;
+    }
+
+    /* ========== BOTTOM CTA ========== */
+    .bottom-cta {
+      padding: 100px 0 120px;
+      text-align: center;
+    }
+    .bottom-cta__title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700; line-height: 1.05;
+    }
+    .bottom-cta__btn { margin-top: 36px; }
 
     /* ========== FOOTER ========== */
     .footer {
@@ -586,20 +567,24 @@
     }
     .footer__text { font-size: 0.8125rem; color: var(--color-text-subtle); letter-spacing: 0.02em; }
 
-    /* ========== CUSTOM CURSOR GLOW (subtle) ========== */
+    /* ========== CURSOR GLOW ========== */
     .cursor-glow {
       position: fixed; width: 400px; height: 400px;
       border-radius: 50%; pointer-events: none; z-index: 0;
       background: radial-gradient(circle, rgba(20,184,166,0.03) 0%, transparent 70%);
-      transform: translate(-50%, -50%);
-      transition: opacity 0.3s;
+      transform: translate(-50%, -50%); transition: opacity 0.3s;
       will-change: left, top;
     }
   </style>
 </head>
 <body>
-  <!-- Cursor glow -->
+
   <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- Announcement Bar -->
+  <div class="announcement-bar">
+    Free shipping on The Full Cycle Bundle &nbsp;·&nbsp; Save 20% when you complete your cycle
+  </div>
 
   <!-- Header -->
   <header class="header" id="header">
@@ -619,7 +604,7 @@
     </div>
   </header>
 
-  <!-- ========== CYCLE HERO ========== -->
+  <!-- ========== HERO ========== -->
   <section class="cycle-hero">
     <div class="cycle-hero__bg">
       <div class="cycle-hero__gradient-1"></div>
@@ -629,34 +614,29 @@
     <div class="container">
       <div class="cycle-hero__layout">
         <div class="cycle-hero__copy">
-          <span class="cycle-hero__badge">The Performance System</span>
+          <span class="cycle-hero__badge">The Enigma Cycle</span>
           <h1 class="cycle-hero__title">
             <span class="title-line"><span>The Complete</span></span>
             <span class="title-line"><span>Performance</span></span>
-            <span class="title-line"><span>Cycle</span></span>
+            <span class="title-line"><span>System</span></span>
           </h1>
-          <p class="cycle-hero__subtitle">5 phases. One cycle. Everything your body needs — from first rep to full recovery.</p>
+          <p class="cycle-hero__subtitle">5 phases. One cycle. Clean nutrition engineered for every stage of your training — from first rep to full recovery.</p>
           <div class="cycle-hero__actions">
             <a href="#bundle" class="btn btn-primary btn-lg">
               Shop The Cycle
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
-            <a href="#cycle-breakdown" class="btn btn-ghost btn-lg">Explore Each Phase</a>
+            <a href="#cycle-breakdown" class="btn btn-ghost btn-lg">See How It Works ↓</a>
           </div>
         </div>
 
         <div class="cycle-hero__visual">
           <div class="cycle-wheel" id="cycleWheel">
             <svg class="cycle-wheel__ring" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-              <!-- Outer subtle ring -->
               <circle cx="250" cy="250" r="220" fill="none" stroke="rgba(255,255,255,0.015)" stroke-width="1"/>
-              <!-- Main ring -->
               <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
-              <!-- Animated teal ring -->
               <circle cx="250" cy="250" r="200" fill="none" stroke="url(#tealGrad)" stroke-width="1.5" class="cycle-wheel__progress"/>
-              <!-- Inner ring -->
               <circle cx="250" cy="250" r="180" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="0.5"/>
-              <!-- Connection lines between nodes -->
               <g class="cycle-wheel__connections">
                 <line x1="250" y1="50" x2="440" y2="138" stroke="rgba(20,184,166,0.06)" stroke-width="0.5"/>
                 <line x1="440" y1="138" x2="368" y2="362" stroke="rgba(20,184,166,0.06)" stroke-width="0.5"/>
@@ -672,38 +652,12 @@
                 </linearGradient>
               </defs>
             </svg>
-
-            <!-- Orbiting dot -->
             <div class="cycle-orbit-dot"></div>
-
-            <!-- Phase Nodes -->
-            <button class="cycle-node" data-phase="0" style="--angle: 270deg;" aria-label="Energy">
-              <span class="cycle-node__glow"></span>
-              <span class="cycle-node__icon">⚡</span>
-              <span class="cycle-node__label">Energy</span>
-            </button>
-            <button class="cycle-node" data-phase="1" style="--angle: 342deg;" aria-label="Hydration">
-              <span class="cycle-node__glow"></span>
-              <span class="cycle-node__icon">💧</span>
-              <span class="cycle-node__label">Hydration</span>
-            </button>
-            <button class="cycle-node" data-phase="2" style="--angle: 54deg;" aria-label="Protein">
-              <span class="cycle-node__glow"></span>
-              <span class="cycle-node__icon">🥛</span>
-              <span class="cycle-node__label">Protein</span>
-            </button>
-            <button class="cycle-node" data-phase="3" style="--angle: 126deg;" aria-label="Creatine">
-              <span class="cycle-node__glow"></span>
-              <span class="cycle-node__icon">💪</span>
-              <span class="cycle-node__label">Creatine</span>
-            </button>
-            <button class="cycle-node" data-phase="4" style="--angle: 198deg;" aria-label="Recovery">
-              <span class="cycle-node__glow"></span>
-              <span class="cycle-node__icon">🧘</span>
-              <span class="cycle-node__label">Recovery</span>
-            </button>
-
-            <!-- Center hub -->
+            <button class="cycle-node" data-phase="0" style="--angle: 270deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">⚡</span><span class="cycle-node__label">Energy</span></button>
+            <button class="cycle-node" data-phase="1" style="--angle: 342deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">💧</span><span class="cycle-node__label">Hydration</span></button>
+            <button class="cycle-node" data-phase="2" style="--angle: 54deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">🥛</span><span class="cycle-node__label">Protein</span></button>
+            <button class="cycle-node" data-phase="3" style="--angle: 126deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">💪</span><span class="cycle-node__label">Strength</span></button>
+            <button class="cycle-node" data-phase="4" style="--angle: 198deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">🧘</span><span class="cycle-node__label">Rest</span></button>
             <div class="cycle-wheel__center" id="cycleCenter">
               <div class="cycle-center__default" id="centerDefault">
                 <svg width="40" height="40" viewBox="0 0 48 48" fill="none">
@@ -718,7 +672,6 @@
                 <span class="cycle-detail__desc" id="detailDesc"></span>
               </div>
             </div>
-
             <div class="cycle-wheel__particles" id="cycleParticles"></div>
           </div>
         </div>
@@ -726,8 +679,16 @@
     </div>
   </section>
 
-  <!-- ========== CYCLE BREAKDOWN ========== -->
-  <section class="cycle-breakdown" id="cycle-breakdown">
+  <!-- ========== CYCLE INTRO ========== -->
+  <section class="cycle-intro" id="cycle-breakdown">
+    <div class="container">
+      <h2 class="cycle-intro__title" data-reveal="up">Your Body Runs in Cycles.<br>Your Nutrition Should Too.</h2>
+      <p class="cycle-intro__desc" data-reveal="up">Most brands sell you a product. We built a system. The Enigma Cycle covers every phase of your training day — energy, endurance, recovery, strength, and rest. Each product is designed to work alone, but they're engineered to work together.</p>
+    </div>
+  </section>
+
+  <!-- ========== PHASE BREAKDOWN ========== -->
+  <section class="cycle-breakdown">
 
     <!-- Phase 1: Energy -->
     <div class="phase-section">
@@ -743,19 +704,18 @@
             <div class="phase-section__phase-tag" data-reveal="up">
               <span class="phase-tag__icon">⚡</span>
               <span class="phase-tag__num">1</span>
-              <span class="phase-tag__label">Phase 1 — Energy</span>
+              <span class="phase-tag__label">Energy</span>
+              <span class="phase-tag__time">Pre-Training · 15–20 min before</span>
             </div>
-            <h2 class="phase-section__title" data-reveal="up">Fuel The Session</h2>
-            <p class="phase-section__desc" data-reveal="up">Engineered for explosive energy without the crash. Clean stimulants, laser focus, zero compromise. This is where every cycle begins.</p>
+            <h2 class="phase-section__title" data-reveal="up">Dial In Before<br>You Start</h2>
+            <p class="phase-section__desc" data-reveal="up">Clean energy, smooth focus, zero crash. Every ingredient on the label — because you should know what's fueling your session.</p>
             <ul class="phase-section__features" data-reveal="up">
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>300mg natural caffeine</li>
-              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Zero artificial sweeteners</li>
+              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Full label transparency</li>
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>No jitters, no crash</li>
             </ul>
-            <a href="#" class="phase-section__cta" data-reveal="up">
-              Shop Energy
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
+            <p class="phase-section__transition" data-reveal="up">You're locked in. Now sustain it. →</p>
+            <a href="#" class="phase-section__cta" data-reveal="up">Shop Energy <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
       </div>
@@ -776,19 +736,18 @@
             <div class="phase-section__phase-tag" data-reveal="up">
               <span class="phase-tag__icon">💧</span>
               <span class="phase-tag__num">2</span>
-              <span class="phase-tag__label">Phase 2 — Hydration</span>
+              <span class="phase-tag__label">Hydration</span>
+              <span class="phase-tag__time">During Training</span>
             </div>
-            <h2 class="phase-section__title" data-reveal="up">Sustain The Work</h2>
-            <p class="phase-section__desc" data-reveal="up">Electrolyte-rich hydration that keeps you performing at peak capacity through every set, every rep, every moment that counts.</p>
+            <h2 class="phase-section__title" data-reveal="up">Water Isn't Enough</h2>
+            <p class="phase-section__desc" data-reveal="up">Full electrolyte profile — sodium, potassium, magnesium — in the ratios your body actually needs. Not a sugar bomb with electrolyte marketing.</p>
             <ul class="phase-section__features" data-reveal="up">
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Full electrolyte spectrum</li>
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Rapid absorption formula</li>
-              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Refreshing natural flavors</li>
+              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Zero sugar, real results</li>
             </ul>
-            <a href="#" class="phase-section__cta" data-reveal="up">
-              Shop Hydration
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
+            <p class="phase-section__transition" data-reveal="up">Session complete. Time to rebuild. →</p>
+            <a href="#" class="phase-section__cta" data-reveal="up">Shop Hydration <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
       </div>
@@ -809,26 +768,25 @@
             <div class="phase-section__phase-tag" data-reveal="up">
               <span class="phase-tag__icon">🥛</span>
               <span class="phase-tag__num">3</span>
-              <span class="phase-tag__label">Phase 3 — Protein</span>
+              <span class="phase-tag__label">Protein</span>
+              <span class="phase-tag__time">Post-Training · Within 30 min</span>
             </div>
-            <h2 class="phase-section__title" data-reveal="up">Rebuild After</h2>
-            <p class="phase-section__desc" data-reveal="up">Premium whey protein isolate that delivers clean, fast-absorbing protein exactly when your muscles need it most.</p>
+            <h2 class="phase-section__title" data-reveal="up">Recovery Starts Now</h2>
+            <p class="phase-section__desc" data-reveal="up">25g of pure whey isolate. Fast-absorbing, easy on the stomach, no bloating. Recovery starts the moment you finish. Make it count.</p>
             <ul class="phase-section__features" data-reveal="up">
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>25g protein per serving</li>
-              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Whey isolate, minimal lactose</li>
+              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Whey isolate, zero bloat</li>
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Smooth texture, no grit</li>
             </ul>
-            <a href="#" class="phase-section__cta" data-reveal="up">
-              Shop Protein
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
+            <p class="phase-section__transition" data-reveal="up">Muscles fed. Now strengthen the foundation. →</p>
+            <a href="#" class="phase-section__cta" data-reveal="up">Shop Protein <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
       </div>
       <div class="phase-connector"><svg width="2" height="80" viewBox="0 0 2 80"><line x1="1" y1="0" x2="1" y2="80" stroke="rgba(20,184,166,0.12)" stroke-width="2" stroke-dasharray="4 4"/></svg></div>
     </div>
 
-    <!-- Phase 4: Creatine -->
+    <!-- Phase 4: Strength -->
     <div class="phase-section">
       <div class="container">
         <div class="phase-section__layout phase-section--reversed">
@@ -842,26 +800,25 @@
             <div class="phase-section__phase-tag" data-reveal="up">
               <span class="phase-tag__icon">💪</span>
               <span class="phase-tag__num">4</span>
-              <span class="phase-tag__label">Phase 4 — Creatine</span>
+              <span class="phase-tag__label">Strength</span>
+              <span class="phase-tag__time">Daily</span>
             </div>
-            <h2 class="phase-section__title" data-reveal="up">Strengthen & Repair</h2>
-            <p class="phase-section__desc" data-reveal="up">Pure creatine monohydrate for increased strength, power output, and faster recovery between sessions. The foundation of progress.</p>
+            <h2 class="phase-section__title" data-reveal="up">The Fundamentals,<br>Done Right</h2>
+            <p class="phase-section__desc" data-reveal="up">The most studied supplement in fitness. 5g pure creatine, properly dosed, no filler. Strength, power output, and recovery — the fundamentals, done right.</p>
             <ul class="phase-section__features" data-reveal="up">
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>5g pure creatine monohydrate</li>
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Micronized for absorption</li>
-              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Unflavored — mix with anything</li>
+              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>No filler, no flavoring</li>
             </ul>
-            <a href="#" class="phase-section__cta" data-reveal="up">
-              Shop Creatine
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
+            <p class="phase-section__transition" data-reveal="up">Your body is building. Let it rest. →</p>
+            <a href="#" class="phase-section__cta" data-reveal="up">Shop Creatine <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
       </div>
       <div class="phase-connector"><svg width="2" height="80" viewBox="0 0 2 80"><line x1="1" y1="0" x2="1" y2="80" stroke="rgba(20,184,166,0.12)" stroke-width="2" stroke-dasharray="4 4"/></svg></div>
     </div>
 
-    <!-- Phase 5: Recovery -->
+    <!-- Phase 5: Rest -->
     <div class="phase-section">
       <div class="container">
         <div class="phase-section__layout">
@@ -875,19 +832,18 @@
             <div class="phase-section__phase-tag" data-reveal="up">
               <span class="phase-tag__icon">🧘</span>
               <span class="phase-tag__num">5</span>
-              <span class="phase-tag__label">Phase 5 — Recovery</span>
+              <span class="phase-tag__label">Rest</span>
+              <span class="phase-tag__time">Evening · Daily</span>
             </div>
-            <h2 class="phase-section__title" data-reveal="up">Rest & Reset</h2>
-            <p class="phase-section__desc" data-reveal="up">Ashwagandha adaptogen complex that reduces cortisol, improves sleep quality, and prepares your body for the next cycle. Where recovery becomes performance.</p>
+            <h2 class="phase-section__title" data-reveal="up">The Phase Most<br>Athletes Skip</h2>
+            <p class="phase-section__desc" data-reveal="up">Training breaks you down. Sleep builds you up. Ashwagandha manages cortisol, supports recovery, and promotes the deep rest your body needs to actually grow.</p>
             <ul class="phase-section__features" data-reveal="up">
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>KSM-66® Ashwagandha</li>
-              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Clinically-dosed adaptogens</li>
-              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Better sleep, lower stress</li>
+              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cortisol management</li>
+              <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Better sleep, better growth</li>
             </ul>
-            <a href="#" class="phase-section__cta" data-reveal="up">
-              Shop Recovery
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
+            <p class="phase-section__transition" data-reveal="up">Recovered. Recharged. Ready to go again. →</p>
+            <a href="#" class="phase-section__cta" data-reveal="up">Shop Ashwagandha <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </div>
       </div>
@@ -900,9 +856,9 @@
       <div class="bundle-cta__card" data-reveal="scale">
         <div class="bundle-cta__glow"></div>
         <div class="bundle-cta__content">
-          <span class="bundle-cta__eyebrow" data-reveal="up">The Complete System</span>
-          <h2 class="bundle-cta__title" data-reveal="up">Get The Full Cycle</h2>
-          <p class="bundle-cta__desc" data-reveal="up">All 5 phases. One system. Save 20% when you build your complete performance cycle.</p>
+          <span class="bundle-cta__eyebrow" data-reveal="up">Every Phase. One Order.</span>
+          <h2 class="bundle-cta__title" data-reveal="up">Complete Your Cycle</h2>
+          <p class="bundle-cta__desc" data-reveal="up">Every phase. One order. 20% off.</p>
           <div class="bundle-cta__phases" data-reveal="up">
             <div class="bundle-phase">⚡ <span>Energy</span></div>
             <svg class="bundle-arrow" width="20" height="12" viewBox="0 0 20 12"><path d="M0 6h18M14 1l5 5-5 5" stroke="rgba(20,184,166,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -912,19 +868,43 @@
             <svg class="bundle-arrow" width="20" height="12" viewBox="0 0 20 12"><path d="M0 6h18M14 1l5 5-5 5" stroke="rgba(20,184,166,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
             <div class="bundle-phase">💪 <span>Creatine</span></div>
             <svg class="bundle-arrow" width="20" height="12" viewBox="0 0 20 12"><path d="M0 6h18M14 1l5 5-5 5" stroke="rgba(20,184,166,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-            <div class="bundle-phase">🧘 <span>Recovery</span></div>
+            <div class="bundle-phase">🧘 <span>Ashwagandha</span></div>
           </div>
           <div class="bundle-cta__pricing" data-reveal="up">
-            <span class="bundle-price__compare">$164.95</span>
-            <span class="bundle-price__current">$129.99</span>
+            <span class="bundle-price__compare">$138</span>
+            <span class="bundle-price__current">$110</span>
             <span class="bundle-price__savings">Save 20%</span>
           </div>
           <a href="#" class="btn btn-primary btn-lg bundle-cta__btn" data-reveal="up">
             Build Your Cycle
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
+          <div class="bundle-cta__trust" data-reveal="up">
+            <span>🚚 Free shipping included</span>
+            <span>✅ 30-day guarantee</span>
+            <span>📋 Full label transparency</span>
+          </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ========== BRAND STRIP ========== -->
+  <section class="brand-strip">
+    <div class="container">
+      <h2 class="brand-strip__title" data-reveal="up">No Proprietary Blends.<br>No Mystery Powders. No BS.</h2>
+      <p class="brand-strip__desc" data-reveal="up">Every Enigma product has a fully transparent label. Every ingredient, every dose — right there. We don't hide behind blends because we don't need to. When the formula is good, you don't need to hide what's in it.</p>
+    </div>
+  </section>
+
+  <!-- ========== BOTTOM CTA ========== -->
+  <section class="bottom-cta">
+    <div class="container">
+      <h2 class="bottom-cta__title" data-reveal="up">Start Your Cycle.</h2>
+      <a href="#bundle" class="btn btn-primary btn-lg bottom-cta__btn" data-reveal="up">
+        Shop The Full Cycle Bundle
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
     </div>
   </section>
 
@@ -935,166 +915,85 @@
   </footer>
 
   <script>
-    // ========== SCROLL REVEAL ENGINE ==========
-    // Smooth, staggered reveals on scroll — air.inc level
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-
-        // If inside a stagger container, compute delay
+    // ========== SCROLL REVEAL ==========
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
         const parent = el.closest('[data-stagger]');
         if (parent) {
           const siblings = [...parent.querySelectorAll('[data-reveal]')];
-          const idx = siblings.indexOf(el);
-          el.style.setProperty('--stagger-index', idx);
+          el.style.setProperty('--stagger-index', siblings.indexOf(el));
         }
-
         el.classList.add('revealed');
-        revealObserver.unobserve(el);
+        revealObs.unobserve(el);
       });
-    }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -60px 0px'
-    });
+    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+    document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
 
-    document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
-
-    // ========== PARALLAX ON SCROLL ==========
-    const parallaxEls = document.querySelectorAll('[data-parallax]');
+    // ========== PARALLAX ==========
+    const pEls = document.querySelectorAll('[data-parallax]');
     let ticking = false;
-
     function updateParallax() {
-      const scrollY = window.scrollY;
-      parallaxEls.forEach(el => {
-        const speed = parseFloat(el.dataset.parallax) || 0.1;
+      pEls.forEach(el => {
+        const speed = parseFloat(el.dataset.parallax);
         const rect = el.getBoundingClientRect();
-        const center = rect.top + rect.height / 2;
-        const viewCenter = window.innerHeight / 2;
-        const offset = (center - viewCenter) * speed;
+        const offset = (rect.top + rect.height/2 - window.innerHeight/2) * speed;
         el.style.transform = `translateY(${offset}px)`;
       });
       ticking = false;
     }
+    window.addEventListener('scroll', () => { if (!ticking) { requestAnimationFrame(updateParallax); ticking = true; } }, { passive: true });
 
-    window.addEventListener('scroll', () => {
-      if (!ticking) { requestAnimationFrame(updateParallax); ticking = true; }
-    }, { passive: true });
-
-    // ========== HEADER SHRINK ==========
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 60);
-    }, { passive: true });
+    // ========== HEADER ==========
+    window.addEventListener('scroll', () => { document.getElementById('header').classList.toggle('scrolled', scrollY > 60); }, { passive: true });
 
     // ========== CURSOR GLOW ==========
     const glow = document.getElementById('cursorGlow');
-    let glowX = 0, glowY = 0, currentX = 0, currentY = 0;
+    let gx=0, gy=0, cx=0, cy=0;
+    document.addEventListener('mousemove', e => { gx=e.clientX; gy=e.clientY; });
+    (function anim() { cx+=(gx-cx)*0.08; cy+=(gy-cy)*0.08; glow.style.left=cx+'px'; glow.style.top=cy+'px'; requestAnimationFrame(anim); })();
 
-    document.addEventListener('mousemove', e => { glowX = e.clientX; glowY = e.clientY; });
-
-    function animateGlow() {
-      currentX += (glowX - currentX) * 0.08;
-      currentY += (glowY - currentY) * 0.08;
-      glow.style.left = currentX + 'px';
-      glow.style.top = currentY + 'px';
-      requestAnimationFrame(animateGlow);
-    }
-    animateGlow();
-
-    // ========== CYCLE WHEEL INTERACTIONS ==========
+    // ========== CYCLE WHEEL ==========
     const phases = [
-      { name: 'Energy', icon: '⚡', desc: 'Pre-workout ignition.' },
-      { name: 'Hydration', icon: '💧', desc: 'Peak performance fuel.' },
-      { name: 'Protein', icon: '🥛', desc: 'Post-workout rebuild.' },
-      { name: 'Creatine', icon: '💪', desc: 'Strength & recovery.' },
-      { name: 'Recovery', icon: '🧘', desc: 'Rest & reset.' }
+      { name:'Energy', icon:'⚡', desc:'Pre-workout ignition.' },
+      { name:'Hydration', icon:'💧', desc:'Mid-training fuel.' },
+      { name:'Protein', icon:'🥛', desc:'Post-workout rebuild.' },
+      { name:'Strength', icon:'💪', desc:'Daily foundation.' },
+      { name:'Rest', icon:'🧘', desc:'Recovery & growth.' }
     ];
-
     const nodes = document.querySelectorAll('.cycle-node');
     const detail = document.getElementById('cycleDetail');
-    const detailIcon = document.getElementById('detailIcon');
-    const detailName = document.getElementById('detailName');
-    const detailDesc = document.getElementById('detailDesc');
-    const centerDefault = document.getElementById('centerDefault');
-    let currentAuto = 0, userInteracting = false;
+    const dIcon = document.getElementById('detailIcon');
+    const dName = document.getElementById('detailName');
+    const dDesc = document.getElementById('detailDesc');
+    const cDef = document.getElementById('centerDefault');
+    let curAuto=0, interacting=false;
 
-    function showPhase(idx) {
-      const p = phases[idx];
-      detailIcon.textContent = p.icon;
-      detailName.textContent = p.name;
-      detailDesc.textContent = p.desc;
-      detail.classList.add('visible');
-      centerDefault.style.opacity = '0';
-      centerDefault.style.transform = 'scale(0.8)';
-    }
+    function show(i) { const p=phases[i]; dIcon.textContent=p.icon; dName.textContent=p.name; dDesc.textContent=p.desc; detail.classList.add('visible'); cDef.style.opacity='0'; cDef.style.transform='scale(0.8)'; }
+    function hide() { detail.classList.remove('visible'); cDef.style.opacity='1'; cDef.style.transform='scale(1)'; }
 
-    function hidePhase() {
-      detail.classList.remove('visible');
-      centerDefault.style.opacity = '1';
-      centerDefault.style.transform = 'scale(1)';
-    }
+    setInterval(() => { if (interacting) return; nodes.forEach(n=>n.classList.remove('auto-active')); nodes[curAuto]?.classList.add('auto-active'); show(curAuto); curAuto=(curAuto+1)%5; }, 3000);
 
-    // Auto-cycle with smooth transitions
-    let autoTimer;
-    function startAutoCycle() {
-      autoTimer = setInterval(() => {
-        if (userInteracting) return;
-        nodes.forEach(n => n.classList.remove('auto-active'));
-        nodes[currentAuto]?.classList.add('auto-active');
-        showPhase(currentAuto);
-        currentAuto = (currentAuto + 1) % 5;
-      }, 3000);
-    }
-
-    nodes.forEach(node => {
-      const idx = parseInt(node.dataset.phase);
-      node.addEventListener('mouseenter', () => {
-        userInteracting = true;
-        nodes.forEach(n => n.classList.remove('auto-active', 'active'));
-        node.classList.add('active');
-        showPhase(idx);
-      });
-      node.addEventListener('mouseleave', () => {
-        node.classList.remove('active');
-        hidePhase();
-        // Resume auto after brief pause
-        setTimeout(() => { userInteracting = false; }, 2000);
-      });
-      node.addEventListener('click', () => {
-        userInteracting = true;
-        nodes.forEach(n => n.classList.remove('active', 'auto-active'));
-        node.classList.add('active');
-        showPhase(idx);
-      });
+    nodes.forEach(n => {
+      const i = +n.dataset.phase;
+      n.addEventListener('mouseenter', () => { interacting=true; nodes.forEach(x=>x.classList.remove('auto-active','active')); n.classList.add('active'); show(i); });
+      n.addEventListener('mouseleave', () => { n.classList.remove('active'); hide(); setTimeout(()=>{interacting=false;},2000); });
+      n.addEventListener('click', () => { interacting=true; nodes.forEach(x=>x.classList.remove('active','auto-active')); n.classList.add('active'); show(i); });
     });
 
     // ========== PARTICLES ==========
     const pc = document.getElementById('cycleParticles');
-    const sizes = ['sm', 'md', 'lg'];
-    for (let i = 0; i < 18; i++) {
-      const p = document.createElement('div');
-      const size = sizes[Math.floor(Math.random() * 3)];
-      p.className = `cycle-particle cycle-particle--${size}`;
-      p.style.left = (15 + Math.random() * 70) + '%';
-      p.style.top = (15 + Math.random() * 70) + '%';
-      p.style.animationDelay = (Math.random() * 6) + 's';
-      p.style.animationDuration = (4 + Math.random() * 4) + 's';
+    ['sm','md','lg','sm','md','sm','lg','sm','md','sm','sm','md','lg','sm','md','sm','sm','md'].forEach((s,i) => {
+      const p=document.createElement('div'); p.className=`cycle-particle cycle-particle--${s}`;
+      p.style.left=(15+Math.random()*70)+'%'; p.style.top=(15+Math.random()*70)+'%';
+      p.style.animationDelay=(Math.random()*6)+'s'; p.style.animationDuration=(4+Math.random()*4)+'s';
       pc.appendChild(p);
-    }
+    });
 
-    // Start auto-cycle after entrance animations
-    setTimeout(startAutoCycle, 2000);
-
-    // ========== SMOOTH SCROLL FOR ANCHORS ==========
+    // ========== SMOOTH ANCHOR ==========
     document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        const target = document.querySelector(a.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
+      a.addEventListener('click', e => { const t=document.querySelector(a.getAttribute('href')); if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});} });
     });
   </script>
 </body>
