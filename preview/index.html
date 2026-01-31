@@ -459,69 +459,161 @@
     .phase-connector svg line { animation: dash-flow 2s linear infinite; }
     @keyframes dash-flow { to { stroke-dashoffset: -16; } }
 
-    /* ========== BUNDLE CTA ========== */
-    .bundle-cta { padding: 60px 0 40px; }
-    .bundle-cta__card {
-      position: relative; padding: 72px 56px; border-radius: 24px;
-      background: linear-gradient(145deg, rgba(20,184,166,0.05) 0%, rgba(20,184,166,0.01) 100%);
-      border: 1px solid rgba(20,184,166,0.1);
-      text-align: center; overflow: hidden;
-      transition: border-color 0.5s;
-    }
-    .bundle-cta__card:hover { border-color: rgba(20,184,166,0.2); }
-    .bundle-cta__glow {
-      position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
-      width: 700px; height: 500px;
-      background: radial-gradient(ellipse, rgba(20,184,166,0.08) 0%, transparent 65%);
-      pointer-events: none; animation: glow-pulse 6s ease-in-out infinite;
-    }
-    @keyframes glow-pulse {
-      0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-      50% { opacity: 1; transform: translateX(-50%) scale(1.05); }
-    }
-    .bundle-cta__content { position: relative; z-index: 1; }
-    .bundle-cta__eyebrow {
+    /* ========== BUNDLE BUILDER ========== */
+    .bundle-builder { padding: 60px 0 40px; }
+    .bundle-builder__header { text-align: center; margin-bottom: 56px; }
+    .bundle-builder__eyebrow {
       font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em;
       text-transform: uppercase; color: var(--color-accent-bright);
     }
-    .bundle-cta__title {
+    .bundle-builder__title {
       font-family: var(--font-heading);
-      font-size: clamp(2.25rem, 4vw, 3.75rem); font-weight: 700;
+      font-size: clamp(2.25rem, 4vw, 3.5rem); font-weight: 700;
       margin-top: 16px; line-height: 1.08;
     }
-    .bundle-cta__desc {
-      margin-top: 18px; font-size: 1.0625rem; color: var(--color-text-muted);
-      max-width: 500px; margin-left: auto; margin-right: auto;
+    .bundle-builder__desc {
+      margin-top: 16px; font-size: 1rem; color: var(--color-text-muted);
+      max-width: 520px; margin-left: auto; margin-right: auto;
       line-height: 1.65; font-weight: 300;
     }
-    .bundle-cta__phases {
-      display: flex; align-items: center; justify-content: center;
-      gap: 6px; margin-top: 40px; flex-wrap: wrap;
+    .bundle-builder__grid {
+      display: grid; grid-template-columns: 1fr; gap: 40px;
     }
-    .bundle-phase {
-      display: flex; align-items: center; gap: 6px; padding: 10px 18px;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 100px; font-size: 0.8125rem; color: var(--color-text-muted);
+    @media (min-width: 900px) {
+      .bundle-builder__grid { grid-template-columns: 1fr 380px; gap: 48px; }
+    }
+
+    /* Steps */
+    .bundle-steps { display: flex; flex-direction: column; gap: 16px; }
+    .bundle-step {
+      background: var(--color-glass);
+      border: 1px solid var(--color-border);
+      border-radius: 16px; padding: 24px 28px;
+      transition: all 0.4s var(--ease-out);
+    }
+    .bundle-step:hover { border-color: var(--color-glass-border); background: rgba(255,255,255,0.05); }
+    .bundle-step__header {
+      display: flex; align-items: center; gap: 16px;
+    }
+    .bundle-step__icon-wrap {
+      position: relative; width: 44px; height: 44px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(20,184,166,0.06); border-radius: 12px;
+      border: 1px solid rgba(20,184,166,0.1);
+    }
+    .bundle-step__icon { font-size: 1.25rem; }
+    .bundle-step__check {
+      position: absolute; top: -6px; right: -6px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--color-accent); color: white;
+      font-size: 0.625rem; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; opacity: 0; transform: scale(0);
+      transition: all 0.4s var(--ease-out);
+    }
+    .bundle-step__check.visible { opacity: 1; transform: scale(1); }
+    .bundle-step__phase {
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--color-text-subtle);
+    }
+    .bundle-step__name {
+      font-size: 1rem; font-weight: 600; color: var(--color-text); margin-top: 2px;
+    }
+    .bundle-step__price {
+      margin-left: auto; font-family: var(--font-heading);
+      font-size: 1.125rem; font-weight: 600; color: var(--color-text-muted);
+    }
+
+    /* Flavor pills */
+    .bundle-step__flavors {
+      display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;
+    }
+    .flavor-pill {
+      padding: 8px 18px; border-radius: 100px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--color-border);
+      color: var(--color-text-muted); font-size: 0.8125rem; font-weight: 500;
+      font-family: var(--font-body); cursor: pointer;
       transition: all 0.3s var(--ease-out);
     }
-    .bundle-phase:hover { background: rgba(20,184,166,0.06); border-color: rgba(20,184,166,0.15); color: var(--color-text); }
-    .bundle-phase span { font-weight: 500; }
-    .bundle-arrow { flex-shrink: 0; }
-    @media (max-width: 768px) { .bundle-arrow { display: none; } .bundle-cta__card { padding: 52px 28px; } }
-    .bundle-cta__pricing { display: flex; align-items: baseline; justify-content: center; gap: 14px; margin-top: 36px; }
-    .bundle-price__compare { font-size: 1.25rem; color: var(--color-text-subtle); text-decoration: line-through; }
-    .bundle-price__current { font-family: var(--font-heading); font-size: 2.75rem; font-weight: 700; }
-    .bundle-price__savings {
-      font-size: 0.8125rem; font-weight: 600; color: var(--color-success);
-      background: rgba(16,185,129,0.08); padding: 5px 14px; border-radius: 100px;
-      border: 1px solid rgba(16,185,129,0.15);
+    .flavor-pill:hover {
+      border-color: rgba(20,184,166,0.2); color: var(--color-text);
+      background: rgba(20,184,166,0.04);
     }
-    .bundle-cta__btn { margin-top: 36px; }
-    .bundle-cta__trust {
-      margin-top: 28px; font-size: 0.8125rem; color: var(--color-text-subtle);
-      display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap;
+    .flavor-pill.selected {
+      border-color: var(--color-accent); color: var(--color-accent-bright);
+      background: rgba(20,184,166,0.08);
+      box-shadow: 0 0 16px rgba(20,184,166,0.1);
     }
-    .bundle-cta__trust span { display: flex; align-items: center; gap: 6px; }
+
+    /* Single-option items */
+    .bundle-step__single {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .bundle-step__single-tag {
+      font-size: 0.8125rem; color: var(--color-text-subtle); font-weight: 400;
+    }
+    .bundle-step__single-included {
+      font-size: 0.75rem; font-weight: 600; color: var(--color-success);
+      background: rgba(16,185,129,0.08); padding: 4px 12px; border-radius: 100px;
+      border: 1px solid rgba(16,185,129,0.12);
+    }
+
+    /* Summary Sidebar */
+    .bundle-summary__card {
+      position: sticky; top: 100px;
+      background: linear-gradient(145deg, rgba(20,184,166,0.05) 0%, rgba(20,184,166,0.01) 100%);
+      border: 1px solid rgba(20,184,166,0.1);
+      border-radius: 20px; padding: 36px 32px;
+      transition: border-color 0.5s;
+    }
+    .bundle-summary__card:hover { border-color: rgba(20,184,166,0.18); }
+    .bundle-summary__title {
+      font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .summary-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.875rem;
+    }
+    .summary-item:last-child { border-bottom: none; }
+    .summary-flavor {
+      color: var(--color-text-muted); font-weight: 400; font-size: 0.8125rem;
+      transition: color 0.3s;
+    }
+    .bundle-summary__divider {
+      height: 1px; background: var(--color-border); margin: 16px 0;
+    }
+    .summary-price-row {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.875rem; color: var(--color-text-muted); padding: 6px 0;
+    }
+    .summary-retail { text-decoration: line-through; }
+    .summary-discount { color: var(--color-success); }
+    .summary-total {
+      font-size: 1.125rem; font-weight: 700; color: var(--color-text);
+      padding: 10px 0 0;
+    }
+    .summary-final {
+      font-family: var(--font-heading); font-size: 1.5rem;
+    }
+    .bundle-summary__cta {
+      width: 100%; margin-top: 24px; padding: 18px;
+    }
+    .bundle-summary__trust {
+      margin-top: 20px; display: flex; flex-direction: column; gap: 8px;
+      font-size: 0.75rem; color: var(--color-text-subtle);
+    }
+    .bundle-summary__trust span { display: flex; align-items: center; gap: 6px; }
+
+    /* Button pulse on complete */
+    @keyframes btn-pulse {
+      0% { box-shadow: 0 0 30px rgba(20,184,166,0.15), 0 4px 20px rgba(0,0,0,0.3); }
+      50% { box-shadow: 0 0 50px rgba(20,184,166,0.3), 0 4px 30px rgba(0,0,0,0.4); }
+      100% { box-shadow: 0 0 30px rgba(20,184,166,0.15), 0 4px 20px rgba(0,0,0,0.3); }
+    }
+    .bundle-summary__cta.all-selected { animation: btn-pulse 2s ease-in-out infinite; }
 
     /* ========== BRAND STRIP ========== */
     .brand-strip {
@@ -771,7 +863,7 @@
               <span class="phase-tag__label">Protein</span>
               <span class="phase-tag__time">Post-Training · Within 30 min</span>
             </div>
-            <h2 class="phase-section__title" data-reveal="up">Recovery Starts Now</h2>
+            <h2 class="phase-section__title" data-reveal="up">Recovery Starts the Moment You Finish</h2>
             <p class="phase-section__desc" data-reveal="up">25g of pure whey isolate. Fast-absorbing, easy on the stomach, no bloating. Recovery starts the moment you finish. Make it count.</p>
             <ul class="phase-section__features" data-reveal="up">
               <li class="phase-feature"><span class="phase-feature__check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>25g protein per serving</li>
@@ -850,39 +942,153 @@
     </div>
   </section>
 
-  <!-- ========== BUNDLE CTA ========== -->
-  <section class="bundle-cta" id="bundle">
+  <!-- ========== BUNDLE BUILDER ========== -->
+  <section class="bundle-builder" id="bundle">
     <div class="container">
-      <div class="bundle-cta__card" data-reveal="scale">
-        <div class="bundle-cta__glow"></div>
-        <div class="bundle-cta__content">
-          <span class="bundle-cta__eyebrow" data-reveal="up">Every Phase. One Order.</span>
-          <h2 class="bundle-cta__title" data-reveal="up">Complete Your Cycle</h2>
-          <p class="bundle-cta__desc" data-reveal="up">Every phase. One order. 20% off.</p>
-          <div class="bundle-cta__phases" data-reveal="up">
-            <div class="bundle-phase">⚡ <span>Energy</span></div>
-            <svg class="bundle-arrow" width="20" height="12" viewBox="0 0 20 12"><path d="M0 6h18M14 1l5 5-5 5" stroke="rgba(20,184,166,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-            <div class="bundle-phase">💧 <span>Hydration</span></div>
-            <svg class="bundle-arrow" width="20" height="12" viewBox="0 0 20 12"><path d="M0 6h18M14 1l5 5-5 5" stroke="rgba(20,184,166,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-            <div class="bundle-phase">🥛 <span>Protein</span></div>
-            <svg class="bundle-arrow" width="20" height="12" viewBox="0 0 20 12"><path d="M0 6h18M14 1l5 5-5 5" stroke="rgba(20,184,166,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-            <div class="bundle-phase">💪 <span>Creatine</span></div>
-            <svg class="bundle-arrow" width="20" height="12" viewBox="0 0 20 12"><path d="M0 6h18M14 1l5 5-5 5" stroke="rgba(20,184,166,0.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-            <div class="bundle-phase">🧘 <span>Ashwagandha</span></div>
+      <div class="bundle-builder__header" data-reveal="up">
+        <span class="bundle-builder__eyebrow">Build Your Cycle</span>
+        <h2 class="bundle-builder__title">Complete Your Cycle</h2>
+        <p class="bundle-builder__desc">Choose your flavors for each phase. Creatine and Ashwagandha are single-option — pure and unflavored.</p>
+      </div>
+
+      <div class="bundle-builder__grid" data-reveal="up">
+        <!-- Phase Steps -->
+        <div class="bundle-steps">
+          <!-- Step 1: Energy -->
+          <div class="bundle-step" data-step="0">
+            <div class="bundle-step__header">
+              <div class="bundle-step__icon-wrap">
+                <span class="bundle-step__icon">⚡</span>
+                <span class="bundle-step__check" id="check0">✓</span>
+              </div>
+              <div>
+                <div class="bundle-step__phase">Phase 1</div>
+                <div class="bundle-step__name">Energy Pre-Workout</div>
+              </div>
+              <div class="bundle-step__price">$32</div>
+            </div>
+            <div class="bundle-step__flavors">
+              <button class="flavor-pill selected" data-step="0" data-flavor="Blue Raspberry">Blue Raspberry</button>
+              <button class="flavor-pill" data-step="0" data-flavor="Tropical Surge">Tropical Surge</button>
+              <button class="flavor-pill" data-step="0" data-flavor="Watermelon">Watermelon</button>
+            </div>
           </div>
-          <div class="bundle-cta__pricing" data-reveal="up">
-            <span class="bundle-price__compare">$138</span>
-            <span class="bundle-price__current">$110</span>
-            <span class="bundle-price__savings">Save 20%</span>
+
+          <!-- Step 2: Hydration -->
+          <div class="bundle-step" data-step="1">
+            <div class="bundle-step__header">
+              <div class="bundle-step__icon-wrap">
+                <span class="bundle-step__icon">💧</span>
+                <span class="bundle-step__check" id="check1">✓</span>
+              </div>
+              <div>
+                <div class="bundle-step__phase">Phase 2</div>
+                <div class="bundle-step__name">Hydration Powder</div>
+              </div>
+              <div class="bundle-step__price">$28</div>
+            </div>
+            <div class="bundle-step__flavors">
+              <button class="flavor-pill selected" data-step="1" data-flavor="Lemon Lime">Lemon Lime</button>
+              <button class="flavor-pill" data-step="1" data-flavor="Orange Burst">Orange Burst</button>
+              <button class="flavor-pill" data-step="1" data-flavor="Berry Blast">Berry Blast</button>
+            </div>
           </div>
-          <a href="#" class="btn btn-primary btn-lg bundle-cta__btn" data-reveal="up">
-            Build Your Cycle
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </a>
-          <div class="bundle-cta__trust" data-reveal="up">
-            <span>🚚 Free shipping included</span>
-            <span>✅ 30-day guarantee</span>
-            <span>📋 Full label transparency</span>
+
+          <!-- Step 3: Protein -->
+          <div class="bundle-step" data-step="2">
+            <div class="bundle-step__header">
+              <div class="bundle-step__icon-wrap">
+                <span class="bundle-step__icon">🥛</span>
+                <span class="bundle-step__check" id="check2">✓</span>
+              </div>
+              <div>
+                <div class="bundle-step__phase">Phase 3</div>
+                <div class="bundle-step__name">Whey Protein Isolate</div>
+              </div>
+              <div class="bundle-step__price">$42</div>
+            </div>
+            <div class="bundle-step__flavors">
+              <button class="flavor-pill selected" data-step="2" data-flavor="Chocolate">Chocolate</button>
+              <button class="flavor-pill" data-step="2" data-flavor="Vanilla">Vanilla</button>
+              <button class="flavor-pill" data-step="2" data-flavor="Cookies & Cream">Cookies & Cream</button>
+            </div>
+          </div>
+
+          <!-- Step 4: Creatine (no flavor) -->
+          <div class="bundle-step" data-step="3">
+            <div class="bundle-step__header">
+              <div class="bundle-step__icon-wrap">
+                <span class="bundle-step__icon">💪</span>
+                <span class="bundle-step__check visible" id="check3">✓</span>
+              </div>
+              <div>
+                <div class="bundle-step__phase">Phase 4</div>
+                <div class="bundle-step__name">Creatine Monohydrate</div>
+              </div>
+              <div class="bundle-step__price">$22</div>
+            </div>
+            <div class="bundle-step__single">
+              <span class="bundle-step__single-tag">Unflavored · Pure</span>
+              <span class="bundle-step__single-included">Included</span>
+            </div>
+          </div>
+
+          <!-- Step 5: Ashwagandha (no flavor) -->
+          <div class="bundle-step" data-step="4">
+            <div class="bundle-step__header">
+              <div class="bundle-step__icon-wrap">
+                <span class="bundle-step__icon">🧘</span>
+                <span class="bundle-step__check visible" id="check4">✓</span>
+              </div>
+              <div>
+                <div class="bundle-step__phase">Phase 5</div>
+                <div class="bundle-step__name">Ashwagandha</div>
+              </div>
+              <div class="bundle-step__price">$14</div>
+            </div>
+            <div class="bundle-step__single">
+              <span class="bundle-step__single-tag">KSM-66® · Capsules</span>
+              <span class="bundle-step__single-included">Included</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Summary Sidebar -->
+        <div class="bundle-summary" data-reveal="up">
+          <div class="bundle-summary__card">
+            <h3 class="bundle-summary__title">The Full Cycle</h3>
+            <div class="bundle-summary__items" id="summaryItems">
+              <div class="summary-item"><span>⚡ Energy</span><span class="summary-flavor" id="sf0">Blue Raspberry</span></div>
+              <div class="summary-item"><span>💧 Hydration</span><span class="summary-flavor" id="sf1">Lemon Lime</span></div>
+              <div class="summary-item"><span>🥛 Protein</span><span class="summary-flavor" id="sf2">Chocolate</span></div>
+              <div class="summary-item"><span>💪 Creatine</span><span class="summary-flavor">Unflavored</span></div>
+              <div class="summary-item"><span>🧘 Ashwagandha</span><span class="summary-flavor">KSM-66®</span></div>
+            </div>
+            <div class="bundle-summary__divider"></div>
+            <div class="bundle-summary__pricing">
+              <div class="summary-price-row">
+                <span>Retail total</span>
+                <span class="summary-retail">$138.00</span>
+              </div>
+              <div class="summary-price-row summary-discount">
+                <span>Cycle discount (20%)</span>
+                <span>−$27.60</span>
+              </div>
+              <div class="bundle-summary__divider"></div>
+              <div class="summary-price-row summary-total">
+                <span>Your price</span>
+                <span class="summary-final">$110.40</span>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg bundle-summary__cta" id="addToCartBtn">
+              Add Full Cycle to Cart
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="bundle-summary__trust">
+              <span>🚚 Free shipping</span>
+              <span>✅ 30-day guarantee</span>
+              <span>📋 Full transparency</span>
+            </div>
           </div>
         </div>
       </div>
@@ -990,6 +1196,47 @@
       p.style.animationDelay=(Math.random()*6)+'s'; p.style.animationDuration=(4+Math.random()*4)+'s';
       pc.appendChild(p);
     });
+
+    // ========== BUNDLE BUILDER ==========
+    const selections = ['Blue Raspberry', 'Lemon Lime', 'Chocolate', 'Unflavored', 'KSM-66®'];
+    const flavorLabels = ['sf0', 'sf1', 'sf2'];
+
+    document.querySelectorAll('.flavor-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const step = pill.dataset.step;
+        // Deselect siblings
+        document.querySelectorAll(`.flavor-pill[data-step="${step}"]`).forEach(p => p.classList.remove('selected'));
+        pill.classList.add('selected');
+        // Update selection
+        selections[step] = pill.dataset.flavor;
+        // Update summary
+        const label = document.getElementById(`sf${step}`);
+        if (label) {
+          label.style.transition = 'opacity 0.2s';
+          label.style.opacity = '0';
+          setTimeout(() => { label.textContent = pill.dataset.flavor; label.style.opacity = '1'; }, 200);
+        }
+        // Show check
+        const check = document.getElementById(`check${step}`);
+        if (check) check.classList.add('visible');
+        // Check if all selected
+        checkAllSelected();
+      });
+    });
+
+    // Show checks for pre-selected
+    [0,1,2].forEach(i => {
+      document.getElementById(`check${i}`)?.classList.add('visible');
+    });
+
+    function checkAllSelected() {
+      const allChecks = document.querySelectorAll('.bundle-step__check.visible');
+      const btn = document.getElementById('addToCartBtn');
+      if (allChecks.length >= 5) {
+        btn.classList.add('all-selected');
+      }
+    }
+    checkAllSelected();
 
     // ========== SMOOTH ANCHOR ==========
     document.querySelectorAll('a[href^="#"]').forEach(a => {
