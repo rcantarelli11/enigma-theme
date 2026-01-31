@@ -4,6 +4,49 @@
   assign featured_image = current_variant.featured_image | default: product.featured_image
 -%}
 
+<!-- Product JSON-LD Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "description": {{ product.description | strip_html | truncate: 5000 | json }},
+  "url": "{{ shop.url }}{{ product.url }}",
+  {%- if featured_image != blank -%}
+  "image": "https:{{ featured_image | image_url: width: 1200 }}",
+  {%- endif -%}
+  "brand": {
+    "@type": "Brand",
+    "name": "Enigma"
+  },
+  "sku": {{ current_variant.sku | default: current_variant.id | json }},
+  {%- if product.type != blank -%}
+  "category": {{ product.type | json }},
+  {%- endif -%}
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ shop.url }}{{ product.url }}",
+    "priceCurrency": "{{ shop.currency }}",
+    "price": "{{ current_variant.price | money_without_currency | remove: ',' }}",
+    {%- if current_variant.compare_at_price > current_variant.price -%}
+    "priceValidUntil": "{{ 'now' | date: '%Y-12-31' }}",
+    {%- endif -%}
+    "availability": "https://schema.org/{% if current_variant.available %}InStock{% else %}OutOfStock{% endif %}",
+    "seller": {
+      "@type": "Organization",
+      "name": "Enigma"
+    }
+  }
+  {%- if product.metafields.reviews.rating.value -%}
+  ,"aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ product.metafields.reviews.rating.value }}",
+    "reviewCount": "{{ product.metafields.reviews.rating_count.value | default: 1 }}"
+  }
+  {%- endif -%}
+}
+</script>
+
 <section class="enigma-pdp enigma-section" id="enigma-product-{{ section.id }}">
   <div class="enigma-container">
     <div class="enigma-pdp__layout">

@@ -1,3 +1,32 @@
+<!-- Organization + WebSite Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Enigma",
+  "url": "{{ shop.url }}",
+  "logo": "{{ shop.url }}/cdn/shop/files/enigma-logo.png",
+  "description": "Premium fitness nutrition — transparent, effective, and built for people who actually read the label.",
+  "sameAs": [
+    "https://www.facebook.com/people/EnigmaOfficial/61572464247140/",
+    "https://www.instagram.com/live_enigma/"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Enigma",
+  "url": "{{ shop.url }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ shop.url }}/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
 {%- style -%}
   #enigma-hero-{{ section.id }} {
     --hero-min-height: {{ section.settings.min_height }}vh;
