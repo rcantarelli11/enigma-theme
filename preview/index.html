@@ -256,7 +256,7 @@
     .cycle-wheel {
       position: relative;
       width: 100%;
-      max-width: 440px;
+      max-width: 520px;
       aspect-ratio: 1;
       margin: 0 auto;
     }
@@ -268,10 +268,10 @@
     }
     .cycle-node {
       position: absolute;
-      width: 80px;
-      height: 80px;
+      width: 88px;
+      height: 88px;
       top: 50%; left: 50%;
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-180px) rotate(calc(-1 * var(--angle)));
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-210px) rotate(calc(-1 * var(--angle)));
       border-radius: 50%;
       background: var(--bg-card);
       border: 1.5px solid var(--stone-300);
@@ -286,19 +286,19 @@
     }
     @media (max-width: 600px) {
       .cycle-node {
-        width: 64px; height: 64px;
-        transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-130px) rotate(calc(-1 * var(--angle)));
+        width: 68px; height: 68px;
+        transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-150px) rotate(calc(-1 * var(--angle)));
       }
     }
     .cycle-node:hover, .cycle-node.active {
       border-color: var(--accent);
       background: var(--accent-bg);
       box-shadow: 0 8px 32px rgba(13,148,136,0.12);
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-180px) rotate(calc(-1 * var(--angle))) scale(1.1);
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-210px) rotate(calc(-1 * var(--angle))) scale(1.1);
     }
     @media (max-width: 600px) {
       .cycle-node:hover, .cycle-node.active {
-        transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-130px) rotate(calc(-1 * var(--angle))) scale(1.1);
+        transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-150px) rotate(calc(-1 * var(--angle))) scale(1.1);
       }
     }
     .cycle-node__icon {
@@ -320,7 +320,7 @@
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 120px; height: 120px;
+      width: 140px; height: 140px;
       border-radius: 50%;
       background: var(--bg-dark);
       display: flex;
@@ -651,6 +651,121 @@
       color: var(--text-muted);
     }
 
+    /* ── Bundle Builder ── */
+    .bundle-section {
+      padding: 120px 0;
+      background: var(--stone-50);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .bundle-steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-top: 48px;
+    }
+    @media (min-width: 768px) { .bundle-steps { grid-template-columns: 1fr 1fr; gap: 20px; } }
+    @media (min-width: 1100px) { .bundle-steps { grid-template-columns: repeat(5, 1fr); gap: 16px; } }
+    .bundle-step {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+    }
+    .bundle-step:hover, .bundle-step.selected {
+      border-color: var(--accent);
+      box-shadow: 0 4px 24px rgba(13,148,136,0.1);
+    }
+    .bundle-step.selected { background: var(--accent-bg); }
+    .bundle-step__phase {
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .bundle-step__icon { font-size: 2rem; margin-bottom: 8px; }
+    .bundle-step__name {
+      font-family: var(--serif);
+      font-size: 1.125rem;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .bundle-step__price {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+    }
+    .bundle-step__select {
+      margin-top: 12px;
+      padding: 0;
+      background: none;
+      border: none;
+      font-size: 0.75rem;
+      font-family: var(--sans);
+      color: var(--text-secondary);
+      cursor: pointer;
+      width: 100%;
+    }
+    .bundle-step__select option { font-size: 0.8125rem; }
+    .bundle-summary {
+      margin-top: 40px;
+      padding: 32px 40px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .bundle-summary__text {}
+    .bundle-summary__title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+    }
+    .bundle-summary__savings {
+      margin-top: 4px;
+      font-size: 0.875rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .bundle-summary__prices {
+      text-align: right;
+    }
+    .bundle-summary__original {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+    .bundle-summary__total {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+    }
+    .bundle-summary__cta {
+      width: 100%;
+    }
+    @media (min-width: 768px) {
+      .bundle-summary__cta { width: auto; }
+    }
+
+    /* ── Product card images ── */
+    .product-card__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s var(--ease);
+    }
+    .product-card:hover .product-card__image img {
+      transform: scale(1.04);
+    }
+
     /* ── Subscribe & Save ── */
     .subscribe {
       padding: 120px 0;
@@ -848,20 +963,22 @@
       <div class="cycle-layout">
         <!-- Wheel -->
         <div class="cycle-wheel" data-reveal>
-          <svg class="cycle-wheel__svg" viewBox="0 0 440 440">
+          <svg class="cycle-wheel__svg" viewBox="0 0 520 520">
             <!-- Outer ring -->
-            <circle cx="220" cy="220" r="180" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
-            <!-- Connection lines -->
+            <circle cx="260" cy="260" r="210" fill="none" stroke="rgba(0,0,0,0.08)" stroke-width="1.5" stroke-dasharray="4 6"/>
+            <!-- Inner ring -->
+            <circle cx="260" cy="260" r="140" fill="none" stroke="rgba(0,0,0,0.04)" stroke-width="1"/>
+            <!-- Connection lines (pentagon) -->
             <g class="cycle-connections" stroke="rgba(0,0,0,0.06)" stroke-width="1">
-              <line x1="220" y1="40" x2="391" y2="164"/>
-              <line x1="391" y1="164" x2="326" y2="365"/>
-              <line x1="326" y1="365" x2="114" y2="365"/>
-              <line x1="114" y1="365" x2="49" y2="164"/>
-              <line x1="49" y1="164" x2="220" y2="40"/>
+              <line x1="260" y1="50" x2="460" y2="193"/>
+              <line x1="460" y1="193" x2="384" y2="427"/>
+              <line x1="384" y1="427" x2="136" y2="427"/>
+              <line x1="136" y1="427" x2="60" y2="193"/>
+              <line x1="60" y1="193" x2="260" y2="50"/>
             </g>
             <!-- Orbit dot -->
-            <circle r="4" fill="#0d9488" opacity="0.6">
-              <animateMotion dur="10s" repeatCount="indefinite" path="M220,40 A180,180 0 0,1 391,164 A180,180 0 0,1 326,365 A180,180 0 0,1 114,365 A180,180 0 0,1 49,164 A180,180 0 0,1 220,40 Z"/>
+            <circle r="5" fill="#0d9488" opacity="0.7">
+              <animateMotion dur="10s" repeatCount="indefinite" path="M260,50 A210,210 0 0,1 460,193 A210,210 0 0,1 384,427 A210,210 0 0,1 136,427 A210,210 0 0,1 60,193 A210,210 0 0,1 260,50 Z"/>
             </circle>
           </svg>
 
@@ -981,80 +1098,79 @@
         <article class="product-card" data-reveal>
           <div class="product-card__image">
             <span class="product-card__tag">Best Seller</span>
-            <div class="product-card__placeholder">E</div>
+            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Whey Protein Isolate Chocolate" loading="lazy">
           </div>
           <div class="product-card__info">
             <p class="product-card__category">Protein</p>
-            <h3 class="product-card__name">Whey Isolate</h3>
+            <h3 class="product-card__name">Whey Protein Isolate — Chocolate</h3>
             <div class="product-card__meta">
-              <span class="product-card__price">$49.99</span>
+              <span class="product-card__price">$44.00</span>
               <button class="product-card__add">Add to Cart</button>
             </div>
           </div>
         </article>
         <article class="product-card" data-reveal data-delay="1">
           <div class="product-card__image">
-            <div class="product-card__placeholder">E</div>
+            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration Powder Lemonade" loading="lazy">
           </div>
           <div class="product-card__info">
             <p class="product-card__category">Hydration</p>
-            <h3 class="product-card__name">Electrolyte Complex</h3>
+            <h3 class="product-card__name">Hydration Powder — Lemonade</h3>
             <div class="product-card__meta">
-              <span class="product-card__price">$34.99</span>
+              <span class="product-card__price">$27.00</span>
               <button class="product-card__add">Add to Cart</button>
             </div>
           </div>
         </article>
         <article class="product-card" data-reveal data-delay="2">
           <div class="product-card__image">
-            <div class="product-card__placeholder">E</div>
+            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy Powder Fruit Punch" loading="lazy">
           </div>
           <div class="product-card__info">
-            <p class="product-card__category">Pre-Workout</p>
-            <h3 class="product-card__name">Ignite Formula</h3>
+            <p class="product-card__category">Energy</p>
+            <h3 class="product-card__name">Energy Powder — Fruit Punch</h3>
             <div class="product-card__meta">
-              <span class="product-card__price">$44.99</span>
+              <span class="product-card__price">$29.00</span>
               <button class="product-card__add">Add to Cart</button>
             </div>
           </div>
         </article>
         <article class="product-card" data-reveal>
           <div class="product-card__image">
-            <div class="product-card__placeholder">E</div>
+            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine Monohydrate" loading="lazy">
           </div>
           <div class="product-card__info">
             <p class="product-card__category">Strength</p>
             <h3 class="product-card__name">Creatine Monohydrate</h3>
             <div class="product-card__meta">
-              <span class="product-card__price">$29.99</span>
+              <span class="product-card__price">$26.00</span>
               <button class="product-card__add">Add to Cart</button>
             </div>
           </div>
         </article>
         <article class="product-card" data-reveal data-delay="1">
           <div class="product-card__image">
-            <span class="product-card__tag">New</span>
-            <div class="product-card__placeholder">E</div>
+            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Ashwagandha" loading="lazy">
           </div>
           <div class="product-card__info">
             <p class="product-card__category">Recovery</p>
-            <h3 class="product-card__name">Sleep & Repair</h3>
+            <h3 class="product-card__name">Ashwagandha</h3>
             <div class="product-card__meta">
-              <span class="product-card__price">$39.99</span>
+              <span class="product-card__price">$19.00</span>
               <button class="product-card__add">Add to Cart</button>
             </div>
           </div>
         </article>
         <article class="product-card" data-reveal data-delay="2">
           <div class="product-card__image">
-            <span class="product-card__tag">Save 15%</span>
-            <div class="product-card__placeholder">E</div>
+            <span class="product-card__tag">New Flavor</span>
+            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1739272406897-generated-label-image-0.jpg?v=1739307729" alt="Energy Powder Cotton Candy" loading="lazy">
           </div>
           <div class="product-card__info">
-            <p class="product-card__category">Bundles</p>
-            <h3 class="product-card__name">The Complete Cycle</h3>
+            <p class="product-card__category">Energy</p>
+            <h3 class="product-card__name">Energy Powder — Cotton Candy</h3>
             <div class="product-card__meta">
-              <span class="product-card__price">$169.99</span>
+              <span class="product-card__price">$29.00</span>
               <button class="product-card__add">Add to Cart</button>
             </div>
           </div>
@@ -1104,6 +1220,100 @@
         </div>
         <div class="philosophy__visual" data-reveal data-delay="2">
           <div class="philosophy__visual-text">E</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bundle Builder -->
+  <section class="bundle-section" id="bundle">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <p class="section-label">Build Your Cycle</p>
+        <h2 class="section-title">One system. Five pillars. Your stack.</h2>
+        <p class="section-desc">Select one product from each phase. Save 10% when you build the complete cycle.</p>
+      </div>
+
+      <div class="bundle-steps" data-reveal>
+        <!-- Step 1: Energy -->
+        <div class="bundle-step selected" data-bundle="energy" onclick="toggleBundle(this)">
+          <div class="bundle-step__phase">Phase 01</div>
+          <div class="bundle-step__icon">⚡</div>
+          <div class="bundle-step__name">Energy</div>
+          <div class="bundle-step__price">$29.00</div>
+          <select class="bundle-step__select" onchange="updateBundle()">
+            <option>Fruit Punch</option>
+            <option>Cotton Candy</option>
+            <option>Guava Berry</option>
+            <option>Lychee Splash</option>
+            <option>Melon Creamsicle</option>
+            <option>Strawberry Shortcake</option>
+            <option>Yuzu</option>
+          </select>
+        </div>
+
+        <!-- Step 2: Hydration -->
+        <div class="bundle-step selected" data-bundle="hydration" onclick="toggleBundle(this)">
+          <div class="bundle-step__phase">Phase 02</div>
+          <div class="bundle-step__icon">💧</div>
+          <div class="bundle-step__name">Hydration</div>
+          <div class="bundle-step__price">$27.00</div>
+          <select class="bundle-step__select" onchange="updateBundle()">
+            <option>Lemonade</option>
+            <option>Lychee</option>
+            <option>Matcha Green Tea</option>
+            <option>Passion Fruit</option>
+            <option>Peach Mango</option>
+          </select>
+        </div>
+
+        <!-- Step 3: Protein -->
+        <div class="bundle-step selected" data-bundle="protein" onclick="toggleBundle(this)">
+          <div class="bundle-step__phase">Phase 03</div>
+          <div class="bundle-step__icon">🥛</div>
+          <div class="bundle-step__name">Protein</div>
+          <div class="bundle-step__price">$44.00</div>
+          <select class="bundle-step__select" onchange="updateBundle()">
+            <option>Chocolate</option>
+            <option>Vanilla</option>
+          </select>
+        </div>
+
+        <!-- Step 4: Strength -->
+        <div class="bundle-step selected" data-bundle="strength" onclick="toggleBundle(this)">
+          <div class="bundle-step__phase">Phase 04</div>
+          <div class="bundle-step__icon">💪</div>
+          <div class="bundle-step__name">Creatine</div>
+          <div class="bundle-step__price">$26.00</div>
+          <select class="bundle-step__select" onchange="updateBundle()">
+            <option>Unflavored</option>
+          </select>
+        </div>
+
+        <!-- Step 5: Recovery -->
+        <div class="bundle-step selected" data-bundle="recovery" onclick="toggleBundle(this)">
+          <div class="bundle-step__phase">Phase 05</div>
+          <div class="bundle-step__icon">🧘</div>
+          <div class="bundle-step__name">Ashwagandha</div>
+          <div class="bundle-step__price">$19.00</div>
+          <select class="bundle-step__select" onchange="updateBundle()">
+            <option>Standard</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="bundle-summary" data-reveal>
+        <div class="bundle-summary__text">
+          <div class="bundle-summary__title">The Complete Cycle</div>
+          <div class="bundle-summary__savings">Save 10% — you're saving $14.50</div>
+        </div>
+        <div class="bundle-summary__prices">
+          <div class="bundle-summary__original">$145.00</div>
+          <div class="bundle-summary__total" id="bundleTotal">$130.50</div>
+        </div>
+        <div class="bundle-summary__cta">
+          <a href="#" class="btn btn-primary btn-lg">Add Bundle to Cart</a>
         </div>
       </div>
     </div>
@@ -1226,10 +1436,57 @@
 
     // Auto-rotate cycle
     let currentPhase = 0;
-    setInterval(() => {
+    let autoRotate = setInterval(() => {
       currentPhase = (currentPhase + 1) % 5;
       showPhase(currentPhase);
     }, 4000);
+
+    // Pause auto-rotate on manual interaction
+    document.querySelectorAll('.cycle-node').forEach(node => {
+      node.addEventListener('click', () => {
+        clearInterval(autoRotate);
+        // Resume after 12s of no interaction
+        setTimeout(() => {
+          autoRotate = setInterval(() => {
+            currentPhase = (currentPhase + 1) % 5;
+            showPhase(currentPhase);
+          }, 4000);
+        }, 12000);
+      });
+    });
+
+    // Bundle builder
+    const prices = { energy: 29, hydration: 27, protein: 44, strength: 26, recovery: 19 };
+
+    function toggleBundle(el) {
+      el.classList.toggle('selected');
+      updateBundle();
+    }
+
+    function updateBundle() {
+      const selected = document.querySelectorAll('.bundle-step.selected');
+      let total = 0;
+      selected.forEach(step => {
+        const key = step.dataset.bundle;
+        total += prices[key] || 0;
+      });
+      const savings = total * 0.10;
+      const discounted = total - savings;
+      const totalEl = document.getElementById('bundleTotal');
+      const summaryTitle = document.querySelector('.bundle-summary__title');
+      const summarysSavings = document.querySelector('.bundle-summary__savings');
+      const originalPrice = document.querySelector('.bundle-summary__original');
+      
+      if (selected.length === 5) {
+        summaryTitle.textContent = 'The Complete Cycle';
+      } else {
+        summaryTitle.textContent = `${selected.length} of 5 Selected`;
+      }
+      
+      totalEl.textContent = `$${discounted.toFixed(2)}`;
+      originalPrice.textContent = `$${total.toFixed(2)}`;
+      summarysSavings.textContent = `Save 10% — you're saving $${savings.toFixed(2)}`;
+    }
   </script>
 
 </body>
