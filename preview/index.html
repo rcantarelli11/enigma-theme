@@ -618,12 +618,36 @@
       align-items: center;
       justify-content: center;
     }
-    .philosophy__visual-text {
-      font-family: var(--serif);
-      font-size: 8rem;
-      color: rgba(0,0,0,0.03);
+    .philosophy__ingredients {
+      padding: 48px 40px;
+      width: 100%;
+    }
+    .ingredient-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .ingredient-row:first-child { border-top: 1px solid var(--border); }
+    .ingredient-name {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--text);
+    }
+    .ingredient-dose {
+      font-family: var(--sans);
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+    .ingredient-note {
+      margin-top: 24px;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
       font-style: italic;
-      user-select: none;
+      text-align: center;
     }
 
     /* ── Testimonial ── */
@@ -664,14 +688,30 @@
     }
     .testimonial-card__author {
       display: flex;
-      flex-direction: column;
-      gap: 2px;
+      align-items: center;
+      gap: 12px;
     }
-    .testimonial-card__author strong {
+    .testimonial-card__avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: white;
+      flex-shrink: 0;
+    }
+    .testimonial-card__avatar--m { background: #0d9488; }
+    .testimonial-card__avatar--s { background: #6366f1; }
+    .testimonial-card__avatar--j { background: #d97706; }
+    .testimonial-card__author-info {}
+    .testimonial-card__author-info strong {
       font-size: 0.875rem;
       font-weight: 500;
+      display: block;
     }
-    .testimonial-card__author span {
+    .testimonial-card__author-info span {
       font-size: 0.75rem;
       color: var(--text-muted);
     }
@@ -1274,7 +1314,37 @@
           </div>
         </div>
         <div class="philosophy__visual" data-reveal data-delay="2">
-          <div class="philosophy__visual-text">E</div>
+          <div class="philosophy__ingredients">
+            <div class="ingredient-row">
+              <span class="ingredient-name">Citrulline Malate</span>
+              <span class="ingredient-dose">6,000mg</span>
+            </div>
+            <div class="ingredient-row">
+              <span class="ingredient-name">Beta-Alanine</span>
+              <span class="ingredient-dose">3,200mg</span>
+            </div>
+            <div class="ingredient-row">
+              <span class="ingredient-name">Creatine Monohydrate</span>
+              <span class="ingredient-dose">5,000mg</span>
+            </div>
+            <div class="ingredient-row">
+              <span class="ingredient-name">Alpha-GPC</span>
+              <span class="ingredient-dose">300mg</span>
+            </div>
+            <div class="ingredient-row">
+              <span class="ingredient-name">Caffeine Anhydrous</span>
+              <span class="ingredient-dose">200mg</span>
+            </div>
+            <div class="ingredient-row">
+              <span class="ingredient-name">L-Theanine</span>
+              <span class="ingredient-dose">100mg</span>
+            </div>
+            <div class="ingredient-row">
+              <span class="ingredient-name">BioPerine®</span>
+              <span class="ingredient-dose">5mg</span>
+            </div>
+            <p class="ingredient-note">Every dose. Every batch. Fully transparent.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1287,6 +1357,12 @@
         <p class="section-label">Build Your Cycle</p>
         <h2 class="section-title">One system. Five pillars. Your stack.</h2>
         <p class="section-desc">Select one product from each phase. Save 10% when you build the complete cycle.</p>
+      </div>
+
+      <div style="text-align:center; margin-bottom: 16px;">
+        <button onclick="selectAllBundle(true)" style="background:none;border:none;font-family:var(--sans);font-size:0.8125rem;color:var(--accent);cursor:pointer;padding:8px 16px;font-weight:500;">Select All</button>
+        <span style="color:var(--stone-300);">|</span>
+        <button onclick="selectAllBundle(false)" style="background:none;border:none;font-family:var(--sans);font-size:0.8125rem;color:var(--text-muted);cursor:pointer;padding:8px 16px;font-weight:500;">Clear</button>
       </div>
 
       <div class="bundle-steps" data-reveal>
@@ -1391,8 +1467,11 @@
           <div class="testimonial-card__stars">★★★★★</div>
           <blockquote class="testimonial-card__quote">"The cleanest energy powder I've tried. No jitters, no crash. The Lychee Splash flavor is insane."</blockquote>
           <div class="testimonial-card__author">
-            <strong>Marcus T.</strong>
-            <span>CrossFit Athlete</span>
+            <div class="testimonial-card__avatar testimonial-card__avatar--m">MT</div>
+            <div class="testimonial-card__author-info">
+              <strong>Marcus T.</strong>
+              <span>CrossFit Athlete</span>
+            </div>
           </div>
           <div class="testimonial-card__verified">✓ Verified Purchase</div>
         </div>
@@ -1400,8 +1479,11 @@
           <div class="testimonial-card__stars">★★★★★</div>
           <blockquote class="testimonial-card__quote">"Finally a protein that tastes great AND has a transparent label. No more guessing what I'm putting in my body."</blockquote>
           <div class="testimonial-card__author">
-            <strong>Sarah K.</strong>
-            <span>Marathon Runner</span>
+            <div class="testimonial-card__avatar testimonial-card__avatar--s">SK</div>
+            <div class="testimonial-card__author-info">
+              <strong>Sarah K.</strong>
+              <span>Marathon Runner</span>
+            </div>
           </div>
           <div class="testimonial-card__verified">✓ Verified Purchase</div>
         </div>
@@ -1409,8 +1491,11 @@
           <div class="testimonial-card__stars">★★★★★</div>
           <blockquote class="testimonial-card__quote">"The Complete Cycle bundle changed my routine. Everything works together. Recovery has never been faster."</blockquote>
           <div class="testimonial-card__author">
-            <strong>James R.</strong>
-            <span>Powerlifter</span>
+            <div class="testimonial-card__avatar testimonial-card__avatar--j">JR</div>
+            <div class="testimonial-card__author-info">
+              <strong>James R.</strong>
+              <span>Powerlifter</span>
+            </div>
           </div>
           <div class="testimonial-card__verified">✓ Verified Purchase</div>
         </div>
@@ -1548,6 +1633,14 @@
 
     function toggleBundle(el) {
       el.classList.toggle('selected');
+      updateBundle();
+    }
+
+    function selectAllBundle(selectAll) {
+      document.querySelectorAll('.bundle-step').forEach(step => {
+        if (selectAll) step.classList.add('selected');
+        else step.classList.remove('selected');
+      });
       updateBundle();
     }
 
