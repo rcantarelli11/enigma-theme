@@ -3,30 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Enigma — Power Beyond Limits</title>
+  <title>Enigma — The Complete Performance System</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #050505;
-      --bg-elevated: #0c0c0c;
-      --text: #f0efe9;
-      --text-muted: rgba(240,239,233,0.5);
-      --text-dim: rgba(240,239,233,0.28);
-      --accent: #14b8a6;
-      --accent-subtle: rgba(20,184,166,0.08);
-      --border: rgba(255,255,255,0.06);
+      --bg: #faf9f6;
+      --bg-white: #ffffff;
+      --bg-warm: #f5f3ef;
+      --bg-card: #ffffff;
+      --text: #1a1a1a;
+      --text-secondary: #555555;
+      --text-muted: #999999;
+      --text-light: #bbbbbb;
+      --accent: #0d9488;
+      --accent-light: #14b8a6;
+      --accent-bg: rgba(13,148,136,0.06);
+      --accent-border: rgba(13,148,136,0.15);
+      --border: rgba(0,0,0,0.07);
+      --border-strong: rgba(0,0,0,0.12);
       --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      --serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --radius: 12px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { 
-      scroll-behavior: smooth; 
-      overflow-x: hidden; 
-      font-size: 16px;
-    }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       font-family: var(--sans);
       background: var(--bg);
@@ -38,413 +42,490 @@
     }
     img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
-
-    /* ── Layout ── */
-    .container {
-      max-width: 1340px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
     @media (min-width: 768px) { .container { padding: 0 48px; } }
-    @media (min-width: 1200px) { .container { padding: 0 64px; } }
 
-    /* ── Reveal Animation ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), 
-                  transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    /* ── Animations ── */
+    [data-reveal] { opacity: 0; transform: translateY(48px); }
+    [data-reveal].visible {
+      opacity: 1; transform: translateY(0);
+      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
     }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .delay-1 { transition-delay: 0.1s !important; }
+    .delay-2 { transition-delay: 0.2s !important; }
+    .delay-3 { transition-delay: 0.3s !important; }
+    .delay-4 { transition-delay: 0.4s !important; }
+
+    /* ── Announcement Bar ── */
+    .announcement {
+      background: var(--text);
+      color: var(--bg);
+      text-align: center;
+      padding: 10px 24px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
     }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-    .reveal-delay-4 { transition-delay: 0.4s; }
+    .announcement a { text-decoration: underline; text-underline-offset: 2px; }
 
     /* ── Nav ── */
     .nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 0 24px;
-      height: 72px;
+      position: sticky;
+      top: 0; z-index: 100;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(5,5,5,0.7);
-      backdrop-filter: blur(40px) saturate(1.4);
-      -webkit-backdrop-filter: blur(40px) saturate(1.4);
+      padding: 0 24px;
+      background: rgba(250,249,246,0.85);
+      backdrop-filter: blur(24px) saturate(1.3);
+      -webkit-backdrop-filter: blur(24px) saturate(1.3);
       border-bottom: 1px solid var(--border);
-      transition: background 0.4s;
+      transition: all 0.3s;
     }
     @media (min-width: 768px) { .nav { padding: 0 48px; } }
     .nav__logo {
       font-family: var(--sans);
       font-size: 1.125rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
     }
-    .nav__links {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-    }
+    .nav__links { display: flex; gap: 32px; align-items: center; }
     .nav__links a {
       font-size: 0.8125rem;
-      font-weight: 400;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-      transition: color 0.3s;
+      color: var(--text-secondary);
+      transition: color 0.2s;
     }
     .nav__links a:hover { color: var(--text); }
+    .nav__right { display: flex; align-items: center; gap: 24px; }
     .nav__cart {
       font-size: 0.8125rem;
-      color: var(--text-muted);
-      transition: color 0.3s;
+      color: var(--text-secondary);
     }
-    .nav__cart:hover { color: var(--text); }
-    @media (max-width: 768px) { .nav__links { display: none; } }
+    .nav__cta {
+      display: inline-flex;
+      padding: 8px 20px;
+      background: var(--text);
+      color: var(--bg);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      border-radius: 100px;
+      transition: opacity 0.2s;
+    }
+    .nav__cta:hover { opacity: 0.85; }
+    @media (max-width: 768px) {
+      .nav__links { display: none; }
+      .nav__cta { display: none; }
+    }
 
     /* ── Hero ── */
     .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 100px 24px 80px;
       text-align: center;
-      padding: 160px 24px 120px;
       position: relative;
-      overflow: hidden;
     }
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 20%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle, rgba(20,184,166,0.04) 0%, transparent 70%);
-      pointer-events: none;
-    }
+    @media (min-width: 768px) { .hero { padding: 140px 48px 100px; } }
     .hero__eyebrow {
       font-size: 0.6875rem;
       font-weight: 500;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 32px;
+      color: var(--accent);
+      margin-bottom: 24px;
     }
     .hero__title {
       font-family: var(--serif);
-      font-size: clamp(3.5rem, 9vw, 7.5rem);
+      font-size: clamp(3rem, 7vw, 5.5rem);
       font-weight: 400;
-      line-height: 0.95;
+      line-height: 1.0;
       letter-spacing: -0.02em;
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
+      color: var(--text);
     }
     .hero__title em {
       font-style: italic;
-      color: var(--accent);
     }
     .hero__sub {
-      margin-top: 36px;
-      font-size: clamp(1rem, 1.4vw, 1.1875rem);
-      color: var(--text-muted);
+      margin-top: 28px;
+      font-size: 1.0625rem;
+      color: var(--text-secondary);
       line-height: 1.7;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+      font-weight: 300;
+    }
+    .hero__actions {
+      margin-top: 44px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      font-family: var(--sans);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.3s var(--ease);
+      border: none;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border-strong);
+    }
+    .btn-outline:hover {
+      border-color: var(--text);
+      background: rgba(0,0,0,0.02);
+    }
+    .btn svg { width: 14px; height: 14px; }
+
+    /* ── Cycle System (The 5 Pillars) ── */
+    .cycle-section {
+      padding: 120px 0;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .cycle__header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .cycle__label {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 20px;
+    }
+    .cycle__title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    .cycle__desc {
+      margin-top: 16px;
+      font-size: 1rem;
+      color: var(--text-secondary);
       max-width: 480px;
       margin-left: auto;
       margin-right: auto;
       font-weight: 300;
     }
-    .hero__cta {
-      margin-top: 56px;
-      display: inline-flex;
+
+    /* Cycle Wheel */
+    .cycle-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 60px;
       align-items: center;
-      gap: 12px;
-      padding: 16px 40px;
-      background: var(--text);
-      color: var(--bg);
-      font-size: 0.875rem;
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      border-radius: 100px;
-      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
-      border: none;
-      cursor: pointer;
     }
-    .hero__cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 60px rgba(240,239,233,0.08);
+    @media (min-width: 960px) {
+      .cycle-layout { grid-template-columns: 1fr 1fr; gap: 80px; }
     }
-    .hero__cta svg {
-      width: 16px;
-      height: 16px;
-      transition: transform 0.3s;
+
+    .cycle-wheel {
+      position: relative;
+      width: 100%;
+      max-width: 440px;
+      aspect-ratio: 1;
+      margin: 0 auto;
     }
-    .hero__cta:hover svg { transform: translateX(3px); }
-    .hero__scroll-hint {
+    .cycle-wheel__svg {
       position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .cycle-node {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-180px) rotate(calc(-1 * var(--angle)));
+      border-radius: 50%;
+      background: var(--bg-white);
+      border: 1.5px solid var(--border);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
-      color: var(--text-dim);
-      font-size: 0.6875rem;
-      letter-spacing: 0.1em;
+      justify-content: center;
+      gap: 2px;
+      cursor: pointer;
+      transition: all 0.4s var(--ease);
+      z-index: 2;
+    }
+    @media (max-width: 600px) {
+      .cycle-node {
+        width: 64px; height: 64px;
+        transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-130px) rotate(calc(-1 * var(--angle)));
+      }
+    }
+    .cycle-node:hover, .cycle-node.active {
+      border-color: var(--accent);
+      background: var(--accent-bg);
+      box-shadow: 0 8px 32px rgba(13,148,136,0.12);
+      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-180px) rotate(calc(-1 * var(--angle))) scale(1.1);
+    }
+    @media (max-width: 600px) {
+      .cycle-node:hover, .cycle-node.active {
+        transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-130px) rotate(calc(-1 * var(--angle))) scale(1.1);
+      }
+    }
+    .cycle-node__icon {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+    .cycle-node__label {
+      font-size: 0.5625rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color 0.3s;
     }
-    .hero__scroll-line {
-      width: 1px;
-      height: 48px;
-      background: linear-gradient(to bottom, var(--text-dim), transparent);
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-    @keyframes scrollPulse {
-      0%, 100% { opacity: 0.3; transform: scaleY(1); }
-      50% { opacity: 0.8; transform: scaleY(1.1); }
-    }
+    .cycle-node:hover .cycle-node__label,
+    .cycle-node.active .cycle-node__label { color: var(--accent); }
 
-    /* ── Marquee ── */
-    .marquee-section {
-      padding: 48px 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      overflow: hidden;
-    }
-    .marquee-track {
-      display: flex;
-      gap: 64px;
-      animation: marqueeScroll 30s linear infinite;
-      width: max-content;
-    }
-    .marquee-item {
-      font-family: var(--sans);
-      font-size: 0.75rem;
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      white-space: nowrap;
+    .cycle-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: var(--text);
       display: flex;
       align-items: center;
-      gap: 64px;
+      justify-content: center;
+      z-index: 3;
     }
-    .marquee-item::after {
-      content: '·';
-      font-size: 1.25rem;
-    }
-    @keyframes marqueeScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    .cycle-center__text {
+      font-family: var(--sans);
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--bg);
+      text-align: center;
+      line-height: 1.3;
     }
 
-    /* ── Product Showcase (Air.inc style full-width sections) ── */
-    .showcase {
-      padding: 160px 0;
+    /* Cycle Detail Panel */
+    .cycle-detail {
+      padding: 0 24px;
     }
-    .showcase__header {
-      text-align: center;
-      max-width: 640px;
-      margin: 0 auto 100px;
+    .cycle-detail__phase {
+      display: none;
     }
-    .showcase__label {
+    .cycle-detail__phase.active {
+      display: block;
+      animation: fadeIn 0.5s var(--ease);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .cycle-detail__number {
       font-size: 0.6875rem;
       font-weight: 500;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
+      color: var(--text-light);
+      margin-bottom: 16px;
+    }
+    .cycle-detail__name {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .cycle-detail__text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-weight: 300;
+      max-width: 440px;
+    }
+    .cycle-detail__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 28px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--accent);
+      border-bottom: 1px solid var(--accent-border);
+      padding-bottom: 4px;
+      transition: all 0.3s;
+    }
+    .cycle-detail__link:hover { border-color: var(--accent); }
+    .cycle-detail__link svg { width: 14px; height: 14px; transition: transform 0.3s; }
+    .cycle-detail__link:hover svg { transform: translateX(4px); }
+
+    /* ── Product Cards ── */
+    .products-section {
+      padding: 120px 0;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .section-label {
+      font-size: 0.6875rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
-    .showcase__heading {
+    .section-title {
       font-family: var(--serif);
-      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-size: clamp(2rem, 4vw, 3rem);
       font-weight: 400;
-      line-height: 1.05;
-      letter-spacing: -0.015em;
+      line-height: 1.1;
     }
-    .showcase__desc {
-      margin-top: 24px;
-      font-size: 1.0625rem;
-      color: var(--text-muted);
-      line-height: 1.7;
+    .section-desc {
+      margin-top: 16px;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
       font-weight: 300;
     }
 
-    /* ── Product Cards (Large, editorial) ── */
     .products-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 24px;
     }
-    @media (min-width: 768px) {
-      .products-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
-    }
-    @media (min-width: 1080px) {
-      .products-grid { grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-    }
+    @media (min-width: 640px) { .products-grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 1024px) { .products-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
     .product-card {
-      position: relative;
-      background: var(--bg-elevated);
+      background: var(--bg-white);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: var(--radius);
       overflow: hidden;
       cursor: pointer;
-      transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+      transition: all 0.4s var(--ease);
     }
     .product-card:hover {
-      border-color: rgba(255,255,255,0.1);
+      border-color: var(--border-strong);
+      box-shadow: 0 12px 48px rgba(0,0,0,0.06);
       transform: translateY(-4px);
     }
     .product-card__image {
       width: 100%;
-      aspect-ratio: 4/5;
-      background: linear-gradient(145deg, #111 0%, #0a0a0a 100%);
+      aspect-ratio: 1;
+      background: var(--bg-warm);
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
       position: relative;
+      overflow: hidden;
     }
-    .product-card__image img {
-      width: 70%;
-      height: 70%;
-      object-fit: contain;
-      transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
-    }
-    .product-card:hover .product-card__image img {
-      transform: scale(1.06);
-    }
-    /* Placeholder for product images */
     .product-card__placeholder {
       font-family: var(--serif);
-      font-size: 4rem;
-      color: rgba(255,255,255,0.03);
+      font-size: 5rem;
+      color: rgba(0,0,0,0.04);
       font-style: italic;
       user-select: none;
     }
-    .product-card__info {
-      padding: 28px 28px 32px;
+    .product-card__tag {
+      position: absolute;
+      top: 16px; left: 16px;
+      padding: 4px 12px;
+      background: var(--accent);
+      color: white;
+      font-size: 0.625rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: 100px;
     }
+    .product-card__info { padding: 20px 24px 24px; }
     .product-card__category {
       font-size: 0.6875rem;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 10px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
     }
     .product-card__name {
       font-family: var(--serif);
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 400;
-      line-height: 1.2;
+    }
+    .product-card__meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
     }
     .product-card__price {
-      margin-top: 12px;
       font-size: 0.9375rem;
-      color: var(--text-muted);
-      font-weight: 300;
-    }
-
-    /* ── Full-Width Feature Section (Air.inc large visual blocks) ── */
-    .feature-block {
-      padding: 0;
-      position: relative;
-    }
-    .feature-block__visual {
-      width: 100%;
-      height: 85vh;
-      min-height: 560px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .feature-block__visual--protein {
-      background: linear-gradient(180deg, #050505 0%, #0a0d0c 40%, #050505 100%);
-    }
-    .feature-block__visual--hydration {
-      background: linear-gradient(180deg, #050505 0%, #080a0e 40%, #050505 100%);
-    }
-    .feature-block__visual--preworkout {
-      background: linear-gradient(180deg, #050505 0%, #0d0a08 40%, #050505 100%);
-    }
-    .feature-block__inner {
-      text-align: center;
-      max-width: 720px;
-      padding: 0 24px;
-    }
-    .feature-block__number {
-      font-family: var(--sans);
-      font-size: 0.6875rem;
       font-weight: 500;
-      letter-spacing: 0.2em;
-      color: var(--text-dim);
-      margin-bottom: 28px;
     }
-    .feature-block__title {
+    .product-card__add {
+      padding: 8px 16px;
+      background: var(--text);
+      color: var(--bg);
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .product-card__add:hover { opacity: 0.85; }
+
+    /* ── Social Proof / Trust ── */
+    .trust-section {
+      padding: 100px 0;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 48px;
+      text-align: center;
+    }
+    @media (min-width: 768px) { .trust-grid { grid-template-columns: repeat(4, 1fr); } }
+    .trust-item__number {
       font-family: var(--serif);
-      font-size: clamp(2.75rem, 5.5vw, 4.5rem);
-      font-weight: 400;
-      line-height: 1.0;
-      letter-spacing: -0.015em;
-    }
-    .feature-block__title em {
-      font-style: italic;
-      color: var(--accent);
-    }
-    .feature-block__text {
-      margin-top: 28px;
-      font-size: 1.0625rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      font-weight: 300;
-      max-width: 520px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .feature-block__link {
-      margin-top: 40px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.875rem;
+      font-size: 2.5rem;
       font-weight: 400;
       color: var(--text);
-      border-bottom: 1px solid rgba(255,255,255,0.2);
-      padding-bottom: 4px;
-      transition: all 0.3s;
     }
-    .feature-block__link:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-    .feature-block__link svg {
-      width: 14px;
-      height: 14px;
-      transition: transform 0.3s;
-    }
-    .feature-block__link:hover svg { transform: translateX(4px); }
-
-    /* ── Divider ── */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 0;
+    .trust-item__label {
+      margin-top: 8px;
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      font-weight: 300;
     }
 
-    /* ── Philosophy / About Section ── */
+    /* ── Philosophy ── */
     .philosophy {
-      padding: 180px 0;
+      padding: 140px 0;
     }
     .philosophy__inner {
       display: grid;
@@ -453,445 +534,622 @@
       align-items: center;
     }
     @media (min-width: 960px) {
-      .philosophy__inner { grid-template-columns: 1fr 1fr; gap: 120px; }
+      .philosophy__inner { grid-template-columns: 1fr 1fr; gap: 100px; }
     }
-    .philosophy__text {}
     .philosophy__label {
       font-size: 0.6875rem;
       font-weight: 500;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 32px;
+      color: var(--accent);
+      margin-bottom: 24px;
     }
     .philosophy__heading {
       font-family: var(--serif);
-      font-size: clamp(2.25rem, 4vw, 3.25rem);
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
       font-weight: 400;
-      line-height: 1.1;
+      line-height: 1.15;
     }
     .philosophy__body {
-      margin-top: 28px;
-      font-size: 1.0625rem;
-      color: var(--text-muted);
+      margin-top: 24px;
+      font-size: 1rem;
+      color: var(--text-secondary);
       line-height: 1.8;
       font-weight: 300;
     }
-    .philosophy__stats {
+    .philosophy__features {
+      margin-top: 40px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      margin-top: 56px;
+      gap: 16px;
     }
-    .stat__number {
-      font-family: var(--serif);
-      font-size: 2.75rem;
-      font-weight: 400;
-      line-height: 1;
+    .feature-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
     }
-    .stat__label {
-      margin-top: 8px;
+    .feature-item__icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--accent-bg);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .feature-item__text {}
+    .feature-item__title {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .feature-item__desc {
       font-size: 0.8125rem;
-      color: var(--text-dim);
-      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-top: 2px;
+      font-weight: 300;
     }
     .philosophy__visual {
-      aspect-ratio: 3/4;
-      background: linear-gradient(145deg, #0c0c0c, #111);
+      aspect-ratio: 4/5;
+      background: var(--bg-warm);
       border: 1px solid var(--border);
       border-radius: 16px;
-      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .philosophy__visual-text {
       font-family: var(--serif);
-      font-size: 6rem;
-      color: rgba(255,255,255,0.02);
+      font-size: 8rem;
+      color: rgba(0,0,0,0.03);
       font-style: italic;
       user-select: none;
     }
 
     /* ── Testimonial ── */
     .testimonial {
-      padding: 160px 0;
+      padding: 120px 0;
       text-align: center;
-      position: relative;
+      background: var(--bg-white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .testimonial__stars {
+      color: var(--accent);
+      font-size: 1.25rem;
+      letter-spacing: 4px;
+      margin-bottom: 28px;
     }
     .testimonial__quote {
       font-family: var(--serif);
-      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
       font-weight: 400;
-      line-height: 1.35;
-      max-width: 780px;
+      line-height: 1.4;
+      max-width: 700px;
       margin: 0 auto;
       font-style: italic;
       color: var(--text);
     }
     .testimonial__attr {
-      margin-top: 40px;
+      margin-top: 28px;
       font-size: 0.8125rem;
-      color: var(--text-dim);
-      letter-spacing: 0.06em;
-    }
-    .testimonial__mark {
-      font-family: var(--serif);
-      font-size: 8rem;
-      line-height: 1;
-      color: rgba(20,184,166,0.08);
-      position: absolute;
-      top: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      user-select: none;
+      color: var(--text-muted);
     }
 
-    /* ── CTA Section ── */
-    .cta-section {
-      padding: 180px 0;
+    /* ── Subscribe & Save ── */
+    .subscribe {
+      padding: 120px 0;
       text-align: center;
-      position: relative;
     }
-    .cta-section::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, rgba(20,184,166,0.03) 0%, transparent 70%);
-      pointer-events: none;
+    .subscribe__box {
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 56px 40px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
     }
-    .cta-section__heading {
+    .subscribe__icon {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+    .subscribe__title {
       font-family: var(--serif);
-      font-size: clamp(3rem, 6vw, 5rem);
+      font-size: 1.75rem;
       font-weight: 400;
-      line-height: 1.0;
-      letter-spacing: -0.015em;
     }
-    .cta-section__heading em {
-      font-style: italic;
-      color: var(--accent);
-    }
-    .cta-section__sub {
-      margin-top: 28px;
-      font-size: 1.0625rem;
-      color: var(--text-muted);
+    .subscribe__text {
+      margin-top: 12px;
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
       font-weight: 300;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.7;
+      line-height: 1.6;
     }
-    .cta-section__btn {
-      margin-top: 52px;
-      display: inline-flex;
+    .subscribe__benefits {
+      margin-top: 28px;
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .subscribe__benefit {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 18px 48px;
+      gap: 8px;
+    }
+    .subscribe__benefit::before {
+      content: '✓';
+      color: var(--accent);
+      font-weight: 700;
+    }
+    .subscribe__cta {
+      margin-top: 32px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 160px 0;
+      text-align: center;
       background: var(--text);
       color: var(--bg);
+    }
+    .cta-section .section-label { color: var(--accent-light); }
+    .cta-section__heading {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.05;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .cta-section__sub {
+      margin-top: 20px;
+      font-size: 1rem;
+      color: rgba(250,249,246,0.6);
+      font-weight: 300;
+    }
+    .cta-section__btn {
+      margin-top: 40px;
+      display: inline-flex;
+      padding: 16px 40px;
+      background: var(--bg);
+      color: var(--text);
       font-size: 0.875rem;
       font-weight: 500;
-      letter-spacing: 0.04em;
       border-radius: 100px;
-      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
       border: none;
       cursor: pointer;
+      transition: all 0.3s var(--ease);
+      text-decoration: none;
     }
-    .cta-section__btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 20px 60px rgba(240,239,233,0.08);
-    }
+    .cta-section__btn:hover { opacity: 0.9; transform: translateY(-2px); }
 
     /* ── Footer ── */
     .footer {
-      padding: 80px 0 48px;
+      padding: 64px 0 40px;
       border-top: 1px solid var(--border);
     }
     .footer__inner {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 48px;
+      gap: 40px;
     }
     @media (min-width: 768px) {
-      .footer__inner { grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; }
+      .footer__inner { grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; }
     }
-    .footer__brand {}
     .footer__logo {
       font-family: var(--sans);
-      font-size: 1.125rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .footer__tagline {
-      font-size: 0.875rem;
-      color: var(--text-dim);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
       line-height: 1.6;
-      max-width: 280px;
+      max-width: 260px;
     }
     .footer__col-title {
       font-size: 0.6875rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
+      font-weight: 600;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 20px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
     }
     .footer__col a {
       display: block;
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      padding: 6px 0;
-      transition: color 0.3s;
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      padding: 5px 0;
+      transition: color 0.2s;
     }
     .footer__col a:hover { color: var(--text); }
     .footer__bottom {
-      margin-top: 64px;
-      padding-top: 24px;
+      margin-top: 48px;
+      padding-top: 20px;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 12px;
     }
-    .footer__copy {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-    }
-    .footer__socials {
-      display: flex;
-      gap: 20px;
-    }
-    .footer__socials a {
-      color: var(--text-dim);
-      transition: color 0.3s;
-    }
+    .footer__copy { font-size: 0.75rem; color: var(--text-muted); }
+    .footer__socials { display: flex; gap: 16px; }
+    .footer__socials a { font-size: 0.75rem; color: var(--text-muted); transition: color 0.2s; }
     .footer__socials a:hover { color: var(--text); }
   </style>
 </head>
 <body>
 
-  <!-- ── Nav ── -->
+  <!-- Announcement -->
+  <div class="announcement">
+    Free shipping on orders over $75 · <a href="#">Subscribe & save 15%</a>
+  </div>
+
+  <!-- Nav -->
   <nav class="nav">
     <a href="/" class="nav__logo">Enigma</a>
     <div class="nav__links">
+      <a href="#system">The System</a>
       <a href="#products">Products</a>
+      <a href="#science">Science</a>
       <a href="#philosophy">About</a>
-      <a href="#story">Science</a>
     </div>
-    <a href="/cart" class="nav__cart">Cart (0)</a>
+    <div class="nav__right">
+      <a href="/cart" class="nav__cart">Cart (0)</a>
+      <a href="#products" class="nav__cta">Shop Now</a>
+    </div>
   </nav>
 
-  <!-- ── Hero ── -->
+  <!-- Hero -->
   <section class="hero">
-    <div class="reveal">
-      <p class="hero__eyebrow reveal reveal-delay-1">Premium Fitness Nutrition</p>
-      <h1 class="hero__title reveal reveal-delay-2">Power beyond<br><em>limits</em></h1>
-      <p class="hero__sub reveal reveal-delay-3">Performance supplements built on science, crafted for athletes who refuse to settle.</p>
-      <a href="#products" class="hero__cta reveal reveal-delay-4">
-        Explore the collection
+    <p class="hero__eyebrow" data-reveal>The Complete Performance System</p>
+    <h1 class="hero__title" data-reveal class="delay-1">The complete<br><em>performance cycle</em></h1>
+    <p class="hero__sub" data-reveal class="delay-2">Five pillars. One system. Every phase of your training optimized with clinically-dosed, fully transparent formulas.</p>
+    <div class="hero__actions" data-reveal class="delay-3">
+      <a href="#products" class="btn btn-primary">
+        Shop the Collection
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
       </a>
-    </div>
-    <div class="hero__scroll-hint">
-      <span>Scroll</span>
-      <div class="hero__scroll-line"></div>
+      <a href="#system" class="btn btn-outline">Learn the System</a>
     </div>
   </section>
 
-  <!-- ── Marquee ── -->
-  <div class="marquee-section">
-    <div class="marquee-track">
-      <span class="marquee-item">Third-Party Tested</span>
-      <span class="marquee-item">No Artificial Colors</span>
-      <span class="marquee-item">Clean Ingredients</span>
-      <span class="marquee-item">Performance Driven</span>
-      <span class="marquee-item">Science Backed</span>
-      <span class="marquee-item">No Proprietary Blends</span>
-      <span class="marquee-item">Full Label Transparency</span>
-      <span class="marquee-item">Made in the USA</span>
-      <!-- Duplicate for seamless loop -->
-      <span class="marquee-item">Third-Party Tested</span>
-      <span class="marquee-item">No Artificial Colors</span>
-      <span class="marquee-item">Clean Ingredients</span>
-      <span class="marquee-item">Performance Driven</span>
-      <span class="marquee-item">Science Backed</span>
-      <span class="marquee-item">No Proprietary Blends</span>
-      <span class="marquee-item">Full Label Transparency</span>
-      <span class="marquee-item">Made in the USA</span>
-    </div>
-  </div>
-
-  <!-- ── Feature: Protein ── -->
-  <section class="feature-block">
-    <div class="feature-block__visual feature-block__visual--protein">
-      <div class="feature-block__inner reveal">
-        <p class="feature-block__number">01</p>
-        <h2 class="feature-block__title">Protein for<br><em>growth</em></h2>
-        <p class="feature-block__text">The perfect balance of taste and functionality. Support muscle growth, recovery, and daily protein needs with clean ingredients and flavors you'll crave.</p>
-        <a href="#" class="feature-block__link">
-          Shop Protein
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ── Feature: Hydration ── -->
-  <section class="feature-block">
-    <div class="feature-block__visual feature-block__visual--hydration">
-      <div class="feature-block__inner reveal">
-        <p class="feature-block__number">02</p>
-        <h2 class="feature-block__title">Hydrate<br><em>smarter</em></h2>
-        <p class="feature-block__text">Go beyond water. Electrolytes and functional ingredients that support endurance, recovery, and sustained performance throughout your day.</p>
-        <a href="#" class="feature-block__link">
-          Shop Hydration
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- ── Feature: Pre-Workout ── -->
-  <section class="feature-block">
-    <div class="feature-block__visual feature-block__visual--preworkout">
-      <div class="feature-block__inner reveal">
-        <p class="feature-block__number">03</p>
-        <h2 class="feature-block__title">Energy to<br><em>ignite</em></h2>
-        <p class="feature-block__text">Precision-dosed pre-workout formulas designed to boost focus, energy, and endurance. No crash, no jitters — just sustained power.</p>
-        <a href="#" class="feature-block__link">
-          Shop Pre-Workout
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Products Grid ── -->
-  <section class="showcase" id="products">
+  <!-- The 5-Pillar Cycle System -->
+  <section class="cycle-section" id="system">
     <div class="container">
-      <div class="showcase__header reveal">
-        <p class="showcase__label">The Collection</p>
-        <h2 class="showcase__heading">Everything you need,<br>nothing you don't</h2>
-        <p class="showcase__desc">Each product is formulated with clinically effective doses — no proprietary blends, no filler, no guesswork.</p>
+      <div class="cycle__header" data-reveal>
+        <p class="cycle__label">The Enigma System</p>
+        <h2 class="cycle__title">Five pillars of performance</h2>
+        <p class="cycle__desc">Your body doesn't train in isolation. Neither should your supplements. Each pillar feeds the next.</p>
+      </div>
+
+      <div class="cycle-layout">
+        <!-- Wheel -->
+        <div class="cycle-wheel" data-reveal>
+          <svg class="cycle-wheel__svg" viewBox="0 0 440 440">
+            <!-- Outer ring -->
+            <circle cx="220" cy="220" r="180" fill="none" stroke="rgba(0,0,0,0.06)" stroke-width="1"/>
+            <!-- Connection lines -->
+            <g class="cycle-connections" stroke="rgba(0,0,0,0.06)" stroke-width="1">
+              <line x1="220" y1="40" x2="391" y2="164"/>
+              <line x1="391" y1="164" x2="326" y2="365"/>
+              <line x1="326" y1="365" x2="114" y2="365"/>
+              <line x1="114" y1="365" x2="49" y2="164"/>
+              <line x1="49" y1="164" x2="220" y2="40"/>
+            </g>
+            <!-- Orbit dot -->
+            <circle r="4" fill="#0d9488" opacity="0.6">
+              <animateMotion dur="10s" repeatCount="indefinite" path="M220,40 A180,180 0 0,1 391,164 A180,180 0 0,1 326,365 A180,180 0 0,1 114,365 A180,180 0 0,1 49,164 A180,180 0 0,1 220,40 Z"/>
+            </circle>
+          </svg>
+
+          <!-- Nodes -->
+          <button class="cycle-node active" data-phase="0" style="--angle: 270deg;" onclick="showPhase(0)">
+            <span class="cycle-node__icon">⚡</span>
+            <span class="cycle-node__label">Energy</span>
+          </button>
+          <button class="cycle-node" data-phase="1" style="--angle: 342deg;" onclick="showPhase(1)">
+            <span class="cycle-node__icon">💧</span>
+            <span class="cycle-node__label">Hydrate</span>
+          </button>
+          <button class="cycle-node" data-phase="2" style="--angle: 54deg;" onclick="showPhase(2)">
+            <span class="cycle-node__icon">🥛</span>
+            <span class="cycle-node__label">Protein</span>
+          </button>
+          <button class="cycle-node" data-phase="3" style="--angle: 126deg;" onclick="showPhase(3)">
+            <span class="cycle-node__icon">💪</span>
+            <span class="cycle-node__label">Strength</span>
+          </button>
+          <button class="cycle-node" data-phase="4" style="--angle: 198deg;" onclick="showPhase(4)">
+            <span class="cycle-node__icon">🧘</span>
+            <span class="cycle-node__label">Rest</span>
+          </button>
+
+          <!-- Center -->
+          <div class="cycle-center">
+            <span class="cycle-center__text">The<br>Cycle</span>
+          </div>
+        </div>
+
+        <!-- Detail Panel -->
+        <div class="cycle-detail" id="cycleDetail">
+          <div class="cycle-detail__phase active" data-panel="0">
+            <p class="cycle-detail__number">01 / 05</p>
+            <h3 class="cycle-detail__name">Energy</h3>
+            <p class="cycle-detail__text">Precision-dosed pre-workout formulas to fuel focus, energy, and endurance. No jitters, no crash — just sustained power when it matters most.</p>
+            <a href="#" class="cycle-detail__link">
+              Shop Pre-Workout
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+          <div class="cycle-detail__phase" data-panel="1">
+            <p class="cycle-detail__number">02 / 05</p>
+            <h3 class="cycle-detail__name">Hydration</h3>
+            <p class="cycle-detail__text">Go beyond water. Our electrolyte formulas deliver functional ingredients that support endurance, recovery, and sustained performance all day.</p>
+            <a href="#" class="cycle-detail__link">
+              Shop Hydration
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+          <div class="cycle-detail__phase" data-panel="2">
+            <p class="cycle-detail__number">03 / 05</p>
+            <h3 class="cycle-detail__name">Protein</h3>
+            <p class="cycle-detail__text">Clean protein for muscle growth, recovery, and daily nutrition. Premium isolate with flavors you'll actually crave, minus the artificial junk.</p>
+            <a href="#" class="cycle-detail__link">
+              Shop Protein
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+          <div class="cycle-detail__phase" data-panel="3">
+            <p class="cycle-detail__number">04 / 05</p>
+            <h3 class="cycle-detail__name">Strength</h3>
+            <p class="cycle-detail__text">Creatine and performance compounds at clinical doses. Build lean muscle, increase power output, and push past plateaus with every session.</p>
+            <a href="#" class="cycle-detail__link">
+              Shop Strength
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+          <div class="cycle-detail__phase" data-panel="4">
+            <p class="cycle-detail__number">05 / 05</p>
+            <h3 class="cycle-detail__name">Rest</h3>
+            <p class="cycle-detail__text">Recovery is where growth happens. Sleep and recovery formulas that optimize your body's natural repair cycle so you wake up ready to go again.</p>
+            <a href="#" class="cycle-detail__link">
+              Shop Recovery
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust Bar -->
+  <section class="trust-section">
+    <div class="container">
+      <div class="trust-grid">
+        <div class="trust-item" data-reveal>
+          <div class="trust-item__number">100%</div>
+          <div class="trust-item__label">Label Transparency</div>
+        </div>
+        <div class="trust-item" data-reveal class="delay-1">
+          <div class="trust-item__number">0</div>
+          <div class="trust-item__label">Artificial Colors</div>
+        </div>
+        <div class="trust-item" data-reveal class="delay-2">
+          <div class="trust-item__number">3rd Party</div>
+          <div class="trust-item__label">Tested & Verified</div>
+        </div>
+        <div class="trust-item" data-reveal class="delay-3">
+          <div class="trust-item__number">USA</div>
+          <div class="trust-item__label">Manufactured</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="products-section" id="products">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <p class="section-label">The Collection</p>
+        <h2 class="section-title">Everything you need, nothing you don't</h2>
+        <p class="section-desc">Every ingredient at clinically effective doses. No proprietary blends, no filler, no guesswork.</p>
       </div>
       <div class="products-grid">
-        <article class="product-card reveal reveal-delay-1">
+        <article class="product-card" data-reveal>
           <div class="product-card__image">
+            <span class="product-card__tag">Best Seller</span>
             <div class="product-card__placeholder">E</div>
           </div>
           <div class="product-card__info">
             <p class="product-card__category">Protein</p>
             <h3 class="product-card__name">Whey Isolate</h3>
-            <p class="product-card__price">$49.99</p>
+            <div class="product-card__meta">
+              <span class="product-card__price">$49.99</span>
+              <button class="product-card__add">Add to Cart</button>
+            </div>
           </div>
         </article>
-        <article class="product-card reveal reveal-delay-2">
+        <article class="product-card" data-reveal class="delay-1">
           <div class="product-card__image">
             <div class="product-card__placeholder">E</div>
           </div>
           <div class="product-card__info">
             <p class="product-card__category">Hydration</p>
             <h3 class="product-card__name">Electrolyte Complex</h3>
-            <p class="product-card__price">$34.99</p>
+            <div class="product-card__meta">
+              <span class="product-card__price">$34.99</span>
+              <button class="product-card__add">Add to Cart</button>
+            </div>
           </div>
         </article>
-        <article class="product-card reveal reveal-delay-3">
+        <article class="product-card" data-reveal class="delay-2">
           <div class="product-card__image">
             <div class="product-card__placeholder">E</div>
           </div>
           <div class="product-card__info">
             <p class="product-card__category">Pre-Workout</p>
             <h3 class="product-card__name">Ignite Formula</h3>
-            <p class="product-card__price">$44.99</p>
+            <div class="product-card__meta">
+              <span class="product-card__price">$44.99</span>
+              <button class="product-card__add">Add to Cart</button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card" data-reveal>
+          <div class="product-card__image">
+            <div class="product-card__placeholder">E</div>
+          </div>
+          <div class="product-card__info">
+            <p class="product-card__category">Strength</p>
+            <h3 class="product-card__name">Creatine Monohydrate</h3>
+            <div class="product-card__meta">
+              <span class="product-card__price">$29.99</span>
+              <button class="product-card__add">Add to Cart</button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card" data-reveal class="delay-1">
+          <div class="product-card__image">
+            <span class="product-card__tag">New</span>
+            <div class="product-card__placeholder">E</div>
+          </div>
+          <div class="product-card__info">
+            <p class="product-card__category">Recovery</p>
+            <h3 class="product-card__name">Sleep & Repair</h3>
+            <div class="product-card__meta">
+              <span class="product-card__price">$39.99</span>
+              <button class="product-card__add">Add to Cart</button>
+            </div>
+          </div>
+        </article>
+        <article class="product-card" data-reveal class="delay-2">
+          <div class="product-card__image">
+            <span class="product-card__tag">Save 15%</span>
+            <div class="product-card__placeholder">E</div>
+          </div>
+          <div class="product-card__info">
+            <p class="product-card__category">Bundles</p>
+            <h3 class="product-card__name">The Complete Cycle</h3>
+            <div class="product-card__meta">
+              <span class="product-card__price">$169.99</span>
+              <button class="product-card__add">Add to Cart</button>
+            </div>
           </div>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- ── Philosophy ── -->
-  <div class="divider"></div>
+  <!-- Philosophy -->
   <section class="philosophy" id="philosophy">
     <div class="container">
       <div class="philosophy__inner">
-        <div class="philosophy__text reveal">
+        <div data-reveal>
           <p class="philosophy__label">Our Philosophy</p>
-          <h2 class="philosophy__heading">Formulated for those who demand more from their supplements</h2>
-          <p class="philosophy__body">We started Enigma because the supplement industry was broken — hidden doses, artificial junk, and flashy marketing covering up mediocre products. We stripped it all back. Every ingredient is clinically dosed, fully transparent, and third-party tested. No shortcuts.</p>
-          <div class="philosophy__stats">
-            <div class="stat reveal reveal-delay-1">
-              <div class="stat__number">100%</div>
-              <div class="stat__label">Label Transparency</div>
+          <h2 class="philosophy__heading">Built for athletes who read labels</h2>
+          <p class="philosophy__body">The supplement industry hides behind proprietary blends and flashy marketing. We stripped it all back. Every ingredient is clinically dosed, fully transparent, and third-party tested.</p>
+          <div class="philosophy__features">
+            <div class="feature-item">
+              <div class="feature-item__icon">🔬</div>
+              <div class="feature-item__text">
+                <div class="feature-item__title">Clinically Dosed</div>
+                <div class="feature-item__desc">Every ingredient at proven effective amounts</div>
+              </div>
             </div>
-            <div class="stat reveal reveal-delay-2">
-              <div class="stat__number">0</div>
-              <div class="stat__label">Artificial Colors</div>
+            <div class="feature-item">
+              <div class="feature-item__icon">📋</div>
+              <div class="feature-item__text">
+                <div class="feature-item__title">Full Label Transparency</div>
+                <div class="feature-item__desc">No proprietary blends — ever</div>
+              </div>
             </div>
-            <div class="stat reveal reveal-delay-3">
-              <div class="stat__number">3rd</div>
-              <div class="stat__label">Party Tested</div>
+            <div class="feature-item">
+              <div class="feature-item__icon">✅</div>
+              <div class="feature-item__text">
+                <div class="feature-item__title">Third-Party Tested</div>
+                <div class="feature-item__desc">Independent verification on every batch</div>
+              </div>
             </div>
-            <div class="stat reveal reveal-delay-4">
-              <div class="stat__number">USA</div>
-              <div class="stat__label">Manufactured</div>
+            <div class="feature-item">
+              <div class="feature-item__icon">🇺🇸</div>
+              <div class="feature-item__text">
+                <div class="feature-item__title">Made in the USA</div>
+                <div class="feature-item__desc">GMP-certified manufacturing facilities</div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="philosophy__visual reveal reveal-delay-2">
+        <div class="philosophy__visual" data-reveal class="delay-2">
           <div class="philosophy__visual-text">E</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ── Testimonial ── -->
-  <div class="divider"></div>
+  <!-- Testimonial -->
   <section class="testimonial">
     <div class="container">
-      <div class="testimonial__mark reveal">"</div>
-      <blockquote class="testimonial__quote reveal">
-        The cleanest, most effective supplements I've ever used. You can feel the difference when there's nothing to hide.
+      <div class="testimonial__stars" data-reveal>★★★★★</div>
+      <blockquote class="testimonial__quote" data-reveal>
+        "The cleanest, most effective supplements I've ever used. You can taste and feel the difference when there's nothing to hide."
       </blockquote>
-      <p class="testimonial__attr reveal reveal-delay-1">— Verified Athlete</p>
+      <p class="testimonial__attr" data-reveal class="delay-1">— Verified Athlete</p>
     </div>
   </section>
 
-  <!-- ── Final CTA ── -->
-  <div class="divider"></div>
+  <!-- Subscribe & Save -->
+  <section class="subscribe">
+    <div class="container">
+      <div class="subscribe__box" data-reveal>
+        <div class="subscribe__icon">🔄</div>
+        <h2 class="subscribe__title">Subscribe & save 15%</h2>
+        <p class="subscribe__text">Never run out. Get your favorites delivered on your schedule with free shipping on every order.</p>
+        <div class="subscribe__benefits">
+          <span class="subscribe__benefit">15% off every order</span>
+          <span class="subscribe__benefit">Free shipping</span>
+          <span class="subscribe__benefit">Cancel anytime</span>
+        </div>
+        <div class="subscribe__cta">
+          <a href="#products" class="btn btn-primary">Start Your Subscription</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
   <section class="cta-section">
     <div class="container">
-      <h2 class="cta-section__heading reveal">Give your body<br><em>space to perform</em></h2>
-      <p class="cta-section__sub reveal reveal-delay-1">Premium nutrition for those who train with intention.</p>
-      <a href="#products" class="cta-section__btn reveal reveal-delay-2">
-        Shop Now
-      </a>
+      <p class="section-label" data-reveal>Ready?</p>
+      <h2 class="cta-section__heading" data-reveal>Fuel every phase of your training</h2>
+      <p class="cta-section__sub" data-reveal class="delay-1">The complete performance system, built for those who demand more.</p>
+      <a href="#products" class="cta-section__btn" data-reveal class="delay-2">Shop the Collection</a>
     </div>
   </section>
 
-  <!-- ── Footer ── -->
+  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <div class="footer__inner">
-        <div class="footer__brand">
+        <div>
           <div class="footer__logo">Enigma</div>
           <p class="footer__tagline">Premium fitness nutrition built on transparency, science, and relentless quality.</p>
         </div>
         <div class="footer__col">
           <p class="footer__col-title">Products</p>
-          <a href="#">Protein</a>
-          <a href="#">Hydration</a>
           <a href="#">Pre-Workout</a>
+          <a href="#">Hydration</a>
+          <a href="#">Protein</a>
+          <a href="#">Creatine</a>
+          <a href="#">Recovery</a>
           <a href="#">Bundles</a>
         </div>
         <div class="footer__col">
@@ -902,11 +1160,11 @@
           <a href="#">FAQ</a>
         </div>
         <div class="footer__col">
-          <p class="footer__col-title">Legal</p>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
+          <p class="footer__col-title">Help</p>
           <a href="#">Shipping</a>
           <a href="#">Returns</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
         </div>
       </div>
       <div class="footer__bottom">
@@ -920,37 +1178,29 @@
     </div>
   </footer>
 
-  <!-- ── Scroll Reveal Script ── -->
   <script>
-    // Intersection Observer for reveal animations
+    // Scroll reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
-    }, {
-      threshold: 0.15,
-      rootMargin: '0px 0px -60px 0px'
-    });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // Cycle Wheel interaction
+    function showPhase(index) {
+      document.querySelectorAll('.cycle-node').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.cycle-detail__phase').forEach(p => p.classList.remove('active'));
+      document.querySelector(`.cycle-node[data-phase="${index}"]`).classList.add('active');
+      document.querySelector(`.cycle-detail__phase[data-panel="${index}"]`).classList.add('active');
+    }
 
-    // Smooth nav background on scroll
-    const nav = document.querySelector('.nav');
-    let ticking = false;
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrolled = window.scrollY > 80;
-          nav.style.background = scrolled 
-            ? 'rgba(5,5,5,0.92)' 
-            : 'rgba(5,5,5,0.7)';
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
+    // Auto-rotate cycle
+    let currentPhase = 0;
+    setInterval(() => {
+      currentPhase = (currentPhase + 1) % 5;
+      showPhase(currentPhase);
+    }, 4000);
   </script>
 
 </body>
