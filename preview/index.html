@@ -498,17 +498,22 @@
       font-weight: 500;
     }
     .product-card__add {
-      padding: 8px 16px;
+      padding: 10px 20px;
       background: var(--text);
-      color: var(--bg);
+      color: var(--bg-card);
       font-size: 0.75rem;
-      font-weight: 500;
+      font-weight: 600;
+      letter-spacing: 0.04em;
       border-radius: 100px;
       border: none;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: all 0.3s var(--ease);
     }
-    .product-card__add:hover { opacity: 0.85; }
+    .product-card__add:hover { 
+      background: var(--accent); 
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(13,148,136,0.2);
+    }
 
     /* ── Social Proof / Trust ── */
     .trust-section {
@@ -629,26 +634,52 @@
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
-    .testimonial__stars {
-      color: var(--accent);
-      font-size: 1.25rem;
-      letter-spacing: 4px;
-      margin-bottom: 28px;
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-top: 48px;
     }
-    .testimonial__quote {
+    @media (min-width: 768px) { .testimonials-grid { grid-template-columns: 1fr 1fr 1fr; } }
+    .testimonial-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+    }
+    .testimonial-card__stars {
+      color: var(--accent);
+      font-size: 0.875rem;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+    }
+    .testimonial-card__quote {
       font-family: var(--serif);
-      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-size: 1.0625rem;
       font-weight: 400;
-      line-height: 1.4;
-      max-width: 700px;
-      margin: 0 auto;
+      line-height: 1.5;
       font-style: italic;
       color: var(--text);
+      margin-bottom: 20px;
     }
-    .testimonial__attr {
-      margin-top: 28px;
-      font-size: 0.8125rem;
+    .testimonial-card__author {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .testimonial-card__author strong {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    .testimonial-card__author span {
+      font-size: 0.75rem;
       color: var(--text-muted);
+    }
+    .testimonial-card__verified {
+      margin-top: 12px;
+      font-size: 0.6875rem;
+      color: var(--accent);
+      font-weight: 500;
     }
 
     /* ── Bundle Builder ── */
@@ -675,11 +706,35 @@
       cursor: pointer;
       transition: all 0.3s var(--ease);
     }
-    .bundle-step:hover, .bundle-step.selected {
+    .bundle-step:hover {
       border-color: var(--accent);
       box-shadow: 0 4px 24px rgba(13,148,136,0.1);
     }
-    .bundle-step.selected { background: var(--accent-bg); }
+    .bundle-step.selected { 
+      background: var(--accent-bg); 
+      border-color: var(--accent);
+      box-shadow: 0 4px 24px rgba(13,148,136,0.1);
+    }
+    .bundle-step:not(.selected) {
+      opacity: 0.5;
+    }
+    .bundle-step:not(.selected):hover { opacity: 0.8; }
+    .bundle-step__toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      border: 2px solid var(--stone-300);
+      margin-bottom: 8px;
+      font-size: 0.75rem;
+      transition: all 0.3s;
+    }
+    .bundle-step.selected .bundle-step__toggle {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
     .bundle-step__phase {
       font-size: 0.625rem;
       font-weight: 600;
@@ -1237,6 +1292,7 @@
       <div class="bundle-steps" data-reveal>
         <!-- Step 1: Energy -->
         <div class="bundle-step selected" data-bundle="energy" onclick="toggleBundle(this)">
+          <div class="bundle-step__toggle">✓</div>
           <div class="bundle-step__phase">Phase 01</div>
           <div class="bundle-step__icon">⚡</div>
           <div class="bundle-step__name">Energy</div>
@@ -1254,6 +1310,7 @@
 
         <!-- Step 2: Hydration -->
         <div class="bundle-step selected" data-bundle="hydration" onclick="toggleBundle(this)">
+          <div class="bundle-step__toggle">✓</div>
           <div class="bundle-step__phase">Phase 02</div>
           <div class="bundle-step__icon">💧</div>
           <div class="bundle-step__name">Hydration</div>
@@ -1269,6 +1326,7 @@
 
         <!-- Step 3: Protein -->
         <div class="bundle-step selected" data-bundle="protein" onclick="toggleBundle(this)">
+          <div class="bundle-step__toggle">✓</div>
           <div class="bundle-step__phase">Phase 03</div>
           <div class="bundle-step__icon">🥛</div>
           <div class="bundle-step__name">Protein</div>
@@ -1281,6 +1339,7 @@
 
         <!-- Step 4: Strength -->
         <div class="bundle-step selected" data-bundle="strength" onclick="toggleBundle(this)">
+          <div class="bundle-step__toggle">✓</div>
           <div class="bundle-step__phase">Phase 04</div>
           <div class="bundle-step__icon">💪</div>
           <div class="bundle-step__name">Creatine</div>
@@ -1292,6 +1351,7 @@
 
         <!-- Step 5: Recovery -->
         <div class="bundle-step selected" data-bundle="recovery" onclick="toggleBundle(this)">
+          <div class="bundle-step__toggle">✓</div>
           <div class="bundle-step__phase">Phase 05</div>
           <div class="bundle-step__icon">🧘</div>
           <div class="bundle-step__name">Ashwagandha</div>
@@ -1319,14 +1379,42 @@
     </div>
   </section>
 
-  <!-- Testimonial -->
+  <!-- Testimonials -->
   <section class="testimonial">
     <div class="container">
-      <div class="testimonial__stars" data-reveal>★★★★★</div>
-      <blockquote class="testimonial__quote" data-reveal>
-        "The cleanest, most effective supplements I've ever used. You can taste and feel the difference when there's nothing to hide."
-      </blockquote>
-      <p class="testimonial__attr" data-reveal data-delay="1">— Verified Athlete</p>
+      <div class="section-header" data-reveal>
+        <p class="section-label">Reviews</p>
+        <h2 class="section-title">What athletes are saying</h2>
+      </div>
+      <div class="testimonials-grid" data-reveal>
+        <div class="testimonial-card">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <blockquote class="testimonial-card__quote">"The cleanest energy powder I've tried. No jitters, no crash. The Lychee Splash flavor is insane."</blockquote>
+          <div class="testimonial-card__author">
+            <strong>Marcus T.</strong>
+            <span>CrossFit Athlete</span>
+          </div>
+          <div class="testimonial-card__verified">✓ Verified Purchase</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <blockquote class="testimonial-card__quote">"Finally a protein that tastes great AND has a transparent label. No more guessing what I'm putting in my body."</blockquote>
+          <div class="testimonial-card__author">
+            <strong>Sarah K.</strong>
+            <span>Marathon Runner</span>
+          </div>
+          <div class="testimonial-card__verified">✓ Verified Purchase</div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-card__stars">★★★★★</div>
+          <blockquote class="testimonial-card__quote">"The Complete Cycle bundle changed my routine. Everything works together. Recovery has never been faster."</blockquote>
+          <div class="testimonial-card__author">
+            <strong>James R.</strong>
+            <span>Powerlifter</span>
+          </div>
+          <div class="testimonial-card__verified">✓ Verified Purchase</div>
+        </div>
+      </div>
     </div>
   </section>
 
