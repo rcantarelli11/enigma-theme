@@ -1,0 +1,94 @@
+.localization-wrapper{
+  --column-gap:var(--spacing-150);
+}
+
+.btn.localization-trigger-label{
+  --column-gap:var(--spacing-100);
+
+  padding:var(--spacing-125);
+  padding-left:var(--spacing-150);
+  color:var(--color-text);
+  border-radius:0;
+}
+
+.localization-option{
+  width:100%;
+  align-items:center;
+  padding:var(--spacing-125) var(--spacing-200);
+  -webkit-text-decoration:none;
+  text-decoration:none;
+  transition:background-color var(--animation-timing-100) var(--ease-out-quart);
+  border-radius:var(--radius-button-within-popover);
+}
+
+.localization-option .localization-option__flag,
+  .localization-option .localization-trigger-label__currency,
+  .localization-option .localization-option__label{
+    margin-right:var(--spacing-125);
+  }
+
+.localization-option .icon--checkmark{
+    margin-left:auto;
+  }
+
+.localization-option:hover{
+    background-color:var(--color-popup-modal-text-alpha-10);
+  }
+
+.localization-wrapper--trigger-roll-animation .disclosure-wrapper{
+    padding:var(--spacing-125);
+    padding-left:var(--spacing-150);
+  }
+
+.localization-wrapper--trigger-roll-animation .disclosure-content{
+    right:calc(var(--spacing-100) * -1);
+  }
+
+.localization-wrapper--trigger-roll-animation .disclosure-wrapper::before{
+    content:"";
+    border-radius:1lh;
+    position:absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    background-color:var(--color-text-alpha-10);
+    opacity:0;
+    transform:scale(0.3);
+    transition:opacity var(--animation-timing-400) var(--ease-out-quart), transform var(--animation-timing-400) var(--ease-out-quart);
+  }
+
+.localization-wrapper--trigger-roll-animation .disclosure-wrapper:hover::before{
+    transform:scale(1);
+    opacity:1;
+  }
+
+.localization-wrapper--trigger-roll-animation .localization-trigger-label{
+    padding:0;
+    padding:initial;
+  }
+
+.localization-wrapper--trigger-roll-animation .localization-trigger-wrapper{
+    position:relative;
+    overflow:hidden;
+  }
+
+.localization-wrapper--trigger-roll-animation .localization-trigger-label{
+    background-color:transparent;
+    transition:opacity var(--animation-timing-400) var(--ease-out-quart), transform var(--animation-timing-400) var(--ease-out-quart);
+  }
+
+.localization-wrapper--trigger-roll-animation .localization-trigger-label:nth-of-type(2){
+    position:absolute;
+    opacity:0;
+  }
+
+.localization-wrapper--trigger-roll-animation .disclosure-wrapper:hover .localization-trigger-label{
+    transform:translateY(-100%);
+    opacity:0;
+  }
+
+.localization-wrapper--trigger-roll-animation .disclosure-wrapper:hover .localization-trigger-label:nth-of-type(2){
+    color:var(--color-text);
+    opacity:1;
+  }

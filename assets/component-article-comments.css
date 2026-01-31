@@ -1,0 +1,71 @@
+html:has(header-wrapper[data-enable-sticky-header="true"]) #comments{
+    scroll-margin-top:var(--header-height);
+  }
+
+.comments__heading{
+  margin-bottom:var(--spacing-450);
+}
+
+.comments{
+  display:flex;
+  flex-direction:column;
+  gap:var(--spacing-300);
+}
+
+.comment{
+  border-radius:var(--radius-card);
+  border:1px solid var(--color-lines-and-borders);
+  padding:var(--spacing-250);
+}
+
+.comment__meta{
+  margin-top:var(--spacing-300);
+  display:flex;
+  gap:var(--spacing-125);
+}
+
+.comment-form:not(:first-child){
+  margin-top:var(--spacing-800);
+}
+
+.comments__leave-heading{
+  margin-bottom:var(--spacing-350);
+}
+
+@media (--tablet){
+
+.comments__leave-heading{
+    margin-bottom:var(--spacing-450)
+}
+  }
+
+.input-control__container{
+  display:flex;
+  flex-direction:column;
+  gap:var(--spacing-200);
+  margin-bottom:var(--spacing-250);
+}
+
+.comments__mod-message{
+  margin-bottom:var(--spacing-200);
+}
+
+#comments .pagination{
+  margin-top:var(--spacing-500);
+}
+
+#comment_form .custom-input-wrapper{
+    width:100%;
+  }
+
+#comment_form .custom-input-wrapper .custom-input,
+    #comment_form .custom-input-wrapper input,
+    #comment_form .custom-input-wrapper textarea{
+      width:100%;
+      display:block;
+    }
+
+.comment-form__name_and_email{
+  display:flex;
+  gap:var(--spacing-200);
+}

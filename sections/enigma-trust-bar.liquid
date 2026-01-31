@@ -1,0 +1,97 @@
+<section class="enigma-trust-bar enigma-section" id="enigma-trust-{{ section.id }}">
+  <div class="enigma-container">
+    <div class="enigma-trust-bar__grid">
+      {%- for block in section.blocks -%}
+        <div class="enigma-trust-bar__item" {{ block.shopify_attributes }}>
+          <div class="enigma-trust-bar__icon">
+            {%- case block.settings.icon -%}
+              {%- when 'shield' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              {%- when 'lab' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10 9V3"/><path d="M14 9V3"/><path d="M6.5 21h11"/><path d="m7 21 3.5-12h3L17 21"/><path d="M8.5 15h7"/></svg>
+              {%- when 'leaf' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.9C15.5 4.9 17 3.5 17 3.5s1.5 2 1.5 6c0 4.2-2.5 7-7.5 10.5z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>
+              {%- when 'truck' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg>
+              {%- when 'star' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {%- when 'bolt' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              {%- else -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            {%- endcase -%}
+          </div>
+          <p class="enigma-trust-bar__title">{{ block.settings.title }}</p>
+          {%- if block.settings.text != blank -%}
+            <p class="enigma-trust-bar__text">{{ block.settings.text }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Enigma Trust Bar",
+  "tag": "section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shield", "label": "Shield" },
+            { "value": "lab", "label": "Lab tested" },
+            { "value": "leaf", "label": "Natural" },
+            { "value": "truck", "label": "Shipping" },
+            { "value": "star", "label": "Star" },
+            { "value": "bolt", "label": "Energy" },
+            { "value": "check", "label": "Check" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Lab Tested"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Enigma Trust Bar",
+      "blocks": [
+        {
+          "type": "trust_item",
+          "settings": { "icon": "lab", "title": "Lab Tested", "text": "Third-party verified" }
+        },
+        {
+          "type": "trust_item",
+          "settings": { "icon": "leaf", "title": "Clean Formula", "text": "No fillers or junk" }
+        },
+        {
+          "type": "trust_item",
+          "settings": { "icon": "truck", "title": "Free Shipping", "text": "Orders over $70" }
+        },
+        {
+          "type": "trust_item",
+          "settings": { "icon": "bolt", "title": "Clinically Dosed", "text": "Real ingredients, real results" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,61 @@
+{% liquid
+  comment
+    Renders a limited version of various price details as a string of key/value pairs. This allows details to be passed to other snippets as needed, preventing looping.
+    This is intended for use in snippets like product-item-minimal which need less information.
+
+    Required parameters:
+      - prod { Object }: The product object.
+  endcomment
+
+  if prod != blank
+    assign has_discount = false
+    assign discount_varies = false
+    assign compare_at_price_varies = false
+
+    if prod.has_only_default_variant
+      if prod.compare_at_price > prod.price
+        assign has_discount = true
+        assign largest_discount = prod.compare_at_price | minus: prod.price
+      endif
+
+    else
+      assign has_null_compare_at_price = false
+      assign smallest_discount = blank
+      assign largest_discount = 0
+
+      for variant in prod.variants
+        if variant.compare_at_price == null
+          assign has_null_compare_at_price = true
+        elsif variant.compare_at_price > variant.price and variant.compare_at_price != 0
+          assign has_discount = true
+          assign variant_discount = variant.compare_at_price | minus: variant.price
+
+          if smallest_discount == blank or variant_discount < smallest_discount
+            assign smallest_discount = variant_discount
+          endif
+
+          if variant_discount > largest_discount
+            assign largest_discount = variant_discount
+          endif
+        else
+          assign smallest_discount = 0
+        endif
+      endfor
+
+      if has_null_compare_at_price and prod.compare_at_price > 0
+        assign compare_at_price_varies = true
+        assign smallest_discount = 0
+      elsif prod.compare_at_price_varies
+        assign compare_at_price_varies = true
+      endif
+
+      if smallest_discount != largest_discount
+        assign discount_varies = true
+      endif
+    endif
+
+    echo 'has_discount: [[hd]], ' | replace: '[[hd]]', has_discount
+    echo 'discount_varies: [[dv]], ' | replace: '[[dv]]', discount_varies
+    echo 'compare_at_price_varies: [[capv]], ' | replace: '[[capv]]', compare_at_price_varies
+  endif
+%}

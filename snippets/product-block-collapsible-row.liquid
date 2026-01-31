@@ -1,0 +1,46 @@
+{%- liquid
+  comment
+    Renders the "Collapsible row" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+  endcomment
+
+  # TODO: Convert to web component so we can expand/collapse content on selection in the theme editor.
+  capture content
+    if block.settings.custom_liquid != blank
+      echo block.settings.custom_liquid
+    elsif block.settings.content_page != blank
+      echo block.settings.content_page.content
+    else
+      echo block.settings.content
+    endif
+  endcapture
+-%}
+
+{%- # We still show the block in the editor if there's no content -%}
+{%- if request.design_mode or content != blank and block.settings.heading != blank -%}
+  {%- capture content_display -%}
+    <div class="product-block-collapsible-row__content-wrapper rte">
+      {{ content }}
+    </div>
+  {%- endcapture -%}
+
+  <div
+    class="product-block product-block-collapsible-row has-accordion"
+    style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+    {{ block.shopify_attributes }}
+  >
+    {% capture accordion_content %}
+      {%- render 'accordion-item',
+        title: block.settings.heading,
+        content: content_display,
+        title_class: 'ff-heading-in-body fs-heading-in-body-200',
+        open: block.settings.expand_by_default,
+        block_id: block.id
+      -%}
+    {% endcapture %}
+
+    {% render 'accordion', items: accordion_content %}
+  </div>
+{%- endif -%}

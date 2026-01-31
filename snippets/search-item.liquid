@@ -1,0 +1,52 @@
+{%- liquid
+  comment
+    Renders a search result item (article or page).
+
+    Required parameters:
+      - item: { Object } The associated search result object.
+      - image_sizes: { String } A list of responsive image sizes (for the 'sizes' attribute).
+  endcomment
+-%}
+
+<a href="{{ item.url }}" class="search-item">
+  {%- if item.object_type == 'article' and item.image -%}
+    <div class="search-item__image">
+      {%- render 'image',
+        image: item.image,
+        aspect_ratio: settings.product_listing_aspect_ratio,
+        object_fit: 'cover',
+        src_set_type: 'grid',
+        lazy_load_effect: 'fade',
+        lazy_load_stagger_index: lazy_load_stagger_index,
+        sizes: image_sizes
+      -%}
+    </div>
+  {%- endif -%}
+
+  <div class="search-item__content">
+    <div class="search-item__content-heading-and-link">
+      <h3 class="search-item__content-heading ff-heading">{{ item.title }}</h3>
+
+      {%- assign button_label = 'search.results.read_now' | t -%}
+      {%- render 'button',
+        button_style: 'text',
+        label: button_label,
+        button_alignment: 'left',
+        underlined: true,
+        class: 'search-item__content-button'
+      -%}
+    </div>
+
+    <div class="search-item__content-tag-wrapper">
+      <div class="search-item__content-tag">
+        {%- liquid
+          if item.object_type == 'article'
+            echo 'search.results.article' | t
+          else
+            echo 'search.results.page' | t
+          endif
+        -%}
+      </div>
+    </div>
+  </div>
+</a>

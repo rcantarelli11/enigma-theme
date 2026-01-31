@@ -1,0 +1,149 @@
+{%- liquid
+  comment
+    Renders the product media display.
+
+    Required parameters:
+      - media: { Object } The media object.
+      - sizes: { String } A list of responsive image sizes (for the 'sizes' attributes).
+
+    Optional parameters
+      - animate: { Boolean } Whether animations should be enabled.
+      - aspect_ratio: { String } The aspect ratio of the media.
+      - enable_product_lightbox: { Boolean } Whether the product media lightbox should be enabled.
+      - fallback_alt: { String } Alt text to use if the media doesn't have any.
+      - link: { String } A URL for the media to link to.
+      - prioritize_loading: { Boolean } If 'true', the `loading="lazy"` attribute won't be added to images.
+      - enable_autoplay_videos: { Boolean: false } Whether Shopify hosted videos should be rendered as background videos.
+  endcomment
+
+  assign media_class = 'media'
+
+  if enable_product_lightbox
+    assign media_class = media_class | append: ' media--has-lightbox'
+  endif
+
+  if animate and media.media_type != 'image'
+    assign media_class = media_class | append: ' animation--media'
+  endif
+
+  capture additional_media_attributes
+    if media.media_type == 'video'
+      echo 'style="--video-aspect-ratio: [[w]]/[[h]];"' | replace: '[[w]]', media.preview_image.width | replace: '[[h]]', media.preview_image.height
+    endif
+
+    if media.media_type != 'image'
+      echo 'data-interactive'
+    endif
+  endcapture
+-%}
+
+<div
+  class="{{ media_class }}"
+  data-media-id="{{ media.id }}"
+  data-media-type="{{ media.media_type }}"
+  {{ additional_media_attributes }}
+>
+  {%- if media.media_type == 'image' -%}
+    {%- liquid
+      assign image_link_tag = 'div'
+
+      if enable_product_lightbox or link
+        assign image_link_tag = 'a'
+      endif
+
+      capture lightbox_link_attributes
+        if enable_product_lightbox
+          assign media_image_url = media.src | image_url
+
+          echo 'href="[[url]]"' | replace: '[[url]]', media_image_url
+          echo 'class="lightbox-media lightbox-image no-transition"'
+          echo 'data-pswp-src="[[url]]"' | replace: '[[url]]', media_image_url
+          echo 'data-pswp-width="[[w]]"' | replace: '[[w]]', media.width
+          echo 'data-pswp-height="[[h]]"' | replace: '[[h]]', media.height
+          echo 'data-cropped="true"'
+          echo 'tabindex="-1"'
+        elsif link
+          echo 'href="[[url]]"' | replace: '[[url]]', link
+        endif
+        if enable_product_lightbox or link
+          echo 'aria-label="[[alt]]"' | replace: '[[alt]]', media.alt
+        endif
+      endcapture
+    -%}
+
+    <{{ image_link_tag }} {{ lightbox_link_attributes }} js-media-image>
+      {%- render 'image',
+        image: media,
+        aspect_ratio: aspect_ratio,
+        sizes: sizes,
+        prioritize_loading: prioritize_loading,
+        fallback_alt: fallback_alt,
+        no_crop: enable_product_lightbox,
+        object_fit: 'cover'
+      -%}
+      {%- if enable_product_lightbox -%}
+        <button
+          class="product-media__lightbox-zoom"
+          js-media-lightbox-trigger
+          js-update-carousel-tabindex
+          aria-label="{{ 'general.accessibility.open_fullscreen_gallery' | t }}"
+        >
+          {%- render 'icon-utility', icon: 'media-zoom-in', width: 20, height: 20, class: 'product-media__zoom-icon' -%}
+        </button>
+      {%- endif -%}
+    </{{ image_link_tag }}>
+
+  {%- elsif media.media_type == 'video' -%}
+    {%- if enable_autoplay_videos -%}
+      {%- render 'background-video',
+        video: media,
+        is_within_media_lightbox: enable_product_lightbox,
+        sizes: sizes,
+        aspect_ratio: aspect_ratio
+      -%}
+    {%- else -%}
+      {%- render 'video-player',
+        video_type: media.media_type,
+        video: media,
+        is_product_media: true,
+        is_within_media_lightbox: enable_product_lightbox,
+        show_poster: true,
+        media_aspect_ratio: aspect_ratio,
+        sizes: sizes,
+        video_width: 'narrow'
+      -%}
+    {%- endif -%}
+
+  {%- elsif media.media_type == 'external_video' -%}
+    {%- render 'video-player',
+      video_type: media.media_type,
+      video: media,
+      is_product_media: true,
+      is_within_media_lightbox: enable_product_lightbox,
+      show_poster: true,
+      media_aspect_ratio: aspect_ratio,
+      sizes: sizes,
+      video_width: 'narrow'
+    -%}
+  {%- elsif media.media_type == 'model' -%}
+    {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
+
+    <div
+      class="model-viewer__poster"
+      title="{{ 'general.accessibility.view_3d_model' | t }}"
+    >
+      {%- render 'image', image: media, sizes: sizes -%}
+      <button
+        class="model-viewer__media-badge"
+        js-update-carousel-tabindex
+        aria-label="{{ 'general.accessibility.view_3d_model' | t }}"
+      >
+        {%- render 'icon-utility', icon: 'media-3d-badge' -%}
+      </button>
+    </div>
+
+    <button class="model-viewer__media-badge model-viewer__close-button">
+      {%- render 'icon-utility', icon: 'cross' -%}
+    </button>
+  {%- endif -%}
+</div>

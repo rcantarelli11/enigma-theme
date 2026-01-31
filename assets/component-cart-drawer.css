@@ -1,0 +1,156 @@
+.cart-drawer__header-content{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+}
+.cart-drawer__header-content-left,
+.cart-drawer__header-content-right{
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.cart-drawer__header-content-left{
+  right:auto;
+}
+.cart-drawer__header-content-left .modal-close-button{
+    margin-left:calc(var(--spacing-125) * -1);
+  }
+.cart-drawer__header-content-right{
+  left:auto;
+  margin-right:calc(-1 * var(--spacing-125));
+}
+.cart-drawer__header-content-right .cart-button{
+    width:40px;
+    height:40px;
+    margin:0;
+  }
+.drawer-header .cart-button{
+  transition:opacity var(--animation-timing-300) var(--ease-out-quart);
+}
+cart-drawer.change-pending .drawer-header .cart-button{
+    opacity:0.5;
+  }
+cart-drawer{
+  --overlaid-footer-collapsed-height:95px;
+}
+cart-drawer .drawer-content{
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+  padding-bottom:var(--overlaid-footer-collapsed-height);
+}
+cart-drawer .drawer-content:has(.cart-drawer-empty-state){
+    padding-bottom:0;
+  }
+cart-drawer .drawer-content form{
+  display:flex;
+  flex-direction:column;
+  flex-grow:1;
+  justify-content:space-between;
+}
+cart-drawer .drawer-viewport{
+  scroll-margin-bottom:var(--overlaid-footer-collapsed-height);
+}
+cart-drawer cross-sells{
+  overflow-x:hidden;
+  margin:auto calc(-1 * var(--drawer-padding-horizontal)) var(--spacing-500);
+}
+cart-drawer cross-sells .scroll-slider__slider{
+    scroll-padding-inline:var(--drawer-padding-horizontal);
+  }
+cart-drawer cross-sells .cross-sells__header,
+  cart-drawer cross-sells .scroll-slider__slider{
+    padding:0 var(--drawer-padding-horizontal);
+  }
+cart-drawer .cart-items{
+  --item-gap:var(--spacing-250);
+  display:flex;
+  flex-direction:column;
+  gap:var(--spacing-250);
+  gap:var(--item-gap);
+  margin-bottom:var(--spacing-500);
+}
+.cart-drawer__text{
+  padding-bottom:var(--spacing-100);
+}
+cart-drawer .drawer-footer{
+  position:absolute;
+  bottom:0;
+  top:auto;
+  right:0;
+  left:0;
+  background:var(--color-background);
+  pointer-events:none;
+}
+cart-drawer .drawer-footer label,
+  cart-drawer .drawer-footer span,
+  cart-drawer .drawer-footer button{
+    pointer-events:all;
+  }
+.cart-drawer__footer-content{
+  display:flex;
+  flex-direction:column;
+  gap:var(--spacing-150);
+}
+.cart-drawer__footer-content button{
+    width:100%;
+  }
+.cart-drawer__footer-content .cart-checkout-button-wrapper{
+    border-radius:var(--radius-button);
+    background-color:var(--color-background);
+  }
+.cart-drawer__footer-content button{
+    transition:opacity var(--animation-timing-300) var(--ease-out-quart);
+  }
+cart-drawer.change-pending .cart-drawer__footer-content button{
+      pointer-events:none;
+      opacity:0.5;
+    }
+.cart-drawer__footer-subtotal{
+  display:flex;
+  justify-content:space-between;
+}
+.cart-drawer__footer-discount{
+  color:var(--color-products-sale);
+}
+html.js cart-drawer .drawer-footer{
+  transition:all var(--animation-timing-200) var(--ease-out-quart);
+}
+html.js cart-drawer .drawer-footer .cart-drawer__footer-subtotal{
+    transition:all var(--animation-timing-200) var(--ease-out-quart);
+  }
+cart-drawer[data-cart-text-is-visible="true"] .drawer-footer{
+      box-shadow:none !important;
+    }
+cart-drawer[data-cart-text-is-visible="true"] .drawer-footer{
+      background-color:transparent;
+    }
+cart-drawer[data-cart-text-is-visible="true"] .drawer-footer .cart-drawer__footer-subtotal{
+        transform:translateY(5px);
+        opacity:0;
+      }
+cart-drawer .cross-sells__items{
+  margin:0 var(--drawer-padding-horizontal);
+}
+cart-drawer:has(.cart-drawer-empty-state) .drawer-footer{
+  display:none;
+}
+.cart-drawer-empty-state{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:var(--spacing-200);
+  flex-grow:1;
+  padding:var(--spacing-500) 0;
+}
+.cart-drawer-empty-state ~ cross-sells{
+    margin-bottom:var(--drawer-padding-horizontal);
+  }

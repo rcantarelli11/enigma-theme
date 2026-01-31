@@ -1,0 +1,38 @@
+.free-shipping-bar{
+  width:100%;
+  background-color:var(--color-text-alpha-05);
+  border-radius:var(--radius-card);
+  margin-bottom:var(--spacing-450);
+  padding:var(--spacing-200);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.free-shipping-bar__bar{
+  position:relative;
+  height:5px;
+  width:100%;
+  margin-top:var(--spacing-150);
+  background:var(--color-text-alpha-10);
+  border-radius:5px;
+  overflow:hidden;
+}
+
+.free-shipping-bar__bar-progress{
+  position:absolute;
+  top:0;
+  right:auto;
+  bottom:0;
+  left:0;
+  width:var(--free-shipping-progress);
+  background-color:var(--color-accent);
+  transition:width var(--animation-timing-300) linear;
+  border-top-left-radius:5px;
+  border-bottom-left-radius:5px;
+}
+
+.free-shipping-bar.free-shipping-bar--force-progress-to-0 .free-shipping-bar__bar-progress{
+    transition-duration:0;
+    width:0;
+  }

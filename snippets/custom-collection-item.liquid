@@ -1,0 +1,107 @@
+{% liquid
+  comment
+    Renders a collection item.
+
+    Required parameters:
+      - coll: { Object } The collection object.
+
+    Optional parameters:
+      - image_aspect_ratio: { String } The image's aspect ratio.
+      - image_source: { String } Whether the image should be:
+        - "collection_image" - The collection's featured image
+        - "first_product_image" - The featured image of the first product in the collection
+      - image_sizes: { String } - A list of responsive image sizes (for the 'sizes' attributes).
+      - index { Number } - Index of collection item. Used to cycle through placeholder illustration and stagger reveal animations.
+  endcomment
+  assign collection_url = block.settings.url
+  if collection_url
+    assign metafield_image_override = coll.metafields.eclipse.collection_list_image
+    assign tag_name = 'a'
+    assign href = collection_url
+  else
+    assign tag_name = 'div'
+  endif
+
+  if metafield_image_override != blank
+    assign collection_image = metafield_image_override.value
+  else
+    if image_source == 'first_product_image'
+      assign collection_image = coll.products.first.featured_image
+    else
+      assign collection_image = coll.image | default: coll.products.first.featured_image
+    endif
+  endif
+
+  if collection_image == blank
+    if index
+      assign placeholder_name_index = index | modulo: 4 | plus: 1
+      assign placeholder_name = 'collection-apparel-' | append: placeholder_name_index
+    else
+      assign placeholder_name = 'collection-apparel-4'
+    endif
+  endif
+  
+-%}
+
+{% capture content %}
+  {% if block.settings.badge != blank %}
+  <div class="badge-main">
+    <div class="bagde-wrapper">
+      {{ block.settings.badge }}
+    </div>
+  </div>
+{% endif %}
+
+  {%
+    render 'image'
+    image: block.settings.image,
+    class: 'collection-item__image',
+    aspect_ratio: image_aspect_ratio,
+    sizes: image_sizes,
+    include_placeholder: true,
+    placeholder_name: placeholder_name
+    load_animation_effect: "blur"
+    load_animation_stagger_index: index
+  %}
+
+  <div class="collection-item__overlay"></div>
+ 
+  <div class="collection-item__content">
+    <div class="collection-list-text-wrapper">
+         <div class="collection-title-icon">
+            <div class="collection-item__title ff-heading">
+              {% if block.settings.title -%}
+                {{ block.settings.title }}
+              {%- else -%}
+                {{ 'collections.general.collection_label' | t }}
+              {%- endif %}
+            
+            </div>
+           {% comment %}
+            <span class='icon-wrap'>
+              {% render 'icon-utility', icon: 'arrow-right-small', width: 16, height: 16 %}
+            </span>
+  {% endcomment %}
+         </div>
+      <p>{{ coll.metafields.custom.collection_short_description }}</p>
+    <div class="devShopNowBtn">
+      {% render 'button',
+        wrapper_class: 'blog-posts-meta__button',
+        label: block.settings.button_label,
+        button_size: 'small',
+        underlined: true
+      %}
+    </div>
+    </div>
+  </div>
+ 
+{% endcapture %}
+
+<{{ tag_name }}
+  class="collection-item"
+  {% if block.settings.url != blank %}
+    href="{{ block.settings.url }}"
+  {% endif %}
+>
+  {{ content }}
+</{{ tag_name }}>

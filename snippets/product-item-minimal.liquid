@@ -1,0 +1,189 @@
+{% liquid
+  comment
+    Renders a minimal product card as seen in cart drawer and upsells
+
+    Required parameters:
+      - prod: { Object } The product
+
+    Optional parameters:
+      - is_cart_item: { Boolean: false } Whether the product item is being rendered as part
+          of the cart (for a cart item).
+      - item_image: { Object: prod.featured_media.preview_image } The image to display. Really just used
+          for cart items so that the specific variant image displays.
+      - size: { String: 'standard' } The size of card. Can be:
+        - 'standard'
+        - 'small'
+      - displayed_price: { String } Override the product price display.
+      - main_content_suffix: { String } Content to append to 'content-main'.
+      - secondary_content: { String } Content to render in 'content-secondary'.
+      - hide_image: { Boolean: false } Whether to omit the product image.
+      - whole_item_linked: { Boolean: false } Whether to make the entire element a link. By
+          default, only the image and title are links.
+      - show_price: { Boolean: true } Whether to show the price.
+      - show_vendor: { Boolean: false } Whether to show the vendor.
+      - show_placeholder: { Boolean: false } Whether to show a placeholder if there's no product.
+      - placeholder_name: { String } The name of the Shopify placeholder SVG to use.
+      - bordered: { Boolean: true } Whether to show a border around the product card.
+  endcomment
+
+  assign is_cart_item = is_cart_item | default: false, allow_false: true
+  assign item_image = item_image | default: prod.featured_media.preview_image
+  assign size = size | default: 'standard'
+  assign show_price = show_price | default: true, allow_false: true
+  assign show_vendor = show_vendor | default: false, allow_false: true
+  assign show_placeholder = show_placeholder | default: false, allow_false: true
+  assign whole_item_linked = whole_item_linked | default: false, allow_false: true
+  assign bordered = bordered | default: true, allow_false: true
+
+  if prod == blank and show_placeholder
+    assign is_placeholder = true
+  else
+    assign is_placeholder = false
+  endif
+
+  assign item_tag = 'div'
+
+  if whole_item_linked
+    assign item_tag = 'a'
+  endif
+
+  # Price and discount details
+  capture price_details
+    render 'get-product-price-details-minimal', prod: prod
+  endcapture
+
+  assign split_price_details = price_details | split: ', '
+
+  for detail in split_price_details
+    assign key = detail | split: ':' | first | strip
+    assign value = detail | split: ':' | last | strip
+
+    case key
+      when 'has_discount'
+        if value == 'true'
+          assign has_discount = true
+        else
+          assign has_discount = false
+        endif
+      when 'discount_varies'
+        if value == 'true'
+          assign discount_varies = true
+        else
+          assign discount_varies = false
+        endif
+      when 'compare_at_price_varies'
+        if value == 'true'
+          assign compare_at_price_varies = true
+        else
+          assign compare_at_price_varies = false
+        endif
+    endcase
+  endfor
+%}
+
+<{{ item_tag }}
+  class="product-item-minimal product-item-minimal--size-{{ size }} {%- if bordered %} product-item-minimal--bordered{% endif %}"
+  {%- if whole_item_linked %}
+    href="{{ prod.url }}"
+    aria-label="{{ 'products.product.view_product' | t }}"
+  {%- else %}
+    aria-label="{{ prod.title }}"
+  {%- endif -%}
+>
+  {%- unless hide_image -%}
+    {%- if whole_item_linked -%}
+      <div class="product-item-minimal__image">
+    {%- else -%}
+      <a
+        class="product-item-minimal__image"
+        href="{{ prod.url }}"
+        aria-label="{{ 'products.product.view_product' | t }}"
+      >
+    {%- endif -%}
+
+    {%- render 'image',
+      image: item_image,
+      aspect_ratio: settings.product_listing_aspect_ratio,
+      object_fit: 'cover',
+      src_set_type: 'grid',
+      sizes: '(min-width: 720px) 140px, 80px',
+      placeholder_name: placeholder_name
+    -%}
+
+    {%- if whole_item_linked -%}</div>{%- else -%}</a>{%- endif -%}
+  {%- endunless -%}
+
+  <div class="product-item-minimal__content">
+    <div class="product-item-minimal__content-main">
+      {%- if show_price -%}
+        {%- capture price_display -%}
+          <p class="product-item-minimal__price {%- if size == "small" %} fs-body-75{%- else %} fs-body-100{%- endif %}">
+            {%- if displayed_price != blank -%}
+              {{ displayed_price }}
+            {%- else -%}
+              {%-render 'product-price-display',
+                prod: prod,
+                price_scope: 'product-card',
+                compare_at_price_varies: compare_at_price_varies,
+                has_discount: has_discount,
+                discount_varies: discount_varies,
+                placeholder: is_placeholder
+              -%}
+            {%- endif -%}
+          </p>
+        {%- endcapture -%}
+      {%- endif -%}
+
+      <div class="product-item-minimal__content-main-left">
+        {%- if show_vendor -%}
+          <p class="product-item-minimal__vendor fs-body-60">{{ prod.vendor }}</p>
+        {%- endif -%}
+
+        {% liquid
+          capture product_title
+            if is_placeholder
+              echo 'general.onboarding.product_title' | t
+            else
+              echo prod.title
+            endif
+          endcapture
+        %}
+
+        {%- if whole_item_linked -%}
+          <h3 class="product-item-minimal__title fs-body-100">
+            {{ product_title }}
+          </h3>
+        {%- else -%}
+          <a href="{{ prod.url }}" class="product-item-minimal__title fs-body-100">{{ product_title }}</a>
+        {%- endif -%}
+
+        {%- liquid
+          if show_price
+            echo price_display
+          endif
+
+          if main_content_suffix != blank
+            echo main_content_suffix
+          endif
+        -%}
+      </div>
+
+      {%- if show_price and is_cart_item -%}
+        <div class="product-item-minimal__content-main-right">
+          {{ price_display }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if secondary_content != blank -%}
+      <div
+        class="product-item-minimal__content-secondary"
+        {%- if is_cart_item -%}
+          data-align-items="stretch"
+        {%- endif -%}
+      >
+        {{- secondary_content -}}
+      </div>
+    {%- endif -%}
+  </div>
+</{{ item_tag }}>

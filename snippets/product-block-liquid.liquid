@@ -1,0 +1,16 @@
+{%- liquid
+  comment
+    Renders a "Liquid" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+  endcomment
+-%}
+
+<div
+  class="product-details__liquid"
+  style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'content-block-liquid', block: block -%}
+</div>

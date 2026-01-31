@@ -1,0 +1,627 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "product_overview": {
+      "type": "main-product--default",
+      "blocks": {
+        "vendor": {
+          "type": "vendor",
+          "disabled": true,
+          "settings": {
+            "bottom_padding": 12
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "bottom_padding": 15
+          }
+        },
+        "sku": {
+          "type": "sku",
+          "disabled": true,
+          "settings": {
+            "text_size": "small",
+            "bottom_padding": 20
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_discount": true,
+            "discount_format": "percent-off",
+            "show_shop_pay": true,
+            "show_sale_badge": true,
+            "show_sold_out_badge": true,
+            "badge_alignment": "above",
+            "sale_badge_format": "sale",
+            "bottom_padding": 32
+          }
+        },
+        "variant-selector": {
+          "type": "variant-selector",
+          "settings": {
+            "selector_style": "chips",
+            "chip_layout": "4_column",
+            "popup_option_name": "Size",
+            "icon": "clothing-ruler",
+            "popup_link_text": "Popup link text",
+            "popup_page_content": "",
+            "bottom_padding": 32
+          }
+        },
+        "quantity-selector": {
+          "type": "quantity-selector",
+          "disabled": true,
+          "settings": {
+            "show_label": true,
+            "bottom_padding": 32
+          }
+        },
+        "inventory-status": {
+          "type": "inventory-status",
+          "disabled": true,
+          "settings": {
+            "show_inventory_notice": "when-inventory-low",
+            "show_inventory_transfer": false,
+            "bottom_padding": 24
+          }
+        },
+        "text_dVPYCq": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "<p>We are currently out of stock, but we are accepting preorders and will ship your order as soon as the item is back in stock.</p>",
+            "text_font_size": 2,
+            "bottom_padding": 36
+          }
+        },
+        "buy-buttons": {
+          "type": "buy-buttons",
+          "settings": {
+            "add_to_cart_btn_style": "solid",
+            "show_dynamic_checkout": false,
+            "show_pickup_availability": false,
+            "bottom_padding": 15
+          }
+        },
+        "featured_icon_with_text": {
+          "type": "featured-icon-with-text",
+          "disabled": true,
+          "settings": {
+            "icon": "shipping-delivery-truck",
+            "heading": "",
+            "text": "<p>Free Shipping on orders over $200</p>",
+            "link": "",
+            "color_icon": "#222222",
+            "color_text": "#222222",
+            "color_background": "#edf2ea",
+            "color_background_gradient": "",
+            "bottom_padding": 36
+          }
+        },
+        "icon_with_text_1": {
+          "type": "icon-with-text",
+          "settings": {
+            "icon": "payment-security-credit-card",
+            "text": "Secure payment",
+            "link": "",
+            "bottom_padding": 12
+          }
+        },
+        "icon_with_text_2": {
+          "type": "icon-with-text",
+          "disabled": true,
+          "settings": {
+            "icon": "communications-international-language",
+            "text": "Shipping all over USA",
+            "link": "",
+            "bottom_padding": 12
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "title": "Product Description",
+            "text_size": "medium",
+            "display_as_collapsible_row": true,
+            "expand_by_default": false,
+            "bottom_padding": 36
+          }
+        },
+        "collapsible_row_1": {
+          "type": "collapsible-row",
+          "settings": {
+            "expand_by_default": false,
+            "heading": "Ingredients",
+            "content": "{{ product.metafields.custom.ingredients | metafield_tag }}",
+            "content_page": "",
+            "custom_liquid": "",
+            "bottom_padding": 48
+          }
+        },
+        "collapsible_row_QpAG44": {
+          "type": "collapsible-row",
+          "settings": {
+            "expand_by_default": false,
+            "heading": "Uses",
+            "content": "{{ product.metafields.custom.uses | metafield_tag }}",
+            "content_page": "",
+            "custom_liquid": "",
+            "bottom_padding": 48
+          }
+        },
+        "collapsible_row_JabY6T": {
+          "type": "collapsible-row",
+          "settings": {
+            "expand_by_default": false,
+            "heading": "Shipping",
+            "content": "{{ product.metafields.custom.shipping | metafield_tag }}",
+            "content_page": "",
+            "custom_liquid": "",
+            "bottom_padding": 48
+          }
+        },
+        "complementary_products_gkyRmJ": {
+          "type": "complementary-products",
+          "settings": {
+            "heading": "Pairs well with",
+            "show_product_thumbnails": true,
+            "max_products": 3,
+            "product_source": "list",
+            "product_list": [
+              "energy-powder-cotton-candy",
+              "creatine-monohydrate-1",
+              "advanced-100-whey-protein-isolate-vanilla-1",
+              "ashwagandha-1",
+              "energy-powder-lychee-splash-energy"
+            ],
+            "bottom_padding": 36
+          }
+        },
+        "share": {
+          "type": "share",
+          "disabled": true,
+          "settings": {
+            "enable_os_sharing": false,
+            "bottom_padding": 24
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "sku",
+        "price",
+        "variant-selector",
+        "quantity-selector",
+        "inventory-status",
+        "text_dVPYCq",
+        "buy-buttons",
+        "featured_icon_with_text",
+        "icon_with_text_1",
+        "icon_with_text_2",
+        "description",
+        "collapsible_row_1",
+        "collapsible_row_QpAG44",
+        "collapsible_row_JabY6T",
+        "complementary_products_gkyRmJ",
+        "share"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "sticky_effect_container": "product_details",
+        "media_position_desktop": "left",
+        "gallery_layout_desktop": "stacked",
+        "media_thumbnail_size": 75,
+        "media_gallery_size_desktop": 50,
+        "media_aspect_ratio": "natural",
+        "enable_video_autoplay": false,
+        "enable_image_zoom": true,
+        "media_gallery_size_mobile": "full_width",
+        "enable_slider_looping": true,
+        "enable_variant_media_grouping": false,
+        "enable_sticky_add_to_cart_desktop": true,
+        "enable_sticky_add_to_cart_mobile": true,
+        "enable_gift_card_recipient": true,
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "scrolling_content_TCmnB9": {
+      "type": "scrolling-content",
+      "blocks": {
+        "text_R8hNPn": {
+          "type": "text",
+          "settings": {
+            "text": "Announce your |Promotion|",
+            "link": "",
+            "enable_highlighting": true
+          }
+        }
+      },
+      "block_order": [
+        "text_R8hNPn"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "text_style": "heading",
+        "text_font_size": 4,
+        "text_mobile_font_size": 6,
+        "duration": 10,
+        "direction": "normal",
+        "gap_desktop": 50,
+        "gap_mobile": 30,
+        "top_padding": 40,
+        "bottom_padding": 40
+      }
+    },
+    "image_with_text_wrQ8NF": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_RpF6eP": {
+          "type": "heading",
+          "settings": {
+            "heading": "Rewards That Go Further",
+            "heading_font_size": 8,
+            "heading_tag": "h2"
+          }
+        },
+        "text_yLLVKA": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Earn loyalty points on every purchase. Redeem for exclusive discounts and rewards while enjoying the supplements you love</p>",
+            "text_font_size": 3
+          }
+        },
+        "button_kJj7ic": {
+          "type": "button",
+          "settings": {
+            "button_link": "",
+            "button_label": "Learn More About Rewards",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "heading_RpF6eP",
+        "text_yLLVKA",
+        "button_kJj7ic"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "image": "shopify://shop_images/shutterstock_327558938.jpg",
+        "aspect_ratio": "natural",
+        "mobile_aspect_ratio": "natural",
+        "media_link": "",
+        "desktop_media_width": 50,
+        "desktop_media_position": "right",
+        "mobile_media_position": "above",
+        "media_breathing_room": 0,
+        "content_width": "custom-width",
+        "custom_width": 500,
+        "content_position": "center_center",
+        "text_alignment": "left",
+        "container_color_scheme": "scheme_2",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "slideshow_EcE33b": {
+      "type": "slideshow",
+      "blocks": {
+        "video_k7FzDQ": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/a734464365594bfeada7163406ded306.HD-1080p-2.5Mbps-39876872.mp4",
+            "video_focal_point": "center",
+            "mobile_video_focal_point": "center",
+            "content_max_width": 700,
+            "text_position": "center_center",
+            "mobile_text_position": "center_center",
+            "overline": "",
+            "heading": "meets peak performance.",
+            "heading_font_size": 5,
+            "heading_tag": "h2",
+            "text": "",
+            "text_font_size": 3,
+            "button_1_link": "",
+            "button_1_label": "",
+            "button_1_style": "solid",
+            "button_2_link": "",
+            "button_2_label": "",
+            "button_2_style": "solid",
+            "overlay_color_scheme": "",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "video_k7FzDQ"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "enable_autoplay": true,
+        "time_between_slides": 6,
+        "custom_desktop_height": "750px",
+        "custom_mobile_height": "650px",
+        "pagination_alignment": "right",
+        "mobile_pagination_alignment": "center",
+        "pagination_background": "#000000",
+        "pagination_foreground": "#ffffff",
+        "pagination_background_opacity": 60,
+        "navigation_cursor_background": "#ffffff",
+        "navigation_cursor_foreground": "#000000",
+        "enable_text_animation": true,
+        "slide_animation": "iris",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 60
+      }
+    },
+    "rich_text": {
+      "type": "rich-text",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "disabled": true,
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Rich text",
+            "heading_font_size": 3,
+            "heading_tag": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "text_font_size": 3
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "button_link": "",
+            "button_label": "Learn More About Rewards",
+            "button_style": "outline"
+          }
+        }
+      },
+      "block_order": [
+        "overline",
+        "heading",
+        "text",
+        "button"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_1",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "text_alignment": "center",
+        "width": "page-width",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    },
+    "reviews_banner_Lk6P4L": {
+      "type": "reviews-banner",
+      "blocks": {
+        "reviews_LWmM9B": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_TjYfyb": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_J848jX": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_fxgXb6": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_369rYY": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_DjCqGz": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_XEmaQA": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_VkBUWg": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_cfNfgy": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        }
+      },
+      "block_order": [
+        "reviews_LWmM9B",
+        "reviews_TjYfyb",
+        "reviews_J848jX",
+        "reviews_fxgXb6",
+        "reviews_369rYY",
+        "reviews_DjCqGz",
+        "reviews_XEmaQA",
+        "reviews_VkBUWg",
+        "reviews_cfNfgy"
+      ],
+      "settings": {
+        "devBg": "",
+        "devTitle": "YOUR JOURNEY SIMPLIFIED WITH",
+        "c_sec_stars_show": false,
+        "devrevText": "ENIGMA",
+        "devUrl": "",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "c_revs_Bg": "#ffffff",
+        "c_show_read_more": false,
+        "c_show_rev_arr": false,
+        "c_show_rev_dots": false
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Featured Collection",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Shop all",
+        "collection": "hydration-powders",
+        "max_products": 8,
+        "column_count_desktop": "4",
+        "column_count_mobile": "1",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    },
+    "recommended_products": {
+      "type": "recommended-products",
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Recommended products",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "max_products": 8,
+        "column_count_desktop": "3",
+        "column_count_mobile": "2",
+        "show_slider_indicator": true,
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "video_hero_C8cx3i": {
+      "type": "video-hero",
+      "blocks": {
+        "heading_rykPqK": {
+          "type": "heading",
+          "settings": {
+            "heading": "Discover our new arrivals",
+            "heading_font_size": 6,
+            "heading_tag": "h2"
+          }
+        },
+        "button_Ne87LA": {
+          "type": "button",
+          "settings": {
+            "button_link": "shopify://collections/all",
+            "button_label": "Shop Now",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "heading_rykPqK",
+        "button_Ne87LA"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "video": "shopify://files/videos/c3beaaa49af843dc8343407c1cc4dbe1.HD-1080p-7.2Mbps-36104027.mp4",
+        "video_focal_point": "center",
+        "mobile_video_focal_point": "center",
+        "background_link": "",
+        "custom_desktop_height": "350px",
+        "custom_mobile_height": "350px",
+        "content_width": 500,
+        "text_position_desktop": "bottom_left",
+        "text_position_mobile": "bottom_left",
+        "overlay_color_scheme": "",
+        "overlay_opacity": 20,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 0,
+        "bottom_padding": 50
+      }
+    }
+  },
+  "order": [
+    "product_overview",
+    "scrolling_content_TCmnB9",
+    "image_with_text_wrQ8NF",
+    "slideshow_EcE33b",
+    "rich_text",
+    "reviews_banner_Lk6P4L",
+    "featured_collection",
+    "recommended_products",
+    "video_hero_C8cx3i"
+  ]
+}

@@ -1,0 +1,35 @@
+{%- liquid
+  comment
+    Renders the inner structure for a drawer. A custom component handles all scroll monitoring and shadow display.
+
+    Required parameters:
+      - header_content: { String } The header content.
+      - main_content: { String } The main content.
+      - footer_content: { String } The footer content.
+
+    Optional parameters:
+      - main_content_class: { String } A custom class to apply to the main content container.
+  endcomment
+
+  render 'inline-scripts', script_name: 'drawer-inner'
+-%}
+
+<drawer-inner>
+  <div class="drawer-header" js-drawer-header>
+    {{- header_content -}}
+  </div>
+
+  <div class="drawer-viewport {%- if main_content_class %} {{ main_content_class }}{%- endif -%}" js-drawer-viewport>
+    <span class="scroll-sentinel" data-scroll-start></span>
+
+    <div class="drawer-content" js-drawer-content>
+      {{- main_content -}}
+    </div>
+
+    <span class="scroll-sentinel" data-scroll-end></span>
+  </div>
+
+  <div class="drawer-footer" js-drawer-footer>
+    {{- footer_content -}}
+  </div>
+</drawer-inner>

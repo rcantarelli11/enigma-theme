@@ -1,0 +1,48 @@
+{%- liquid
+  comment
+    Renders a button to remove an active filter.
+
+    Required parameters:
+      - filter: { Object } The filter object.
+
+    Optional parameters:
+      - value: { Object } The active filter value.
+  endcomment
+-%}
+
+{%-
+  # The filter label data attributes are used in JS to build an ID for finding
+  # the asscoaited filter input.
+-%}
+<button
+  type="button"
+  class="active-filter-item"
+  data-type="{{ filter.type | replace: '_', '-' }}"
+  js-active-filter-item
+  {%- if filter.type != 'price_range' %}
+    data-filter-label-handle="{{ filter.label | handle }}"
+    data-filter-value-label-handle="{{ value.label | handle }}"
+  {%- endif -%}
+>
+  <span class="active-filter-item__label fs-body-100">
+    {%- liquid
+      case filter.type
+        when 'price_range'
+          assign min_value = filter.min_value.value | default: 0 | money_without_trailing_zeros
+          assign max_value = filter.max_value.value | default: filter.range_max | money_without_trailing_zeros
+
+          echo '[[min]] - [[max]]' | replace: '[[min]]', min_value | replace: '[[max]]', max_value
+
+        when 'boolean'
+          echo filter.label
+
+        else
+          echo value.label
+      endcase
+    -%}
+  </span>
+
+  <span class="active-filter-item__icon">
+    {%- render 'icon-utility', icon: 'cross', width: 12, height: 12 -%}
+  </span>
+</button>

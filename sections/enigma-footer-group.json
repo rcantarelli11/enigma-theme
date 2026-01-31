@@ -1,0 +1,40 @@
+{
+  "type": "footer",
+  "name": "Enigma Footer",
+  "sections": {
+    "enigma-footer": {
+      "type": "enigma-footer",
+      "settings": {
+        "social_facebook": "https://www.facebook.com/people/EnigmaOfficial/61572464247140/",
+        "social_instagram": "https://www.instagram.com/live_enigma/"
+      },
+      "blocks": {
+        "shop-col": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Shop",
+            "menu": "collections"
+          }
+        },
+        "company-col": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Company",
+            "menu": "main-menu"
+          }
+        },
+        "support-col": {
+          "type": "menu_column",
+          "settings": {
+            "heading": "Support",
+            "menu": "footer-menu"
+          }
+        }
+      },
+      "block_order": ["shop-col", "company-col", "support-col"]
+    }
+  },
+  "order": [
+    "enigma-footer"
+  ]
+}

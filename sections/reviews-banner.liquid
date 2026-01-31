@@ -1,0 +1,516 @@
+{%- style -%}
+  .devMainReviewSection {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    background:{{ section.settings.devBg }};
+  }
+
+  @media screen and (min-width: 750px) {
+    .devMainReviewSection {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+<section class="htesti relative text-scheme-text bg-scheme-background overflow-hidden " data-color-scheme="tertiary" style="background-image: url('https://cdn.shopify.com/s/files/1/1618/2767/files/Group_8606.png?v=1707827816');background-size: cover;background-repeat: no-repeat;">
+
+<section class="fitness-banner">
+  <div class="banner-content">
+    <h1 class="banner-heading">{{ section.settings.devTitle }}</h1>
+    <p class="banner-subheading">{{ section.settings.devrevText }}</p>
+    <div class="cta-btn"><a href="#" class="cta-button">Trusted by over 10k+ customers  worldwide since 2025.</a>
+  </div>
+    </div>
+</section>
+
+  
+  <div class="section-content py-section-vertical-spacing">
+   <div class="devMainReviewSection c_rev_big_sec_dev{{ section.id }}">
+  <div class="review-swiper swiper">
+    <div class="swiper-wrapper">
+      {% for block in section.blocks %}
+        <div class="devReviewBlock c_revs_colors{{ section.id }} swiper-slide">
+          <div class="devRating">
+            <svg fill="#79edfc" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>ionicons-v5-e</title><path d="M496,203.3H312.36L256,32,199.64,203.3H16L166.21,308.7,107.71,480,256,373.84,404.29,480,345.68,308.7Z"></path></g>
+            </svg>
+            <svg fill="#79edfc" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>ionicons-v5-e</title><path d="M496,203.3H312.36L256,32,199.64,203.3H16L166.21,308.7,107.71,480,256,373.84,404.29,480,345.68,308.7Z"></path></g>
+            </svg>
+
+            <svg fill="#79edfc" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>ionicons-v5-e</title><path d="M496,203.3H312.36L256,32,199.64,203.3H16L166.21,308.7,107.71,480,256,373.84,404.29,480,345.68,308.7Z"></path></g>
+            </svg>
+
+            <svg fill="#79edfc" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>ionicons-v5-e</title><path d="M496,203.3H312.36L256,32,199.64,203.3H16L166.21,308.7,107.71,480,256,373.84,404.29,480,345.68,308.7Z"></path></g>
+            </svg>
+
+            <svg fill="#79edfc" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>ionicons-v5-e</title><path d="M496,203.3H312.36L256,32,199.64,203.3H16L166.21,308.7,107.71,480,256,373.84,404.29,480,345.68,308.7Z"></path></g>
+            </svg>
+          </div>
+          <div class="devReviewTitle">
+            <h2>{{ block.settings.devrevText }}</h2>
+          </div>
+          <div class="devBodytext">
+            <p class="{% if section.settings.c_show_read_more %} {% else %} expanded {% endif %}">
+              {{ block.settings.devrevBody }}
+            </p>
+            {% if section.settings.c_show_read_more %}
+              <button class="devSeeMore">Read More</button>
+            {% endif %}
+          </div>
+          <div class="devRevVerification">
+            <div class="devReviewer">
+              <h3>{{ block.settings.devrevName }}</h3>
+            </div>
+            {% if block.settings.devrevVerify == true %}
+              <div class="devVerificatin">
+                <p>
+                  Verified Buyer
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="13"
+                    fill="currentColor"
+                    class="bi bi-check-circle-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                  </svg>
+                </p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+<style>
+.devRating {
+    text-align: center;
+}
+  .fitness-banner {
+    width: 100%;
+    padding: 80px 5%;
+}
+  .section-content {
+    position: relative;
+    z-index: 10;
+}
+  .fitness-banner .banner-content {
+    max-width: 1174px;
+    margin: auto;
+    padding-right: 45px;
+    padding-left: 45px;
+}
+  .banner-heading {
+    color: #222;
+}
+.banner-subheading {
+    font-size: 54px;
+    font-weight: bold;
+    /* color: #79edfc; */
+    letter-spacing: 10px;
+}
+  .fitness-banner a.cta-button {
+    background-color: #79edfc;
+    padding: 10px 15px;
+    text-align: center;
+    display: inline-block;
+    max-width: 350px;
+    font-weight: 700;
+    font-size: 19px;
+    position: relative;
+     text-decoration:none;
+}
+  .fitness-banner a.cta-button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -35px;
+    border-bottom: 40px solid #79edfc;
+    display: inline-block;
+    border-right: 16px solid #79edfc;
+    border-top: 33px solid transparent;
+    border-left: 20px solid transparent;
+    height: 100%;
+}
+  .fitness-banner a.cta-button:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -35px;
+    border-bottom: 40px solid transparent;
+    display: inline-block;
+    border-right: 16px solid transparent;
+    border-top: 33px solid #79edfc;
+    border-left: 20px solid #79edfc;
+    height: 100%;
+}
+  .sliders-container, .header-container {
+    max-width: 1730px;
+    margin: auto;
+}
+    .devMainReviewSection .swiper-wrapper{
+  transition-timing-function : linear;
+}
+  </style>
+<style>
+    .devMainReviewSection-div {
+        /* max-width: {{section.settings.devMax_width }}px; */
+        margin: 0 auto;
+    }
+    .devReviewHead {
+        margin-bottom: 32px;
+    }
+    .devReviewHead svg, .devRating svg{
+          width: 22px;
+      height: 22px;
+    }
+    .devReviewHead .devReviewHeading{
+      margin:0px;
+      color:#17322B;
+      font-size:38px;
+      line-height:1.1;
+      letter-spacing:1px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .c_dev_stars_head{{ section.id }}{
+        display: flex;
+      justify-content: center;
+      align-items: center;
+      padding:10px 0 0 0;
+    }
+    .c_dev_stars_head{{ section.id }} span{
+          margin: 0 0 0 10px;
+    }
+    .c_dev_stars_head{{ section.id }} svg{
+      display:block;
+      margin:0 2px;
+    }
+      .devInstaHead p{
+       margin:0px;
+        color:#18322B;
+        font-weight:400;
+        font-size:18px;
+     }
+
+    .devReviewMainGrid svg.bi.bi-chevron-right, .devReviewMainGrid svg.bi.bi-chevron-left {
+        color: #215157;
+        border-radius: 50%;
+        height: 20px;
+        width: 20px;
+    }
+        .devReviewMainGrid .slick-arrow:before {
+        content: none !important;
+    }
+        .devReviewMainGrid .slick-next  {
+        right: 10px !important;
+    }
+        .devReviewMainGrid .slick-prev{
+          left:15px !important;
+          z-index:9;
+        }
+        .devReviewMainGrid .slick-arrow svg{
+          width:20px;
+          height:20px;
+          color:black;
+        }
+        .devReviewMainGrid .slick-disabled svg{
+          opacity:0.4;
+          cursor:not-allowed;
+        }
+  .c_revs_colors{{ section.id }}{
+   background: {{ section.settings.c_revs_Bg }};
+  }
+    .devReviewBlock {
+    padding: 22px;
+    margin: 0 8px;
+    height: auto !important;
+    background: #eae7e7;
+}
+       .slick-track{
+         display:flex;
+       }
+    .devReviewTitle h2 {
+        width: 100%;
+        margin-top: 8px;
+        font-size: 17px;
+        font-weight: bold;
+        margin-bottom:8px;
+        word-wrap: break-word;
+    }
+      .devReviewer h3{
+        font-size: 15px;
+        font-weight: bold;
+        margin:0;
+      }
+      .devVerificatin p{
+        margin:0;
+        font-size:12px;
+      }
+    .devreviews-crousel .oke-w-reviewer-identity {
+        font-size: 15px;
+    }
+
+     .devRevVerification {
+          display: flex;
+        align-items: center;
+        gap: 15px;
+       margin-top:auto;
+       padding-top:8px;
+       }
+     .devBodytext p{
+       max-height:50px;
+       overflow:hidden;
+       margin:0;
+       text-align:center;
+     }
+       .expanded{
+        max-height:100% !important;
+        overflow:hidden;
+       }
+      .devSeeMore {
+        /* display: none; */
+        background: transparent;
+        border: 0;
+        text-decoration: underline;
+        font-size: 14px;
+        padding: 0;
+    }
+
+    {% if template.name =="product" or template.name =="index" %}
+       .devReviewHead .devReviewHeading {
+      text-align: center;
+      }
+      {% endif %}
+
+
+
+       @media screen and (max-width:767px){
+
+         .devReviewHead h1 {
+        font-size: 23px;
+        line-height: 26px;
+    }
+       .devReviewTitle h2 {
+        font-size: 14px;
+      }
+    .devReviewer h3 {
+        font-size: 13px;
+    }
+         .banner-subheading {
+            font-size: 27px;
+        }
+         .fitness-banner a.cta-button {
+          font-size: 15px;
+          line-height: 1.2;
+      }
+         .fitness-banner .banner-content {
+                padding-right: 28px;
+                padding-left: 28px;
+            }
+     .devBodytext p {
+        max-height: 47px;
+        overflow: hidden;
+        line-height: 1.1;
+    }
+         .fitness-banner a.cta-button:after {
+        content: "";
+            border-bottom: 30px solid transparent;
+            border-top: 30px solid #79edfc;
+        }    
+         {% if template.name == "product" or template.name =="index" %}
+  .devMainReviewSection{
+        padding-top: 0px;
+        padding-bottom: 0px;
+  }
+
+           {% endif %}
+       }
+  @media(max-width:550px){
+    {% if template.name == "product" or template.name =="index" %}
+     .devReviewHead h1 {
+      font-size: 26px !important;
+           }
+           {% endif %}
+  }
+</style>
+<script>
+
+  {% if section.settings.c_show_read_more %}
+      document.addEventListener('DOMContentLoaded', function () {
+        const cards = document.querySelectorAll('.devBodytext');
+
+        cards.forEach(card => {
+          const content = card.querySelector('.devBodytext p');
+          const seeMoreBtn = card.querySelector('.devSeeMore');
+
+          if (content.scrollHeight > content.clientHeight) {
+            seeMoreBtn.style.display = 'block';
+          }
+
+          seeMoreBtn.addEventListener('click', function () {
+            if (content.classList.contains('expanded')) {
+              content.classList.remove('expanded');
+              seeMoreBtn.textContent = 'Read More';
+            } else {
+              content.classList.add('expanded');
+              seeMoreBtn.textContent = 'Read Less';
+            }
+          });
+        });
+      });
+    {% endif %}
+</script>
+  <script>
+var swiperOptions = {
+loop: true,
+  freeMode: true,
+  autoplay: {
+    delay: 0,
+    pauseOnMouseEnter:true,
+    disableOnInteraction:false,
+  },
+  loopAddBlankSlides:true,
+  slidesPerView: 1.2,
+  speed: 8000,
+  grabCursor: true,
+  loopAdditionalSlides: 1.2,
+   breakpoints: {
+        640: {
+          slidesPerView: 4,
+          spaceBetween: 20,
+          loopAdditionalSlides: 4,
+        }
+       
+      },
+};
+
+var swiper = new Swiper(".review-swiper", swiperOptions);
+</script>
+{% schema %}
+{
+  "name": "Reviews Banner",
+  "settings": [
+       {
+        "type": "color",
+        "id": "devBg",
+        "label": "Section Background"
+    },
+    {
+        "type": "text",
+        "id": "devTitle",
+        "label": "Heading"
+  },
+     {
+        "type": "checkbox",
+        "id": "c_sec_stars_show",
+        "label": "Show stars under heading?",
+       "default":false
+    },
+      {
+        "type": "text",
+        "id": "devrevText",
+        "label": "Text Reviews"
+  },
+  {
+        "type": "url",
+        "id": "devUrl",
+        "label": "All Reviews"
+  },
+  {
+    "type": "range",
+    "id": "padding_top",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Padding Top",
+    "default": 40
+  },
+  {
+    "type": "range",
+    "id": "padding_bottom",
+    "min": 0,
+    "max": 100,
+    "step": 4,
+    "unit": "px",
+    "label": "Padding Bottom",
+    "default": 40
+  },
+    {
+      "type":"color",
+      "id":"c_revs_Bg",
+      "label":"Reviews background color",
+      "default":"#CFDDA0"
+    },
+    {
+        "type": "checkbox",
+        "id": "c_show_read_more",
+        "label": "Enable read more?",
+       "default":true
+    },
+    {
+        "type": "checkbox",
+        "id": "c_show_rev_arr",
+        "label": "Show/Hide Arrows?",
+       "default":false
+    },
+    {
+        "type": "checkbox",
+        "id": "c_show_rev_dots",
+        "label": "Show/Hide Dots?",
+       "default":false
+    }
+
+  ],
+    "blocks": [
+   {
+    "type": "Reviews",
+    "name": "Add a Review",
+    "settings": [
+         {
+        "type": "text",
+        "id": "devrevText",
+        "label": "Review Title"
+     },
+       {
+        "type": "textarea",
+        "id": "devrevBody",
+        "label": "Review Body"
+    },
+      {
+        "type": "text",
+        "id": "devrevName",
+        "label": "Reviewer Name"
+    },
+      {
+        "type": "checkbox",
+        "id": "devrevVerify",
+        "label": "Verified?"
+    }
+    ]
+  }
+],
+
+  "presets": [
+  {
+    "name": "Reviews Banner"
+  }
+]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

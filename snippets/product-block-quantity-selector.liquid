@@ -1,0 +1,30 @@
+{%- liquid
+  comment
+    Renders the "Quantity selector" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - variant: { Object } The current product variant.
+      - form_id: { String } The form ID to associate the inputs with
+  endcomment
+
+  echo 'component-quantity-input.css' | asset_url | stylesheet_tag
+  render 'inline-scripts', script_name: 'quantity-input'
+-%}
+
+<div
+  class="product-details__quantity"
+  style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  js-product-block
+  js-product-block-allowed-in-quickview
+  js-product-block-quantity-selector
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.show_label -%}
+    <div class="quantity-label">
+      {{ 'products.product.quantity' | t | append: ':' }}
+    </div>
+  {%- endif -%}
+
+  {%- render 'quantity-input', id: variant.id, name: 'quantity', form_id: form_id -%}
+</div>

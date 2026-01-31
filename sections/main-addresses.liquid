@@ -1,0 +1,155 @@
+{{ 'component-pagination.css' | asset_url | stylesheet_tag }}
+{% render 'inline-scripts', script_name: 'main-addresses' %}
+
+<main-addresses
+  class="addresses section"
+  data-section-id="{{ section.id }}"
+  data-section-type="addresses"
+  style="{% render 'settings-section-padding' %}"
+>
+  <div class="section-inner section-inner--width-page-width stack">
+    <header class="addresses__header stack ta-c">
+      <nav class="addresses__breadcrumbs">
+        <ul class="breadcrumbs cluster">
+          <li class="breadcrumbs__item">
+            <a href="{{ routes.account_url }}">{{ 'customer.account.title' | t }}</a>
+          </li>
+          <li class="breadcrumbs__item breadcrumbs__break">&nbsp;&#47;&nbsp;</li>
+          <li class="breadcrumbs__item">{{ 'customer.addresses.title' | t }}</li>
+        </ul>
+      </nav>
+      <h1 class="addresses__heading ff-heading fs-heading-display-3">{{ 'customer.addresses.title' | t }}</h1>
+      <div class="addresses__new">
+        {% assign new_address_label = 'customer.addresses.add_new' | t %}
+        {% render 'button',
+          label: new_address_label,
+          id: 'address-new-button',
+          button_alignment: 'center',
+          require_link: false,
+          linkless_type: 'button'
+        %}
+
+        {% liquid
+          capture modal_content
+            render 'standard-address-form'
+          endcapture
+        %}
+
+        {% render 'modal',
+          name: 'new-address',
+          content: modal_content,
+          color: 'popup-modal',
+          class: 'modal address-modal',
+          close_button: true,
+          backdrop: true,
+          backdrop_dismiss: true,
+          scroll_lock: true
+        %}
+      </div>
+    </header>
+
+    {% paginate customer.addresses by 6 %}
+      <div class="addresses__list">
+        {%- for address in customer.addresses -%}
+          <div class="addresses__list-item stack">
+            {% if address == customer.default_address %}
+              <h3 class="list-item__label--default ff-body fs-body-100 fs-body-bold">
+                {{ 'customer.addresses.default' | t }}
+              </h3>
+            {% endif %}
+
+            {{ address | format_address }}
+
+            {% liquid
+              assign edit_address_label = 'customer.addresses.edit' | t
+              assign edit_address_attributes = 'data-address-id="[[ai]]"' | replace: '[[ai]]', address.id
+              assign delete_address_label = 'customer.addresses.delete' | t
+              assign delete_confirm_message = 'customer.addresses.delete_confirm' | t
+
+              capture delete_address_attributes
+                echo 'data-target="[[au]]"' | replace: '[[au]]', address.url
+                echo 'data-confirm-message="[[cm]]"' | replace: '[[cm]]', delete_confirm_message
+              endcapture
+            %}
+
+            <div class="list-item__inline-buttons cluster">
+              {% render 'button',
+                label: edit_address_label,
+                id: 'address-edit-button',
+                button_style: 'text',
+                underlined: true,
+                require_link: false,
+                linkless_type: 'button',
+                button_attributes: edit_address_attributes
+              %}
+              {% render 'button',
+                label: delete_address_label,
+                id: 'address-delete-button',
+                button_style: 'text',
+                underlined: true,
+                require_link: false,
+                linkless_type: 'button',
+                button_attributes: delete_address_attributes
+              %}
+            </div>
+
+            {% liquid
+              capture modal_content
+                render 'standard-address-form', address: address
+              endcapture
+
+              assign modal_name = 'edit-address-' | append: address.id
+            %}
+
+            {% render 'modal',
+              name: modal_name,
+              content: modal_content,
+              color: 'popup-modal',
+              class: 'modal address-modal',
+              close_button: true,
+              backdrop: true,
+              backdrop_dismiss: true,
+              scroll_lock: true
+            %}
+          </div>
+        {%- endfor -%}
+      </div>
+      {%- if paginate.pages > 1 -%}
+        {% render 'pagination', paginate: paginate, resource_string: 'general.pagination.addresses' %}
+      {%- endif -%}
+    {% endpaginate %}
+  </div>
+</main-addresses>
+
+{% schema %}
+{
+  "name": "t:sections.main_addresses.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ]
+}
+{% endschema %}

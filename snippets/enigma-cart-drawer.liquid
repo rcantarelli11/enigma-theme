@@ -1,0 +1,197 @@
+<!-- Cart Drawer Overlay -->
+<div class="enigma-cart-overlay" data-cart-overlay></div>
+
+<!-- Cart Drawer -->
+<div class="enigma-cart-drawer" data-cart-drawer>
+  <div class="enigma-cart-drawer__header">
+    <h2 style="font-size: 1.125rem; font-weight: 700; letter-spacing: 0.05em;">YOUR CART</h2>
+    <button class="enigma-cart-drawer__close" data-cart-close aria-label="Close cart">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </div>
+
+  <!-- Free Shipping Bar -->
+  <div class="enigma-cart-drawer__shipping" data-cart-shipping>
+    <p data-cart-shipping-text></p>
+    <div class="enigma-cart-drawer__shipping-bar">
+      <div class="enigma-cart-drawer__shipping-fill" data-cart-shipping-fill></div>
+    </div>
+  </div>
+
+  <!-- Cart Items -->
+  <div class="enigma-cart-drawer__items" data-cart-items>
+    <!-- Populated via JS -->
+  </div>
+
+  <!-- Empty State -->
+  <div class="enigma-cart-drawer__empty" data-cart-empty style="display: none;">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+    <p style="font-size: 1.125rem; font-weight: 600; margin-top: 1rem;">Your cart is empty</p>
+    <p style="color: var(--text-secondary); margin-top: 0.25rem;">Find something you love</p>
+    <a href="/collections/all" class="enigma-btn enigma-btn--primary" style="margin-top: 1.5rem;">Shop Now</a>
+  </div>
+
+  <!-- Cart Footer -->
+  <div class="enigma-cart-drawer__footer" data-cart-footer>
+    <div class="enigma-cart-drawer__subtotal">
+      <span>Subtotal</span>
+      <span data-cart-subtotal></span>
+    </div>
+    <p style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 1rem;">Shipping and taxes calculated at checkout</p>
+    <a href="/checkout" class="enigma-btn enigma-btn--primary enigma-btn--lg" style="width: 100%; text-align: center;" data-cart-checkout>
+      Checkout
+    </a>
+    <a href="/cart" style="display: block; text-align: center; margin-top: 0.75rem; font-size: 0.8125rem; color: var(--text-secondary); text-decoration: underline;">
+      View Cart
+    </a>
+  </div>
+</div>
+
+<script>
+(function() {
+  const FREE_SHIPPING_THRESHOLD = 7000; // $70 in cents
+
+  const drawer = document.querySelector('[data-cart-drawer]');
+  const overlay = document.querySelector('[data-cart-overlay]');
+  const closeBtn = document.querySelector('[data-cart-close]');
+  const itemsContainer = document.querySelector('[data-cart-items]');
+  const emptyState = document.querySelector('[data-cart-empty]');
+  const footer = document.querySelector('[data-cart-footer]');
+  const subtotalEl = document.querySelector('[data-cart-subtotal]');
+  const shippingText = document.querySelector('[data-cart-shipping-text]');
+  const shippingFill = document.querySelector('[data-cart-shipping-fill]');
+  const cartCountEls = document.querySelectorAll('[data-cart-count]');
+
+  function openCart() {
+    drawer.classList.add('open');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    fetchCart();
+  }
+
+  function closeCart() {
+    drawer.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Open cart triggers
+  document.querySelectorAll('[data-cart-toggle]').forEach(el => el.addEventListener('click', (e) => { e.preventDefault(); openCart(); }));
+  if (closeBtn) closeBtn.addEventListener('click', closeCart);
+  if (overlay) overlay.addEventListener('click', closeCart);
+
+  // Escape key
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCart(); });
+
+  async function fetchCart() {
+    const res = await fetch('/cart.js');
+    const cart = await res.json();
+    renderCart(cart);
+  }
+
+  function renderCart(cart) {
+    // Update count badges
+    cartCountEls.forEach(el => {
+      el.textContent = cart.item_count;
+      el.style.display = cart.item_count > 0 ? 'flex' : 'none';
+    });
+
+    if (cart.item_count === 0) {
+      itemsContainer.style.display = 'none';
+      emptyState.style.display = 'flex';
+      footer.style.display = 'none';
+      return;
+    }
+
+    emptyState.style.display = 'none';
+    itemsContainer.style.display = 'block';
+    footer.style.display = 'block';
+
+    // Shipping bar
+    updateShippingBar(cart.total_price);
+
+    // Subtotal
+    subtotalEl.textContent = '$' + (cart.total_price / 100).toFixed(2);
+
+    // Render items
+    itemsContainer.innerHTML = cart.items.map(item => `
+      <div class="enigma-cart-item" data-line-key="${item.key}">
+        <a href="${item.url}" class="enigma-cart-item__image">
+          <img src="${item.featured_image.url || item.image}" alt="${item.title}" width="80" height="80" loading="lazy">
+        </a>
+        <div class="enigma-cart-item__details">
+          <a href="${item.url}" class="enigma-cart-item__title">${item.product_title}</a>
+          ${item.variant_title && item.variant_title !== 'Default Title' ? `<p class="enigma-cart-item__variant">${item.variant_title}</p>` : ''}
+          <div class="enigma-cart-item__bottom">
+            <div class="enigma-cart-item__qty">
+              <button data-cart-qty-change data-key="${item.key}" data-qty="${item.quantity - 1}" aria-label="Decrease">−</button>
+              <span>${item.quantity}</span>
+              <button data-cart-qty-change data-key="${item.key}" data-qty="${item.quantity + 1}" aria-label="Increase">+</button>
+            </div>
+            <span class="enigma-cart-item__price">$${(item.final_line_price / 100).toFixed(2)}</span>
+          </div>
+        </div>
+        <button class="enigma-cart-item__remove" data-cart-remove data-key="${item.key}" aria-label="Remove ${item.title}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+      </div>
+    `).join('');
+
+    // Bind qty change events
+    itemsContainer.querySelectorAll('[data-cart-qty-change]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const key = btn.dataset.key;
+        const qty = parseInt(btn.dataset.qty);
+        await updateCartItem(key, qty);
+      });
+    });
+
+    // Bind remove events
+    itemsContainer.querySelectorAll('[data-cart-remove]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const key = btn.dataset.key;
+        await updateCartItem(key, 0);
+      });
+    });
+  }
+
+  function updateShippingBar(totalCents) {
+    if (totalCents >= FREE_SHIPPING_THRESHOLD) {
+      shippingText.innerHTML = '✓ You qualify for <strong>free shipping!</strong>';
+      shippingFill.style.width = '100%';
+    } else {
+      const remaining = ((FREE_SHIPPING_THRESHOLD - totalCents) / 100).toFixed(2);
+      shippingText.innerHTML = `Add <strong>$${remaining}</strong> more for <strong>free shipping</strong>`;
+      shippingFill.style.width = `${(totalCents / FREE_SHIPPING_THRESHOLD) * 100}%`;
+    }
+  }
+
+  async function updateCartItem(key, qty) {
+    const res = await fetch('/cart/change.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: key, quantity: qty })
+    });
+    const cart = await res.json();
+    renderCart(cart);
+  }
+
+  // Intercept ATC forms to open drawer
+  document.addEventListener('submit', async (e) => {
+    const form = e.target.closest('form[action="/cart/add"]');
+    if (!form) return;
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    await fetch('/cart/add.js', {
+      method: 'POST',
+      body: formData
+    });
+
+    openCart();
+  });
+
+  // Expose globally
+  window.enigmaCart = { open: openCart, close: closeCart, refresh: fetchCart };
+})();
+</script>

@@ -1,0 +1,28 @@
+{%- liquid
+  comment
+    Renders an element to reveal given content with a given animation type.
+
+    Required parameters:
+      - content: { String } HTML markup for the content being revealed.
+      - type: { String } The reveal animation type. Can be:
+        - 'iris'
+        - 'fade'
+        - 'none'
+
+    Note: some elements use the animating-image-wrap class directly, like banner.liquid
+  endcomment
+
+  render 'inline-scripts', script_name: 'visibility-watcher'
+-%}
+
+<visibility-watcher data-watch-child-selector=".animating-image-wrap">
+  <div class="animating-image-wrap">
+    {%- liquid
+      unless type == 'none'
+        render 'animating-image-revealer', type: type
+      endunless
+
+      echo content
+    -%}
+  </div>
+</visibility-watcher>

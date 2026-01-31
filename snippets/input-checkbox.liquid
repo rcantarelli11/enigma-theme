@@ -1,0 +1,83 @@
+{%- liquid
+  comment
+    Renders a checkbox input.
+
+    Required parameters:
+      - id: { String } The input's ID.
+      - name: { String } The input's name.
+      - label: { String } The input's label.
+
+    Optional parameters:
+      - value: { String } The input's value.
+      - class: { String } The input's class.
+      - checked: { Boolean: false } Whether the input is checked.
+      - required: { Boolean: false } Whether the input is required.
+      - disabled: { Boolean: false } Whether the input is disabled.
+      - has_error: { Boolean: false } Whether there's an error associated with the input.
+      - error_message: { String } The message to display when there's an error associated
+          with the input.
+      - help_text: { String } Text to be shown below the textarea.
+      - form_id: { String } ID of the form to connect the input with.
+  endcomment
+
+  assign checked = checked | default: false, allow_false: true
+  assign required = required | default: false, allow_false: true
+
+  if required
+    assign label = 'general.forms.required_label' | t: label: label
+  endif
+-%}
+
+<div class="custom-input-wrapper">
+  <div class="custom-input custom-input--checkbox {%- if has_error %} has-error{%- endif -%}">
+    <div class="checkbox-wrapper">
+      <input
+        type="checkbox"
+        id="{{ id }}"
+        name="{{ name }}"
+
+        {%- if value != blank %}
+          value="{{ value }}"
+        {%- endif -%}
+
+        {%- if class != blank %}
+          class="{{ class }}"
+        {%- endif -%}
+
+        {%- if form_id != blank -%}
+          form="{{ form_id }}"
+        {%- endif -%}
+
+        {%- if checked %}
+          checked
+        {%- endif -%}
+
+        {%- if required %}
+          required
+        {%- endif -%}
+
+        {%- if disabled %}
+          disabled
+        {%- endif -%}
+      >
+
+      <div class="checkbox-checkmark">
+        {%- render 'icon-utility', icon: 'checkmark-small', width: 12.5, height: 10 -%}
+      </div>
+
+      <div class="checkbox-shadow"></div>
+    </div>
+
+    <label for="{{ id }}">
+      <span>{{ label }}</span>
+    </label>
+  </div>
+
+  {%- if has_error and error_message != blank -%}
+    <div class="notification-display error-display">{{ error_message }}</div>
+  {%- endif -%}
+
+  {%- if help_text != blank -%}
+    <div class="custom-input-help-text">{{ help_text }}</div>
+  {%- endif -%}
+</div>

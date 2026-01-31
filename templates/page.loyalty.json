@@ -1,0 +1,304 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_with_text_Vz37Jg": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_6yJTQV": {
+          "type": "heading",
+          "settings": {
+            "heading": "GET REWARDED ",
+            "heading_font_size": 6,
+            "heading_tag": "h2"
+          }
+        },
+        "overline_kgNfry": {
+          "type": "overline",
+          "settings": {
+            "text": "<strong>FOR STUFF YOU ALREADY DO</strong>"
+          }
+        },
+        "text_hjxcHw": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>We developed the Enigma Loyalty program to show appreciation for our most dedicated and engaged supporters. Not only are we rewarding you for choosing Enigma Energy, but we’re also giving back for your brand interactions, whether it’s hitting the gym or sharing epic moments online. Earn points with every action and redeem them for products and exclusive merchandise. It’s that easy. It’s that awesome.</strong></p>",
+            "text_font_size": 3
+          }
+        },
+        "button_iMahXa": {
+          "type": "button",
+          "settings": {
+            "button_link": "/account/login",
+            "button_label": "Sign up or Login now",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "heading_6yJTQV",
+        "overline_kgNfry",
+        "text_hjxcHw",
+        "button_iMahXa"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "image": "shopify://shop_images/ENIGMA_LOYALTY_6_1.png",
+        "aspect_ratio": "natural",
+        "mobile_aspect_ratio": "natural",
+        "media_link": "",
+        "desktop_media_width": 50,
+        "desktop_media_position": "left",
+        "mobile_media_position": "above",
+        "media_breathing_room": 0,
+        "content_width": "custom-width",
+        "custom_width": 550,
+        "content_position": "center_center",
+        "text_alignment": "left",
+        "container_color_scheme": "scheme_2",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "image_with_text_z4mRzA": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_QBqyUx": {
+          "type": "heading",
+          "settings": {
+            "heading": "USING POINTS IS CRAZY EASY",
+            "heading_font_size": 6,
+            "heading_tag": "h2"
+          }
+        },
+        "text_QAiTXY": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Every product* on the Enigma Energy website can be purchased with dollars (and more currencies coming soon!) or loyalty points. Just choose your product and flavor, select your payment method, and add it to your cart.</strong></p><p><strong>*Please note that certain limited edition items may not be available for purchase with points at launch.</strong></p>",
+            "text_font_size": 3
+          }
+        },
+        "button_ktfPN7": {
+          "type": "button",
+          "settings": {
+            "button_link": "/account/login",
+            "button_label": "Sign Up or Login In",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "heading_QBqyUx",
+        "text_QAiTXY",
+        "button_ktfPN7"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "image": "shopify://shop_images/Buy_with_11000_points_4.png",
+        "aspect_ratio": "natural",
+        "mobile_aspect_ratio": "natural",
+        "media_link": "",
+        "desktop_media_width": 50,
+        "desktop_media_position": "right",
+        "mobile_media_position": "above",
+        "media_breathing_room": 0,
+        "content_width": "custom-width",
+        "custom_width": 550,
+        "content_position": "center_center",
+        "text_alignment": "left",
+        "container_color_scheme": "scheme_2",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "enable_corner_radius": true,
+        "top_padding": 80,
+        "bottom_padding": 50
+      }
+    },
+    "multi_column_zfaBF8": {
+      "type": "multi-column",
+      "blocks": {
+        "column_item_AtFF7K": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "image": "shopify://shop_images/REFER.png",
+            "heading": "REFER YOUR FRIENDS",
+            "text": "<p><strong>Spread the word about Enigma Energy and earn big points when your friends make their first purchase! Just share your referral link below with friends or on your socials. They'll get 20% off their first order, and you’ll score 500 points. How awesome is that?</strong></p>",
+            "button_link": "",
+            "button_label": ""
+          }
+        },
+        "column_item_pzxhbF": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "image": "shopify://shop_images/PURCHASE.png",
+            "heading": "BUY EPIC ENIGMA ENERGY GEAR!",
+            "text": "<p><strong>Earn bonus points with every product* or apparel/merch item purchased on livenigma.com. It's a simple way to rack up a few extra points with no hassle!</strong></p>",
+            "button_link": "",
+            "button_label": ""
+          }
+        },
+        "column_item_9fC96E": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "image": "shopify://shop_images/REDEEM.png",
+            "heading": "EARN POINTS BY REDEEMING WHAT YOU ALREADY BUY",
+            "text": "<p><strong>Loyalty points can be redeemed after checkout. The more you buy, the more points you accumulate—it's that simple! Start earning rewards with every purchase and enjoy the benefits!</strong></p>",
+            "button_link": "",
+            "button_label": ""
+          }
+        },
+        "column_item_gdXYYV": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "image": "shopify://shop_images/BIRTHDAY.png",
+            "heading": "EARN POINTS ON YOUR BIRTHDAY",
+            "text": "<p><strong>It’s your party, and you can earn points if you want to! Enter your birthday below to rack up some points, and who knows—you might even get a “happy birthday” shoutout from the Enigma Energy family on your big day. Hey, it’s happened before!</strong></p>",
+            "button_link": "",
+            "button_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_item_AtFF7K",
+        "column_item_pzxhbF",
+        "column_item_9fC96E",
+        "column_item_gdXYYV"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "HOW TO EARN POINTS",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "column_spacing": "medium",
+        "column_count_desktop": "4",
+        "column_count_mobile": "1",
+        "enable_slider_on_desktop": false,
+        "enable_slider_on_mobile": false,
+        "show_slider_indicator": false,
+        "text_alignment": "left",
+        "heading_font_size": 2,
+        "heading_mobile_font_size": 2,
+        "item_title_heading_tag": "h3",
+        "text_font_size": 3,
+        "button_style": "solid",
+        "media_aspect_ratio": "natural",
+        "media_position": "above_content",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "image_with_text_n7RRHT": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_fAJVBD": {
+          "type": "heading",
+          "settings": {
+            "heading": "WHAT'S YOUR STATUS?",
+            "heading_font_size": 6,
+            "heading_tag": "h2"
+          }
+        },
+        "text_aFtzHQ": {
+          "type": "text",
+          "settings": {
+            "text": "<p>The more you shop and engage with Enigma Energy, the sooner you'll unlock our exclusive status tiers, offering awesome perks for our most active members. Perks include point multipliers (so you earn more on every purchase), free shipping, VIP access to events, exclusive product drops, and more.</p><p>Members achieve status by earning the required number of Enigma Energy loyalty points within a calendar year. Once you hit BRONZE, SILVER, or GOLD status, your status is valid for the rest of the year and the entire following year. Don’t hit a status tier? No worries—your points are yours to keep and use as long as your account has had activity in the past 18 months.</p>",
+            "text_font_size": 3
+          }
+        }
+      },
+      "block_order": [
+        "heading_fAJVBD",
+        "text_aFtzHQ"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "image": "shopify://shop_images/Loyalty_photos.png",
+        "aspect_ratio": "natural",
+        "mobile_aspect_ratio": "natural",
+        "media_link": "",
+        "desktop_media_width": 50,
+        "desktop_media_position": "left",
+        "mobile_media_position": "above",
+        "media_breathing_room": 0,
+        "content_width": "custom-width",
+        "custom_width": 500,
+        "content_position": "center_center",
+        "text_alignment": "left",
+        "container_color_scheme": "scheme_2",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "points_table_jG6agH": {
+      "type": "points-table",
+      "settings": {
+        "color_scheme": "scheme_2",
+        "content_width": 500
+      }
+    },
+    "rich_text_7F7b7y": {
+      "type": "rich-text",
+      "blocks": {
+        "button_VYTVhC": {
+          "type": "button",
+          "settings": {
+            "button_link": "/account/register",
+            "button_label": "Sign Up or Login In",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "button_VYTVhC"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "text_alignment": "center",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    }
+  },
+  "order": [
+    "image_with_text_Vz37Jg",
+    "image_with_text_z4mRzA",
+    "main",
+    "multi_column_zfaBF8",
+    "image_with_text_n7RRHT",
+    "points_table_jG6agH",
+    "rich_text_7F7b7y"
+  ]
+}

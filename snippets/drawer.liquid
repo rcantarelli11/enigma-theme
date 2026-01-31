@@ -1,0 +1,55 @@
+{%- liquid
+  comment
+    Renders a drawer element based on dialog/modal.
+
+    Required parameters:
+    - name: { String } The unique name of the dialog.
+    - title: { String } The title for the dialog (used for the aria-label attribute).
+    - description: { String } A description of the dialog (used for the aria-description attribute).
+    - content: { String } The HTML content of the dialog.
+    - alignment: { String: 'left' } The alignment of the dialog. Can be:
+      - 'left'
+      - 'right'
+      - 'bottom'
+
+    Optional parameters:
+      - class: { String } A custom class to be added to the dialog.
+      - reusable: { Boolean: false } Whether the dialog container can be reused for multiple content sources. When 'true', content is provided through CustomEvent detail object, and is cleared on close.
+      - omit_inner: { Boolean: false } Whether to omit the 'dialog-inner' element.
+      - close_button: { Boolean: false } Whether to add a close button to the drawer.
+      - mobile_alignment_bottom: { Boolean: false } Whether the alignment on mobile should switch to 'bottom'.
+  endcomment
+
+  assign alignment = alignment | default: 'left'
+  assign mobile_alignment_bottom = mobile_alignment_bottom | default: false, allow_false: true
+
+  capture class
+    echo 'drawer drawer--alignment-[[alignment]]' | replace: '[[alignment]]', alignment
+
+    if mobile_alignment_bottom
+      echo ' drawer--mobile-alignment-bottom'
+    endif
+
+    if class != blank
+      echo ' '
+      echo class
+    endif
+  endcapture
+-%}
+
+{%- if alignment != blank and name != blank -%}
+  {%- render 'modal',
+    name: name,
+    class: class,
+    content: content,
+    close_button: close_button,
+    color: 'drawer',
+    backdrop: true,
+    backdrop_dismiss: true,
+    scroll_lock: true,
+    reusable: false,
+    aria_label: title,
+    aria_description: description,
+    omit_inner: omit_inner
+  -%}
+{%- endif -%}

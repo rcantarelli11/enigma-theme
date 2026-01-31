@@ -1,0 +1,43 @@
+{% liquid
+  comment
+    Renders the free shipping bar for the cart drawer.
+  endcomment
+-%}
+
+{%- if settings.enable_free_shipping_bar and settings.free_shipping_bar_min_amount != blank -%}
+  {%- liquid
+    assign free_shipping_bar_min_amount_cents = settings.free_shipping_bar_min_amount | times: 100
+    assign percentage_to_free_shipping = cart.total_price | times: 100.0 | divided_by: free_shipping_bar_min_amount_cents | at_most: 100
+    assign threshold_met = false
+
+    if percentage_to_free_shipping == 100
+      assign threshold_met = true
+    endif
+  -%}
+
+  <div
+    class="free-shipping-bar {%- if threshold_met %} free-shipping-bar--threshold-met{% endif %}"
+    style="--free-shipping-progress: {{  percentage_to_free_shipping }}%"
+    js-free-shipping-bar
+  >
+    <h4 class="free-shipping-bar__message fs-body-75 ta-c">
+      {%- liquid
+        if threshold_met
+          echo 'cart.general.free_shipping' | t
+        else
+          assign remaining_amount = free_shipping_bar_min_amount_cents | minus: cart.total_price | money
+
+          capture remaining_amount_formatted_html
+            echo '<strong>[[ra]]</strong>' | replace: '[[ra]]', remaining_amount
+          endcapture
+
+          echo 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount_formatted_html
+        endif
+      -%}
+    </h4>
+
+    <div class="free-shipping-bar__bar">
+      <span class="free-shipping-bar__bar-progress"></span>
+    </div>
+  </div>
+{%- endif -%}

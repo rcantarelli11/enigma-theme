@@ -1,0 +1,176 @@
+{% liquid
+  comment
+    Renders a standard price display. This includes price, compare price, and any overrides for $0 and sold out prices.
+
+    Required parameters:
+      - prod { Object }: Either a product or variant object, depending on the 'price_scope'.
+      - price_scope { String }: Where the price is being rendered. Can be:
+        - 'product-block': Rendered in the product page, quick view, or featured product.
+        - 'product-card': Rendered in product cards.
+      - compare_at_price_varies { Boolean }: Whether the compare price varies.
+      - has_discount: { Boolean }: Whether there's a discount.
+      - discount_varies { Boolean }: Whether the discount amount varies.
+
+    Optional parameters:
+      - placeholder: { Boolean: false } Whether the price is being rendered as part of a placeholder.
+  endcomment
+
+  assign placeholder = placeholder | default: false, allow_false: true
+
+  if prod != blank
+    assign price_content_type = 'price'
+    assign custom_price_content = blank
+    assign price = prod.price
+    assign compare_at_price = prod.compare_at_price
+
+    if price_scope == 'product-block'
+      assign price_varies = false
+    elsif price_scope == 'product-card'
+      assign price_varies = prod.price_varies
+    endif
+
+    # Zero dollar checks
+    assign override_zero_price = false
+
+    if settings.zero_dollar_price_format != 'show' and price == 0
+      if prod.available
+        assign override_zero_price = true
+      elsif prod.available == false and settings.sold_out_price_format == 'show' and price_scope != 'cart'
+        assign override_zero_price = true
+      endif
+    endif
+
+    if override_zero_price
+      assign override_priority = 'zero-dollar'
+
+      if settings.zero_dollar_price_format == 'hide'
+        assign price_content_type = 'hide'
+      elsif settings.zero_dollar_price_format == 'replace'
+        assign price_content_type = 'custom'
+        assign custom_price_content = 'general.currency.zero_dollar_price_custom_text' | t
+      endif
+    endif
+
+    # Sold out checks (doesn't apply to 'cart')
+    assign override_sold_price = false
+    assign show_from = false
+
+    if settings.sold_out_price_format != 'show' and prod.available == false
+      assign override_sold_price = true
+      assign override_priority = 'sold-out'
+
+      if settings.sold_out_price_format == 'hide'
+        assign price_content_type = 'hide'
+      elsif settings.sold_out_price_format == 'replace'
+        assign price_content_type = 'custom'
+        assign custom_price_content = 'general.currency.sold_out_price_custom_text' | t
+      endif
+    endif
+
+    # Only show 'from' text on product cards
+    if override_sold_price == false and price_scope == 'product-card'
+      if price_varies or price_varies == false and has_discount and discount_varies
+        assign show_from = true
+      endif
+    endif
+
+    # Using 'displayed' naming variables to split pricing logic out to prevent result mutations
+    assign displayed_price = price
+
+    # If the compare price varies, we don't show it
+    unless compare_at_price_varies
+      assign displayed_compare_at_price = compare_at_price
+    endunless
+
+    # Zero dollar overrides for custom and hidden settings
+    if override_zero_price and override_priority == 'zero-dollar'
+      if price_content_type == 'custom'
+        assign displayed_price = custom_price_content
+      elsif price_content_type == 'hide'
+        if price_varies or has_discount
+          assign override_zero_price = false
+        else
+          assign displayed_price = ''
+        endif
+      endif
+    endif
+
+    # Sold out overrides for custom and hidden settings
+    if override_sold_price and override_priority == 'sold-out'
+      if price_content_type == 'hide'
+        assign displayed_price = ''
+      elsif price_content_type == 'custom'
+        assign displayed_price = custom_price_content
+      endif
+    endif
+
+    # Pricing with or without currency
+    if override_sold_price == false and override_zero_price == false
+      if settings.show_currency_codes_on_products
+        assign displayed_price = displayed_price | money_with_currency
+      else
+        assign displayed_price = displayed_price | money
+      endif
+    endif
+
+    # We're not showing the currency on original prices
+    assign displayed_compare_at_price = displayed_compare_at_price | money
+  endif
+%}
+
+<span
+  class="price"
+  data-price-container
+
+  {%- if price_scope == 'product-block' and override_sold_price or override_zero_price %}
+    data-price-override-priority="{{ override_priority }}"
+    data-price-override-display-type="{{ price_content_type }}"
+    data-price-override-custom-content="{{ custom_price_content }}"
+  {%- endif -%}
+>
+  {%- if placeholder -%}
+    {%- liquid
+      if settings.show_currency_codes_on_products
+        echo 1999 | money_with_currency
+      else
+        echo 1999 | money
+      endif
+    -%}
+  {%- elsif show_from -%}
+    {%- liquid
+      capture price_class
+        echo 'price__main'
+
+        if has_discount
+          echo ' price__main--sale'
+        endif
+      endcapture
+    -%}
+
+    <span class="{{ price_class }}">{{ 'products.general.price_range_html' | t: price: displayed_price }}</span>
+  {%- elsif compare_at_price > price -%}
+    <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+
+    {%- liquid
+      capture price_class
+        echo 'price__main'
+
+        if override_sold_price
+          echo ' price__main--sold-out'
+        else
+          echo ' price__main--sale'
+        endif
+      endcapture
+    -%}
+
+    <span class="{{ price_class }}" data-price>{{ displayed_price }}</span>
+
+    {%- if override_sold_price == false and displayed_compare_at_price != blank -%}
+      <s class="price__strikethrough" data-compare-price>{{ displayed_compare_at_price }}</s>
+    {%- endif -%}
+  {%- else -%}
+    <span class="price__main {%- if override_sold_price %} price__main--sold-out{%- endif -%}">
+      {{- displayed_price -}}
+    </span>
+  {%- endif %}
+</span>

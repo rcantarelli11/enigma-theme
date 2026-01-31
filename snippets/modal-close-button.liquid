@@ -1,0 +1,25 @@
+{%- liquid
+  comment
+    Renders a close button for modals.
+
+    Optional parameters:
+      - form_class: { String } A custom class to apply to the button's wrapping form.
+      - button_class: { String } A custom class to the apply to the button.
+  endcomment
+-%}
+
+<form
+  method="dialog"
+
+  {%- if form_class %}
+    class="{{ form_class }}"
+  {%- endif -%}
+>
+  <button
+    class="modal-close-button {%- if button_class!= blank %} {{ button_class }}{%- endif -%}"
+    autofocus
+    aria-label="{{ 'general.accessibility.close_modal' | t }}"
+  >
+    {%- render 'icon-utility', icon: 'cross', width: 16, height: 16 -%}
+  </button>
+</form>

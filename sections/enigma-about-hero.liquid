@@ -1,0 +1,21 @@
+<section class="enigma-about-hero enigma-section enigma-section--lg">
+  <div class="enigma-container" style="text-align: center; max-width: 800px; margin: 0 auto;">
+    <p class="enigma-label mb-sm">{{ section.settings.label }}</p>
+    <h1 class="enigma-h1" style="font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1;">{{ section.settings.title }}</h1>
+    <p class="enigma-body-lg mt-lg" style="color: var(--text-secondary); max-width: 640px; margin-left: auto; margin-right: auto;">
+      {{ section.settings.subtitle }}
+    </p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Hero",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "OUR STORY" },
+    { "type": "text", "id": "title", "label": "Title", "default": "We Don't Sell Hype. We Sell What Works." },
+    { "type": "textarea", "id": "subtitle", "label": "Subtitle", "default": "Enigma is premium fitness nutrition — transparent, effective, and built for people who actually read the label." }
+  ],
+  "presets": [{ "name": "About Hero" }]
+}
+{% endschema %}

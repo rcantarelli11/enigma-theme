@@ -1,0 +1,11 @@
+{% liquid
+  comment
+    Renders the required CSS variables for overlay settings (eg. banners, slideshow, and heroes).
+
+    Required:
+      - local_settings: { Object } The Shopify settings object for the parent section or block.
+  endcomment
+
+  echo '--overlay-opacity: [[oo]]%; ' | replace: '[[oo]]', local_settings.overlay_opacity
+  render 'color-scheme-to-vars', color_scheme: local_settings.overlay_color_scheme
+-%}

@@ -1,0 +1,75 @@
+{%- liquid
+  comment
+    Renders an "Inventory status" product block.
+
+    Required parameters:
+      - variant: { Object } Current variant object.
+      - block: { Object } The associated block object.
+  endcomment
+
+  assign message_color = settings.color_products_sold_out
+
+  capture inventory_message
+    if variant.available
+      if variant.inventory_management == null
+        if block.settings.show_inventory_notice == 'always'
+          echo 'products.inventory.in_stock' | t
+          assign message_color = settings.color_products_in_stock
+        endif
+      else
+        if variant.inventory_management and variant.inventory_quantity > 0 and settings.inventory_levels_low_inventory_threshold > 0
+          if variant.inventory_quantity <= settings.inventory_levels_low_inventory_threshold
+            echo 'products.inventory.low_stock' | t: count: variant.inventory_quantity
+            assign message_color = settings.color_products_low_inventory
+          else
+            if block.settings.show_inventory_notice == 'always'
+              echo 'products.inventory.in_stock' | t
+              assign message_color = settings.color_products_in_stock
+            endif
+          endif
+        else
+          if variant.inventory_policy == 'deny' and variant.inventory_quantity <= 0 and variant.requires_shipping
+            echo 'products.inventory.sold_out' | t
+          elsif variant.inventory_policy == 'continue' and variant.inventory_quantity <= 0 and variant.requires_shipping
+            echo 'products.inventory.backordered' | t
+          endif
+        endif
+      endif
+    else
+      echo 'products.inventory.sold_out' | t
+    endif
+  endcapture
+
+  capture inventory_transfer_message
+    unless variant.available
+      if block.settings.show_inventory_transfer and variant.incoming
+        assign formatted_incoming_date = variant.next_incoming_date | date: '%B %d, %Y'
+
+        echo 'products.inventory.inventory_transfer_message' | t: transfer_date: formatted_incoming_date
+      endif
+    endunless
+  endcapture
+-%}
+
+<div
+  class="product-block product-block--inventory-status"
+  style="
+    --bottom-spacing: {{ block.settings.bottom_padding }}px;
+    --message-color: {{ message_color }};
+  "
+  js-product-block
+  js-product-block-inventory-status
+  {{ block.shopify_attributes }}
+>
+  {%- if inventory_message != blank -%}
+    <div class="inventory-status__message">
+      {{ inventory_message }}
+    </div>
+  {%- endif -%}
+
+  {%- if inventory_transfer_message != blank -%}
+    <div class="inventory-status__transfer_message fs-body-75">
+      {{ inventory_transfer_message }}
+    </div>
+  {%- endif -%}
+</div>

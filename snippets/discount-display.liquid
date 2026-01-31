@@ -1,0 +1,67 @@
+{% liquid
+  comment
+    Renders the discount display as either a badge or text.
+
+    Required parameters:
+      - display_type { String }: Can be:
+        - 'badge'
+        - 'text'
+      - discount_format { String }: The discount string format. Can be:
+        - 'sale'
+        - 'percent-off'
+        - 'minus-percent'
+        - 'save-percent'
+        - 'dollar-off'
+        - 'minus-dollar'
+        - 'save-dollar'
+      - discount_amount { Number }: The discount amount. Depending on the discount format, this value will be either a
+          percentage, or dollar amount.
+      - discount_varies { Boolean }: Whether the discount amount varies.
+
+    Optional parameters:
+      - custom_class { String }: A custom class to apply to the display.
+  endcomment
+
+  capture discount_display
+    if discount_format == 'sale'
+      echo 'products.discount_display.sale' | t
+    else
+      if discount_format contains 'percent'
+        assign discount_value = discount_amount
+      elsif discount_format contains 'dollar'
+        assign discount_value = discount_amount | money_without_trailing_zeros
+      endif
+
+      capture format_key
+        if discount_varies == true
+          echo 'varied_'
+        endif
+
+        echo discount_format | replace: '-', '_'
+      endcapture
+
+      capture display_key
+        echo 'products.discount_display.[[fk]]' | replace: '[[fk]]', format_key
+      endcapture
+
+      echo display_key | t: value: discount_value
+    endif
+  endcapture
+
+  capture display_class
+    echo 'discount-display fs-body-75'
+
+    if display_type == 'badge'
+      echo ' badge badge--discount'
+    else
+      echo ' t-opacity-70'
+    endif
+
+    if custom_class != blank
+      echo ' '
+      echo custom_class
+    endif
+  endcapture
+%}
+
+<span class="{{ display_class }}">{{ discount_display }}</span>

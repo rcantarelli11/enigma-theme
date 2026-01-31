@@ -1,0 +1,16 @@
+{%- liquid
+  comment
+    Renders an "Image" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+  endcomment
+-%}
+
+<div
+  class="product-details__image"
+  style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'content-block-image', block: block, alignment: block.settings.image_alignment, animate: false -%}
+</div>

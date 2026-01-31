@@ -1,0 +1,503 @@
+<style>
+  .left__menumobilebtn, .right__menumobilebtn{
+    display:none;
+  }
+
+
+  @media screen and (max-width: 1023px){
+   
+    .left__menumobilebtn, .right__menumobilebtn {
+    display: block;
+    position: absolute;
+    top: 32%;
+}
+    .submenu__inner{
+      position:relative;
+    }
+     .left__menumobilebtn{
+       left:36px;
+       
+     }
+    .right__menumobilebtn {
+      right:10px;
+}
+    .custom__btn--main{
+          height: 45px;
+    width: 45px;
+    background: currentColor;
+    border: none;
+    border-radius: 50%;
+    display: flex
+;
+    align-items: center;
+    justify-content: center;
+    }
+    .custom__btn--main svg path{
+      stroke:white;
+    }
+     .custom__btn--main svg path{
+      stroke:white;
+    }
+    .custom__btn--main svg{
+          width: 18px;
+    }
+  }
+</style>
+{%- liquid
+  comment
+    Renders a navigation component.
+
+    The markup generated produces a structure that supports building menus that do not require javascript, through the use of stateful html elements (checkbox) and CSS attribute selectors.
+
+    The structure is used to cover the 3 types of menus, Drawer, Dropdowns, and Megamenus without duplicate DOM elements representing the menus.
+
+    Required parameters:
+      - linklist: { Object } The shopify menu to render as navigation
+      - blocks: { Array } Megamenu blocks and their settings
+      - menu_position: { String } Class suffix to scope styles based on selector
+  endcomment
+-%}
+
+{%- capture cross_border -%}
+  {% if section.settings.show_language_selector or section.settings.show_country_selector %}
+    {%- liquid
+      if section.settings.country_selector_label == 'country-and-currency'
+        assign show_country_names = true
+      endif
+    -%}
+
+    {%- render 'localization-form-drawer',
+      id: 'navigation',
+      show_language_selector: section.settings.show_language_selector,
+      show_country_selector: section.settings.show_country_selector,
+      show_country_names: show_country_names,
+      show_country_flags: section.settings.show_country_flag
+    -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{% liquid
+  if section.settings.show_language_selector and section.settings.show_country_selector
+    assign localization_offset_class = 'localization-offset--language-and-country'
+  elsif section.settings.show_language_selector
+    assign localization_offset_class = 'localization-offset--language'
+  elsif section.settings.show_country_selector
+    assign localization_offset_class = 'localization-offset--country'
+  endif
+
+  capture burger_icon
+    render 'icon-utility', icon: 'burger', width: 20, height: 20
+  endcapture
+%}
+
+<navigation-wrapper>
+  <nav class="navigation navigation--{{ menu_position }}">
+    <label class="navigation__backdrop" for="navigation-control"></label>
+
+    <label
+      class="navigation__control header__button header__button--navigation btn btn--style-inline-icon"
+      for="navigation-control"
+    >
+      <span class="visually-hidden">{{ 'sections.navigation_menu.open_menu' | t }}</span>
+
+      <div class="icon-wrapper">
+        {%- # Double icon for hover effect -%}
+        {{ burger_icon }}
+        {{ burger_icon }}
+      </div>
+
+      <input class="navigation__control-input" type="checkbox" id="navigation-control">
+    </label>
+
+    <div class="navigation__submenu submenu submenu--primary">
+      <label class="navigation__control-close" for="navigation-control" tabindex="0">
+        <span class="visually-hidden">{{ 'sections.navigation_menu.close_menu' | t }}</span>
+
+        {% render 'icon-utility', icon: 'cross', width: 16, height: 16 %}
+      </label>
+
+      <div class="submenu__container submenu__container--primary">
+        <div class="submenu__inner submenu__inner--primary">
+          {% render 'navigation-submenu-header' %}
+
+          <ul class="submenu__list scrollbars-hidden {{ localization_offset_class }}">
+            <li class="scroll-sentinel" data-scroll-start></li>
+
+            {%- for link in linklist -%}
+              {%- liquid
+                assign is_mega_menu = false
+                assign parent_columns = 1
+                assign promotion_count = 0
+                assign secondary_level_item_count = link.links.size
+                assign condense_solo_categories = false
+                assign promotion_layout_on_mobile = 'slider'
+                assign promotion_position_on_desktop = 'last'
+                assign promotion_position_on_mobile = 'last'
+                assign promotion_show_on_mobile = true
+                assign heading_text_style_name = 'heading'
+                assign menu_item_text_style_name = 'heading'
+
+                for block in blocks
+                  assign mega_menu_handle = block.settings.title | handle
+
+                  if link.handle == mega_menu_handle
+                    assign is_mega_menu = true
+                    assign block_attributes = block.shopify_attributes
+                    assign block_id = block.id
+
+                    if has_mega_menu == blank
+                      assign has_mega_menu = true
+                    endif
+
+                    assign condense_solo_categories = block.settings.condense_solo_categories
+                    assign promotion_layout_on_mobile = block.settings.promotion_layout_on_mobile
+                    assign promotion_position_on_desktop = block.settings.promotion_position_on_desktop
+                    assign promotion_position_on_mobile = block.settings.promotion_position_on_mobile
+                    assign promotion_show_on_mobile = block.settings.promotion_show_on_mobile
+                    assign parent_columns = block.settings.column_count
+                    assign heading_text_style_name = block.settings.heading_text_style
+                    assign menu_item_text_style_name = block.settings.submenu_text_style
+
+                    capture promos
+                      for i in (1..5)
+                        capture promotion_enabled_setting
+                          echo 'promotion_item_[[index]]_enabled' | replace: '[[index]]', i
+                        endcapture
+
+                        if block.settings[promotion_enabled_setting]
+                          assign promotion_count = promotion_count | plus: 1
+
+                          capture promotion_image_setting
+                            echo 'promotion_item_[[index]]_image' | replace: '[[index]]', i
+                          endcapture
+
+                          capture promotion_heading_setting
+                            echo 'promotion_item_[[index]]_heading' | replace: '[[index]]', i
+                          endcapture
+
+                          capture promotion_text_setting
+                            echo 'promotion_item_[[index]]_text' | replace: '[[index]]', i
+                          endcapture
+
+                          capture promotion_link_setting
+                            echo 'promotion_item_[[index]]_link' | replace: '[[index]]', i
+                          endcapture
+
+                          render 'navigation-promo', index:forloop.index0 , image: block.settings[promotion_image_setting], heading: block.settings[promotion_heading_setting], text: block.settings[promotion_text_setting], link: block.settings[promotion_link_setting], aspect_ratio: block.settings.promotion_image_aspect_ratio, i: i
+                        endif
+                      endfor
+                    endcapture
+
+                    break
+                  endif
+                endfor
+              -%}
+
+              {%- if link.links.size == 0 and is_mega_menu != true -%}
+                <li class="submenu__item submenu__item--primary">
+                  <a class="submenu__link submenu__link--item submenu__item-display-text" href="{{ link.url }}">
+                    <span class="submenu__link-text-wrapper">
+                      <span class="submenu__link-text" data-content="{{ link.title | escape }}">
+                        {{- link.title | escape -}}
+                      </span>
+                    </span>
+                  </a>
+                </li>
+              {%- else -%}
+                <li class="submenu__item submenu__item--primary submenu__item--parent submenu__item--primary-submenu">
+                  {% render 'navigation-parent-item', link: link, link_loop: forloop, is_top_level: true %}
+
+                  <div
+                    class="
+                      submenu
+                      submenu--secondary
+                      submenu--heading-style-{{ heading_text_style_name }}
+                      submenu--item-style-{{ menu_item_text_style_name }}
+                      navigation-promos--position-desktop-{{ promotion_position_on_desktop }}
+                      navigation-promos--position-drawer-{{ promotion_position_on_mobile }}
+                      {%- if is_mega_menu %} submenu--mega{% endif -%}
+                    "
+                    data-column-count="{{ parent_columns }}"
+                    data-nav-count="{{ secondary_level_item_count }}"
+                    data-promo-count="{{ promotion_count }}"
+                    style="
+                      --column-count: {{ parent_columns }};
+                      --promo-count: {{ promotion_count }};
+                    "
+                    {%- if is_mega_menu %}
+                      data-block-id="{{ block_id }}"
+                      {{ block_attributes }}
+                    {%- endif -%}
+                  >
+                    <div class="submenu__container submenu__container--secondary">
+                      <div class="submenu__inner submenu__inner--secondary">
+                        {%- if is_mega_menu %}
+                          <span class="scroll-sentinel" data-scroll-start></span>
+                        {% endif -%}
+
+                        {% render 'navigation-submenu-header', link: link, level: 1, link_loop: forloop %}
+
+                        {% liquid
+                          # positioning of promos
+                          # dom elements for .navigation-promos and container-spacer are duplicated
+                          # before and after the menu, then classes are used to toggle visibility.
+                          # This is for visual flow tabbing, instead of using tabindex to set all
+                          # items tab order.
+                        %}
+                        {%- if is_mega_menu -%}
+                          {%- if promotion_count > 0 -%}
+                            <div
+                              class="
+                                scrollbars-hidden
+                                submenu__navigation-promos
+                                navigation-promos
+                                navigation-promos--first
+                                {%- if promotion_layout_on_mobile == 'slider' %} navigation-promos--slider{% endif -%}
+                                {%- if promotion_show_on_mobile == false %} navigation-promos--hide-mobile{% endif -%}
+                              "
+                            >
+                              {{ promos }}
+                            </div>
+                          {%- endif -%}
+
+                          <span class="scroll-sentinel" data-scroll-end></span>
+                        {% endif %}
+
+                        {%- if is_mega_menu -%}
+                          {% if secondary_level_item_count > 0 %}
+                            {%- if promotion_count > 0 -%}
+                              <div class="container-spacer navigation-promos--first"></div>
+                            {%- endif -%}
+                          {%- endif -%}
+                        {%- endif -%}
+
+                        {%- if secondary_level_item_count > 0 -%}
+                          <ul class="submenu__list scrollbars-hidden grid-container">
+                            <li class="scroll-sentinel" data-scroll-start></li>
+
+                            {%- capture single_link_structure -%}
+                              <li class="submenu__item">
+                                <a class="submenu__link submenu__link--item submenu__item-display-text" href="[[url]]">
+                                  <span class="submenu__link-text">[[title]]</span>
+                                </a>
+                              </li>
+                            {%- endcapture -%}
+
+                            {%- if condense_solo_categories -%}
+                              {%- liquid
+                                capture single_links
+                                  for link in link.links
+                                    if link.links.size == 0
+                                      assign escaped_title = link.title | escape
+                                      echo single_link_structure | replace: '[[url]]', link.url | replace: '[[title]]', escaped_title
+                                    endif
+                                  endfor
+                                endcapture
+                              -%}
+
+                              {%- if single_links != blank -%}
+                                <li class="submenu__item submenu__item--parent submenu__item--secondary-submenu submenu__item--collected-list">
+                                  <div class="submenu submenu--tertiary">
+                                    <div class="submenu__container submenu__container--tertiary">
+                                      <ul class="submenu__list scrollbars-hidden submenu__list--collected-list">
+                                        {{ single_links }}
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </li>
+                              {%- endif -%}
+                            {%- endif -%}
+
+                            {%- for link in link.links -%}
+                              {%- if link.links.size == 0 -%}
+                                {%- liquid
+                                  if condense_solo_categories
+                                    continue
+                                  endif
+
+                                  assign escaped_title = link.title | escape
+                                  echo single_link_structure | replace: '[[url]]', link.url | replace: '[[title]]', escaped_title
+                                -%}
+                              {%- else -%}
+                                <li class="submenu__item submenu__item--parent submenu__item--secondary-submenu">
+                                  {% render 'navigation-parent-item', link: link, link_loop: forloop %}
+
+                                  <div class="submenu submenu--tertiary">
+                                    <div class="submenu__container submenu__container--tertiary">
+                                      <div class="submenu__inner submenu__inner--tertiary">
+                                        {% render 'navigation-submenu-header',
+                                          link: link,
+                                          level: 2,
+                                          link_loop: forloop
+                                        %}
+
+                                        <ul class="submenu__list scrollbars-hidden">
+                                          <li class="scroll-sentinel" data-scroll-start></li>
+
+                                          {%- liquid
+                                            for link in link.links
+                                              assign escaped_title = link.title | escape
+                                              echo single_link_structure | replace: '[[url]]', link.url | replace: '[[title]]', escaped_title
+                                            endfor
+                                          -%}
+
+                                          <li class="scroll-sentinel" data-scroll-end></li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+                              {%- endif -%}
+                            {%- endfor -%}
+
+                            <li class="scroll-sentinel" data-scroll-end></li>
+                          </ul>
+                        {%- endif -%}
+
+                        {%- if is_mega_menu -%}
+                          {% if secondary_level_item_count > 0 %}
+                            {%- if promotion_count > 0 -%}
+                              <div class="container-spacer navigation-promos--second"></div>
+                            {%- endif -%}
+                          {%- endif -%}
+                        {%- endif -%}
+
+                        {%- if is_mega_menu -%}
+                          {%- if promotion_count > 0 -%}
+                            <div
+                              class="
+                                scrollbars-hidden
+                                submenu__navigation-promos
+                              thisisis
+                                navigation-promos
+                                navigation-promos--second
+                                {%- if promotion_layout_on_mobile == 'slider' %} navigation-promos--slider{% endif -%}
+                                {%- if promotion_show_on_mobile == false %} navigation-promos--hide-mobile{% endif -%}
+                              "
+                            >
+                                                            <div class="left__menumobilebtn">
+                <button class="custom__btn--main">
+                  <svg viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      
+      <g style="transform: rotate(180deg); transform-origin: center;">
+        <path class="chevron" d="M12.7615 1.26501L20.5 9.00357L12.7615 16.7421" stroke="currentColor" stroke-width="1.75"></path>
+        <path class="stem" d="M0 9L20.3091 9.00001" stroke="currentColor" stroke-width="1.75"></path>
+      </g>
+    </svg>
+                </button>
+
+                               </div>
+                              {{ promos }}
+                                                    <div class="right__menumobilebtn">
+                            <button class="custom__btn--main">
+                              <svg viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      
+      <g style="transform: rotate(0deg); transform-origin: center;">
+        <path class="chevron" d="M12.7615 1.26501L20.5 9.00357L12.7615 16.7421" stroke="currentColor" stroke-width="1.75"></path>
+        <path class="stem" d="M0 9L20.3091 9.00001" stroke="currentColor" stroke-width="1.75"></path>
+      </g>
+    </svg>
+                            </button>
+                            </div>
+                            </div>
+                          {%- endif -%}
+
+                          <span class="scroll-sentinel" data-scroll-end></span>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+
+            <li class="scroll-sentinel" data-scroll-end></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="navigation__cross-border-account">
+        <div class="cross-border-account__wrapper">
+          {{ cross_border }}
+        </div>
+
+        {%- if shop.customer_accounts_enabled -%}
+          {%- liquid
+            if customer
+              assign customer_button_label = 'customer.login.my_account' | t
+              assign customer_button_link = routes.account_url
+            else
+              assign customer_button_label = 'customer.login.sign_in' | t
+              assign customer_button_link = routes.account_login_url
+            endif
+          -%}
+
+          {%- render 'button',
+            label: customer_button_label,
+            button_style: 'text',
+            link: customer_button_link,
+            class: 'customer-login fs-body-75'
+          -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </nav>
+
+  {% if has_mega_menu %}
+    {{ 'component-mega-menu.css' | asset_url | stylesheet_tag }}
+  {% endif %}
+</navigation-wrapper>
+
+<script>
+const btnNext = document.querySelector(".right__menumobilebtn");
+const btnPrev = document.querySelector(".left__menumobilebtn");
+const slides = document.querySelectorAll(".submenu__container .navigation-promo");
+const slider = document.querySelector(".thisisis");
+
+// Convert NodeList to Array
+const slidesArray = Array.from(slides);
+
+function getVisibleSlideIndex() {
+  let maxVisibleArea = 0;
+  let visibleSlide = slidesArray[0];
+
+  const sliderRect = slider.getBoundingClientRect();
+
+  slidesArray.forEach((slide) => {
+    const rect = slide.getBoundingClientRect();
+
+    const visibleWidth = Math.min(rect.right, sliderRect.right) - Math.max(rect.left, sliderRect.left);
+    const clampedWidth = Math.max(0, visibleWidth)
+
+    if (clampedWidth > maxVisibleArea) {
+      maxVisibleArea = clampedWidth;
+      visibleSlide = slide;
+    }
+  });
+
+  return parseInt(visibleSlide.dataset.show, 10);
+}
+
+
+btnNext.addEventListener("click", () => {
+  const currentIndex = getVisibleSlideIndex();
+  console.log(currentIndex)
+  const nextSlide = slidesArray[currentIndex + 1];
+  if (nextSlide) {
+    nextSlide.scrollIntoView({ behavior: "smooth", inline: "start" });
+  }
+});
+
+
+btnPrev.addEventListener("click", () => {
+  const currentIndex = getVisibleSlideIndex();
+   console.log(currentIndex)
+  const prevSlide = slidesArray[currentIndex - 1];
+  if (prevSlide) {
+    prevSlide.scrollIntoView({ behavior: "smooth", inline: "start" });
+  }
+});
+
+  
+</script>
+

@@ -1,0 +1,722 @@
+{%- liquid
+  echo 'section-shoppable-feed.css' | asset_url | stylesheet_tag
+  render 'inline-scripts', script_name: 'shoppable-feed'
+  render 'inline-scripts', script_name: 'visibility-watcher'
+
+  assign tablet_columns = section.settings.column_count_desktop | at_most: 3
+
+  capture grid_image_sizes
+    render 'get-image-sizes', type: 'grid', columnns: section.settings.column_count_mobile, tablet_columns: tablet_columns, desktop_columns: section.settings.column_count_desktop
+  endcapture
+
+  assign card_aspect_ratio = section.settings.card_aspect_ratio
+  if card_aspect_ratio == 'use-theme-settings'
+    assign card_aspect_ratio = settings.product_listing_aspect_ratio
+  endif
+
+  assign drawer_aspect_ratio = section.settings.drawer_aspect_ratio
+  if drawer_aspect_ratio == 'use-theme-settings'
+    assign drawer_aspect_ratio = settings.product_listing_aspect_ratio
+  endif
+
+  if section.settings.layout == 'grid'
+    capture standard_grid_classes
+      echo 'standard-grid standard-grid--with-count-based-gaps '
+      echo 'standard-grid--with-matching-row-gaps '
+      echo 'standard-grid--mobile-[[ccm]]-column ' | replace: '[[ccm]]', section.settings.column_count_mobile
+      echo 'standard-grid--desktop-[[ccd]]-column ' | replace: '[[ccd]]', section.settings.column_count_desktop
+    endcapture
+  endif
+
+  assign grid_item_count = section.blocks.size
+
+  case section.settings.shop_button_icon
+    when 'bag'
+      assign icon_size = 18
+    when 'cart'
+      assign icon_size = 20
+  endcase
+-%}
+
+<shoppable-feed
+  class="section shoppable-feed"
+  style="
+    {% render 'settings-section-padding' %}
+    {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+  "
+  data-section-id="{{ section.id }}"
+>
+  <div class="section-inner section-inner--width-{{ section.settings.width }}">
+    {% render 'section-header', section: section, animate_heading: true %}
+
+    {%- for block in section.blocks -%}
+      {%- # Grid items -%}
+      {%- liquid
+        capture placeholder_suffix
+          cycle '1', '2', '3', '4'
+        endcapture
+
+        capture placeholder_name
+          echo 'collection-apparel-[[ps]]' | replace: '[[ps]]', placeholder_suffix
+        endcapture
+
+        capture drawer_index
+          echo 'sections.shoppable_feed.drawer_mobile_current_look_index' | t: current: forloop.index, total: grid_item_count
+        endcapture
+      -%}
+
+      {%- capture grid_items -%}
+        {{ grid_items }}
+
+        <div class="shoppable-feed__item">
+          {%- if block.settings.video != blank -%}
+            {%- render 'inline-scripts', script_name: 'background-video' %}
+            {%- render 'background-video',
+              video: block.settings.video,
+              aspect_ratio: card_aspect_ratio,
+              focal_point: block.settings.video_focal_point,
+              class: 'shoppable-feed-item__media shoppable-feed-item__media--video'
+            -%}
+
+          {%- else -%}
+            <div class="shoppable-feed-item__media shoppable-feed-item__media--image">
+              {%- render 'image',
+                image: block.settings.image,
+                aspect_ratio: card_aspect_ratio,
+                animate: true,
+                include_placeholder: true,
+                placeholder_name: placeholder_name,
+                object_fit: 'cover',
+                sizes: grid_image_sizes,
+                src_set_type: 'grid',
+                load_animation_effect: 'blur',
+                load_animation_stagger_index: forloop.index
+              -%}
+            </div>
+          {%- endif -%}
+
+          <div class="shoppable-feed-item__button-container">
+            <button type="button" class="shoppable-feed-item__button" js-shoppable-feed-drawer-trigger data-block-index="{{ forloop.index }}" aria-label="{{ 'sections.shoppable_feed.shop_the_look' | t }}">
+              <div class="shoppable-feed-item__button-content">
+                <div class="shoppable-feed-item__icon-container">
+                  {% render 'icon-utility', icon: section.settings.shop_button_icon, width: icon_size, height: icon_size %}
+                </div>
+
+                <span class="shoppable-feed-item__button-text fs-body-75" js-shop-the-look-btn-text>
+                  {{- 'sections.shoppable_feed.shop_the_look' | t -}}
+                </span>
+              </div>
+            </button>
+          </div>
+        </div>
+      {%- endcapture -%}
+
+      {%- # Drawer media -%}
+      {%- capture drawer_media -%}
+        {{ drawer_media }}
+
+        <div class="shoppable-feed-drawer__item-media" data-block-index="{{ forloop.index }}" js-drawer-block>
+          {%- if block.settings.video != blank -%}
+            {%- render 'inline-scripts', script_name: 'background-video' %}
+            {%- render 'background-video',
+              video: block.settings.video,
+              aspect_ratio: drawer_aspect_ratio,
+              focal_point: block.settings.video_focal_point
+            -%}
+
+          {%- else %}
+            {%- render 'image',
+              image: block.settings.image,
+              aspect_ratio: drawer_aspect_ratio,
+              include_placeholder: true,
+              placeholder_name: placeholder_name,
+              object_fit: 'cover',
+              sizes: '475px',
+              src_set_width_values: '475,900',
+              load_animation_effect: 'blur',
+            -%}
+          {%- endif -%}
+        </div>
+      {%- endcapture -%}
+
+      {%- # Drawer products -%}
+      {%- capture drawer_products -%}
+        {{ drawer_products }}
+
+        <div class="shoppable-feed-drawer__item-products" data-block-index="{{ forloop.index }}" js-shoppable-feed-product-group>
+          {%- assign button_label = 'sections.shoppable_feed.drawer_product_shop_now_link' | t -%}
+
+          {%- if block.settings.products != blank -%}
+            {%- for prod in block.settings.products -%}
+              {%- capture secondary_content -%}
+                {%- if section.settings.shop_now_action == "quick_view" and settings.enable_quick_shopping  -%}
+                  {%- render 'inline-scripts', script_name: 'product-item-quick-shopping' -%}
+                  {%- render 'product-item-quick-shopping', prod: prod, minimal_button: true, within_dialog: true, quick_view_only: true -%}
+                {%- else -%}
+                  {% render 'button', label: button_label, button_style: 'text', button_size: 'small', link: prod.url, class: 'fs-body-75', underlined: true %}
+                {%- endif %}
+              {% endcapture %}
+
+              {%- render 'product-item-minimal',
+                prod: prod,
+                show_vendor: section.settings.show_vendor,
+                secondary_content: secondary_content,
+                bordered: false
+              -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..4) -%}
+              {%- assign product_placeholder_name = 'product-apparel-[[index]]' | replace: '[[index]]', i -%}
+
+              {%- render 'product-item-minimal',
+                show_vendor: section.settings.show_vendor,
+                show_placeholder: true,
+                placeholder_name: product_placeholder_name,
+                bordered: false
+              -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      {%- endcapture -%}
+    {%- endfor -%}
+
+    <visibility-watcher
+      class="
+        shoppable-feed__items
+        shoppable-feed__items--layout-{{ section.settings.layout }}
+        {%- if section.settings.layout == 'grid' %} {{ standard_grid_classes }}{%- endif -%}
+      "
+      style="
+        --column-count-mobile: {{ section.settings.column_count_mobile }};
+        --column-count-desktop: {{ section.settings.column_count_desktop }};
+      "
+    >
+      {%- if section.settings.layout == 'slider' -%}
+        <div class="section-slider-wrap-outer scroll-slider-wrap-outer">
+          <div class="section-slider-wrap scroll-slider-wrap">
+            {%- liquid
+              capture slider_id
+                echo 'shoppable-feed-slider-[[sid]]' | replace: '[[sid]]', section.id
+              endcapture
+
+              assign gap = '16px'
+              assign gap_above_720 = '20px'
+              assign gap_above_1440 = '28px'
+
+              if section.settings.column_count_mobile == '1'
+                assign peek = '8%'
+              else
+                assign peek = '36%'
+              endif
+
+              assign peek_above_720 = '8%'
+
+              if section.settings.column_count_desktop == '4'
+                assign gap_above_1024 = '24px'
+                assign peek_above_1024 = '4%'
+              else
+                assign gap_above_1024 = '28px'
+                assign peek_above_1024 = '8%'
+              endif
+            -%}
+
+            {%- capture slider -%}
+              {% render 'scroll-slider',
+                id: slider_id,
+                slider_items: grid_items,
+                columns: 1,
+                columns_above_720: section.settings.column_count_desktop,
+                gap: gap,
+                gap_above_720: gap_above_720,
+                gap_above_1024: gap_above_1024,
+                gap_above_1440: gap_above_1440,
+                peek: peek,
+                peek_above_720: peek_above_720,
+                peek_above_1024: peek_above_1024,
+                navigation_container: ".scroll-slider-wrap-outer",
+                animate: true
+              %}
+            {%- endcapture -%}
+
+            {%- if section.settings.show_slider_indicator and section.blocks.size > 1 -%}
+              <scroll-slider-with-scroll-indicator>
+                {{ slider }}
+                {% render 'scroll-indicator', item_count: section.blocks.size %}
+              </scroll-slider-with-scroll-indicator>
+            {%- else -%}
+              {{ slider }}
+            {%- endif -%}
+          </div>
+
+          {%- if section.blocks.size > 1 -%}
+            {% render 'scroll-slider-navigation-buttons', size: 'large' %}
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        {{ grid_items }}
+      {%- endif -%}
+    </visibility-watcher>
+
+    {%- # Drawer content -%}
+    {%- liquid
+      assign drawer_name = 'shoppable-feed-drawer-' | append: section.id
+      assign drawer_title = 'sections.shoppable_feed.shop_the_look' | t
+      assign drawer_description = 'sections.shoppable_feed.drawer_aria_description' | t
+    -%}
+
+    {%- capture drawer_header -%}
+      <div class="shoppable-feed-drawer__header">
+        {%- render 'modal-close-button', form_class: 'shoppable-feed-drawer-header__close-button' -%}
+
+        <h3 class="shoppable-feed-drawer-header__heading ff-heading fs-heading-5-base">
+          {{- 'sections.shoppable_feed.shop_the_look' | t -}}
+        </h3>
+      </div>
+    {%- endcapture -%}
+
+    {%- capture drawer_main -%}
+      <div class="shoppable-feed-drawer__item-count fs-body-50" js-drawer-slide-index-container>
+         <span class="item-count__index" js-drawer-current-slide-index></span>
+         <span>{{- 'sections.shoppable_feed.drawer_mobile_current_look_index_divider' | t -}}</span>
+         <span>{{ grid_item_count }}</span>
+      </div>
+
+      <div class="shoppable-feed-drawer__media-container scroll-slider-wrap-outer" js-shoppable-feed-drawer-media>
+        <div class="shoppable-feed-drawer__scroll-pill-wrapper" js-shoppable-feed-scroll-pill-wrapper>
+          <div class="shoppable-feed-drawer__scroll-pill fs-body-100">
+            {{- 'sections.shoppable_feed.drawer_scroll_for_more' | t -}}
+
+            <span class='icon-wrap'>
+              {% render 'icon-utility', icon: 'arrow-down', width: 16, height: 16 %}
+            </span>
+          </div>
+        </div>
+
+        <div class="scroll-slider-wrap">
+          {%- liquid
+            capture slider_id
+              echo 'shoppable-feed-drawer-slider-[[sid]]' | replace: '[[sid]]', section.id
+            endcapture
+
+            if section.settings.layout == 'slider'
+              assign include_assets = false
+            else
+              assign include_assets = true
+            endif
+          -%}
+
+          {% render 'scroll-slider',
+            id: slider_id,
+            slider_items: drawer_media,
+            columns: 1,
+            gap: '0px',
+            peek: '0px',
+            navigation_container: ".scroll-slider-wrap-outer",
+            include_assets: include_assets,
+            initialization_strategy: 'manual'
+          %}
+        </div>
+
+        {% render 'scroll-slider-navigation-buttons', size: 'regular' %}
+      </div>
+
+      <div class="shoppable-feed-drawer__products" js-shoppable-feed-products>
+        <template js-shoppable-feed-products-template>
+          {{ drawer_products }}
+        </template>
+      </div>
+    {%- endcapture -%}
+
+    {%- capture drawer_inner -%}
+      {%-  render 'drawer-inner',
+        header_content: drawer_header,
+        main_content: drawer_main,
+        footer_content: '',
+        main_content_class: 'scrollbars-hidden'
+      -%}
+    {%- endcapture -%}
+
+    {%- render 'drawer',
+      name: drawer_name,
+      title: drawer_title,
+      description: drawer_description,
+      content: drawer_inner,
+      alignment: 'right',
+      mobile_alignment_bottom: true,
+      omit_inner: true,
+      class: 'shoppable-feed-drawer',
+      bottom_drawer_on_mobile: true
+    -%}
+  </div>
+</shoppable-feed>
+
+{% schema %}
+{
+  "name": "t:sections.shoppable_feed.name",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "custom.overlay"
+    ]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_header.header.content"
+    },
+    {
+      "id": "section_header_heading",
+      "type": "text",
+      "label": "t:shared.settings.section_header.heading.label",
+      "default": "t:sections.shoppable_feed.settings.header.heading.default"
+    },
+    {
+      "id": "section_header_heading_tag",
+      "type": "select",
+      "label": "t:shared.settings.heading_tag.label",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        }
+      ],
+      "info": "t:shared.settings.heading_tag.info",
+      "default": "h2"
+    },
+    {
+      "id": "section_header_text",
+      "type": "inline_richtext",
+      "label": "t:shared.settings.section_header.text.label",
+      "default": "t:sections.shoppable_feed.settings.header.text.default"
+    },
+    {
+      "id": "section_header_link_url",
+      "type": "url",
+      "label": "t:shared.settings.section_header.link_url.label"
+    },
+    {
+      "id": "section_header_link_label",
+      "type": "text",
+      "label": "t:shared.settings.section_header.link_label.label",
+      "default": "t:sections.shoppable_feed.settings.header.link_label.default"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shoppable_feed.settings.layout.header.content"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:sections.shoppable_feed.settings.layout.layout.label",
+      "options": [
+        {
+          "value": "grid",
+          "label": "t:sections.shoppable_feed.settings.layout.layout.options.grid"
+        },
+        {
+          "value": "slider",
+          "label": "t:sections.shoppable_feed.settings.layout.layout.options.slider"
+        }
+      ],
+      "default": "slider"
+    },
+    {
+      "id": "show_slider_indicator",
+      "type": "checkbox",
+      "label": "t:shared.settings.show_slider_indicator.label",
+      "default": true
+    },
+    {
+      "id": "column_count_desktop",
+      "type": "select",
+      "label": "t:shared.settings.standard_grid.column_count_desktop.label",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "id": "column_count_mobile",
+      "type": "select",
+      "label": "t:shared.settings.standard_grid.column_count_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shoppable_feed.settings.images.header.content"
+    },
+    {
+      "type": "select",
+      "id": "shop_button_icon",
+      "label": "t:sections.shoppable_feed.settings.images.shop_button_icon.label",
+      "options": [
+        {
+          "value": "bag",
+          "label": "t:sections.shoppable_feed.settings.images.shop_button_icon.options.bag"
+        },
+        {
+          "value": "cart",
+          "label": "t:sections.shoppable_feed.settings.images.shop_button_icon.options.cart"
+        }
+      ],
+      "default": "bag"
+    },
+    {
+      "type": "select",
+      "id": "card_aspect_ratio",
+      "label": "t:sections.shoppable_feed.settings.images.aspect_ratio.card.label",
+      "info": "t:sections.shoppable_feed.settings.images.aspect_ratio.card.info",
+      "options": [
+        {
+          "value": "use-theme-settings",
+          "label": "t:shared.settings.aspect_ratio.options.use_theme_settings"
+        },
+        {
+          "value": "natural",
+          "label": "t:shared.settings.aspect_ratio.options.natural"
+        },
+        {
+          "value": "portrait",
+          "label": "t:shared.settings.aspect_ratio.options.portrait"
+        },
+        {
+          "value": "portrait-alt",
+          "label": "t:shared.settings.aspect_ratio.options.portrait_alt"
+        },
+        {
+          "value": "square",
+          "label": "t:shared.settings.aspect_ratio.options.square"
+        },
+        {
+          "value": "landscape-alt",
+          "label": "t:shared.settings.aspect_ratio.options.landscape_alt"
+        },
+        {
+          "value": "landscape",
+          "label": "t:shared.settings.aspect_ratio.options.landscape"
+        }
+      ],
+      "default": "use-theme-settings"
+    },
+    {
+      "type": "select",
+      "id": "drawer_aspect_ratio",
+      "label": "t:sections.shoppable_feed.settings.images.aspect_ratio.drawer.label",
+      "options": [
+        {
+          "value": "use-theme-settings",
+          "label": "t:shared.settings.aspect_ratio.options.use_theme_settings"
+        },
+        {
+          "value": "natural",
+          "label": "t:shared.settings.aspect_ratio.options.natural"
+        },
+        {
+          "value": "portrait",
+          "label": "t:shared.settings.aspect_ratio.options.portrait"
+        },
+        {
+          "value": "portrait-alt",
+          "label": "t:shared.settings.aspect_ratio.options.portrait_alt"
+        },
+        {
+          "value": "square",
+          "label": "t:shared.settings.aspect_ratio.options.square"
+        },
+        {
+          "value": "landscape-alt",
+          "label": "t:shared.settings.aspect_ratio.options.landscape_alt"
+        },
+        {
+          "value": "landscape",
+          "label": "t:shared.settings.aspect_ratio.options.landscape"
+        }
+      ],
+      "info": "t:sections.shoppable_feed.settings.images.aspect_ratio.info",
+      "default": "use-theme-settings"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.shoppable_feed.settings.products.header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "t:sections.shoppable_feed.settings.products.show_vendor.label"
+    },
+    {
+      "type": "select",
+      "id": "shop_now_action",
+      "label": "t:sections.shoppable_feed.settings.products.shop_now_action.label",
+      "options": [
+        {
+          "value": "product_page",
+          "label": "t:sections.shoppable_feed.settings.products.shop_now_action.options.product_page"
+        },
+        {
+          "value": "quick_view",
+          "label": "t:sections.shoppable_feed.settings.products.shop_now_action.options.quick_view"
+        }
+      ],
+      "info": "t:sections.shoppable_feed.settings.products.shop_now_action.info"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:shared.settings.section_settings.width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:shared.settings.section_settings.width.options.page_width"
+        },
+        {
+          "value": "full-width-padded",
+          "label": "t:shared.settings.section_settings.width.options.full_width_padded_simplified_language"
+        }
+      ],
+      "info": "t:shared.settings.section_settings.width.info"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shoppable-feed-item",
+      "name": "t:sections.shoppable_feed.blocks.shoppable_feed_item.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:sections.shoppable_feed.blocks.shoppable_feed_item.settings.image.label"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "t:sections.shoppable_feed.blocks.shoppable_feed_item.settings.video.label"
+        },
+        {
+          "type": "select",
+          "id": "video_focal_point",
+          "label": "t:sections.shoppable_feed.blocks.shoppable_feed_item.settings.video_focal_point.label",
+          "options": [
+            {
+              "value": "center",
+              "label": "t:shared.options.video_focal_point.center"
+            },
+            {
+              "value": "top",
+              "label": "t:shared.options.video_focal_point.top"
+            },
+            {
+              "value": "bottom",
+              "label": "t:shared.options.video_focal_point.bottom"
+            },
+            {
+              "value": "left",
+              "label": "t:shared.options.video_focal_point.left"
+            },
+            {
+              "value": "right",
+              "label": "t:shared.options.video_focal_point.right"
+            }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "product_list",
+          "id": "products",
+          "label": "t:sections.shoppable_feed.blocks.shoppable_feed_item.settings.products.label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shoppable_feed.presets.name",
+      "blocks": [
+        {
+          "type": "shoppable-feed-item"
+        },
+        {
+          "type": "shoppable-feed-item"
+        },
+        {
+          "type": "shoppable-feed-item"
+        },
+        {
+          "type": "shoppable-feed-item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

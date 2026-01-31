@@ -1,0 +1,22 @@
+{%- liquid
+  comment
+    Renders the "Vendor" product block.
+
+    Required parameters:
+      - prod: { Object } The current product object.
+      - block: { Object } The associated block object.
+  endcomment
+-%}
+
+{% unless prod.vendor == blank %}
+  <div
+    class="product-details__vendor t-opacity-70"
+    style="--bottom-spacing: {{ block.settings.bottom_padding }}px"
+    js-product-block
+    js-product-block-allowed-in-quickview
+    js-product-block-vendor
+    {{ block.shopify_attributes }}
+  >
+    {{ prod.vendor | link_to_vendor }}
+  </div>
+{% endunless %}

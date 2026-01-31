@@ -1,0 +1,4 @@
+.rich-text .content-blocks{
+    max-width:var(--custom-width);
+    margin:auto;
+  }

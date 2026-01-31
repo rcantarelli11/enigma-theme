@@ -1,0 +1,81 @@
+{
+  "sections": {
+    "about-hero": {
+      "type": "enigma-about-hero",
+      "settings": {
+        "label": "OUR STORY",
+        "title": "We Don't Sell Hype. We Sell What Works.",
+        "subtitle": "Enigma is premium fitness nutrition — transparent, effective, and built for people who actually read the label."
+      }
+    },
+    "about-story": {
+      "type": "enigma-about-story",
+      "settings": {
+        "content": "<p>Every supplement brand screams the loudest, slaps a celebrity on the label, and hopes you don't flip the bottle around. Proprietary blends. Underdosed ingredients. $60 tubs of marketing.</p><p>We wanted something different. Something honest.</p><p>Enigma was built on a simple idea: <strong>if the product is good, you don't need to hide what's in it.</strong> Every formula is fully transparent — every ingredient, every dose, right on the label. No fillers. No blends. No games.</p>"
+      }
+    },
+    "about-values": {
+      "type": "enigma-about-values",
+      "settings": {
+        "label": "WHAT WE STAND FOR",
+        "title": "Our Values"
+      },
+      "blocks": {
+        "transparency": {
+          "type": "value",
+          "settings": {
+            "icon": "transparency",
+            "title": "Transparency",
+            "text": "Full label disclosure. No proprietary blends. You see exactly what you're putting in your body."
+          }
+        },
+        "quality": {
+          "type": "value",
+          "settings": {
+            "icon": "quality",
+            "title": "Quality",
+            "text": "Clean ingredients from trusted suppliers. Every batch tested. No shortcuts."
+          }
+        },
+        "honesty": {
+          "type": "value",
+          "settings": {
+            "icon": "honesty",
+            "title": "Honesty",
+            "text": "We don't make claims we can't back up. No miracle promises. Just effective nutrition."
+          }
+        }
+      },
+      "block_order": ["transparency", "quality", "honesty"]
+    },
+    "cta": {
+      "type": "enigma-split-content",
+      "settings": {
+        "label": "READY TO TRY?",
+        "title": "Find Your Formula",
+        "text": "<p>Whether you're looking for clean protein, focused pre-workout energy, or functional hydration — we've got something for every part of your training.</p>",
+        "reverse": false,
+        "button_text": "Shop All Products",
+        "button_link": "/collections/all"
+      }
+    },
+    "newsletter": {
+      "type": "enigma-newsletter",
+      "settings": {
+        "label": "JOIN THE INNER CIRCLE",
+        "title": "Get 10% Off Your First Order",
+        "text": "First access to new drops, exclusive deals, and training tips. No spam.",
+        "placeholder": "Enter your email",
+        "button_text": "Get 10% Off",
+        "disclaimer": "No spam. Unsubscribe anytime."
+      }
+    }
+  },
+  "order": [
+    "about-hero",
+    "about-story",
+    "about-values",
+    "cta",
+    "newsletter"
+  ]
+}

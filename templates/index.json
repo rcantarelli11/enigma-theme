@@ -1,0 +1,155 @@
+{
+  "sections": {
+    "hero": {
+      "type": "enigma-hero",
+      "settings": {
+        "label": "ENIGMA",
+        "title": "Power Beyond Limits",
+        "subtitle": "Clean ingredients. No compromises. Premium fitness nutrition engineered for those who refuse to settle.",
+        "min_height": 100,
+        "overlay_opacity_top": 30,
+        "overlay_opacity_mid": 60,
+        "overlay_opacity_bottom": 95,
+        "button_text": "Shop Now",
+        "button_link": "/collections/all",
+        "button_text_2": "See What's Inside",
+        "button_link_2": "/pages/about-us"
+      }
+    },
+    "trust-bar": {
+      "type": "enigma-trust-bar",
+      "blocks": {
+        "lab": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "lab",
+            "title": "Lab Tested",
+            "text": "Third-party verified"
+          }
+        },
+        "clean": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "leaf",
+            "title": "Clean Formula",
+            "text": "Every ingredient earns its place"
+          }
+        },
+        "shipping": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "text": "Orders over $70"
+          }
+        },
+        "dosed": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "bolt",
+            "title": "Clinically Dosed",
+            "text": "Real science, not marketing hype"
+          }
+        }
+      },
+      "block_order": ["lab", "clean", "shipping", "dosed"]
+    },
+    "featured-collection": {
+      "type": "enigma-featured-collection",
+      "settings": {
+        "label": "BEST SELLERS",
+        "title": "Most Popular",
+        "collection": "best-sellers",
+        "products_to_show": 4,
+        "show_view_all": true
+      }
+    },
+    "split-1": {
+      "type": "enigma-split-content",
+      "settings": {
+        "label": "THE ENIGMA DIFFERENCE",
+        "title": "We Don't Sell Hype. We Sell What Works.",
+        "text": "<p>Most supplement brands sell you a label. We sell you what's on it. Every Enigma product is transparent, third-party tested, and built for people who read the ingredients list before the marketing copy. No neon. No bro science. Just clean nutrition that works.</p>",
+        "reverse": false,
+        "button_text": "See What's Inside",
+        "button_link": "/collections/all"
+      }
+    },
+    "collection-energy": {
+      "type": "enigma-featured-collection",
+      "settings": {
+        "label": "FOCUS. ENERGY. NO CRASH.",
+        "title": "Pre-Workouts",
+        "collection": "preworkouts",
+        "products_to_show": 4,
+        "show_view_all": true
+      }
+    },
+    "split-2": {
+      "type": "enigma-split-content",
+      "settings": {
+        "label": "HYDRATION REDEFINED",
+        "title": "Hydration That Works as Hard as You Do",
+        "text": "<p>Go beyond water. Electrolytes, minerals, and functional ingredients your body needs during and after intense training. Unique flavors like Lychee Splash, Yuzu, and Matcha Green Tea that make hydration something you look forward to.</p>",
+        "reverse": true,
+        "button_text": "Shop Hydration",
+        "button_link": "/collections/hydration-powders"
+      }
+    },
+    "testimonials": {
+      "type": "enigma-testimonials",
+      "settings": {
+        "label": "REAL REVIEWS",
+        "title": "What Athletes Say"
+      },
+      "blocks": {
+        "review-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Best pre-workout I've ever tried. Clean energy that lasts the whole session — no jitters, no crash. This is the real deal.",
+            "author": "Alex M.",
+            "product": "Energy Powder"
+          }
+        },
+        "review-2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Finally a protein isolate that tastes amazing AND has clean ingredients. The Chocolate flavor is unreal — mixes smooth every time.",
+            "author": "Sarah K.",
+            "product": "Whey Protein Isolate"
+          }
+        },
+        "review-3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "I read every label. Most brands have something to hide. Enigma doesn't. Full transparency, legit doses, and it actually works.",
+            "author": "Marcus T.",
+            "product": "Creatine Monohydrate"
+          }
+        }
+      },
+      "block_order": ["review-1", "review-2", "review-3"]
+    },
+    "newsletter": {
+      "type": "enigma-newsletter",
+      "settings": {
+        "label": "JOIN THE INNER CIRCLE",
+        "title": "Get 10% Off Your First Order",
+        "text": "First access to new drops, exclusive deals, and training tips. No spam.",
+        "placeholder": "Enter your email",
+        "button_text": "Get 10% Off",
+        "disclaimer": "No spam. Unsubscribe anytime."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "trust-bar",
+    "featured-collection",
+    "split-1",
+    "collection-energy",
+    "split-2",
+    "testimonials",
+    "newsletter"
+  ]
+}

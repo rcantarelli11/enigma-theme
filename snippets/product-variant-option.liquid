@@ -1,0 +1,133 @@
+{%- liquid
+  comment
+    Returns the variant values in the required display.
+
+    Required parameters:
+      - option: { Object } Variant option object.
+      - variant_display: { String } The variant display, ex. chips, swatches, dropdown.
+
+    Optional parameters:
+      - custom_swatch_color_key_map: { Object } An array of custom color keys (names).
+      - custom_swatch_color_value_map: { Object } An array of custom color values (HEX values).
+      - chip_layout: { String } Required if diplay is 'chips' to properly style.
+  endcomment
+-%}
+
+{% if variant_display == 'chips' or variant_display == 'swatches' %}
+  {%- assign swatch_image_size = swatch_size | times: 2 -%}
+  {%- for option_value in option.values -%}
+    {%- liquid
+      capture option_id
+        echo '[[si]]-[[op]]-[[fi]]' | replace: '[[si]]', section.id | replace: '[[op]]', option.position | replace: '[[fi]]', forloop.index0
+      endcapture
+
+      capture form_id
+        echo 'product-form-[[si]]' | replace: '[[si]]', section.id
+      endcapture
+
+      if option_value.available == false
+        assign option_unavailable = true
+      else
+        assign option_unavailable = false
+      endif
+
+      if option_value.swatch.image
+        capture swatch_image_url
+          echo option_value.swatch.image | image_url: width: swatch_image_size
+        endcapture
+      endif
+    -%}
+
+    <label
+      for="{{ option_id }}"
+      class="variant-option variant-option__label variant-option--{{ variant_display }}"
+    >
+      <input
+        id="{{ option_id }}"
+        type="radio"
+        name="id"
+        value="{{ option_value.variant.id }}"
+        form="{{ form_id }}"
+
+        {% if option_value.selected %}
+          checked
+        {% endif %}
+
+        {% unless option_value.available %}
+          class="disabled"
+        {% endunless %}
+
+        data-product-url="{{ option_value.product_url | default: prod.url }}"
+        data-variant-id="{{ option_value.variant.id }}"
+        data-option-value-id="{{ option_value.id }}"
+        data-variant-layout="{{ variant_display }}"
+
+        {% if option_value.variant.featured_media %}
+          data-option-value-featured-media="{{ option_value.variant.featured_media.id }}"
+          data-option-value-featured-media-position="{{ option_value.variant.featured_media.position }}"
+        {% endif %}
+
+        js-variant-input
+      >
+
+      {% if variant_display == 'swatches' %}
+        {% render 'swatch',
+          value: option_value,
+          selected: option_value.selected,
+          disabled: option_unavailable,
+          custom_swatch_color_key_map: custom_swatch_color_key_map,
+          custom_swatch_color_value_map: custom_swatch_color_value_map,
+          color: option_value.swatch.color,
+          image_url: swatch_image_url,
+          size: swatch_size,
+          is_variant_swatch: true
+        %}
+      {% elsif variant_display == 'chips' %}
+        {% render 'chip', value: option_value, selected: option_value.selected, disabled: option_unavailable %}
+      {% endif %}
+    </label>
+  {%- endfor -%}
+{%- elsif variant_display == 'dropdown' -%}
+  <select
+    id="option{{ option.position }}"
+    name="options[{{ option.name | escape }}]"
+    class="variant-option--dropdown input"
+    form="{{ form_id }}"
+    aria-label="{{ 'products.product.change_option' | t }} {{ option.name | escape }}"
+    data-variant-layout="{{ variant_display }}"
+    js-variant-input
+  >
+    {%- for option_value in option.values -%}
+      {%- liquid
+        if option_value.available == false
+          assign option_unavailable = true
+        else
+          assign option_unavailable = false
+        endif
+      -%}
+
+      <option
+        id="{{section.id}}-{{option.position}}-{{ forloop.index0 }}"
+        data-value-handle="{{ option_value | handleize }}--{{ forloop.index0 }}"
+        value="{{ option_value | escape }}"
+
+        {%- if option_value.selected -%}
+          selected="selected"
+        {%- endif -%}
+
+        {%- if option_unavailable -%}
+          disabled
+        {% endif -%}
+
+        data-product-url="{{ option_value.product_url }}"
+        data-variant-id="{{ option_value.variant.id }}"
+        data-option-value-id="{{ option_value.id }}"
+        {% if option_value.variant.featured_media %}
+          data-option-value-featured-media="{{ option_value.variant.featured_media.id }}"
+        {% endif %}
+      >
+        {{ option_value }}
+      </option>
+    {%- endfor -%}
+  </select>
+{%- endif -%}

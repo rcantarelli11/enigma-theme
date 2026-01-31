@@ -1,0 +1,47 @@
+{% liquid
+  comment
+    Simple "slider" that will reveal slides through button navigation, with the option to auto-rotate
+    through the slides.
+
+    Required parameters:
+      - slider_items: { String } The HTML of slider items.
+
+    Optional parameters:
+      - autoplay: { Boolean: false } Whether the slider should autoplay.
+      - autoplay_delay: { Number: 0 } The delay (in seconds) between slide changes.
+  endcomment
+
+  assign button_classes = 'announcement-slider__nav-button btn btn--style-inline-icon'
+
+  echo 'component-announcement-slider.css' | asset_url | stylesheet_tag
+  render 'inline-scripts', script_name: 'announcement-slider'
+%}
+
+<announcement-slider
+  data-autoplay="{{ autoplay | default: false, allow_false: true }}"
+  data-autoplay-delay="{{ autoplay_delay | default: 0 | times: 1000 }}"
+>
+  <button
+    type="button"
+    class="{{ button_classes }}"
+    title="{{ 'general.accessibility.previous' | t }}"
+    js-prev-button
+    name="prev"
+  >
+    {%- render 'icon-utility', icon: 'chevron-left-small', width: 12, height: 12 -%}
+  </button>
+
+  <div class="announcement-slider__slider ta-c" js-slider data-active-slide-index="0">
+    {{- slider_items -}}
+  </div>
+
+  <button
+    type="button"
+    class="{{ button_classes }}"
+    title="{{ 'general.accessibility.next' | t }}"
+    js-next-button
+    name="next"
+  >
+    {%- render 'icon-utility', icon: 'chevron-right-small', width: 12, height: 12 -%}
+  </button>
+</announcement-slider>

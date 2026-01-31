@@ -1,0 +1,178 @@
+{%- if settings.cart_type == 'drawer' -%}
+  {%- liquid
+    echo 'component-cart-shared.css' | asset_url | stylesheet_tag
+    echo 'component-cart-drawer.css' | asset_url | stylesheet_tag
+    echo 'component-product-item-minimal.css' | asset_url | stylesheet_tag
+    echo 'component-quantity-input.css' | asset_url | stylesheet_tag
+
+    # Fetch this here rather than free-shipping-bar.liquid, otherwise when going from empty
+    # to non-empty state there is a flash of unstyled content
+    if settings.enable_free_shipping_bar and settings.free_shipping_bar_min_amount != blank
+      echo 'component-free-shipping-bar.css' | asset_url | stylesheet_tag
+    endif
+
+    render 'inline-scripts', script_name: 'cart-drawer'
+    render 'inline-scripts', script_name: 'cart-item'
+    render 'inline-scripts', script_name: 'quantity-input'
+
+    if settings.enable_cart_note
+      echo 'component-cart-note.css' | asset_url | stylesheet_tag
+      render 'inline-scripts', script_name: 'cart-note'
+    endif
+  -%}
+
+  {%- capture header_content -%}
+    <div class="cart-drawer__header-content">
+      {% render 'modal-close-button', form_class: "cart-drawer__header-content-left", class: "cart-drawer__close-button" %}
+
+      <h3 class="ff-heading fs-heading-5-base">{{ 'cart.general.cart' | t }}</h3>
+
+      <div class="cart-drawer__header-content-right">
+        {% render 'cart-button', clickable: false %}
+      </div>
+    </div>
+  {%- endcapture -%}
+
+  {%- capture drawer_inner_content -%}
+    {%- if cart.item_count > 0 -%}
+      {%- liquid
+        if settings.enable_free_shipping_bar
+          render 'free-shipping-bar'
+        endif
+      -%}
+
+      <form
+        action="{{ routes.cart_url }}"
+        method="post"
+        novalidate
+        id="cart-drawer-form"
+      >
+        {% render 'cart-items' %}
+
+        {%- liquid
+          if settings.enable_cart_cross_sells
+            render 'cross-sells', placement: "cart-drawer"
+          endif
+        -%}
+
+        <div class="cart-drawer__text" js-cart-text>
+          {%- liquid
+            if settings.enable_cart_note
+              render 'cart-note'
+            endif
+          -%}
+
+          {% render 'cart-summary' %}
+        </div>
+      </form>
+    {%- else -%}
+      {%- assign continue_shopping_label = "cart.general.continue_shopping" | t  -%}
+
+      <div class="cart-drawer-empty-state">
+        <h4 class="fs-body-250">{{ "cart.general.empty_message" | t }}</h4>
+
+        {%- render 'button',
+          label: continue_shopping_label,
+          button_style: "outline",
+          linkless_type: "button",
+          button_attributes: "js-keep-shopping-button"
+        -%}
+      </div>
+
+      {%- liquid
+        if settings.enable_cart_cross_sells
+          render 'cross-sells', placement: "cart-drawer"
+        endif
+      -%}
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- if cart.item_count > 0 -%}
+    {%- capture footer_content -%}
+      <div class="cart-drawer__footer-content">
+        <div class="cart-drawer__footer-subtotal" js-cart-footer-subtotal>
+          <label class="content">
+            {{ "cart.general.subtotal" | t }}
+
+            {%- if cart.total_discount > 0 -%}
+              {%- assign total_discount = cart.total_discount -%}
+              {%- assign formatted_discount_total = total_discount | money | prepend : "-" -%}
+
+              (<span class="cart-drawer__footer-discount">{{ "cart.general.discounts.cart_level_summary_html" | t: amount: formatted_discount_total }}</span>)
+            {%- endif -%}
+          </label>
+
+          <span>{{ cart.total_price | money }}</span>
+        </div>
+
+        {% render 'cart-checkout-button', form_id: "cart-drawer-form" %}
+      </div>
+    {%- endcapture -%}
+  {%- endif -%}
+
+  {%- capture drawerContent -%}
+    <cart-drawer data-section-id="{{ section.id  }}" data-cart-count="{{ cart.item_count }}">
+      <template data-template-key="cart-drawer">
+        {%- render 'drawer-inner',
+          header_content: header_content,
+          main_content: drawer_inner_content,
+          footer_content: footer_content,
+          main_content_class: 'scrollbars-hidden',
+        -%}
+      </template>
+    </cart-drawer>
+  {%- endcapture -%}
+
+  {%- liquid
+    capture drawer_title
+      echo 'cart.drawer.title' | t
+    endcapture
+
+    capture drawer_description
+      echo 'cart.general.description' | t
+    endcapture
+  -%}
+
+  {%- render 'drawer',
+    name: 'cartDrawer',
+    alignment: 'right',
+    title: drawer_title,
+    description: drawer_description,
+    content: drawerContent,
+    omit_inner: true,
+    close_button: false
+  -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.cart_drawer.name",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.cart_drawer.settings.intro.paragraph.content"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.cart_shared.settings.cross_sells.heading.content",
+      "info": "t:sections.cart_shared.settings.cross_sells.heading.info"
+    },
+    {
+      "type": "select",
+      "id": "cross_sells_layout",
+      "label": "t:sections.cart_shared.settings.cross_sells.layout.label",
+      "options": [
+        {
+          "value": "slider",
+          "label": "t:sections.cart_shared.settings.cross_sells.layout.options.slider"
+        },
+        {
+          "value": "list",
+          "label": "t:sections.cart_shared.settings.cross_sells.layout.options.list"
+        }
+      ],
+      "default": "slider"
+    }
+  ]
+}
+{% endschema %}

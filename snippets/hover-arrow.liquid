@@ -1,0 +1,31 @@
+{%- liquid
+  comment
+    Renders the arrow display for pagination arrow buttons.
+
+    Required parameters:
+      - direction: { String } The direction that the arrow is pointing. Can be:
+        - 'left'
+        - 'right'
+
+    Optional parameters:
+      - scale_arrow_with_text: { Boolean: true } Whether the arrow dimensions should be 'em'-based
+          so that it will scale with related text.
+  endcomment
+
+  assign scale_arrow_with_text = scale_arrow_with_text | default: true, allow_false: true
+
+  capture arrow_icon_name
+    if direction == 'left'
+      echo 'arrow-left-small'
+    else
+      echo 'arrow-right-small'
+    endif
+  endcapture
+-%}
+
+<span class="hover-arrow-wrapper hover-arrow-wrapper--{{ direction }} hover-arrow-wrapper--scales-{{ scale_arrow_with_text }}">
+  <span class="hover-arrow-inner">
+    {% render 'icon-utility', icon: arrow_icon_name, width: 16, height: 16, class: 'hover-arrow hover-arrow--default' %}
+    {% render 'icon-utility', icon: arrow_icon_name, width: 16, height: 16, class: 'hover-arrow hover-arrow--hover' %}
+  </span>
+</span>

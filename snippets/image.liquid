@@ -1,0 +1,251 @@
+{% liquid
+  comment
+    Renders an image, with an optional placeholder.
+
+    Required parameters:
+      - image: { Object } The image to be rendered.
+
+    Optional parameters:
+      - aspect_ratio: { String: 'natural' } The aspect ratio of the image.
+      - animate: { Boolean } Whether the image should be animated.
+      - fallback_alt: { String } Alt text to use if the image doesn't have any.
+      - fallback_width: { Number: 320 } A width (in pixels) to be used for browsers that don't support srcset.
+      - focal_point: { String: 'image_presentation' } The source of the focal point of the image. Can be:
+        - 'image_presentation': The focal point comes from the image itself.
+        - 'X_Y': The X and Y position of the focal point (as a percentage).
+      - mobile_focal_point: { String } The source of the focal point of the image on mobile. Can be:
+        - 'image_presentation': The focal point comes from the image itself.
+        - 'X_Y': The X and Y position of the focal point (as a percentage).
+      - class: { String } A custom class to be applied to the image.
+      - attributes: { String } Custom HTML attributes to be applied to the image.
+      - include_placeholder: { Boolean: true } Whether a placeholder should be rendered if no image is provided.
+      - custom_placeholder: { String } A custom placeholder image to be used.
+      - no_crop: { Boolean } If 'true', the image will be loaded in full, and then cropped in CSS (rather than
+          letting Shopify serve a cropped image).
+      - object_fit: { String } The 'object-fit' CSS property to use for the image.
+      - placeholder_name: { String } The name of the Shopify placeholder SVG to use.
+      - placeholder_natural_fallback_ratio: { String: 'square' } The aspect ratio used for the placeholder when
+          'aspect_ratio' is 'natural'.
+      - prioritize_loading: { Boolean } If 'true', the `loading="lazy"` attribute won't be added to the image.
+      - sizes: { String } A list of responsive image sizes (for the 'sizes' attributes).
+      - src_set_type: { String } A string noting the kind of environment the image is being rendered in to help
+          with more performant srcset generation. If this parameter isn't specified, a comprehensive srcset range
+          will be used. Note: alternatively you may define specific widths via `src_set_width_values`
+        - 'icon'
+        - 'grid'
+        - 'full-width'
+      - src_set_width_values: { String } A string like "50,100" representing srcset width values to use instead of
+          default set or `src_set_type`.
+      - load_animation_effect: { String } The type of animation effect to use when the image is loaded. Can be:
+        - 'fade'
+        - 'blur'
+      - load_animation_stagger_index: { Number } Used to stagger image load animations in certain situations.
+      - load_animation_manually_triggered: { Boolean } Instead of the animation appearing based on 'loaded' state, it will wait for a 'visible' class which is externally applied
+      - allowed_to_round: { Boolean: false } When true, image will match global image rounding config
+  endcomment
+
+  assign aspect_ratio = aspect_ratio | default: 'natural'
+  assign include_placeholder = include_placeholder | default: true, allow_false: true
+
+  assign focal_point = focal_point | default: 'image-presentation'
+
+  assign allowed_to_round = allowed_to_round | default: false, allow_false: true
+
+  capture lazy_load_classes
+    if load_animation_effect
+      echo ' lazy-load-effect--[[ef]]' | replace: '[[ef]]', load_animation_effect
+    endif
+    if load_animation_stagger_index
+      echo ' with-lazy-load-stagger'
+    endif
+  endcapture
+
+  if load_animation_stagger_index
+    assign lazy_load_style = '--lazy-load-stagger-index: [[in]];' | replace: '[[in]]', load_animation_stagger_index
+  endif
+-%}
+
+{%- if image != blank -%}
+  {%- liquid
+    assign fallback_width = fallback_width | default: 320
+    assign alt = image.alt | default: fallback_alt | escape
+    assign object_fit = object_fit | default: 'cover'
+
+    if focal_point == 'image-presentation'
+      assign object_position = image.presentation.focal_point
+
+      # If Shopify focal point is centered, use "center" crop_mode
+      if object_position == '50.0% 50.0%' or object_position == blank
+        assign crop_mode = 'center'
+      else
+        assign crop_mode = 'no-crop'
+      endif
+    elsif focal_point != blank
+      assign object_position = focal_point | replace: '_', ' '
+
+      # Shopify's image crop doesn't support 2D values, this just prevents an error
+      unless object_position contains ' '
+        assign crop_mode = object_position
+      endunless
+    endif
+
+    if mobile_focal_point != blank
+      assign mobile_object_position = mobile_focal_point | replace: '_', ' '
+
+      # Shopify's image crop doesn't support 2D values, this just prevents an error
+      unless mobile_object_position contains ' '
+        assign crop_mode = mobile_object_position
+      endunless
+    endif
+
+    if object_fit != 'contain' and aspect_ratio != blank and aspect_ratio != 'natural' and crop_mode != 'no-crop' and no_crop != true
+      case aspect_ratio
+        when 'portrait'
+          assign crop_height_ratio = 1.5
+        when 'portrait-alt'
+          assign crop_height_ratio = 1.25
+        when 'square'
+          assign crop_height_ratio = 1
+        when 'landscape-alt'
+          assign crop_height_ratio = 0.8
+        when 'landscape'
+          assign crop_height_ratio = 0.666666
+        when 'landscape-wide'
+          assign crop_height_ratio = 0.5625
+        when 'landscape-ultrawide'
+          assign crop_height_ratio = 0.4286
+      endcase
+    endif
+
+    unless src_set_width_values
+      case src_set_type
+        when 'icon'
+          # TODO: why is this 24,48 ? where it is used we are passing in sizes: 32px, so we probably need 64px for retina here at least?
+          assign src_set_width_values = '24,48'
+        when 'mobile-only-grid'
+          # Assumption: Grids on mobile will be 1 or 2 columns so range doesn't need to go past 600px @ 2x
+          assign src_set_width_values = '150,200,240,280,300,360,400,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200'
+        when 'grid'
+          # Assumption: Grids can have spanning tiles that go to 66% of the grid width which can be 1050px with 'page-width' section settings
+          # If the grid spans 100% or the section width is 'full-width-padded', the 'full-width' type should be used.
+          assign src_set_width_values = '150,200,240,280,300,360,400,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200'
+        when 'mobile-only-full-width'
+          # Assumption: Full width images on mobile only don't need to go past 600px @ 2x
+          assign src_set_width_values = '400,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200'
+        when 'full-width'
+          # Assumption: The smallest phone will be  350px @ 2x
+          assign src_set_width_values = '700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1800,2000,2200,2400,2600,2800,3000,3500,4000,4500,5000,5500,6000'
+        else
+          assign src_set_width_values = '100,150,200,240,280,300,360,400,450,500,550,600,650,700,750,800,850,900,950,1000,1100,1200,1300,1400,1500,1600,1800,2000,2200,2400,2600,2800,3000,3500,4000,4500,5000,5500,6000'
+      endcase
+    endunless
+
+    capture src_set_string
+      assign src_set_widths = src_set_width_values | split: ','
+
+      for width_string in src_set_widths
+        assign width = width_string | plus: 0
+
+        if image.width < width
+          break
+        endif
+
+        if crop_height_ratio
+          assign crop_height = width | times: crop_height_ratio
+
+          if image.height < crop_height
+            break
+          endif
+        endif
+
+        unless forloop.first
+          echo src_set_string | append: ', '
+        endunless
+
+        if crop_height and crop_mode != 'no-crop'
+          echo image | image_url: width: width, height: crop_height, crop: crop_mode | append: ' [[w]]w' | replace: '[[w]]', width
+        else
+          echo image | image_url: width: width | append: ' [[w]]w' | replace: '[[w]]', width
+        endif
+      endfor
+    endcapture
+
+    capture class
+      if class != blank
+        echo 'image [[c]]' | replace: '[[c]]', class
+      else
+        echo 'image'
+      endif
+      if allowed_to_round
+        echo ' image--rounded'
+      endif
+      if animate
+        echo ' animation--image'
+      endif
+
+      if lazy_load_classes
+        echo ' '
+        echo lazy_load_classes
+      endif
+    endcapture
+
+    capture image_style
+      if object_position
+        echo '--object-position: [[op]];' | replace: '[[op]]', object_position
+      endif
+
+      if mobile_object_position != blank
+        echo '--mobile-object-position: [[mop]];' | replace: '[[mop]]', mobile_object_position
+      endif
+
+      if object_fit
+        echo '--object-fit: [[of]];' | replace: '[[of]]', object_fit
+      endif
+
+      if lazy_load_style
+        echo lazy_load_style
+      endif
+    endcapture
+  -%}
+
+  <img
+    alt="{{ alt }}"
+    class="{{ class }}"
+    data-aspect-ratio="{{ aspect_ratio }}"
+    style="{{ image_style }}"
+    width="{{ image.width }}"
+    height="{{ image.height }}"
+    src="{{ image | image_url: width: fallback_width }}"
+    srcset="{{ src_set_string }}"
+    sizes="{{ sizes | strip }}"
+    {%- if attributes != blank %}
+      {{ attributes }}
+    {% endif -%}
+    {%- if load_animation_manually_triggered %}
+      js-manual-load-animation
+    {%- else -%}
+      onload="javascript: this.classList.add('visible')"
+    {% endif -%}
+    {%- if prioritize_loading %}
+      fetchpriority="high"
+    {%- else %}
+      loading="lazy"
+    {% endif -%}
+  >
+{%- elsif include_placeholder -%}
+  {%- if custom_placeholder != blank -%}
+    {{ custom_placeholder }}
+  {%- else -%}
+    {%- assign natural_fallback = placeholder_natural_fallback_ratio | default: 'square' -%}
+    {% assign class = class | append: ' ' | append: lazy_load_classes %}
+    {%- render 'placeholder-image',
+      class: class,
+      attributes: attributes,
+      placeholder_name: placeholder_name,
+      aspect_ratio: aspect_ratio,
+      natural_fallback_ratio: natural_fallback,
+      style: lazy_load_style,
+      allowed_to_round: allowed_to_round
+    -%}
+  {%- endif -%}
+{%- endif -%}

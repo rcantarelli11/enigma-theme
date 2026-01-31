@@ -1,0 +1,187 @@
+{% liquid
+  comment
+    Renders a standard button.
+
+    Required parameters:
+      - label: { String } The button label.
+
+    Optional parameters:
+      - button_style: { String: 'solid' } The button style. Can be:
+        - 'solid'
+        - 'outline'
+        - 'text'
+        - 'icon'
+      - button_size: { String: 'regular' } The button size. Can be:
+        - 'large'
+          - Only compatable with 'icon' type.
+        - 'regular'
+        - 'small'
+        - 'x-small'
+          - Only compatible with 'solid' and 'outline' types.
+      - button_width: { String: 'regular' } The button width. Can be:
+        - 'regular'
+        - 'full'
+          - Not compatible with 'text' type.
+      - button_alignment: { String: 'none' } How the button should be horizontally aligned. Can be:
+        - 'none'
+        - 'left'
+        - 'center'
+        - 'right'
+      - underlined: { Boolean: 'false' } Whether the text should be underlined before hovering.
+        - Only compatible with 'text' types.
+      - require_link: { Boolean: true } Whether the button needs a link. If a link is needed, but not
+        provided, a flash alert will show in the theme editor when the button is clicked.
+      - link: { String } The button URL.
+      - linkless_type: { String: 'button' } The button "type" for linkless buttons. Can be:
+        - 'button'
+        - 'submit'
+      - button_attributes: { String } Any HTML attributes (eg. data attributes) to include with the button.
+      - disabled: { Boolean: false } Whether the button is disabled.
+      - wrapper_class: { String } A class to add to the button wrapper.
+      - class: { String } A class to add to the button.
+      - name: { String } A name to add to the button.
+      - id: { String } An id to add to the button.
+      - additional_content: { String } Additional content to include in the button.
+      - aria_label: { String } aria-label attribute, suggested for all icon buttons
+      - hidden: { Boolean: false } The button's hidden attribute
+  endcomment
+
+  # Button alignment
+  assign button_alignment = button_alignment | default: 'none'
+
+  # Button wrapper
+  assign button_wrapper_class = 'btn-wrapper btn-wrapper--align-[[alignment]]' | replace: '[[alignment]]', button_alignment
+
+  if wrapper_class != blank
+    assign button_wrapper_class = button_wrapper_class | append: ' ' | append: wrapper_class
+  endif
+
+  # Button tag
+  capture button_tag
+    if link != blank
+      echo 'a'
+    else
+      echo 'button'
+    endif
+  endcapture
+
+  # Button attributes
+  capture button_attributes
+    echo button_attributes
+
+    if link == blank
+      # Button type
+      assign linkless_type = linkless_type | default: 'button'
+      assign type_attribute = ' type="' | append: linkless_type | append: '"'
+
+      echo type_attribute
+
+      # Flash alert
+      assign require_link = require_link | default: true, allow_false: true
+
+      if require_link
+        assign flash_message = 'general.flash_alert.no_link' | t
+        assign flash_message_data = 'data-flash-message="' | append: flash_message | append: '"'
+
+        echo ' data-flash-trigger '
+        echo flash_message_data
+      endif
+    else
+      # href
+      assign link_attribute = ' href="' | append: link | append: '"'
+      echo link_attribute
+    endif
+
+    if name
+      echo 'name="[[n]]"' | replace: '[[n]]', name
+    endif
+
+    if id
+      echo 'id="[[id]]"' | replace: '[[id]]', id
+    endif
+
+    # disabled
+    if disabled
+      echo ' disabled'
+    endif
+
+    if aria_label
+      echo 'aria-label="[[l]]"' | replace: '[[l]]', aria_label
+    endif
+
+    # An 'ontouchstart' attribute allows the ':active' pseudo class to apply on mobile:
+    # https://stackoverflow.com/questions/3885018/active-pseudo-class-doesnt-work-in-mobile-safari
+    echo ' ontouchstart=""'
+  endcapture
+
+  # Button style, size, and width
+  assign button_style = button_style | default: 'solid'
+  assign button_size = button_size | default: 'regular'
+
+  if button_style == 'text'
+    assign button_width = 'regular'
+  else
+    assign button_width = button_width | default: 'regular'
+  endif
+
+  assign underlined = underlined | default: false, allow_false: true
+
+  # Button class
+  capture button_class
+    assign button_class = 'btn btn--style-[[style]] btn--size-[[size]] btn--width-[[width]]' | replace: '[[style]]', button_style | replace: '[[size]]', button_size | replace: '[[width]]', button_width
+    if class
+      assign button_class = button_class | append: ' ' | append: class
+    endif
+
+    if button_style == 'text' and underlined == true
+      assign button_class = button_class | append: ' underlined'
+    endif
+
+    echo button_class
+  endcapture
+-%}
+
+{%- if button_style == 'outline' -%}
+  {%- capture outline_label_structure -%}
+    {%- # Hidden label to maintain button size -%}
+   <span class="btn__label btn__label--hidden">[[label]]</span>
+
+    <span class="btn__label btn__label--combined">
+      <span class="label-default">[[label]]</span>
+      <span class="label-active">[[label]]</span>
+    </span>
+  {%- endcapture -%}
+{%- endif -%}
+
+{%- liquid
+  # Button label
+  capture button_label
+    if button_style == 'icon'
+      echo label
+    elsif button_style == 'outline'
+      echo outline_label_structure | replace: '[[label]]', label
+    else
+      echo '<span class="btn__label btn__label--default">[[label]]</span>' | replace: '[[label]]', label
+
+      if button_style == 'solid'
+        # Hidden label to maintain button size
+        echo '<span class="btn__label btn__label--hidden">[[label]]</span>' | replace: '[[label]]', label
+        echo '<span class="btn__label btn__label--active">[[label]]</span>' | replace: '[[label]]', label
+      endif
+    endif
+  endcapture
+-%}
+
+<div class="{{ button_wrapper_class }}">
+  <{{ button_tag }}
+    class="{{ button_class }}"
+
+    {{ button_attributes }}
+    {% if hidden %}
+      hidden
+    {% endif %}
+  >
+    {{ button_label }}
+    {{ additional_content }}
+  </{{ button_tag }}>
+</div>

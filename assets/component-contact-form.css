@@ -1,0 +1,202 @@
+:root{
+  --js-mobile:(max-width: 719.9px);
+  --js-tablet:(min-width: 720px);
+  --js-below-small-desktop:(max-width: 1023.9px);
+  --js-small-desktop:(min-width: 1024px);
+  --js-desktop:(min-width: 1440px);
+  --js-max-page-width:(min-width: 1600px);
+}
+@keyframes contentOverlineAnimation{
+  100%{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+@keyframes contentHeadingAnimation{
+  0%{
+    -webkit-mask-size:0% 100%;
+            mask-size:0% 100%;
+  }
+
+  100%{
+    -webkit-mask-size:120% 100%;
+            mask-size:120% 100%;
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+@keyframes contentContentAnimation{
+  0%{
+    -webkit-mask-size:0% 100%;
+            mask-size:0% 100%;
+  }
+
+  100%{
+    -webkit-mask-size:120% 100%;
+            mask-size:120% 100%;
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+@keyframes contentSliderAnimation{
+  100%{
+    transform:translateX(0);
+    opacity:1;
+  }
+}
+.contact-form .content-block{
+    margin-bottom:0;
+  }
+.form-content-block-alignment--center .content-block{
+    text-align:center;
+  }
+.form-content-block-alignment--right .content-block{
+    text-align:right;
+  }
+.contact-form__header{
+  margin-bottom:var(--spacing-700);
+}
+.contact-form__header-overline{
+  margin-bottom:var(--block-spacing-overline);
+}
+.contact-form__header-heading-wrapper{
+  margin-bottom:var(--block-spacing-heading);
+}
+.contact-form__header-heading-wrapper:has(.animation-heading){
+    margin-bottom:calc(
+      var(--block-spacing-heading) - var(--bottom-font-padding)
+    );
+  }
+.ta-c .contact-form__header-heading-wrapper{
+    display:flex;
+    justify-content:center;
+  }
+.contact-form__header-heading-wrapper .contact-form__header-heading{
+    width:max-content;
+  }
+.contact-form__header-heading-wrapper .contact-form__header-heading.animation-heading{
+      margin:0 calc(var(--horizontal-font-padding) * -1);
+      padding:0 var(--horizontal-font-padding) var(--bottom-font-padding);
+    }
+.contact-form__form{
+  display:grid;
+  grid-template-columns:1fr;
+  align-items:center;
+  grid-column-gap:var(--spacing-300);
+  column-gap:var(--spacing-300);
+  grid-row-gap:var(--spacing-300);
+  row-gap:var(--spacing-300);
+}
+@media (min-width: 720px){
+.contact-form__form{
+    grid-template-columns:repeat(2, 1fr)
+}
+
+    .contact-form__form .notification-display{
+      grid-column:span 2;
+    }
+  }
+.contact-form__form .notification-display{
+    text-align:center;
+  }
+.contact-form__element .custom-input,
+  .contact-form__element .custom-input--text input,
+  .contact-form__element .custom-input textarea,
+  .contact-form__element .custom-input select{
+    width:100%;
+  }
+.contact-form__element .custom-input textarea{
+      height:var(--custom-input-height);
+    }
+.contact-form__element .custom-input.custom-input--checkbox{
+      display:flex;
+      gap:var(--spacing-150);
+    }
+.contact-form__element .custom-input.custom-input--checkbox .checkbox-wrapper{
+        flex-shrink:0;
+      }
+.contact-form__element .custom-input.custom-input--checkbox .checkbox-wrapper + label{
+          position:static;
+          position:initial;
+          margin-top:calc(var(--spacing-25) * -1);
+          padding-left:0;
+        }
+.contact-form__element.contact-form__element--multi .custom-input-wrapper:not(:last-child),
+    .contact-form__element.contact-form__element--multi .custom-input--radio:not(:last-child){
+      margin-bottom:var(--spacing-150);
+    }
+@media (min-width: 720px){
+  .contact-form__element--full-width,
+  .contact-form__heading-block,
+  .content-block--text{
+    grid-column:span 2;
+  }
+}
+.contact-form__element-label{
+  margin-bottom:var(--spacing-150);
+}
+.contact-form__recaptcha-terms{
+  margin-top:var(--spacing-300);
+  text-align:center;
+}
+.contact-form__header-heading-wrapper .animation-overline, .contact-form__heading-block .animation-overline{
+    transform:translateY(10px);
+    opacity:0;
+  }
+.contact-form__header-heading-wrapper .animation-heading, .contact-form__heading-block .animation-heading{
+    -webkit-mask-image:linear-gradient(to left, transparent 0%, black 20%);
+            mask-image:linear-gradient(to left, transparent 0%, black 20%);
+    -webkit-mask-repeat:no-repeat;
+            mask-repeat:no-repeat;
+    transform:translateY(20px);
+    opacity:0;
+  }
+.contact-form__header-heading-wrapper .animation-content, .contact-form__heading-block .animation-content{
+    -webkit-mask-image:linear-gradient(to left, transparent 0%, black 20%);
+            mask-image:linear-gradient(to left, transparent 0%, black 20%);
+    -webkit-mask-repeat:no-repeat;
+            mask-repeat:no-repeat;
+    transform:translateY(20px);
+    opacity:0;
+  }
+.contact-form__header-heading-wrapper .animation-slider, .contact-form__heading-block .animation-slider{
+    transform:translateX(35px);
+    opacity:0;
+  }
+@media (min-width: 1024px){
+      .contact-form__header-heading-wrapper .animation-slider:not(.animation-slider--small), .contact-form__heading-block .animation-slider:not(.animation-slider--small){
+        transform:translateX(50px);
+      }
+    }
+.contact-form__header-heading-wrapper.became-visible .animation-heading, .contact-form__heading-block.became-visible .animation-heading{
+      animation-name:contentHeadingAnimation;
+      animation-duration:var(--animation-timing-800);
+      animation-delay:0;
+      animation-timing-function:var(--ease-out-quart);
+      animation-fill-mode:forwards;
+    }
+.contact-form__header-heading-wrapper.became-visible .animation-overline, .contact-form__heading-block.became-visible .animation-overline{
+      animation-name:contentOverlineAnimation;
+      animation-duration:var(--animation-timing-400);
+      animation-delay:calc(0 + var(--animation-timing-75));
+      animation-timing-function:var(--ease-out-quart);
+      animation-fill-mode:forwards;
+    }
+.contact-form__header-heading-wrapper.became-visible .animation-content, .contact-form__heading-block.became-visible .animation-content{
+      animation-name:contentContentAnimation;
+      animation-duration:var(--animation-timing-900);
+      animation-delay:calc(0 + var(--animation-timing-75));
+      animation-timing-function:var(--ease-out-quart);
+      animation-fill-mode:forwards;
+    }
+.contact-form__header-heading-wrapper.became-visible .animation-slider, .contact-form__heading-block.became-visible .animation-slider{
+      animation-name:contentSliderAnimation;
+      animation-duration:var(--animation-timing-400);
+      animation-timing-function:var(--ease-out-quart);
+      animation-fill-mode:forwards;
+    }
+@media (min-width: 1024px){
+        .contact-form__header-heading-wrapper.became-visible .animation-slider:not(.animation-slider--small), .contact-form__heading-block.became-visible .animation-slider:not(.animation-slider--small){
+          animation-duration:var(--animation-timing-500);
+        }
+      }

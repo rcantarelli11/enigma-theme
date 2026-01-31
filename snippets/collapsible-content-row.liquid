@@ -1,0 +1,41 @@
+{%- liquid
+  comment
+    Renders a single 'Collapsible content' row.
+
+    Required parameters:
+      - block: { Object } The associated block.
+  endcomment
+-%}
+
+{% capture accordion_icon %}
+  <div class="collapsible-content_row-icon">
+    {% render 'icon-utility', icon: 'plus', width: 16, height: 16 %}
+    {% render 'icon-utility', icon: 'minus', width: 16, height: 16 %}
+  </div>
+{% endcapture %}
+
+{% capture content %}
+  <div class="collapsible-content-row_content rte">
+    {{ block.settings.text }}
+  </div>
+{% endcapture %}
+
+{% capture title %}
+  <span class="collapsible-content_row-title">
+    {% if block.settings.icon != "none" %}
+      {%- render 'icon-editorial', icon: block.settings.icon, size: 28, -%}
+    {% endif %}
+    <label class="ff-{{ section.settings.row_heading_font }}">{{ block.settings.heading }}</label>
+  </span>
+{% endcapture %}
+
+{% render 'accordion-item',
+  title: title,
+  content: content,
+  open: block.settings.expand_by_default,
+  attributes: block.shopify_attributes,
+  custom_icon: accordion_icon,
+  class: 'collapsible-content_row',
+  title_class: 'collapsible-content_row-summary',
+  block_id: block.id
+%}

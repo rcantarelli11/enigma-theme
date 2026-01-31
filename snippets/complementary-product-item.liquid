@@ -1,0 +1,41 @@
+{%- liquid
+  comment
+    Renders a complementary product item.
+
+    Required parameters:
+      - prod: { Object } The associated product object.
+      - show_product_thumbnail: { Boolean } Whether to show the product image thumbnail.
+
+    Optional parameters:
+      - placeholder_name: { String } The name of the Shopify placeholder SVG to use.
+  endcomment
+
+  assign button_label = 'products.general.view' | t
+-%}
+
+{%- capture secondary_content -%}
+  {%- if settings.enable_quick_shopping -%}
+    {%- render 'product-item-quick-shopping', prod: prod, minimal_button: true -%}
+  {%- else -%}
+    {% render 'button', label: button_label, button_style: 'outline', button_size: 'small', link: prod.url, class: 'complementary-product-item__add-button' %}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- liquid
+  if show_product_thumbnail
+    assign hide_image = false
+  else
+    assign hide_image = true
+  endif
+-%}
+
+<div class="complementary-product-item" js-complementary-product-item>
+  {%- render 'product-item-minimal',
+    prod: prod,
+    secondary_content: secondary_content,
+    size: 'small',
+    hide_image: hide_image,
+    show_placeholder: true,
+    placeholder_name: placeholder_name
+  -%}
+</div>

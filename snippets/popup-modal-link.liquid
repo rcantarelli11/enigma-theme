@@ -1,0 +1,63 @@
+{%- liquid
+  comment
+    Renders a link with a custom icon or image, that opens a popup modal with content.
+
+    Required parameters:
+      - wrapper_class: { String } A class to add to the button wrapper.
+      - popup_id: { String } Block id or unique identifier to allow modal functionality to connect with content.
+      - icon: { String } Editorial icon name.
+      - custom_image: { Object } Image to use in place of an icon.
+      - link_text: { String } Text of the link.
+      - modal_page: { Object } Shopify page to render within the modal.
+      - modal_class { String } Class applied to modal
+  endcomment
+
+  render 'inline-scripts', script_name: 'rte-container'
+  render 'inline-scripts', script_name: 'popup-modal-link'
+-%}
+
+{% capture modal_content %}
+<div class="{{ wrapper_class }}-popup__modal rte" js-popup-modal-content scrollbars-hidden>
+  <template js-popup-modal-content-template>
+    <rte-container>
+      <h2 class="modal-header__title ff-heading fs-heading-3-base">{{ modal_page.title }}</h2>
+
+      {{ modal_page.content }}
+    </rte-container>
+  </template>
+</div>
+{% endcapture %}
+<popup-modal-link class="{{ wrapper_class }}__popup-modal-link" data-block-id="{{ popup_id }}">
+  <button class="popup-modal__link" js-popup-modal-link>
+    {%- if icon != 'none' -%}
+      <div class="popup-modal__link-icon">
+        {%- liquid
+          if custom_image != blank
+            render 'image', image: custom_image, sizes: '28px', src_set_type: 'icon', object_fit: 'contain'
+          else
+            render 'icon-editorial', icon: icon, size: 28
+          endif
+        -%}
+      </div>
+    {%- endif -%}
+
+    <span class="popup-modal__link-text ff-body t-overflow-ellipsis">{{ link_text }}</span>
+  </button>
+
+  {%- assign popup_name = 'popup-modal-' | append: popup_id -%}
+  {%- assign class = 'modal product-dialog-allowed-in-quickview' %}
+
+  {% if modal_class %}
+    {% assign class = class | append: ' ' | append: modal_class %}
+  {% endif %}
+  {%- render 'modal',
+    name: popup_name,
+    content: modal_content,
+    color: 'popup-modal',
+    class: class,
+    close_button: true,
+    backdrop: true,
+    backdrop_dismiss: true,
+    scroll_lock: true
+  -%}
+</popup-modal-link>

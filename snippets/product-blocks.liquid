@@ -1,0 +1,129 @@
+{%- liquid
+  comment
+    Renders product blocks (blocks associated with the "Product overview" section).
+
+    Note: This snippet should only be used on the product template, within the context of
+      the "Product overview" section because the presence of the product and section
+      objects are assumed.
+
+    Required parameters:
+      - prod: { Object } Current product object.
+      - variant: { Object } The current product variant.
+      - sibling_products: { Object } Array of "sibling" products associated with the current product.
+
+    Optional parameters:
+      - is_featured: { Boolean } Whether the section is a Featured product.
+  endcomment
+
+  capture form_id
+    echo 'product-form-[[si]]-[[pi]]' | replace: '[[si]]', section.id | replace: '[[pi]]', prod.id
+  endcapture
+
+  assign has_sibling_products = false
+  if sibling_products.length > 0
+    assign has_sibling_products = true
+  endif
+
+  if is_featured and prod == blank
+    assign show_placeholder = true
+  endif
+-%}
+
+{%- capture product_price_display -%}
+  {%- if variant != blank -%}
+    {%- liquid
+      assign has_discount = false
+
+      if variant.compare_at_price > variant.price
+        assign has_discount = true
+      endif
+    -%}
+
+    {%- render 'product-price-display',
+      prod: variant,
+      price_scope: 'product_block',
+      compare_at_price_varies: false,
+      has_discount: has_discount,
+      discount_varies: false
+    -%}
+  {%- else -%}
+    {%- render 'product-price-display', placeholder: show_placeholder -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- for block in section.blocks -%}
+  {%- case block.type -%}
+      {% # App block %}
+    {%- when '@app' -%}
+      {%- render block -%}
+
+      {% # Product specific blocks %}
+    {%- when 'buy-buttons' -%}
+      {%- render 'product-block-buy-buttons',
+        form_id: form_id,
+        prod: prod,
+        variant: variant,
+        block: block,
+        product_price_display: product_price_display,
+        has_sibling_products: has_sibling_products,
+        is_featured: is_featured
+      -%}
+    {%- when 'collapsible-row' -%}
+      {%- render 'product-block-collapsible-row', block: block -%}
+    {%- when 'complementary-products' -%}
+      {%- render 'product-block-complementary-products', prod: prod, block: block -%}
+    {%- when 'custom-option' -%}
+      {%- render 'product-block-custom-option', block: block, form_id: form_id -%}
+    {%- when 'description' -%}
+      {%- render 'product-block-description', prod: prod, block: block -%}
+    {%- when 'featured-icon-with-text' -%}
+      {%- render 'product-block-featured-icon-with-text', block: block -%}
+    {%- when 'full-details-link' -%}
+      {%- render 'product-block-full-details-link', prod: prod, block: block -%}
+    {%- when 'icon-with-text' -%}
+      {%- render 'product-block-icon-with-text', block: block -%}
+    {%- when 'image' -%}
+      {%- render 'product-block-image', block: block -%}
+    {%- when 'inventory-status' -%}
+      {%- render 'product-block-inventory-status', variant: variant, block: block -%}
+    {%- when 'liquid' -%}
+      {%- render 'product-block-liquid', block: block -%}
+    {%- when 'popup' -%}
+      {%- render 'product-block-popup', block: block -%}
+    {%- when 'price' -%}
+      {%- render 'product-block-price',
+        prod: prod,
+        block: block,
+        variant: variant,
+        is_featured: is_featured,
+        product_price_display: product_price_display
+      -%}
+    {%- when 'product-rating' -%}
+      {%- render 'product-block-product-rating', prod: prod, block: block -%}
+    {%- when 'quantity-selector' -%}
+      {%- render 'product-block-quantity-selector', form_id: form_id, block: block, variant: variant -%}
+    {%- when 'share' -%}
+      {%- render 'product-block-share', prod: prod, block: block, is_featured: is_featured -%}
+    {%- when 'sku' -%}
+      {%- render 'product-block-sku', block: block, variant: variant -%}
+    {%- when 'text' -%}
+      {%- render 'product-block-text', block: block -%}
+    {%- when 'title' -%}
+      {%- render 'product-block-title', prod: prod, block: block -%}
+    {%- when 'variant-selector' -%}
+      {%- render 'product-block-variant-selector',
+        form_id: form_id,
+        prod: prod,
+        block: block,
+        sibling_products: sibling_products
+      -%}
+    {%- when 'vendor' -%}
+      {%- render 'product-block-vendor', prod: prod, block: block -%}
+
+      {% # Content blocks %}
+    {%- when 'divider' -%}
+      {%- render 'content-block-divider', block: block, animate: false -%}
+    {%- when 'spacer' -%}
+      {%- render 'content-block-spacer', block: block, animate: false -%}
+  {%- endcase -%}
+{%- endfor -%}

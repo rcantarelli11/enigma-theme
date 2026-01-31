@@ -1,0 +1,39 @@
+{%- liquid
+  comment
+    Renders a cross sell item.
+
+    Required parameters:
+      - prod: { Object } The product object associated with the item.
+
+    Optional parameters:
+      - within_drawer: { Boolean } Whether the items are within the cart drawer.
+  endcomment
+
+  assign button_label = 'products.general.view' | t
+-%}
+
+{%- capture secondary_content -%}
+  {%- if settings.enable_quick_shopping -%}
+    {%- render 'inline-scripts', script_name: 'product-item-quick-shopping' -%}
+    {%- render 'product-item-quick-shopping', prod: prod, minimal_button: true, within_dialog: within_drawer -%}
+  {%- else -%}
+    {% render 'button', label: button_label, button_style: 'outline', button_size: 'small', link: prod.url, class: 'cross-sells-item__add-button' %}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- liquid
+  if settings.cart_cross_sells_show_product_thumbnails
+    assign hide_image = false
+  else
+    assign hide_image = true
+  endif
+-%}
+
+<div class="cross-sells-item" data-product-id="{{ prod.id }}" js-cross-sells-item>
+  {%- render 'product-item-minimal',
+    prod: prod,
+    secondary_content: secondary_content,
+    size: 'small',
+    hide_image: hide_image
+  -%}
+</div>

@@ -1,0 +1,111 @@
+{%- liquid
+  comment
+    Renders a cart item.
+
+    Required parameters:
+      - item: { Object } The cart item.
+  endcomment
+
+  capture delete_icon
+    render 'icon-utility', icon: 'trash', width: 18, height: 20
+  endcapture
+-%}
+
+{%- capture displayed_price -%}
+  {%- render 'item-price-display', item: item -%}
+
+  {%- if item.unit_price -%}
+    {%- render 'unit-price-display',
+      unit_price: item.unit_price,
+      unit_price_measurement_value: item.unit_price_measurement.reference_value,
+      unit_price_measurement_unit: item.unit_price_measurement.reference_unit
+    -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture main_content_suffix -%}
+  {%- unless item.product.has_only_default_variant -%}
+    <p class="product-item-minimal__variant fs-body-75">
+      {%- for option in item.options_with_values -%}
+        <span class="product-item-minimal__variant-option">
+          {{ option.name }}: {{ option.value }}
+        </span>
+      {%- endfor -%}
+    </p>
+  {%- endunless -%}
+
+  {%- unless item.properties == empty  -%}
+    {%- for property in item.properties -%}
+      <div class="fs-body-75 product-item-minimal__variant">
+        {%- unless property.last == empty or property.first == "__shopify_send_gift_card_to_recipient" -%}
+          <span>{{ property.first }}: </span>
+
+          {%- if property.last contains '/uploads' -%}
+            <a href="{{ property.last }}">{{ property.last | split: '/' | last }}</a>
+          {%- else -%}
+            <span>{{ property.last }}</span>
+          {%- endif -%}
+        {%- endunless -%}
+      </div>
+    {%- endfor -%}
+  {%- endunless -%}
+
+  {%- if item.line_level_discount_allocations.size > 0 -%}
+    {%- for discount_allocation in item.line_level_discount_allocations -%}
+      <p class="cart-item-discount fs-body-60">
+        {{ discount_allocation.discount_application.title }} (-
+        {{- discount_allocation.amount | money -}}
+        )
+      </p>
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if item.selling_plan_allocation -%}
+    <p class="cart-item-selling-plan fs-body-60 t-opacity-60">
+      {{ item.selling_plan_allocation.selling_plan.name }}
+    </p>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture secondary_content -%}
+  <template data-template-key="error-display"></template>
+
+  <label class="cart-item__error-display notification-display error-display" role="alert" aria-live="assertive" js-error-display hidden></label>
+
+  <div class="cart-item__controls">
+    {%- liquid
+      render "quantity-input", default_value: item.quantity, id: item.key, skip_assets: true, min_value: 0
+
+      capture delete_button_spinner
+        render 'loader', background_color_var: '--button-background-color', foreground_color_var: '--color-text', loader_size: 16, tag_name: 'span'
+      endcapture
+
+      assign delete_button_label = "general.accessibility.quantity_delete" | t
+    -%}
+
+    {%- render 'button',
+      label: delete_icon,
+      button_style: 'icon',
+      require_link: false,
+      button_attributes: "js-delete-button",
+      additional_content: delete_button_spinner,
+      class: "cart-item__delete-button",
+      aria_label: delete_button_label
+    -%}
+  </div>
+{%- endcapture -%}
+
+<cart-item
+  data-cart-item-key="{{ item.key }}"
+  data-cart-item-id="{{ item.id }}"
+  data-cart-item-quantity="{{ item.quantity }}"
+>
+  {%- render 'product-item-minimal',
+    prod: item.product,
+    is_cart_item: true,
+    item_image: item.image,
+    secondary_content: secondary_content,
+    displayed_price: displayed_price,
+    main_content_suffix: main_content_suffix
+  -%}
+</cart-item>

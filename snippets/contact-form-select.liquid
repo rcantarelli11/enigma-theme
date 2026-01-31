@@ -1,0 +1,50 @@
+{%- liquid
+  comment
+    Renders a "Select dropdown" block for the contact form.
+
+    Required parameters:
+      - block: { Object } The associated block.
+  endcomment
+
+  capture input_id
+    echo 'select--[[bid]]' | replace: '[[bid]]', block.id
+  endcapture
+
+  assign downcased_label = block.settings.label | downcase | escape
+
+  capture input_name
+    echo 'contact[[[label]]]' | replace: '[[label]]', downcased_label
+  endcapture
+-%}
+
+<div
+  class="contact-form__element contact-form__element--{{ block.settings.width }}"
+  {{ block.shopify_attributes }}
+>
+  {%- capture option_structure -%}
+    <option value="[[label]]">[[label]]</option>
+  {%- endcapture -%}
+
+  {%- liquid
+    capture options
+      for i in (1..10)
+        capture setting_id
+          echo 'option_[[i]]' | replace: '[[i]]', i
+        endcapture
+
+        if block.settings[setting_id] != blank
+          assign escaped_option = block.settings[setting_id] | escape
+          echo option_structure | replace: '[[label]]', escaped_option
+        endif
+      endfor
+    endcapture
+  -%}
+
+  {%- render 'input-select',
+    id: input_id,
+    name: input_name,
+    label: block.settings.label,
+    options: options,
+    required: block.settings.required
+  -%}
+</div>

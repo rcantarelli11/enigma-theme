@@ -1,0 +1,159 @@
+{%- liquid
+  comment
+    Renders CSS variables for a given font type.
+
+    Required parameters:
+      - type: { String } The font type. Can be:
+        - heading
+        - body
+        - navigation
+        - button
+      - font: { Object } The associated font object.
+      - casing: { String } The font casing. Can be:
+        - normal
+        - uppercase
+      - letter_spacing: { Number } The font letter spacing (as a percentage).
+
+    Optional parameters:
+      - bold_font: { Object } The associated bold font object. Required for the following font types:
+        - heading
+        - body
+      - desktop_size: { Number } The base font size on desktop (in pixels). Required for the following font types:
+        - heading
+        - body
+        - navigation
+        - button
+      - mobile_scale: { Number } A percentage value representing what percentage the mobile font size should be of the
+        desktop font size. Required for the following font types:
+        - heading
+        - body
+        - button
+      - levels: { String } A comma separated list of font levels (ie. 'display-1, display-2, etc.'). Required for
+        the following font types:
+        - heading
+        - body
+        - button
+      - multipliers: { String } A comma separated list of font multipliers. Each value should correspond
+        to the level at the same list index. For example, if we have 'display-1, display-2' and
+        '1.5, 1.333', then 'display-1' corresponds to '1.5'. Required for the following font types:
+        - heading
+        - body
+        - button
+      - font_source: { String } The source, or base, font being used. Can be:
+        - 'heading'
+        - 'body'
+  endcomment
+
+  case type
+    when 'heading', 'body', 'navigation', 'button'
+      # Font family
+      capture family_var_name
+        echo '--font-family-' | append: type
+      endcapture
+
+      capture family_var_value
+        echo '[[family]], [[fallback]]' | replace: '[[family]]', font.family | replace: '[[fallback]]', font.fallback_families
+      endcapture
+
+      echo '[[fvn]]: [[fvv]]; ' | replace: '[[fvn]]', family_var_name | replace: '[[fvv]]', family_var_value
+
+      # Font weight
+      capture weight_var_name
+        echo '--font-weight-' | append: type
+      endcapture
+
+      echo '[[wvn]]: [[fw]]; ' | replace: '[[wvn]]', weight_var_name | replace: '[[fw]]', font.weight
+
+    when 'heading', 'body', 'navigation', 'button'
+      # Font size
+      capture size_var_prefix
+        echo '--font-size-' | append: type | append: '-'
+      endcapture
+
+      assign levels = levels | split: ', '
+      assign multipliers = multipliers | split: ', '
+
+      for level in levels
+        capture size_var_name
+          if level == 'regular'
+            echo size_var_prefix | remove_last: '-'
+          else
+            echo size_var_prefix | append: level
+          endif
+        endcapture
+
+        capture size_var_value
+          assign multiplier = multipliers[forloop.index0] | plus: 0
+          render 'font-size-clamp', desktop_size: desktop_size, multiplier: multiplier, mobile_scale: mobile_scale
+        endcapture
+
+        echo '[[svn]]: [[svv]];' | replace: '[[svn]]', size_var_name | replace: '[[svv]]', size_var_value
+
+        unless forloop.last
+          echo ' '
+        endunless
+      endfor
+
+    when 'heading', 'body'
+      # Bold font weight
+      capture bold_weight_var_name
+        echo '--font-weight-bold-' | append: type
+      endcapture
+
+      echo '[[bwvn]]: [[bfw]]; ' | replace: '[[bwvn]]', bold_weight_var_name | replace: '[[bfw]]', bold_font.weight
+
+    when 'heading', 'body'
+      # Font style
+      capture style_var_name
+        echo '--font-style-' | append: type
+      endcapture
+
+      echo '[[svn]]: [[fs]]; ' | replace: '[[svn]]', style_var_name | replace: '[[fs]]', font.style
+
+    when 'heading'
+      # Line height
+      echo '--line-height-heading: 1.15; '
+
+    when 'body'
+      # Italic font syle
+      capture italic_style_var_name
+        echo '--font-style-italic-' | append: type
+      endcapture
+
+      echo '[[isvn]]: italic; ' | replace: '[[isvn]]', italic_style_var_name
+
+      # Line height
+      echo '--line-height-body: 1.4; '
+
+    when 'navigation'
+      # Line height
+      if font_source == 'heading'
+        echo '--line-height-navigation: var(--line-height-heading);'
+      else
+        echo '--line-height-navigation: var(--line-height-body);'
+      endif
+
+    when 'button'
+      # Line height
+      echo '--line-height-button: 1.4; '
+  endcase
+
+  # Text transform
+  if casing == 'uppercase'
+    capture transform_var_name
+      echo '--text-transform-' | append: type
+    endcapture
+
+    echo '[[tvn]]: uppercase; ' | replace: '[[tvn]]', transform_var_name
+  endif
+
+  # Letter spacing
+  capture letter_spacing_var_name
+    echo '--letter-spacing-' | append: type
+  endcapture
+
+  # Convert % to em value
+  assign letter_spacing = letter_spacing | times: 0.01
+
+  echo '[[lsvn]]: [[ls]]em; ' | replace: '[[lsvn]]', letter_spacing_var_name | replace: '[[ls]]', letter_spacing
+-%}

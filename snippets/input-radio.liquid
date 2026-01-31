@@ -1,0 +1,57 @@
+{%- liquid
+  comment
+    Renders a radio input.
+
+    Required parameters:
+      - id: { String } The input's ID.
+      - name: { String } The input's name.
+      - value: { String } The input's value.
+      - label: { String } The input's label.
+
+    Optional parameters:
+      - class: { String } The input's class.
+      - checked: { Boolean: false } Whether the input is checked.
+      - required: { Boolean: false } Whether the input is required.
+      - include_hidden_label: { Boolean: false } Whether to include a hidden label. This is
+          for cases where the input/label are in a container without set dimensions. When we
+          want to have an absolutely positioned label (for a larger clickable area), including
+          the hidden label preserves the width.
+      - form_id: { String } ID of the form to connect the input with.
+  endcomment
+
+  assign checked = checked | default: false, allow_false: true
+  assign required = required | default: false, allow_false: true
+  assign include_hidden_label = include_hidden_label | default: false, allow_false: true
+-%}
+
+<div class="custom-input custom-input--radio">
+  <input
+    type="radio"
+    id="{{ id }}"
+    name="{{ name }}"
+    value="{{  value }}"
+    data-label="{{ label | escape }}"
+
+    {%- if class != blank %}
+      class="{{ class }}"
+    {%- endif -%}
+
+    {%- if form_id != blank -%}
+      form="{{ form_id }}"
+    {%- endif -%}
+
+    {%- if checked %}
+      checked
+    {%- endif -%}
+
+    {%- if required %}
+      required
+    {%- endif -%}
+  >
+
+  <label for="{{ id }}">{{ label }}</label>
+
+  {%- if include_hidden_label -%}
+    <span class="hidden-label ff-body fs-body-100">{{ label }}</span>
+  {%- endif -%}
+</div>

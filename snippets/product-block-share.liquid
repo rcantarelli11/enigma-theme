@@ -1,0 +1,31 @@
+{%- liquid
+  comment
+    Renders the "Share" product block.
+
+    Required parameters:
+      - prod: { Object } The current product object.
+      - block: { Object } The associated block object.
+
+    Optional parameters:
+      - is_featured: { Boolean } Whether the section is a Featured product.
+  endcomment
+
+  assign share_image = prod.selected_variant.featured_media.preview_image | default: prod.featured_media.preview_image
+
+  if is_featured
+    assign url = request.origin | append: prod.url
+  endif
+-%}
+
+<div
+  class="product-block-share"
+  style="--bottom-spacing:{{ block.settings.bottom_padding }}px;"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'social-share',
+    enable_os_sharing: block.settings.enable_os_sharing,
+    title: prod.title,
+    image: share_image,
+    url: url
+  -%}
+</div>

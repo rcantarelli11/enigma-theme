@@ -1,0 +1,77 @@
+{%- liquid
+  comment
+    Renders a quantity input.
+
+    Required parameters:
+      - id: { String } The input's ID.
+      - name: { String } The input's name.
+
+    Optional parameters:
+      - default_value: { Number: 1 } The input's default value.
+      - min_value: { Number: 1 } The input's minimum value.
+      - skip_assets: { Boolean: false } omit CSS and JS assets
+      - form_id: { String } ID of the form to connect the input with.
+  endcomment
+
+  assign default_value = default_value | default: 1
+  assign min_value = min_value | default: 1
+
+  capture minus_icon
+    render 'icon-utility', icon: 'minus', width: 16, height: 2
+  endcapture
+
+  assign subtract_label = 'general.accessibility.quantity_subtract' | t
+  assign increase_label = 'general.accessibility.quantity_add' | t
+
+  capture minus_attributes
+    echo 'aria-controls="[[id]]" js-quantity-minus' | replace: '[[id]]', id
+  endcapture
+
+  capture plus_icon
+    render 'icon-utility', icon: 'plus', width: 16, height: 16
+  endcapture
+
+  capture plus_attributes
+    echo 'aria-controls="[[id]]" js-quantity-plus' | replace: '[[id]]', id
+  endcapture
+
+  unless skip_assets
+    echo 'component-quantity-input.css' | asset_url | stylesheet_tag
+    render 'inline-scripts', script_name: 'quantity-input'
+  endunless
+-%}
+
+<quantity-input>
+  <label for="{{ id }}" class="visually-hidden">{{ 'general.accessibility.quantity_input_label' | t }}</label>
+
+  {%- render 'button',
+    label: minus_icon,
+    button_style: 'icon',
+    require_link: false,
+    button_attributes: minus_attributes,
+    aria_label: subtract_label
+  -%}
+
+  <input
+    type="number"
+    id="{{ id }}"
+    name="{{ name }}"
+    value="{{ default_value }}"
+    min="{{ min_value }}"
+    aria-label="{{ 'general.accessibility.quantity_input_label' | t }}"
+
+    {%- if form_id != blank -%}
+      form="{{ form_id }}"
+    {%- endif -%}
+
+    js-quantity-input
+  >
+
+  {%- render 'button',
+    label: plus_icon,
+    button_style: 'icon',
+    require_link: false,
+    button_attributes: plus_attributes,
+    aria_label: increase_label
+  -%}
+</quantity-input>

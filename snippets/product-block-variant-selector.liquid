@@ -1,0 +1,241 @@
+{%- liquid
+  comment
+    Renders the "Variant selector" product block.
+
+    Required parameters:
+      - prod: { Object } The current product object.
+      - block: { Object } The associated block object.
+      - sibling_products: { Object } Array of "sibling" products associated with the current product.
+      - form_id: { String } The form ID to associate the inputs with.
+  endcomment
+
+  # Chip variant layout
+  assign variant_display = block.settings.selector_style
+  if variant_display == 'chips'
+    assign chip_layout = block.settings.chip_layout | replace: '_', '-'
+    if chip_layout == 'natural'
+      assign chip_grid = false
+    else
+      assign chip_grid = true
+    endif
+  endif
+
+  # Swatch data
+  if settings.enable_variant_swatches
+    assign swatch_variant_options = settings.swatch_variant_options | split: ','
+  endif
+
+  case settings.variant_swatch_size
+    when 'small'
+      assign swatch_size = 36
+    when 'medium'
+      assign swatch_size = 44
+    when 'large'
+      assign swatch_size = 52
+    when 'x-large'
+      assign swatch_size = 66
+  endcase
+
+  assign swatch_image_size = swatch_size | times: 2
+
+  capture custom_swatch_color_maps
+    render 'get-custom-swatch-color-maps'
+  endcapture
+
+  assign custom_swatch_color_key_map = custom_swatch_color_maps | split: ' | ' | first | split: ','
+  assign custom_swatch_color_value_map = custom_swatch_color_maps | split: ' | ' | last | split: ','
+-%}
+
+{%- unless prod == blank -%}
+  {%- unless prod.has_only_default_variant and sibling_products == null or sibling_products.size == 0 -%}
+    {%- render 'inline-scripts', script_name: 'product-block-variant-selector' -%}
+
+    <product-block-variant-selector
+      id="product-details__variant-selector"
+      class="product-details__variants-wrapper stack"
+      style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+      data-current-variant-id="{{ prod.selected_or_first_available_variant.id }}"
+      data-media-count="{{ prod.media.size }}"
+      js-product-block
+      js-product-block-allowed-in-quickview
+      js-product-block-variant-selector
+      {{ block.shopify_attributes }}
+    >
+      {%- # Sibling swatches -%}
+      {%- if prod.metafields.eclipse.sibling_option_name and sibling_products -%}
+        <div class="option-group__container">
+          <span class="option-group__label">
+            <span class="label-container">
+              <span class="label-text">{{ settings.sibling_product_option_label }}:</span>
+              <span class="label-value">{{ prod.metafields.eclipse.sibling_option_name }}</span>
+            </span>
+          </span>
+
+          <div class="option-group__siblings-container">
+            {%- for sibling_product in sibling_products -%}
+              {% liquid
+                if sibling_product.available == false
+                  assign sibling_unavailable = true
+                else
+                  assign sibling_unavailable = false
+                endif
+
+                assign sibling_selected = false
+                if prod.id == sibling_product.id
+                  assign sibling_selected = true
+                endif
+
+                if settings.enable_sibling_product_image_swatches
+                  assign sibling_product_featured_media = sibling_product.featured_media | image_url: width: swatch_image_size
+                endif
+
+                assign sibling_option_name = sibling_product.metafields.eclipse.sibling_option_name
+              %}
+
+              <a href="{{ sibling_product.url }}" class="variant-option--sibling-swatch">
+                {%- render 'swatch',
+                  value: sibling_option_name,
+                  size: swatch_size,
+                  selected: sibling_selected,
+                  disabled: sibling_unavailable,
+                  custom_swatch_color_key_map: custom_swatch_color_key_map,
+                  custom_swatch_color_value_map: custom_swatch_color_value_map,
+                  image_url: sibling_product_featured_media,
+                  is_variant_swatch: true
+                %}
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- # Standard variants -%}
+      {%- unless prod.has_only_default_variant -%}
+        {%- for option in prod.options_with_values -%}
+          {% liquid
+            assign variant_option = option.name | downcase | strip
+            assign variant_display = block.settings.selector_style
+
+            if swatch_variant_options != blank
+              for swatch_option in swatch_variant_options
+                assign swatch_option_lowercase = swatch_option | downcase | strip
+
+                if variant_option == swatch_option_lowercase
+                  assign variant_display = 'swatches'
+                  break
+                endif
+              endfor
+            endif
+
+            # Check for variant popup label match
+            assign variant_has_popup = false
+            assign variant_popup_option_name = block.settings.popup_option_name | downcase | strip
+            if block.settings.popup_page_content != blank and block.settings.popup_link_text != blank and variant_option == variant_popup_option_name
+              assign variant_has_popup = true
+            endif
+          %}
+
+          {%- capture variant_options -%}
+          {% if variant_display == 'swatches' %}
+            <div class="option-group__swatches-container">
+              {%- render 'product-variant-option',
+                prod: prod,
+                option: option,
+                variant_display: variant_display,
+                swatch_size: swatch_size,
+                custom_swatch_color_key_map: custom_swatch_color_key_map,
+                custom_swatch_color_value_map: custom_swatch_color_value_map
+              -%}
+            </div>
+          {% elsif variant_display == 'chips' %}
+            <div
+              class="option-group__chips-container"
+              data-chip-layout="{{ chip_layout }}"
+              data-chip-grid="{{ chip_grid }}"
+            >
+              {%- render 'product-variant-option',
+                prod: prod,
+                option: option,
+                variant_display: variant_display,
+                chip_layout: chip_layout
+              -%}
+            </div>
+
+          {% elsif variant_display == 'dropdown' %}
+            {%- render 'product-variant-option',
+              prod: prod,
+              option: option,
+              variant_display: variant_display,
+            -%}
+          {% endif %}
+        {%- endcapture -%}
+
+          {% # Variant popup %}
+          {%- if variant_has_popup -%}
+            {% assign popup_id = product.id | append: '-' | append: block.id %}
+
+            {%- capture variant_popup -%}
+            {%- render 'popup-modal-link',
+              wrapper_class: 'product-variant',
+              popup_id: popup_id,
+              icon: block.settings.icon,
+              custom_image: block.settings.custom_icon_image,
+              link_text: block.settings.popup_link_text,
+              modal_page: block.settings.popup_page_content,
+              modal_class: "product-block-variant-selector--popup-modal" -%}
+          {%- endcapture -%}
+          {%- endif -%}
+
+          {% # Final variant output %}
+          <div
+            class="option-group__container"
+            data-group-index="{{ forloop.index0 }}"
+            js-variant-group-container
+          >
+            <span class="option-group__label">
+              <span class="label-container">
+                <span class="label-text">{{ option.name }}:</span>
+                <span class="label-value" js-variant-label-value>{{- option.selected_value }}</span>
+              </span>
+
+              {%- if variant_has_popup and variant_option == variant_popup_option_name -%}
+                <span class="popup-container">
+                  {{ variant_popup }}
+                </span>
+              {%- endif -%}
+            </span>
+
+            {{ variant_options }}
+          </div>
+        {% endfor %}
+      {%- endunless -%}
+
+      {%- # No-js selector -%}
+      <div class="no-js__variant-selector-input" js-no-js-variant-selector>
+        <select
+          name="id"
+          class="input"
+          id="variant-selector"
+          form="{{ form_id }}"
+          data-variant-select
+        >
+          {% for variant in prod.variants -%}
+            <option
+              value="{{ variant.id }}"
+              {%- if variant == current_variant -%}
+                selected="selected"
+              {%- endif -%}
+              {%- if variant.available == false -%}
+                disabled
+              {%- endif -%}
+            >
+              {{ variant.title }}
+              {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+              {%- unless prod.gift_card? -%}- {{ variant.price | money_with_currency }}{%- endunless -%}
+            </option>
+          {%- endfor %}
+        </select>
+      </div>
+    </product-block-variant-selector>
+  {%- endunless -%}
+{%- endunless -%}

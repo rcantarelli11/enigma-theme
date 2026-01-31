@@ -1,0 +1,12 @@
+{% liquid
+  comment
+    Renders a liquid block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+  endcomment
+-%}
+
+<div class="content-block content-block--liquid" {{ block.shopify_attributes }}>
+  {{ block.settings.custom_liquid }}
+</div>

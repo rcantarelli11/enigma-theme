@@ -1,0 +1,270 @@
+{%- liquid
+  comment
+    Renders an individual grid item for the "Grid" section.
+
+    Required parameters:
+      - block: { Object } The associated block object for the grid item.
+      - loop_index: { Number } The index of the current block in the block loop.
+        - Used for loading animation
+      - scrolling_text_enabled: { Boolean } Whether scrolling text is enabled.
+      - scrolling_text_duration: { Number } The time requried for the content to animate once (in seconds).
+      - scrolling_text_direction: { String } The direction of the scrolling animation. Can be:
+        - 'normal'
+        - 'reverse'
+      - scrolling_text_divider: { String } The type of divider to use in the scrolling text. Can be:
+        - 'icon'
+        - 'dot'
+        - 'none'
+      - scrolling_text_divider_icon: { String } The name of the divider icon.
+      - section_width: { String } The section's width setting (section.settings.width) to allow for more accurate image sizes. Can be:
+        - 'full-width-padded'
+        - 'page-width'
+  endcomment
+
+  assign grid_columns = 3
+  assign src_set_type = 'grid'
+
+  case block.settings.width
+    when '33%'
+      assign columns = 1
+      assign column_class = 'one-third'
+    when '50%'
+      assign columns = 1
+      assign grid_columns = 2
+      assign column_class = 'one-half'
+    when '66%'
+      assign columns = 2
+      assign column_class = 'two-thirds'
+      if section_width == 'full-width-padded'
+        assign src_set_type = 'full-width'
+      endif
+    when '100%'
+      assign columns = 3
+      assign column_class = 'full'
+      assign src_set_type = 'full-width'
+  endcase
+
+  capture overlay_css_vars
+    echo 'background,background-gradient,text,'
+
+    case block.settings.button_style
+      when 'solid'
+        echo 'solid-button-background,solid-button-text,accent,accent-foreground'
+      when 'outline'
+        echo 'outline-button-background,outline-button-text-and-border,outline-button-text-and-border-alpha-50,accent,accent-foreground'
+      when 'text'
+        echo 'text-alpha-80'
+    endcase
+  endcapture
+-%}
+
+{%- capture image_sizes -%}
+  {%- render 'get-grid-image-sizes', section_width: section_width, desktop_column_count: grid_columns, desktop_tile_span_column_count: columns -%}
+{%- endcapture -%}
+
+<div
+  class="
+    grid-section__grid-item
+    grid-section__grid-item--width-{{ column_class }}
+  "
+  style="
+    --grid-item-height: {{ block.settings.height }}px;
+    --mobile-grid-item-height: {{ block.settings.mobile_height }}px;
+    --overlay-opacity: {{ block.settings.overlay_opacity }}%;
+    {%- render 'color-scheme-to-vars', color_scheme: block.settings.overlay_color_scheme, css_vars: overlay_css_vars -%}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- # Background media -%}
+  {%- if block.settings.video != blank -%}
+    {%- render 'background-video',
+      video: block.settings.video,
+      enable_mobile_video: true,
+      mobile_video: block.settings.mobile_video,
+      class: 'grid-item__video'
+    -%}
+  {%- else -%}
+    {%- render 'image',
+      image: block.settings.image,
+      class: 'grid-item__image grid-item__image--desktop',
+      animate: true,
+      include_placeholder: true,
+      placeholder_name: 'detailed-apparel-1',
+      object_fit: 'cover',
+      sizes: image_sizes,
+      src_set_type: src_set_type,
+      load_animation_effect: 'blur',
+      load_animation_stagger_index: loop_index
+    -%}
+
+    {%- if block.settings.mobile_image != blank -%}
+      {%- render 'image',
+        image: block.settings.mobile_image,
+        class: 'grid-item__image grid-item__image--mobile',
+        animate: true,
+        include_placeholder: true,
+        placeholder_name: 'detailed-apparel-1',
+        object_fit: 'cover',
+        sizes: image_sizes,
+        src_set_type: 'mobile-only-grid',
+        load_animation_effect: 'blur',
+        load_animation_stagger_index: loop_index
+      -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  <div class="grid-item__overlay"></div>
+
+  {%- # Scrolling text -%}
+  {%- if scrolling_text_enabled and block.settings.enable_scrolling_text -%}
+    {%- liquid
+      # The top and left items should follow the direction setting, but the bottom and right
+      # items need to do the opposite so that everything looks like it's going in the same
+      # direction.
+      if scrolling_text_direction == 'normal'
+        assign scrolling_text_alternate_direction = 'reverse'
+      else
+        assign scrolling_text_alternate_direction = 'normal'
+      endif
+
+      assign item_types = 'top,right,bottom,left' | split: ','
+    -%}
+
+    <div class="grid-item__scrolling-text">
+      {%- capture scrolling_text_item_content -%}
+        <span class="scrolling-text-item__text ff-heading fs-heading-in-body-75">{{ block.settings.scrolling_text }}</span>
+
+        {%- if scrolling_text_divider == 'icon' or scrolling_text_divider == 'dot' -%}
+          <span class="scrolling-text-item__divider">
+            {%- liquid
+              if scrolling_text_divider == 'icon'
+                render 'icon-editorial', icon: scrolling_text_divider_icon, size: 20
+              else
+                echo '&#183;'
+              endif
+            -%}
+          </span>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {%- for type in item_types -%}
+        {%- liquid
+          case type
+            when 'top'
+              assign current_scrolling_text_direction = scrolling_text_direction
+              assign writing_mode = 'horizontal'
+            when 'right'
+              assign current_scrolling_text_direction = scrolling_text_alternate_direction
+              assign writing_mode = 'vertical'
+            when 'bottom'
+              assign current_scrolling_text_direction = scrolling_text_alternate_direction
+              assign writing_mode = 'horizontal'
+            when 'left'
+              assign current_scrolling_text_direction = scrolling_text_direction
+              assign writing_mode = 'vertical'
+          endcase
+        -%}
+
+        <div class="grid-item__scrolling-text-item grid-item__scrolling-text-item--{{ type }}">
+          {%- render 'scrolling-content',
+            content: scrolling_text_item_content,
+            duration: scrolling_text_duration,
+            direction: current_scrolling_text_direction,
+            gap: 20,
+            prevent_tab_focus: true,
+            skip_dependencies: true,
+            writing_mode: writing_mode
+          -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- liquid
+    capture content_vertical_position
+      echo block.settings.content_position | split: '_' | first
+    endcapture
+
+    capture content_horizontal_position
+      echo block.settings.content_position | split: '_' | last
+    endcapture
+
+    capture mobile_content_vertical_position
+      echo block.settings.mobile_content_position | split: '_' | first
+    endcapture
+
+    capture mobile_content_horizontal_position
+      echo block.settings.mobile_content_position | split: '_' | last
+    endcapture
+
+    capture max_content_width
+      if block.settings.content_width == 'custom'
+        echo '[[mcw]]px' | replace: '[[mcw]]', block.settings.maximum_content_width
+      else
+        echo '100%'
+      endif
+    endcapture
+  -%}
+
+  <div class="grid-item__content-wrapper">
+    <div
+      class="
+        grid-item__content
+        grid-item__content--vertical-position-{{ content_vertical_position }}
+        grid-item__content--horizontal-position-{{ content_horizontal_position }}
+        grid-item__content--mobile-vertical-position-{{ mobile_content_vertical_position }}
+        grid-item__content--mobile-horizontal-position-{{ mobile_content_horizontal_position }}
+        grid-item__content--horizontal-alignment-{{ block.settings.text_alignment }}
+        grid-item__content--mobile-horizontal-alignment-{{ block.settings.mobile_text_alignment }}
+      "
+      style="--max-content-width: {{ max_content_width }};"
+    >
+      {%- if block.settings.overline != blank -%}
+        <div class="grid-item-content__overline ff-overline fs-overline">{{ block.settings.overline }}</div>
+      {%- endif -%}
+
+      {%- if block.settings.heading != blank -%}
+        {%- liquid
+          capture heading_font_size_class
+            render 'settings-text-size', type: 'heading', size: block.settings.heading_font_size
+          endcapture
+        -%}
+
+        <{{ block.settings.heading_tag }} class="grid-item-content__heading rte ff-heading {{ heading_font_size_class }}">
+          {{- block.settings.heading -}}
+        </{{ block.settings.heading_tag }}>
+      {%- endif -%}
+
+      {%- if block.settings.text != blank -%}
+        {%- liquid
+          capture text_font_size_class
+            render 'settings-text-size', type: 'text', size: block.settings.text_font_size
+          endcapture
+        -%}
+
+        <div class="grid-item-content__text rte {{ text_font_size_class }}">{{ block.settings.text }}</div>
+      {%- endif -%}
+
+      {%- if block.settings.button_link != blank and block.settings.button_label != blank -%}
+        {%- render 'button',
+          label: block.settings.button_label,
+          button_style: block.settings.button_style,
+          button_size: block.settings.button_size,
+          link: block.settings.button_link,
+          wrapper_class: 'grid-item-content__button'
+        -%}
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- if block.settings.button_link != blank -%}
+    <a
+      href="{{ block.settings.button_link }}"
+      class="grid-item__link"
+      aria-label="{{ 'general.accessibility.visit_link' | t: link: block.settings.button_link }}"
+      {%- unless block.settings.button_label == blank %}
+        tabindex="-1"
+      {%- endunless -%}
+    ></a>
+  {%- endif -%}
+</div>

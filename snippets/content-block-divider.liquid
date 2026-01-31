@@ -1,0 +1,23 @@
+{% liquid
+  comment
+    Renders a divider block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - animate: { Boolean } Apply animation class to potentially animate
+  endcomment
+-%}
+
+<div
+  class="content-block content-block--divider{% if animate %} animation-content{% endif %}"
+  style="
+    --divider-height: {{ block.settings.thickness }}px;
+    --divider-margin-top: {{ block.settings.space_above }}px;
+    --divider-margin-top-mobile: {{ block.settings.space_above_mobile }}px;
+    --divider-margin-bottom: {{ block.settings.space_below }}px;
+    --divider-margin-bottom-mobile: {{ block.settings.space_below_mobile }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="divider"></div>
+</div>

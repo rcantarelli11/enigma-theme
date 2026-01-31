@@ -1,0 +1,394 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "color_scheme": "scheme_2",
+        "heading_font_size": 6,
+        "heading_mobile_font_size": 5,
+        "show_collection_description": true,
+        "show_product_count": false,
+        "content_max_width": 500,
+        "show_banner_image": true,
+        "image": "shopify://shop_images/Products_-_BANNER.png",
+        "banner_height_type": "custom",
+        "custom_desktop_height": "450px",
+        "custom_mobile_height": "350px",
+        "text_alignment": "center_center",
+        "width": "full-width-padded",
+        "overlay_color_scheme": "scheme_2",
+        "overlay_opacity": 20,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "top_padding": 60,
+        "bottom_padding": 0
+      }
+    },
+    "product_grid": {
+      "type": "main-collection-product-grid",
+      "blocks": {
+        "promotion_tile": {
+          "type": "promotion-tile",
+          "disabled": true,
+          "settings": {
+            "position": 4,
+            "width": "one-column",
+            "mobile_width": "full",
+            "min_height": 400,
+            "min_height_mobile": 400,
+            "video": "shopify://files/videos/c3beaaa49af843dc8343407c1cc4dbe1.HD-1080p-7.2Mbps-36104027.mp4",
+            "link": "",
+            "heading": "Discover our new arrivals",
+            "heading_font_size": 6,
+            "text": "",
+            "text_font_size": 3,
+            "content_max_width": 500,
+            "text_alignment": "bottom_left",
+            "button_label": "Shop Now",
+            "button_style": "solid",
+            "button_placement": "bottom-anchored",
+            "overlay_color_scheme": "scheme_4",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "promotion_tile"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "products_per_page": 20,
+        "column_count_desktop": "3",
+        "column_count_mobile": "2",
+        "show_total_result_count": true,
+        "enable_sorting": true,
+        "enable_filtering": true,
+        "show_sticky_filter_and_sort_button": false,
+        "filter_group_open_state": "first",
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 60,
+        "menu": "collections"
+      }
+    },
+    "slideshow_r9mwhP": {
+      "type": "slideshow",
+      "blocks": {
+        "video_yFaVdd": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/1101122933-preview.mp4",
+            "video_focal_point": "center",
+            "mobile_video_focal_point": "center",
+            "content_max_width": 700,
+            "text_position": "center_center",
+            "mobile_text_position": "center_center",
+            "overline": "",
+            "heading": "Discover Our New Arrivals",
+            "heading_font_size": 7,
+            "heading_tag": "h2",
+            "text": "",
+            "text_font_size": 3,
+            "button_1_link": "",
+            "button_1_label": "",
+            "button_1_style": "solid",
+            "button_2_link": "",
+            "button_2_label": "",
+            "button_2_style": "solid",
+            "overlay_color_scheme": "",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "video_yFaVdd"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "enable_autoplay": true,
+        "time_between_slides": 6,
+        "custom_desktop_height": "450px",
+        "custom_mobile_height": "450px",
+        "pagination_alignment": "left",
+        "mobile_pagination_alignment": "center",
+        "pagination_background": "#000000",
+        "pagination_foreground": "#ffffff",
+        "pagination_background_opacity": 60,
+        "navigation_cursor_background": "#ffffff",
+        "navigation_cursor_foreground": "#000000",
+        "enable_text_animation": true,
+        "slide_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "video_hero_r3wekX": {
+      "type": "video-hero",
+      "blocks": {
+        "heading_aWczXt": {
+          "type": "heading",
+          "settings": {
+            "heading": "Become A Brand Ambassador",
+            "heading_font_size": 5,
+            "heading_tag": "h2"
+          }
+        },
+        "button_MnxqQ3": {
+          "type": "button",
+          "settings": {
+            "button_link": "shopify://pages/brand-ambassador",
+            "button_label": "Inquire Now",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "heading_aWczXt",
+        "button_MnxqQ3"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "video": "shopify://files/videos/c3beaaa49af843dc8343407c1cc4dbe1.HD-1080p-7.2Mbps-36104027.mp4",
+        "video_focal_point": "center",
+        "mobile_video_focal_point": "center",
+        "background_link": "",
+        "custom_desktop_height": "350px",
+        "custom_mobile_height": "350px",
+        "content_width": 500,
+        "text_position_desktop": "bottom_left",
+        "text_position_mobile": "center_center",
+        "overlay_color_scheme": "",
+        "overlay_opacity": 20,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 30,
+        "bottom_padding": 40
+      }
+    },
+    "reviews_banner_Lk6P4L": {
+      "type": "reviews-banner",
+      "blocks": {
+        "reviews_LWmM9B": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_TjYfyb": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_J848jX": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_fxgXb6": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_369rYY": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_DjCqGz": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_XEmaQA": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_VkBUWg": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_cfNfgy": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        }
+      },
+      "block_order": [
+        "reviews_LWmM9B",
+        "reviews_TjYfyb",
+        "reviews_J848jX",
+        "reviews_fxgXb6",
+        "reviews_369rYY",
+        "reviews_DjCqGz",
+        "reviews_XEmaQA",
+        "reviews_VkBUWg",
+        "reviews_cfNfgy"
+      ],
+      "settings": {
+        "devBg": "",
+        "devTitle": "YOUR JOURNEY SIMPLIFIED WITH",
+        "c_sec_stars_show": false,
+        "devrevText": "ENIGMA",
+        "devUrl": "",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "c_revs_Bg": "#ffffff",
+        "c_show_read_more": false,
+        "c_show_rev_arr": false,
+        "c_show_rev_dots": false
+      }
+    },
+    "image_with_text_4TE6iA": {
+      "type": "image-with-text",
+      "blocks": {
+        "overline_kcmqhn": {
+          "type": "overline",
+          "disabled": true,
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading_VR7PCA": {
+          "type": "heading",
+          "settings": {
+            "heading": "Rewards That Go Further",
+            "heading_font_size": 5,
+            "heading_tag": "h2"
+          }
+        },
+        "text_ccNejV": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Earn loyalty points on every purchase. Redeem for exclusive discounts and rewards while enjoying the supplements you love</p>",
+            "text_font_size": 3
+          }
+        },
+        "button_h9jfiU": {
+          "type": "button",
+          "settings": {
+            "button_link": "shopify://pages/loyalty",
+            "button_label": "Learn More",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "overline_kcmqhn",
+        "heading_VR7PCA",
+        "text_ccNejV",
+        "button_h9jfiU"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "image": "shopify://shop_images/60854ccd0819816a4bca8264_valery-sysoev-LDAirERNzew-unsplash-p-2600.jpg",
+        "aspect_ratio": "natural",
+        "mobile_aspect_ratio": "natural",
+        "media_link": "",
+        "desktop_media_width": 50,
+        "desktop_media_position": "right",
+        "mobile_media_position": "above",
+        "media_breathing_room": 0,
+        "content_width": "custom-width",
+        "custom_width": 500,
+        "content_position": "center_center",
+        "text_alignment": "left",
+        "container_color_scheme": "scheme_2",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "blog_posts_GJycwd": {
+      "type": "blog-posts",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Blog posts",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "View all",
+        "blog": "news",
+        "layout_style": "grid",
+        "grid_image_aspect_ratio": "square",
+        "number_of_articles": 6,
+        "show_author": false,
+        "show_published_date": true,
+        "show_article_tags": true,
+        "overlay_color_scheme": "",
+        "overlay_opacity": 20,
+        "heading_font_size": 5,
+        "heading_mobile_font_size": 5,
+        "show_excerpt": true,
+        "show_read_more_button": true,
+        "button_style": "outline",
+        "enable_scrolling_hover_text": true,
+        "scroll_duration": 10,
+        "scroll_direction": "normal",
+        "latest_posts_heading": "Latest posts",
+        "enable_thumbnail_hover": true,
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "product_grid",
+    "slideshow_r9mwhP",
+    "video_hero_r3wekX",
+    "reviews_banner_Lk6P4L",
+    "image_with_text_4TE6iA",
+    "blog_posts_GJycwd"
+  ]
+}

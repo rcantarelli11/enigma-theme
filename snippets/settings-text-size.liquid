@@ -1,0 +1,51 @@
+{%- liquid
+  comment
+    Returns the appropriate font size class (ie. 'fs-X-Y') depending on the text "type" and "size".
+
+    Required parameters:
+      - type: { String } A string noting the text "type". Can be:
+        - 'heading'
+        - 'heading_mobile'
+        - 'heading_above_mobile'
+        - 'text'
+        - 'overline'
+        - 'text_mobile'
+      - size: { Number } A number representing the text "size" (from the text size setting). Ranges from 1-8.
+  endcomment
+
+  # 0-based index
+  assign index = size | minus: 1
+
+  case type
+    when 'heading'
+      assign classes_string = 'fs-heading-5-base, fs-heading-4-base, fs-heading-3-base, fs-heading-2-base, fs-heading-1-base, fs-heading-display-3, fs-heading-display-2, fs-heading-display-1'
+      assign classes_array = classes_string | split: ', '
+
+      echo classes_array[index]
+    when 'heading_mobile'
+      assign classes_string = 'fs-heading-5-base-mobile-only, fs-heading-4-base-mobile-only, fs-heading-3-base-mobile-only, fs-heading-2-base-mobile-only, fs-heading-1-base-mobile-only, fs-heading-display-3-mobile-only, fs-heading-display-2-mobile-only, fs-heading-display-1-mobile-only'
+      assign classes_array = classes_string | split: ', '
+
+      echo classes_array[index]
+    when 'heading_above_mobile'
+      assign classes_string = 'fs-heading-5-base-above-mobile-only, fs-heading-4-base-above-mobile-only, fs-heading-3-base-above-mobile-only, fs-heading-2-base-above-mobile-only, fs-heading-1-base-above-mobile-only, fs-heading-display-3-above-mobile-only, fs-heading-display-2-above-mobile-only, fs-heading-display-1-above-mobile-only'
+      assign classes_array = classes_string | split: ', '
+
+      echo classes_array[index]
+    when 'text'
+      assign classes_string = 'fs-body-60, fs-body-75, fs-body-100, fs-body-150, fs-body-200, fs-body-250, fs-body-300, fs-body-350'
+      assign classes_array = classes_string | split: ', '
+
+      echo classes_array[index]
+    when 'overline'
+      assign classes_string = 'fs-body-20, fs-body-25, fs-body-50, fs-body-60, fs-body-75, fs-body-100, fs-body-150, fs-body-200'
+      assign classes_array = classes_string | split: ', '
+
+      echo classes_array[index]
+    when 'text_mobile'
+      assign classes_string = 'fs-body-60-mobile-only, fs-body-75-mobile-only, fs-body-100-mobile-only, fs-body-150-mobile-only, fs-body-200-mobile-only, fs-body-250-mobile-only, fs-body-300-mobile-only, fs-body-350-mobile-only'
+      assign classes_array = classes_string | split: ', '
+
+      echo classes_array[index]
+  endcase
+-%}

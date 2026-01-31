@@ -1,0 +1,89 @@
+{%- liquid
+  comment
+    Renders product media thumbnails to the left or below the main media.
+
+    Required parameters:
+      - prod: { Object } The product object.
+      - local_settings: { Object } Section settings to properly render product media.
+      - thumbnail_size: { Number } Theme setting for thumbnail width, also used for 'sizes' attribute.
+      - thumbnail_position: { String } Placement of thumbnails set in section settings.
+      - aspect_ratio: { String } The image snippet aspect ratio value to pass through.
+      - featured_media: { Object } The featured media object to assign active thumbnail state.
+      - initial_variant_media_position: { Number } Current media position that begins a variant group set.
+      - next_variant_media_index: { Number } Next media position connected to a variant group to end the current group.
+  endcomment
+
+  assign initial_variant_media_position = initial_variant_media_position | default: 0
+  if local_settings.enable_variant_media_grouping
+    # Slide needs to start negative to simulate index 0 when looping media
+    assign slide_index = -1
+  endif
+-%}
+
+{%- if prod.media.size > 1 -%}
+  <div class="product-thumbnails product-thumbnails__end-cap-gradient" style="--thumbnail-size: {{ thumbnail_size }}px">
+    <div
+      class="product-thumbnails__container scrollbars-hidden"
+      js-product-thumbnails
+      data-thumbnail-position="{{ thumbnail_position }}"
+      data-scroll-container
+      data-at-start="true"
+      data-at-end="false"
+      data-axis="{%- if thumbnail_position == 'below' %}horizontal{% else %}vertical{% endif -%}"
+    >
+      {%- for media in prod.media -%}
+        {%- liquid
+          assign prioritize_loading = false
+
+          if forloop.first or forloop.index == initial_variant_media_position
+            assign prioritize_loading = true
+          endif
+
+          if forloop.index < initial_variant_media_position or forloop.index > next_variant_media_index
+            continue
+          endif
+
+          if local_settings.enable_variant_media_grouping
+            if forloop.index >= initial_variant_media_position or forloop.index <= next_variant_media_index
+              assign slide_index = slide_index | plus: 1
+            endif
+          else
+            assign slide_index = forloop.index0
+          endif
+        -%}
+        <div class="product-thumbnails__item" data-media-type="{{ media.media_type }}" js-product-thumbnail-item>
+          <button
+            type="button"
+            class="product-thumbnails__item-link{%- if media.id == featured_media.id %} active{% endif -%}"
+            data-thumbnail-id="{{ media.id }}"
+            data-thumbnail-index="{{ slide_index }}"
+            js-product-thumbnail
+            aria-label="{{ 'general.accessibility.image_thumbnail' | t: number: forloop.index }}"
+          >
+            {%- render 'image',
+              image: media.preview_image,
+              id: media.id,
+              wrapper_class: 'product-thumbnails__item-image',
+              aspect_ratio: aspect_ratio,
+              sizes: thumbnail_size,
+              object_fit: 'cover',
+              prioritize_loading: prioritize_loading
+            -%}
+
+            {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
+              <div class="product-thumbnails__item-badge">
+                {%- render 'icon-utility', icon: 'media-play-circled-dark', width: 22, height: 22 -%}
+              </div>
+            {%- elsif media.media_type == 'model' -%}
+              <div class="product-thumbnails__item-badge">
+                {%- render 'icon-utility', icon: 'media-3d-badge-dark', width: 22, height: 22 -%}
+              </div>
+            {%- endif -%}
+          </button>
+
+          <hr class="product-thumbnails__active {% if media.id == featured_media.id %}active{% endif %}">
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}

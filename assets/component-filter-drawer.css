@@ -1,0 +1,101 @@
+.filter-drawer .drawer-content{
+    position:relative;
+    padding:0;
+  }
+  .filter-drawer .drawer-footer{
+    padding-top:var(--spacing-200);
+  }
+  @media (--small-desktop){
+  .filter-drawer .drawer-footer{
+      padding-top:var(--spacing-250)
+  }
+    }
+
+.filter-drawer-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.filter-drawer-header__close-button{
+  margin-right:calc(var(--spacing-125) * -1);
+}
+
+.filter-drawer-loading-overlay{
+  visibility:hidden;
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  background-color:var(--color-background);
+  opacity:0.7;
+  transition:visibility var(--animation-timing-200) var(--ease-out-quart);
+  z-index:3;
+}
+
+.loading .filter-drawer-loading-overlay{
+    visibility:visible;
+  }
+
+.filter-drawer-view-results .label-loading{
+    display:none;
+  }
+
+.filter-drawer-view-results .btn__label--default{
+    position:absolute;
+  }
+
+.filter-drawer-view-results .btn__label--default::before{
+      content:"";
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:var(--spacing-200);
+      background-color:var(--color-solid-button-background);
+      z-index:1;
+    }
+
+.filter-drawer-view-results .btn__label--default .label-idle,
+    .filter-drawer-view-results .btn__label--default .label-loading{
+      position:absolute;
+      top:0;
+      right:0;
+      bottom:0;
+      left:0;
+      padding:var(--button-padding);
+      transition-duration:var(--animation-timing-300);
+      transition-timing-function:var(--ease-out-quart);
+    }
+
+.filter-drawer-view-results .btn__label--default .label-idle{
+      transition-property:transform;
+    }
+
+.filter-drawer-view-results .btn__label--default .label-loading{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      opacity:0;
+      transform:translateY(20px);
+      transition-property:opacity, transform;
+    }
+
+.loading .filter-drawer-view-results{
+    pointer-events:none;
+  }
+
+.loading .filter-drawer-view-results .btn__label--default .label-idle,
+      .loading .filter-drawer-view-results .btn__label--default .label-loading{
+        transition-duration:var(--animation-timing-400);
+      }
+
+.loading .filter-drawer-view-results .btn__label--default .label-idle{
+        transform:translateY(-100%);
+      }
+
+.loading .filter-drawer-view-results .btn__label--default .label-loading{
+        opacity:1;
+        transform:translateY(0);
+      }

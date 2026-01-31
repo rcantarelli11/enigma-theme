@@ -1,0 +1,99 @@
+<div
+  class="activate-account section"
+  data-section-id="{{ section.id }}"
+  data-section-type="activate-account"
+  style="{% render 'settings-section-padding' %}"
+>
+  <div class="section-inner section-inner--width-narrow ">
+    <header class="activate-account__header stack ta-c">
+      <h1 class="activate-account__heading ff-heading fs-heading-display-3">
+        {{ 'customer.activate_account.title' | t }}
+      </h1>
+      <p class="activate-account__subheading fs-body-100">
+        {{ 'customer.activate_account.subtext' | t }}
+      </p>
+    </header>
+
+    {% assign form_id = 'ActivateAccount' %}
+    {% form 'activate_customer_password', class: 'activate-account__form stack', id: form_id %}
+      <div class="activate-account__customer-password">
+        <label for="{{ form_id }}-customer-password">{{ 'customer.activate_account.password' | t }}</label>
+        <input
+          type="password"
+          value=""
+          name="customer[password]"
+          id="{{ form_id }}-customer-password"
+          class="input"
+        >
+      </div>
+
+      <div class="activate-account__customer-password-confirmation">
+        <label for="{{ form_id }}-customer-password-confirmation">
+          {{- 'customer.activate_account.password_confirm' | t -}}
+        </label>
+        <input
+          type="password"
+          value=""
+          name="customer[password_confirmation]"
+          id="{{ form_id }}-customer-password-confirmation"
+          class="input"
+        >
+      </div>
+
+      {%- assign success_msg = 'customer.activate_account.success' | t -%}
+      {% render 'form-status', form: form, form_id: 'activateAccount', success_message: success_msg %}
+
+      <div class="activate-account__inline-buttons cluster">
+        {% assign submit_label = 'customer.activate_account.submit' | t -%}
+        {% render 'button',
+          label: submit_label,
+          class: 'activate-account__button--submit',
+          linkless_type: 'submit',
+          require_link: false
+        %}
+
+        {% assign decline_label = 'customer.activate_account.decline' | t -%}
+        {% render 'button',
+          label: decline_label,
+          class: 'activate-account__button--decline',
+          name: 'decline',
+          linkless_type: 'submit',
+          require_link: false
+        %}
+      </div>
+    {% endform %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_activate_account.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ]
+}
+{% endschema %}

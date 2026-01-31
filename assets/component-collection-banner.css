@@ -1,0 +1,36 @@
+.collection_banner > :last-child{
+    margin-bottom:0;
+  }
+  .collection_banner .content-block-wrapper--heading{
+    justify-content:center;
+    margin-bottom:0;
+  }
+  .content-alignment-horizontal--left .collection_banner .content-block-wrapper--heading{
+      justify-content:flex-start;
+    }
+  .content-alignment-horizontal--left .collection_banner .collection_banner__product-count{
+      text-align:left;
+    }
+  .content-alignment-horizontal--center .collection_banner .content-block-wrapper--heading{
+      justify-content:center;
+    }
+  .content-alignment-horizontal--center .collection_banner .content-block-wrapper--heading .banner-content__heading,
+      .content-alignment-horizontal--center .collection_banner .content-block-wrapper--heading .collection_banner__product-count{
+        text-align:center;
+      }
+  .content-alignment-horizontal--right .collection_banner .content-block-wrapper--heading{
+      justify-content:flex-end;
+    }
+  .content-alignment-horizontal--right .collection_banner .collection_banner__product-count{
+      text-align:right;
+    }
+
+.collection_banner--has-product-count .banner-content__heading{
+    margin-bottom:var(--spacing-100);
+  }
+
+.collection_banner__product-count{
+  display:block;
+  margin-bottom:calc(var(--spacing-100) + var(--block-spacing-heading));
+  color:var(--color-text-alpha-70);
+}

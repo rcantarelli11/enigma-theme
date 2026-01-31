@@ -1,0 +1,142 @@
+{% liquid
+  # renders a navigation bar for the blog template
+
+  render 'inline-scripts', script_name: 'blog-navigation'
+
+  assign show_all_tags = true
+
+  if settings.article_categories != blank
+    assign tag_allow_list = settings.article_categories | strip | downcase | split: ','
+
+    if tag_allow_list.size > 0
+      assign show_all_tags = false
+      assign stripped_tag_allow_list = ''
+
+      for tag in tag_allow_list
+        assign stripped_tag = tag | strip
+        assign stripped_tag_allow_list = stripped_tag_allow_list | append: stripped_tag | append: ','
+      endfor
+    endif
+
+    assign stripped_tag_allow_list = stripped_tag_allow_list | remove_last: ',' | split: ','
+  endif
+
+  if show_all_tags
+    assign category_filters = blog.all_tags
+  else
+    assign category_filters = stripped_tag_allow_list
+  endif
+%}
+
+{% capture tag_select_options %}
+  <option
+    value="{{ blog.url }}"
+    {%- unless current_tags %}
+      selected="selected"
+    {%- endunless %}
+  >
+    {{ 'blogs.blog.all_posts' | t }}
+
+    {% if section.settings.show_category_filter_counts %}
+      ({{ blogs[blog.handle].articles_count }})
+    {% endif %}
+  </option>
+{% endcapture %}
+
+{% for tag in category_filters %}
+  {% liquid
+    unless show_all_tags
+      for article_tag in blogs[blog.handle].tags
+        assign article_tag_downcased = article_tag | downcase
+        assign show_tag = true
+        assign tag_index = blank
+
+        if tag == article_tag_downcased
+          assign tag_index = forloop.index0
+          break
+        endif
+
+        assign show_tag = false
+      endfor
+    endunless
+  %}
+
+  {% capture tag_list %}
+    {{ tag_list }}
+
+    {% if show_tag or show_all_tags %}
+      <li class="blog-navigation__item {%- if current_tags contains tag %} selected {%- endif %}">
+        {{ tag | capitalize | link_to_tag: tag }}
+
+        {% if section.settings.show_category_filter_counts %}
+          <span class="item__count fs-body-50">
+            {% liquid
+              if show_all_tags
+              echo tag.total_count
+              else
+              # directly reference blog from blogs list to avoid filtering the count
+              # directly reference tag from tags list to ensure count has a reference point
+              echo blogs[blog.handle].tags[tag_index].total_count
+              endif
+            %}
+          </span>
+        {% endif %}
+      </li>
+    {% endif %}
+  {% endcapture %}
+
+  {% capture tag_select_options %}
+    {{ tag_select_options }}
+
+    {% if show_tag or show_all_tags %}
+      <option
+        value="{{ blog.url }}/tagged/{{ tag | handle }}"
+        {% if current_tags contains tag %}
+          selected="selected"
+        {% endif %}
+      >
+        {{ tag | capitalize }}
+
+        {% if section.settings.show_category_filter_counts %}
+          {%- liquid
+            echo ' ('
+
+            if show_all_tags
+              echo tag.total_count
+            else
+              # directly reference blog from blogs list to avoid filtering the count
+              # directly reference tag from tags list to ensure count has a reference point
+              echo blogs[blog.handle].tags[tag_index].total_count
+            endif
+
+            echo ')'
+          -%}
+        {% endif %}
+      </option>
+    {% endif %}
+  {% endcapture %}
+{% endfor %}
+
+{% if blogs[blog.handle].articles_count > 0 %}
+  <blog-navigation>
+    <ul class="blog-navigation fs-body-150">
+      <li class="blog-navigation__item {%- unless current_tags %} selected {%- endunless %}">
+        {{ 'blogs.blog.all_posts' | t | link_to: blog.url }}
+
+        {% if section.settings.show_category_filter_counts %}
+          {% # directly reference blog from blogs list to avoid filtering the count %}
+          <span class="item__count fs-body-50">{{ blogs[blog.handle].articles_count }}</span>
+        {% endif %}
+      </li>
+      {{ tag_list }}
+    </ul>
+
+    {% render 'input-select',
+      id: 'blog-navigation-mobile',
+      name: 'blog-navigation-mobile',
+      wrapper_class: 'blog-navigation--mobile',
+      label_type: 'none',
+      options: tag_select_options
+    %}
+  </blog-navigation>
+{% endif %}

@@ -1,0 +1,34 @@
+{%- liquid
+  comment
+    Renders a "switch" input, which is basically a checkbox with a custom display. This input
+    is only used for the filtering display, so things are built specifically for that case.
+
+    Required parameters:
+      - id: { String } The input's ID.
+      - name: { String } The input's name.
+      - value: { String } The input's value.
+      - label: { String } The input's label.
+
+    Optional parameters:
+      - checked: { Boolean: false } Whether the input is checked.
+  endcomment
+
+  assign checked = checked | default: false, allow_false: true
+-%}
+
+<div class="custom-input custom-input--switch">
+  <label for="{{ id }}">
+    <span>{{ label }}</span>
+  </label>
+
+  <input
+    type="checkbox"
+    id="{{ id }}"
+    name="{{ name }}"
+    value="{{ value }}"
+
+    {%- if checked %}
+      checked
+    {%- endif -%}
+  >
+</div>

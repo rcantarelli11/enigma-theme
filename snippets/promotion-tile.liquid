@@ -1,0 +1,261 @@
+{%- liquid
+  comment
+    Renders a promotion tile to be rendered as part of a grid.
+
+    Required parameters:
+      - block: { Object } The block associated with the promotion tile.
+      - column_count_mobile: { String } The number of grid columns on mobile.
+      - column_count_desktop: { String } The number of grid columns on desktop.
+      - section_width: { String }
+
+    Optional parameters:
+      - class: { String } A custom class to apply to the tile.
+      - has_mobile_tile: { Boolean } Whether there's a mobile-specific tile. When
+          the product grid has 2 columns on mobile, we need to show the tile 1 spot
+          after the selected index to prevent blank spaces in the grid.
+      - has_tablet_tile: { Boolean } Whether there's a tablet-specific tile. When
+          the product grid has 4 columns on desktop, we need to show the tile 1 spot
+          before the selected index to prevent blank spaces in the grid.
+  endcomment
+
+  assign column_count_mobile = column_count_mobile | plus: 0
+  assign column_count_tablet = column_count_desktop | at_most: 3
+  assign column_count_desktop = column_count_desktop | plus: 0
+
+  capture overlay_css_vars
+    echo 'background,background-gradient,text,'
+
+    case block.settings.button_style
+      when 'solid'
+        echo 'solid-button-background,solid-button-text,accent,accent-foreground'
+      when 'outline'
+        echo 'outline-button-background,outline-button-text-and-border,outline-button-text-and-border-alpha-50,accent,accent-foreground'
+      when 'text'
+        echo 'text-alpha-80'
+    endcase
+  endcapture
+-%}
+
+<div
+  class="
+    promotion-tile
+    promotion-tile--width-{{ block.settings.width | default: 'one-column' }}
+    {%- if block.settings.mobile_width %} promotion-tile--mobile-width-{{ block.settings.mobile_width }}{%- endif -%}
+    {%- if class != blank %} {{ class }}{%- endif -%}
+    {%- if has_mobile_tile %} promotion-tile--has-mobile-tile{%- endif -%}
+    {%- if has_tablet_tile %} promotion-tile--has-tablet-tile{%- endif -%}
+  "
+  js-promotion-tile
+  style="
+    --column-count-mobile: {{ column_count_mobile }};
+    --column-count-tablet: {{ column_count_tablet }};
+    --column-count-desktop: {{ column_count_desktop }};
+    --min-height: {{ block.settings.min_height }}px;
+    --min-height-mobile: {{ block.settings.min_height_mobile | default: block.settings.min_height }}px;
+    --overlay-opacity: {{ block.settings.overlay_opacity }}%;
+    {%- render 'color-scheme-to-vars', color_scheme: block.settings.overlay_color_scheme, css_vars: overlay_css_vars -%}
+  "
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.video != blank -%}
+    {%- if block.settings.mobile_video != blank -%}
+      {%- render 'background-video',
+        video: block.settings.video,
+        enable_mobile_video: true,
+        mobile_video: block.settings.mobile_video,
+        pause_button_content_type: 'icon',
+        class: 'promotion-tile__background promotion-tile__background--video'
+      -%}
+    {%- else -%}
+      {%- render 'background-video',
+        video: block.settings.video,
+        pause_button_content_type: 'icon',
+        class: 'promotion-tile__background promotion-tile__background--video'
+      -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- liquid
+      assign src_set_type = 'grid'
+      assign tile_columns_desktop = 1
+      assign tile_columns_tablet = 1
+      assign tile_columns_mobile = 1
+
+      case block.settings.width
+        when 'two-column'
+          assign tile_columns_tablet = 2
+          assign tile_columns_desktop = 2
+        when 'full'
+          assign tile_columns_tablet = column_count_tablet
+          assign tile_columns_desktop = column_count_desktop
+          assign src_set_type = 'full-width'
+      endcase
+
+      case block.settings.mobile_width
+        when 'one-column'
+          assign tile_columns_mobile = 1
+        when 'full'
+          assign tile_columns_mobile = column_count_mobile
+      endcase
+    -%}
+
+    {%- capture image_sizes -%}
+      {%- render 'get-grid-image-sizes',
+        section_width: section_width,
+        desktop_column_count: column_count_desktop,
+        tablet_column_count: column_count_tablet,
+        mobile_column_count: column_count_mobile,
+        desktop_tile_span_column_count: tile_columns_desktop,
+        tablet_tile_span_column_count: tile_columns_tablet,
+        mobile_tile_span_column_count: tile_columns_mobile,
+      -%}
+    {%- endcapture -%}
+
+    {%- render 'image',
+      image: block.settings.image,
+      class: 'promotion-tile__background promotion-tile__background--image promotion-tile__background--image-desktop',
+      focal_point: 'image-presentation',
+      include_placeholder: true,
+      placeholder_name: 'detailed-apparel-1',
+      placeholder_natural_fallback_ratio: 'portrait',
+      sizes: image_sizes,
+      src_set_type: src_set_type,
+      load_animation_effect: 'blur'
+    -%}
+
+    {%- if block.settings.mobile_image != blank -%}
+      {%- render 'image',
+        image: block.settings.mobile_image,
+        class: 'promotion-tile__background promotion-tile__background--image promotion-tile__background--image-mobile',
+        focal_point: 'image-presentation',
+        include_placeholder: true,
+        placeholder_name: 'detailed-apparel-1',
+        placeholder_natural_fallback_ratio: 'portrait',
+        sizes: image_sizes,
+        src_set_type: 'mobile-only-grid'
+      -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  <div class="promotion-tile__overlay"></div>
+
+  {%- liquid
+    capture content_vertical_alignment
+      echo block.settings.text_alignment | split: '_' | first
+    endcapture
+
+    capture content_horizontal_alignment
+      echo block.settings.text_alignment | split: '_' | last
+    endcapture
+  -%}
+
+  <div class="promotion-tile__content-wrapper">
+    <div class="promotion-tile__content {%- if block.settings.button_placement == "bottom-anchored" %} promotion-tile__content--button-bottom{%- endif -%}">
+      {%- # Capture button content so we can place it -%}
+      {%- capture content_button -%}
+        {%- if block.settings.button_label != blank -%}
+          {%- liquid
+            if block.settings.button_placement == 'standard'
+              capture button_wrapper_class
+                echo 'promotion-tile__content-button'
+              endcapture
+
+              capture button_alignment
+                echo content_horizontal_alignment
+              endcapture
+            else
+              # Text buttons shouldn't be full width, and align with the content
+              if block.settings.button_style == 'text'
+                capture button_alignment
+                  echo content_horizontal_alignment
+                endcapture
+              else
+                capture button_width
+                  echo 'full'
+                endcapture
+              endif
+
+              capture button_wrapper_class
+                echo 'promotion-tile__content-button promotion-tile__content-button--placement-bottom'
+              endcapture
+            endif
+          -%}
+
+          {%- render 'button',
+            label: block.settings.button_label,
+            button_style: block.settings.button_style,
+            button_width: button_width,
+            button_alignment: button_alignment,
+            require_link: true,
+            link: block.settings.link,
+            wrapper_class: button_wrapper_class
+          -%}
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {%- liquid
+        # Max content width only applies to the collection page version of the promo tile
+        capture max_content_width
+          if block.settings.content_max_width
+            echo '[[cmw]]px' | replace: '[[cmw]]', block.settings.content_max_width
+          else
+            echo '100%'
+          endif
+        endcapture
+      -%}
+
+      <div
+        class="promotion-tile__content-primary"
+        data-content-alignment-vertical="{{ content_vertical_alignment }}"
+        data-content-alignment-horizontal="{{ content_horizontal_alignment }}"
+        style="--max-content-width: {{ max_content_width }};"
+      >
+        <div class="promotion-tile__content-primary-inner">
+          {%- if block.settings.heading != blank -%}
+            {%- liquid
+              capture heading_font_size_class
+                render 'settings-text-size', type: 'heading', size: block.settings.heading_font_size
+              endcapture
+            -%}
+
+            <h2 class="promotion-tile__content-heading ff-heading {{ heading_font_size_class }}">
+              {{ block.settings.heading }}
+            </h2>
+          {%- endif -%}
+
+          {%- if block.settings.text != blank -%}
+            {%- liquid
+              capture text_font_size_class
+                render 'settings-text-size', type: 'text', size: block.settings.text_font_size
+              endcapture
+            -%}
+
+            <p class="promotion-tile__content-text rte ff-body {{ text_font_size_class }}">
+              {{ block.settings.text }}
+            </p>
+          {%- endif -%}
+
+          {%- if block.settings.button_placement == 'standard' -%}
+            {{ content_button }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if block.settings.button_placement == 'bottom-anchored' -%}
+        <div class="promotion-tile__content-secondary">
+          {{ content_button }}
+        </div>
+      {%- endif -%}
+
+      {%- if block.settings.link != blank -%}
+        <a
+          href="{{ block.settings.link }}"
+          class="promotion-tile__link"
+          aria-label="{{ 'general.accessibility.visit_link' | t: link: block.settings.link }}"
+          {%- unless block.settings.button_label == blank %}
+            tabindex="-1"
+          {%- endunless -%}
+        ></a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

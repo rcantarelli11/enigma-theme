@@ -1,0 +1,299 @@
+{%- liquid
+  comment
+    Render product media web component.
+
+    Required parameters
+      - prod: { Object } Current product to pull media from.
+      - local_settings: { Object } Section settings to properly render product media.
+      - current_variant: { Object } Specific variant to show correct product media on load.
+      - color_scheme_vars: { Object } Output from color-scheme-to-vars
+
+    Optional parameters
+      - setting_override_enable_image_zoom: { Boolean } An override for local_settings.enable_image_zoom
+      - setting_override_media_gallery_size_mobile: { String } An override for local_settings.media_gallery_size_mobile
+  endcomment
+
+  assign featured_media = current_variant.featured_media | default: prod.featured_media
+  assign scroller_id = 'product-' | append: section.id
+  assign media_aspect_ratio = local_settings.media_aspect_ratio
+  assign gallery_layout = local_settings.gallery_layout_desktop
+  assign first_3d_model = prod.media | where: 'media_type', 'model' | first
+  assign loop_back_to_start_mobile = local_settings.enable_slider_looping
+  assign lightbox_enabled = local_settings.enable_image_zoom
+  assign media_gallery_size_mobile = local_settings.media_gallery_size_mobile
+
+  if setting_override_enable_image_zoom != null
+    assign lightbox_enabled = setting_override_enable_image_zoom
+  endif
+
+  if setting_override_media_gallery_size_mobile != blank
+    assign media_gallery_size_mobile = setting_override_media_gallery_size_mobile
+  endif
+
+  if local_settings.enable_variant_media_grouping
+    # Slide needs to start negative to simulate index 0 when looping media
+    assign slide_index = -1
+    assign media_delimiters_positions = prod.variants | map: 'featured_media' | uniq | map: 'position'
+
+    if current_variant.featured_media
+      assign initial_variant_media_position = current_variant.featured_media.position
+
+      for delimiter_position in media_delimiters_positions
+        if delimiter_position == initial_variant_media_position
+          if media_delimiters_positions[forloop.index] == blank
+            assign next_variant_media_index = prod.media.last.position
+            assign next_variant_media_position = prod.media.last.position | plus: 1
+          else
+            assign next_variant_media_index = media_delimiters_positions[forloop.index] | minus: 1
+            assign next_variant_media_position = media_delimiters_positions[forloop.index]
+          endif
+          break
+        endif
+      endfor
+
+      assign media_group_size = next_variant_media_position | minus: initial_variant_media_position
+    endif
+  endif
+
+  assign media_size = media_group_size | default: prod.media.size
+
+  # If only single image in gallery display as list, and
+  # use has_single_media var to control slider js (always on mobile)
+  assign has_single_media = false
+  if prod.media.size <= 1
+    assign has_single_media = true
+    assign gallery_layout = 'stacked'
+  else
+    # Thumbnails used for carousel index indicator
+    # Decimal needed to make sure we get the decimals to properly fill 100% width
+    assign mobile_thumbnail_width_percentage = 100.0 | divided_by: media_size | round: 2
+  endif
+
+  if gallery_layout contains 'thumbnails'
+    assign has_thumbnails = true
+    assign thumbnail_size = local_settings.media_thumbnail_size
+    assign thumbnail_position = gallery_layout | split: '_' | last
+    assign media_layout = 'thumbnails'
+    assign layout_column_count = 1
+    assign disable_carousel_above_tablet = false
+    assign default_thumbnail_aspect_ratio = true
+
+    if thumbnail_position == 'left' and media_aspect_ratio == 'natural'
+      assign default_thumbnail_aspect_ratio = false
+      assign thumbnail_aspect_ratio = prod.featured_media.aspect_ratio
+    endif
+  else
+    assign media_layout = 'columns'
+    assign has_thumbnails = false
+
+    if gallery_layout == 'grid'
+      assign layout_column_count = 2
+    endif
+
+    assign disable_carousel_above_tablet = true
+  endif
+
+  if media_gallery_size_mobile == 'full_width'
+    assign mobile_slider_gap = '0px'
+  else
+    assign mobile_slider_gap = '4px'
+  endif
+
+  case local_settings.gallery_layout_desktop
+    when 'grid'
+      if has_single_media
+        assign desktop_width = local_settings.media_gallery_size_desktop | divided_by: 100.0
+        # subtract section inner gap
+        assign desktop_offset = '20px'
+      else
+        assign desktop_width = local_settings.media_gallery_size_desktop | divided_by: 2.0 | divided_by: 100.0
+        # subtract section inner gap
+        assign desktop_offset = '20px'
+      endif
+
+    when 'stacked', 'thumbnails_below'
+      assign desktop_width = local_settings.media_gallery_size_desktop | divided_by: 100.0
+      # subtract section inner gap
+      assign desktop_offset = '20px'
+
+    when 'thumbnails_left'
+      assign desktop_width = local_settings.media_gallery_size_desktop | divided_by: 100.0
+      # subtract section inner gap, thumbnail width, and thumbnail gap
+      assign desktop_offset = '20px - [[ts]]px - 28px' | replace: '[[ts]]', thumbnail_size
+  endcase
+
+  if media_gallery_size_mobile == 'full_width'
+    assign mobile_width = '100vw'
+  else
+    assign mobile_width = 'calc(100vw - 40px)'
+  endif
+
+  capture sizes
+    if local_settings.width == 'page-width'
+      echo '(min-width: 1680px) calc(((1680px - (40px * 2)) * [[dw]]) - [[do]]),' | replace: '[[dw]]', desktop_width | replace: '[[do]]', desktop_offset
+    endif
+
+    echo '(min-width: 1440px) calc(((100vw - (40px * 2)) * [[dw]]) - [[do]]),' | replace: '[[dw]]', desktop_width | replace: '[[do]]', desktop_offset
+    echo '(min-width: 1024px) calc(((100vw - (32px * 2)) * [[dw]]) - [[do]]),' | replace: '[[dw]]', desktop_width | replace: '[[do]]', desktop_offset
+    echo mobile_width
+  endcapture
+-%}
+
+{%- capture media_items -%}
+  {%- for media in prod.media -%}
+    {%- liquid
+      assign media_item_class = 'product-media__item animation--item'
+      assign prioritize_loading = false
+
+      if forloop.first or forloop.index == initial_variant_media_position
+        assign prioritize_loading = true
+      endif
+
+      if forloop.index < initial_variant_media_position or forloop.index > next_variant_media_index
+        continue
+      endif
+
+      if local_settings.enable_variant_media_grouping
+        if forloop.index >= initial_variant_media_position or forloop.index <= next_variant_media_index
+          assign slide_index = slide_index | plus: 1
+        endif
+      else
+        assign slide_index = forloop.index0
+      endif
+    -%}
+
+    <div
+      class="{{ media_item_class }}"
+      data-media-item-id="{{ media.id }}"
+      data-media-type="{{ media.media_type }}"
+      data-product-media-wrapper
+      data-aspect-ratio="{{ media_aspect_ratio }}"
+      {% # Naming must be data-slide-index to work with scroll slider %}
+
+      data-slide-index="{{ slide_index }}"
+
+      {%- if media.id == featured_media.id -%}
+        data-initial-slide
+      {%- endif %}
+
+      js-media-item-wrapper
+    >
+
+      {%- render 'media',
+        media: media,
+        fallback_alt: prod.title,
+        enable_product_lightbox: lightbox_enabled,
+        aspect_ratio: media_aspect_ratio,
+        sizes: sizes,
+        animate: true,
+        enable_autoplay_videos: local_settings.enable_video_autoplay,
+        prioritize_loading: prioritize_loading
+      -%}
+    </div>
+  {%- endfor %}
+{%- endcapture -%}
+
+{%- render 'inline-scripts', script_name: 'product-media' -%}
+
+<product-media
+  class="product-media__container"
+  data-has-product-lightbox="{{ lightbox_enabled }}"
+  data-scroller-id="{{ scroller_id }}"
+  data-media-layout="{{ media_layout }}"
+  data-aspect-ratio="{{ media_aspect_ratio }}"
+  data-media-count="{{ media_size }}"
+  data-video-autoplay="{{ local_settings.enable_video_autoplay }}"
+  data-has-single-media="{{ has_single_media }}"
+
+  {%- if has_thumbnails -%}
+    data-thumbnail-position="{{ thumbnail_position }}"
+    data-has-default-thumbnail-aspect-ratio="{{ default_thumbnail_aspect_ratio }}"
+    data-featured-media-id="{{ featured_media.id }}"
+  {%- endif -%}
+
+  js-product-media
+
+  style="
+    {%- if default_thumbnail_aspect_ratio == false -%}
+    --thumbnail-aspect-ratio: {{ thumbnail_aspect_ratio }};
+    {%- endif -%}
+    {%- if has_thumbnails == false -%}
+    --media-layout-column-count: {{ layout_column_count }};
+    {%- endif -%}
+    --mobile-thumbnail-width-percentage: {{ mobile_thumbnail_width_percentage }}%;
+  "
+>
+  {% unless has_single_media %}
+    {%- render 'product-thumbnails',
+      prod: prod,
+      local_settings: local_settings,
+      thumbnail_size: thumbnail_size,
+      thumbnail_position: thumbnail_position,
+      aspect_ratio: media_aspect_ratio,
+      featured_media: featured_media,
+      initial_variant_media_position: initial_variant_media_position,
+      next_variant_media_index: next_variant_media_index
+    -%}
+  {% endunless %}
+
+  <div class="product-media__items-wrapper">
+    <div class="product-media__items">
+      {% if prod.media.size > 1 %}
+        <div class="product-media-slider-wrap-outer scroll-slider-wrap-outer">
+          <div class="product-media-slider-wrap scroll-slider-wrap">
+            {%- render 'scroll-slider',
+              id: scroller_id,
+              slider_items: media_items,
+              columns: 1,
+              columns_above_1024: layout_column_count,
+              gap: mobile_slider_gap,
+              gap_above_1024: '4px',
+              peek: '0px',
+              loop_back_to_start: true,
+              loop_back_to_start_mobile: loop_back_to_start_mobile,
+              disable_above_1024: disable_carousel_above_tablet,
+              navigation_container: '.scroll-slider-wrap-outer'
+            -%}
+          </div>
+
+          <div class="scroll-slider-nav-button-wrap">
+            {%- render 'scroll-slider-navigation-buttons', size: 'large' -%}
+          </div>
+        </div>
+      {% else %}
+        {% if prod.media.size == 1 %}
+          {{ media_items }}
+        {% else %}
+          <div class="product-media__item placeholder-image">
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    {%- if first_3d_model -%}
+      <div class="view-in-space__container">
+        <button
+          aria-label="{{ 'products.product.view_in_space_label' | t }}"
+          class="view-in-space btn btn--size-small btn--width-full"
+          js-in-your-space
+          data-shopify-xr
+          data-shopify-model3d-id="{{ first_3d_model.id }}"
+          data-shopify-title="{{ prod.title | escape }}"
+          data-shopify-xr-hidden
+        >
+          {%- render 'icon-utility', icon: 'media-3d', width: '16', height: '16' -%}
+
+          <span class="view-in-space__text">{{ 'products.product.view_in_space' | t }}</span>
+        </button>
+      </div>
+    {%- endif %}
+  </div>
+</product-media>
+
+{%- render 'inline-scripts', script_name: 'background-video' -%}
+
+{%- # The 'View in your space' functionality needs access to the model JSON -%}
+<script type="application/json" id="ModelJSON-{{ prod.id }}">
+  {{ prod.media | where: 'media_type', 'model' | json }}
+</script>

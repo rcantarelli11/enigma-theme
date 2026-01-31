@@ -1,0 +1,99 @@
+{% liquid
+  comment
+    Renders various price details as a string of key/value pairs. This allows details to be passed to other snippets as needed, preventing looping.
+
+    Required parameters:
+      - prod { Object }: The product object.
+      - discount_format { String }: The discount format. Can be:
+        - 'sale'
+        - 'percent-off'
+        - 'minus-percent'
+        - 'save-percent'
+        - 'dollar-off'
+        - 'minus-dollar'
+        - 'save-dollar'
+  endcomment
+
+  if prod != blank
+    assign has_discount = false
+    assign discount_varies = false
+    assign compare_at_price_varies = false
+    assign has_unit_price = false
+
+    if prod.has_only_default_variant
+      if prod.compare_at_price > prod.price
+        assign has_discount = true
+
+        if discount_format contains 'percent'
+          assign largest_discount = prod.compare_at_price | minus: prod.price | times: 100 | divided_by: prod.compare_at_price | round
+        else
+          assign largest_discount = prod.compare_at_price | minus: prod.price
+        endif
+      endif
+
+      if prod.variants.first.unit_price
+        assign has_unit_price = true
+        assign unit_price = prod.variants.first.unit_price
+        assign unit_price_measurement_value = prod.variants.first.unit_price_measurement.reference_value
+        assign unit_price_measurement_unit = prod.variants.first.unit_price_measurement.reference_unit
+      endif
+    else
+      assign has_null_compare_at_price = false
+      assign smallest_discount = blank
+      assign largest_discount = 0
+
+      for variant in prod.variants
+        if variant.compare_at_price == null
+          assign has_null_compare_at_price = true
+        elsif variant.compare_at_price > variant.price and variant.compare_at_price != 0
+          assign has_discount = true
+
+          if discount_format contains 'percent'
+            assign variant_discount = variant.compare_at_price | minus: variant.price | times: 100 | divided_by: variant.compare_at_price | round
+          elsif discount_format contains 'dollar'
+            assign variant_discount = variant.compare_at_price | minus: variant.price
+          endif
+
+          if smallest_discount == blank or variant_discount < smallest_discount
+            assign smallest_discount = variant_discount
+          endif
+
+          if variant_discount > largest_discount
+            assign largest_discount = variant_discount
+          endif
+        else
+          assign smallest_discount = 0
+        endif
+
+        if variant.price == prod.price and has_unit_price == false
+          if variant.unit_price_measurement
+            assign has_unit_price = true
+            assign unit_price = variant.unit_price
+            assign unit_price_measurement_value = variant.unit_price_measurement.reference_value
+            assign unit_price_measurement_unit = variant.unit_price_measurement.reference_unit
+          endif
+        endif
+      endfor
+
+      if has_null_compare_at_price and prod.compare_at_price > 0
+        assign compare_at_price_varies = true
+        assign smallest_discount = 0
+      elsif prod.compare_at_price_varies
+        assign compare_at_price_varies = true
+      endif
+
+      if smallest_discount != largest_discount
+        assign discount_varies = true
+      endif
+    endif
+
+    echo 'has_discount: [[hd]], ' | replace: '[[hd]]', has_discount
+    echo 'discount_varies: [[dv]], ' | replace: '[[dv]]', discount_varies
+    echo 'compare_at_price_varies: [[capv]], ' | replace: '[[capv]]', compare_at_price_varies
+    echo 'largest_discount: [[ld]], ' | replace: '[[ld]]', largest_discount
+    echo 'has_unit_price: [[hup]], ' | replace: '[[hup]]', has_unit_price
+    echo 'unit_price: [[up]], ' | replace: '[[up]]', unit_price
+    echo 'unit_price_measurement_value: [[upmv]], ' | replace: '[[upmv]]', unit_price_measurement_value
+    echo 'unit_price_measurement_unit: [[upmu]], ' | replace: '[[upmu]]', unit_price_measurement_unit
+  endif
+%}

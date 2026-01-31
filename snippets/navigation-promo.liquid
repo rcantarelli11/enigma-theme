@@ -1,0 +1,62 @@
+{%- liquid
+  comment
+    Renders a navigation promo component that displays an image, heading, and text wrapped in an optional link.
+
+    Optional parameters:
+      - aspect_ratio: { String: 'square' } The aspect ratio of the image.
+      - image: { Object } The image object to display. Defaults to placeholder svg.
+      - heading: { String } The heading text to display.
+      - text: { String } The body text to display.
+      - link: { String } The URL to link to.
+      - i: { Number } Index of navigation promo item. Used to cycle through placeholder illustration.
+
+  endcomment
+
+  capture tag_name
+    if link != blank
+      echo 'a href="[[link]]"' | replace: '[[link]]', link
+    else
+      echo 'div'
+    endif
+  endcapture
+
+  capture aspect_ratio_class
+    if aspect_ratio == blank
+      assign aspect_ratio = 'square'
+    endif
+
+    echo 'navigation-promo--image-[[aspect_ratio]]' | replace: '[[aspect_ratio]]', aspect_ratio
+  endcapture
+
+  assign placeholder_name = 'collection-apparel-' | append: i
+-%}
+
+<div class="navigation-promo {{ aspect_ratio_class }}" data-show="{{ index | plus: 5}}">
+  <{{ tag_name }} class="navigation-promo__link">
+    <div class="navigation-promo__image-wrapper">
+      {% render 'image',
+        image: image,
+        aspect_ratio: aspect_ratio,
+        fallback_width: 350,
+        class: 'navigation-promo__image',
+        load_animation_effect: 'blur',
+        load_animation_manually_triggered: true,
+        object_fit: 'cover',
+        sizes: '350px',
+        placeholder_name: placeholder_name
+      %}
+    </div>
+
+    {% if heading != blank %}
+      <h2 class="navigation-promo__heading">
+        <span class="ff-heading fs-heading-in-body-200">{{ heading }}</span>
+      </h2>
+    {% endif %}
+
+    {% if text != blank %}
+      <div class="navigation-promo__body ff-body fs-body-75">
+        {{ text }}
+      </div>
+    {% endif %}
+  </{{ tag_name }}>
+</div>

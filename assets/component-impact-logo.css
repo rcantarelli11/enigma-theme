@@ -1,0 +1,125 @@
+:root{
+  --js-mobile:(max-width: 719.9px);
+  --js-tablet:(min-width: 720px);
+  --js-below-small-desktop:(max-width: 1023.9px);
+  --js-small-desktop:(min-width: 1024px);
+  --js-desktop:(min-width: 1440px);
+  --js-max-page-width:(min-width: 1600px);
+}
+impact-logo[data-enable-impact-logo="all-screens"]{
+    --impact-logo-display:flex;
+  }
+@media (min-width: 720px){
+impact-logo[data-enable-impact-logo="large-screens"]{
+      --impact-logo-display:flex
+  }
+    }
+impact-logo[data-impact-logo-alignment="left"]{
+    --impact-logo-alignment:flex-start;
+  }
+impact-logo[data-impact-logo-alignment="center"]{
+    --impact-logo-alignment:center;
+  }
+impact-logo[data-impact-logo-alignment="right"]{
+    --impact-logo-alignment:flex-end;
+  }
+impact-logo[data-impact-logo-transparent="true"]{
+    background:transparent !important;
+  }
+impact-logo[data-impact-logo-transparent="true"]{
+    position:absolute;
+    left:0;
+    right:0;
+    color:var(--color-text-transparent);
+    z-index:calc(1 - 1);
+    z-index:calc(var(--z-index-header, 1) - 1);
+  }
+impact-logo{
+
+  position:relative;
+  display:none;
+  display:var(--impact-logo-display, none);
+  justify-content:center;
+  z-index:-1;
+}
+impact-logo .impact-logo__image-container{
+    --fade-size:15px;
+    display:flex;
+    justify-content:var(--impact-logo-alignment);
+    width:100%;
+    padding:15px var(--gutter);
+    padding:var(--fade-size) var(--gutter);
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:var(--impact-logo-top-padding-mobile);
+    margin-bottom:var(--impact-logo-bottom-padding-mobile);
+  }
+@media screen and (min-width: 720px){
+impact-logo .impact-logo__image-container{
+      --fade-size:40px;
+      margin-top:var(--impact-logo-top-padding);
+      margin-bottom:var(--impact-logo-bottom-padding)
+  }
+    }
+impact-logo .impact-logo__image-container.fade-top{
+      -webkit-mask-image:linear-gradient(
+        to bottom,
+        transparent 0,
+        black calc(0 + var(--fade-size))
+      );
+              mask-image:linear-gradient(
+        to bottom,
+        transparent 0,
+        black calc(0 + var(--fade-size))
+      );
+      -webkit-mask-image:linear-gradient(
+        to bottom,
+        transparent var(--impact-logo-fade-top-start, 0),
+        black calc(var(--impact-logo-fade-top-start, 0) + var(--fade-size))
+      );
+              mask-image:linear-gradient(
+        to bottom,
+        transparent var(--impact-logo-fade-top-start, 0),
+        black calc(var(--impact-logo-fade-top-start, 0) + var(--fade-size))
+      );
+    }
+impact-logo .impact-logo__image-container.fade-bottom{
+      padding-bottom:var(--fade-size);
+      -webkit-mask-image:linear-gradient(
+        to bottom,
+        black calc(0 + var(--fade-size)),
+        transparent
+          calc(0 + var(--fade-size) * 2)
+      );
+              mask-image:linear-gradient(
+        to bottom,
+        black calc(0 + var(--fade-size)),
+        transparent
+          calc(0 + var(--fade-size) * 2)
+      );
+      -webkit-mask-image:linear-gradient(
+        to bottom,
+        black calc(var(--impact-logo-fade-bottom-start, 0) + var(--fade-size)),
+        transparent
+          calc(var(--impact-logo-fade-bottom-start, 0) + var(--fade-size) * 2)
+      );
+              mask-image:linear-gradient(
+        to bottom,
+        black calc(var(--impact-logo-fade-bottom-start, 0) + var(--fade-size)),
+        transparent
+          calc(var(--impact-logo-fade-bottom-start, 0) + var(--fade-size) * 2)
+      );
+    }
+impact-logo .image{
+    max-width:var(--impact-logo-width, var(--max-page-width));
+    width:100%;
+    opacity:1;
+    opacity:var(--impact-logo-opacity, 1);
+    transform:translateY(0);
+    transform:translateY(var(--impact-logo-parallax, 0));
+    transition:opacity var(--ease-out-quart) var(--animation-timing-400), transform var(--ease-out-quart) var(--animation-timing-500);
+  }
+body:has(header-wrapper[data-enable-transparent-header="true"]) impact-logo[data-impact-logo-transparent="false"]{
+    margin-top:calc(var(--header-height-internal) * -1);
+    padding-top:var(--header-height-internal);
+  }

@@ -1,0 +1,49 @@
+{% liquid
+  comment
+    Renders a button block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - forloop: { Object } The forloop object for the current block iteration.
+
+    Optional parameters:
+      - alignment: { String } The button's horizontal alignment. Can be:
+        - "left"
+        - "center"
+        - "right"
+
+    TODO: stop rendering alignment classname if alignment not passed
+  endcomment
+
+  assign prev_index = forloop.index0 | minus: 1
+  assign next_index = forloop.index0 | plus: 1
+  assign has_button_next = false
+  assign has_button_prev = false
+
+  if section.blocks[next_index].type == 'button'
+    assign has_button_next = true
+  endif
+
+  if prev_index > -1 and section.blocks[prev_index].type == 'button'
+    assign has_button_prev = true
+  endif
+-%}
+
+{% if has_button_prev == false and has_button_next -%}
+  <div class="content-blocks__inline-buttons content-blocks--alignment-{{ alignment }}">
+{%- endif %}
+
+{%- unless block.settings.button_label == blank -%}
+  <div class="content-block content-block--button" {{ block.shopify_attributes }}>
+    {%- render 'button',
+      label: block.settings.button_label,
+      link: block.settings.button_link,
+      button_style: block.settings.button_style,
+      button_alignment: alignment
+    -%}
+  </div>
+{%- endunless -%}
+
+{% if has_button_prev and has_button_next == false -%}
+  </div>
+{%- endif %}

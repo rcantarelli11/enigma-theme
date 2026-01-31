@@ -1,0 +1,39 @@
+{%- liquid
+  comment
+    Renders a "Full details link" product block.
+
+    Required parameters:
+      - prod: { Object } Current product object.
+      - block: { Object } The associated block object.
+  endcomment
+
+  assign button_label = 'products.product.view_full_details' | t
+-%}
+
+<div
+  class="product-block product-block--full-details-link"
+  style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  {{ block.shopify_attributes }}
+>
+  {% if block.settings.button_style == 'text-with-icon' %}
+    <div class="full-details-link--text-with-icon">
+      {% render 'button',
+        label: button_label,
+        link: prod.url,
+        button_style: 'text',
+        button_size: 'small',
+        underlined: true
+      %}
+      {% render 'icon-utility', icon: 'chevron-right-small', width: 7, height: 12 %}
+    </div>
+  {% else %}
+    {% render 'button',
+      label: button_label,
+      link: prod.url,
+      button_style: block.settings.button_style,
+      button_size: 'small',
+      button_width: 'full',
+      underlined: true
+    %}
+  {% endif %}
+</div>

@@ -1,0 +1,169 @@
+:root{
+  --js-mobile:(max-width: 719.9px);
+  --js-tablet:(min-width: 720px);
+  --js-below-small-desktop:(max-width: 1023.9px);
+  --js-small-desktop:(min-width: 1024px);
+  --js-desktop:(min-width: 1440px);
+  --js-max-page-width:(min-width: 1600px);
+}
+@keyframes contentOverlineAnimation{
+  100%{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+@keyframes contentHeadingAnimation{
+  0%{
+    -webkit-mask-size:0% 100%;
+            mask-size:0% 100%;
+  }
+
+  100%{
+    -webkit-mask-size:120% 100%;
+            mask-size:120% 100%;
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+@keyframes contentContentAnimation{
+  0%{
+    -webkit-mask-size:0% 100%;
+            mask-size:0% 100%;
+  }
+
+  100%{
+    -webkit-mask-size:120% 100%;
+            mask-size:120% 100%;
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+@keyframes contentSliderAnimation{
+  100%{
+    transform:translateX(0);
+    opacity:1;
+  }
+}
+social-share[data-native-share-supported="true"] .social-share--standard{
+      display:none;
+    }
+social-share[data-native-share-supported="true"] .social-share--native{
+      display:flex;
+    }
+.social-share--standard{
+  display:flex;
+  align-items:center;
+  gap:var(--spacing-200);
+}
+html.js [data-native-share-enabled="true"] .social-share--standard{
+    display:none;
+  }
+html.js [data-native-share-supported="false"] .social-share--standard{
+    display:flex;
+  }
+.social-share--native{
+  display:none;
+  align-items:center;
+  gap:var(--spacing-75);
+  width:-moz-fit-content;
+  width:fit-content;
+  padding:0;
+  background:none;
+  color:var(--color-text);
+  border:none;
+  -webkit-appearance:none;
+          appearance:none;
+  cursor:pointer;
+}
+.social-share--native:hover .social-share__share-text{
+      animation:underlinedLinkHover var(--animation-timing-750) ease-in-out;
+    }
+.social-share--native .social-share__share-text{
+    padding-bottom:1px;
+    background:linear-gradient(90deg, var(--color-text), var(--color-text));
+    background-size:100% 1px;
+    background-position-x:0%;
+    background-position-y:calc(100% - 1px);
+    background-repeat:no-repeat;
+    -webkit-text-decoration:none;
+    text-decoration:none;
+  }
+.social-share__links{
+  --column-gap:var(--spacing-75);
+}
+.social-share__link{
+  position:relative;
+}
+.social-share__link:hover .share-link__icon{
+      background-color:var(--color-text-alpha-10);
+    }
+.social-share__link:hover .share-link__tooltip{
+      display:block;
+      opacity:1;
+    }
+.social-share__link--copy{
+  padding:0;
+  background:none;
+  border:none;
+  -webkit-appearance:none;
+          appearance:none;
+  cursor:pointer;
+}
+html.no-js .social-share__link--copy{
+    display:none;
+  }
+.social-share__link--copy.copy-success .tooltip-copy--idle, .social-share__link--copy.copy-error .tooltip-copy--idle{
+      display:none;
+    }
+.social-share__link--copy.copy-success .tooltip-copy--success{
+      display:block;
+    }
+.social-share__link--copy.copy-error .tooltip-copy--error{
+      display:block;
+    }
+.share-link__icon{
+  display:flex;
+  align-items:center;
+  padding:var(--spacing-100);
+  border-radius:100%;
+}
+.share-link__tooltip{
+  display:none;
+  position:absolute;
+  bottom:calc(100% + 2px);
+  left:50%;
+  width:max-content;
+  padding:var(--spacing-50) var(--spacing-100);
+  background-color:var(--color-text);
+  color:var(--color-background);
+  border-radius:var(--radius-button);
+  filter:drop-shadow(0px 4px 5px var(--color-text-alpha-10));
+  transform:translateX(-50%);
+  opacity:0;
+  transition:opacity var(--animation-timing-100) var(--ease-out-quart);
+}
+.share-link__tooltip .tooltip-copy--success,
+  .share-link__tooltip .tooltip-copy--error{
+    display:none;
+  }
+@keyframes underlinedLinkHover{
+    0%{
+      background-position-x:100%;
+      background-size:100% 1px;
+    }
+
+    50%{
+      background-position-x:100%;
+      background-size:0% 1px;
+    }
+
+    51%{
+      background-position-x:0%;
+      background-size:0% 1px;
+    }
+
+    100%{
+      background-position-x:0%;
+      background-size:100% 1px;
+    }
+  }

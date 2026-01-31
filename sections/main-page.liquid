@@ -1,0 +1,110 @@
+{{ 'section-page.css' | asset_url | stylesheet_tag }}
+{% render 'inline-scripts', script_name: 'visibility-watcher' %}
+{% render 'inline-scripts', script_name: 'rte-container' %}
+
+<div
+  class="section page"
+  style="
+    {% render 'settings-section-padding' %}
+    {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+    --custom-width: {{ section.settings.custom_width }}px;
+  "
+>
+  <div class="section-inner section-inner--width-{{ section.settings.content_width }}">
+    <div class="page__header">
+      <visibility-watcher data-watch-parent-selector=".page__header">
+        <h1 class="page__heading ff-heading fs-heading-display-3 ta-c animation-heading">
+          {{ page.title }}
+        </h1>
+      </visibility-watcher>
+    </div>
+
+    <div class="page__content rte ff-body{% if section.settings.enable_corner_radius %} rte--with-rounded-images{% endif %}">
+      <rte-container>
+        {{ page.content }}
+      </rte-container>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_page.name",
+  "tag": "section",
+  "class": "page-section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.content_layout.header.content"
+    },
+    {
+      "type": "radio",
+      "id": "content_width",
+      "label": "t:shared.settings.content_layout.content_width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:shared.settings.content_layout.content_width.options.page"
+        },
+        {
+          "value": "custom-width",
+          "label": "t:shared.settings.content_layout.content_width.options.custom"
+        }
+      ],
+      "default": "custom-width"
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "t:shared.settings.content_layout.custom_width.label",
+      "info": "t:shared.settings.content_layout.custom_width.info",
+      "min": 400,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 650
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.image_rounding.content_images_header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_corner_radius",
+      "default": true,
+      "label": "t:shared.settings.image_rounding.enable_corner_radius.label",
+      "info": "t:shared.settings.image_rounding.enable_corner_radius.info"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ]
+}
+{% endschema %}

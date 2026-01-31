@@ -1,0 +1,88 @@
+{%- liquid
+  comment
+    Renders a string for a tile (not full width, not in a grid) image's 'sizes' attribute.
+
+    Optional parameters:
+      - image_width_unit: { String: 'percentage' } The unit for the value of the image width. Can be:
+        - 'percentage'
+        - 'px'
+      - if 'image_width_unit' == 'percentage'
+        - section_width: { String } The width of the section the image is within to get an image's proprtional width. Can be:
+          - 'page-width'
+          - 'full-width-padded'
+      - desktop_image_width: { Number: 50 } The image width in the selected unit for desktop and small desktop breakpoints.
+      - tablet_image_width: { Number: 100 } The image width in the selected unit for tablet breakpoints.
+      - mobile_image_width: { Number: 100 } The image width in the selected unit for mobile breakpoints.
+      - breakpoint_min: { String } The screen size minimum for when full coverage isn't needed.
+        Only use breakpoint_min OR breakpoint_max. Can be:
+        - 'desktop'
+        - 'tablet'
+      - breakpoint_max: { String } The screen size maximum for when full coverage isn't needed.
+        Only use breakpoint_min OR breakpoint_max. Can be:
+        - 'mobile'
+        - 'tablet'
+  endcomment
+
+  assign image_width_unit = image_width_unit | default: 'percentage'
+
+  if image_width_unit == 'px'
+    assign desktop_image_width = desktop_image_width | append: 'px'
+    assign tablet_image_width = tablet_image_width | append: 'px'
+    assign mobile_image_width = mobile_image_width | append: 'px'
+
+  elsif image_width_unit == 'percentage'
+    assign desktop_image_width = desktop_image_width | default: 50
+    assign tablet_image_width = tablet_image_width | default: 100
+    assign mobile_image_width = mobile_image_width | default: 100
+
+    assign desktop_image_width_percentage = desktop_image_width | divided_by: 100.00 | round: 2
+    assign tablet_image_width_percentage = tablet_image_width | divided_by: 100.00 | round: 2
+    assign mobile_image_width_percentage = mobile_image_width | divided_by: 100.00 | round: 2
+
+    if section_width == 'page-width'
+      assign large_desktop_image_width = 1600 | times: desktop_image_width_percentage | round: 0 | append: 'px'
+    endif
+
+    assign desktop_image_width = 'calc(100vw * [[diwp]] - (2 * 20px))' | replace: '[[diwp]]', desktop_image_width_percentage
+    assign tablet_image_width = 'calc(100vw * [[tiwp]] - (2 * 20px))' | replace: '[[tiwp]]', tablet_image_width_percentage
+    assign mobile_image_width = 'calc(100vw * [[miwp]] - (2 * 20px))' | replace: '[[miwp]]', mobile_image_width_percentage
+  endif
+
+  # Get size range
+  assign size_range = 'desktop, small-desktop, tablet, mobile'
+
+  if breakpoint_max == 'tablet'
+    assign size_range = 'tablet, mobile'
+  elsif breakpoint_max == 'mobile'
+    assign size_range = 'mobile'
+  endif
+
+  assign has_mobile = true
+  if breakpoint_min == 'tablet'
+    assign has_mobile = false
+    assign size_range = 'desktop, small-desktop, tablet'
+  elsif breakpoint_min == 'desktop'
+    assign has_mobile = false
+    assign size_range = 'desktop, small-desktop'
+  endif
+
+  # Populate size calcs
+  if size_range contains 'desktop'
+    if section_width == 'page-width' and image_width_unit == 'percentage'
+      echo '(min-width: 1600px) [[ldiw]], ' | replace: '[[ldiw]]', large_desktop_image_width
+    endif
+
+    echo '(min-width: 1024px) [[diw]], ' | replace: '[[diw]]', desktop_image_width
+  endif
+
+  if size_range contains 'tablet'
+    echo '(min-width: 720px) [[tiw]], ' | replace: '[[tiw]]', tablet_image_width
+  endif
+
+  # The last value in the string can't be a calc
+  if size_range contains 'mobile'
+    echo '(max-width: 719.9px) [[miw]], 100vw' | replace: '[[miw]]', mobile_image_width
+  else
+    echo '100vw'
+  endif
+-%}

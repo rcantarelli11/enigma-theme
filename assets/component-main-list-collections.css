@@ -1,0 +1,14 @@
+.list-collections__header-heading + .list-collections__header-text{
+  margin-top:var(--spacing-100);
+}
+
+.list-collections__grid{
+  margin-top:var(--spacing-600);
+}
+
+@media (--small-desktop){
+
+.list-collections__grid{
+    margin-top:var(--spacing-700)
+}
+  }

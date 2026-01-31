@@ -1,0 +1,50 @@
+{%- liquid
+  comment
+    Renders article tags based on categories that are entered in the settings. Used for the article
+    template, as well as article items.
+
+    Required parameters:
+      - article: { Object } The associated article object.
+      - blog: { Object } The blog object associated with the article.
+  endcomment
+
+  assign show_all_tags = true
+
+  if settings.article_categories != blank
+    assign tag_allow_list = settings.article_categories | strip | downcase | split: ','
+
+    if tag_allow_list.size > 0
+      assign stripped_tag_allow_list = ''
+      assign show_all_tags = false
+
+      for tag in tag_allow_list
+        assign stripped_tag = tag | strip
+        assign stripped_tag_allow_list = stripped_tag_allow_list | append: stripped_tag | append: ','
+      endfor
+    endif
+
+    assign stripped_tag_allow_list = stripped_tag_allow_list | remove_last: ',' | split: ','
+  endif
+-%}
+
+{%- for tag in article.tags -%}
+  {%- liquid
+    assign show_tag = true
+
+    unless show_all_tags
+      assign downcased_tag = tag | downcase
+
+      unless stripped_tag_allow_list contains downcased_tag
+        assign show_tag = false
+      endunless
+    endunless
+  -%}
+
+  {%- if show_tag -%}
+    <li class="article-tags__item">
+      <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="article-tags__tag">
+        {{ tag }}
+      </a>
+    </li>
+  {%- endif %}
+{%- endfor -%}

@@ -1,0 +1,582 @@
+<div
+  class="
+    media-hero
+    image-hero
+    section
+  "
+  style="
+    {% render 'settings-section-padding' %}
+    {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+  "
+>
+<div class="section-inner section-inner--width-{{ section.settings.width }}">
+<div class="container" id="Loyalty">
+      <div class="points-table">
+        <table>
+          <thead>
+            <tr>
+              <th scope="“col”">
+                <h5>benefits</h5>
+              </th>
+
+              <th scope="“col”" class="paln_title member">
+                <img class="loyalty-card" src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/MEMBER.png?v=1741638662" alt=""> 
+                <img class="loyalty-title" src="//www.ghostlifestyle.com/cdn/shop/files/Loyalty_Member_300x.png?v=1613729664" alt="Member Level">
+                <h5>no points</h5>
+              </th>
+
+              <th scope="“col”" class="paln_title bronze">
+                <img class="loyalty-card" src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/BRONZE.png?v=1741638662" alt="">
+                <img class="loyalty-title" src="//www.ghostlifestyle.com/cdn/shop/files/Loyalty_Bronze_300x.png?v=1614304460" alt="Bronze Level">
+                <h5>5,000 points</h5>
+              </th>
+
+              <th scope="“col”" class="paln_title silver">
+                <img class="loyalty-card" src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/SILVER.png?v=1741638662" alt="">
+                <img class="loyalty-title" src="//www.ghostlifestyle.com/cdn/shop/files/Loyalty_Silver_300x.png?v=1613729663" alt="Silver LEvel">
+                <h5>12,500 points</h5>
+              </th>
+
+              <th scope="“col”" class="paln_title gold">
+                <img class="loyalty-card" src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/Beige_and_Black_Minimalist_Loyalty_Card.png?v=1741638662" alt="">
+                <img class="loyalty-title" src="//www.ghostlifestyle.com/cdn/shop/files/Loyalty_Gold_300x.png?v=1614305227" alt="Gold Level">
+                <h5>25,000 points</h5>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <th scope="“row”">Earn ENIGMA® Loyalty Points</th>
+              <td class="member"><label aria-label="Earn Enigma® Loyalty Points Benefit"></label></td>
+              <td class="bronze"><label aria-label="Earn Ghost® Loyalty Points Benefit"></label></td>
+              <td class="silver"><label aria-label="Earn Ghost® Loyalty Points Benefit"></label></td>
+              <td class="gold"><label aria-label="Earn Ghost® Loyalty Points Benefit"></label></td>
+            </tr>
+
+            <tr>
+              <th scope="“row”">Redeem Points For Products</th>
+              <td class="member"><label aria-label="Redeem Points For Products benefit"></label></td>
+              <td class="bronze"><label aria-label="Redeem Points For Products benefit"></label></td>
+              <td class="silver"><label aria-label="Redeem Points For Products benefit"></label></td>
+              <td class="gold"><label aria-label="Redeem Points For Products benefit"></label></td>
+            </tr>
+
+            <tr>
+              <th scope="“row”">Birthday Points</th>
+              <td class="member"><label aria-label="Birthday Points benefit"></label></td>
+              <td class="bronze"><label aria-label="Birthday Points benefit"></label></td>
+              <td class="silver"><label aria-label="Birthday Points benefit"></label></td>
+              <td class="gold"><label aria-label="Birthday Points benefit"></label></td>
+            </tr>
+
+            <tr>
+              <th scope="“row”">Access to Exclusive Merch</th>
+              <td class="member"></td>
+              <td class="bronze"><label aria-label="Access to Exclusive Merch benefit"></label></td>
+              <td class="silver"><label aria-label="Access to Exclusive Merch benefit"></label></td>
+              <td class="gold"><label aria-label="Access to Exclusive Merch benefit"></label></td>
+            </tr>
+
+            <tr>
+              <th scope="“row”">Exclusive Offers &amp; Promotions</th>
+              <td class="member"></td>
+              <td class="bronze"><label aria-label="Exclusive Offers &amp; Promotions benefit"></label></td>
+              <td class="silver"><label aria-label="Exclusive Offers &amp; Promotions benefit"></label></td>
+              <td class="gold"><label aria-label="Exclusive Offers &amp; Promotions benefit"></label></td>
+            </tr>
+
+            <tr>
+              <th scope="“row”">Earn bonus points on all purchases</th>
+              <td class="member"></td>
+              <td class="bronze"></td>
+              <td class="silver"><label aria-label="Earn bonus points on all purchases benefit"></label></td>
+              <td class="gold"><label aria-label="Earn bonus points on all purchases benefit"></label></td>
+            </tr>
+
+            <tr>
+              <th scope="“row”">Free Shipping on points purchases</th>
+              <td class="member"></td>
+              <td class="bronze"></td>
+              <td class="silver"><label aria-label="Free Shipping on points purchases benefit"></label></td>
+              <td class="gold"><label aria-label="Free Shipping on points purchases benefit"></label></td>
+            </tr>
+
+            <tr>
+              <th scope="“row”">Free Shipping on all purchases</th>
+              <td class="member"></td>
+              <td class="bronze"></td>
+              <td class="silver"></td>
+              <td class="gold"><label aria-label="Free Shipping on all purchases benefit"></label></td>
+            </tr>
+
+            <tr>
+              <th scope="“row”">Early Access to Launches</th>
+              <td class="member"></td>
+              <td class="bronze"></td>
+              <td class="silver"></td>
+              <td class="gold"><label aria-label="Early Access to Launches benefit"></label></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  <div class="mobile-tiers-wrapper">
+     <div
+        class="swiper-container"
+        data-section-id="{{ section.id }}"
+        data-perview-mobile="1"
+        data-perview-tablet="1"
+        data-space-desktop="20"
+        data-space-mobile="10"
+      >
+      <swiper-carousel data-space-between="0" data-centered="true" class="mobile-tiers block  swiper swipercol-{{ section.id }}">
+        <div class="swiper-wrapper" role="region" id="swiper-wrapper-10f17634e08289f72" aria-live="polite" style="transition-duration: 0ms; height: 372px; transform: translate3d(0px, 0px, 0px);">
+          <div class="mobile-tier-content swiper-slide mobile-member" >
+            <img class="loyalty-card" src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/MEMBER.png?v=1741638662">
+            <img class="loyalty-title" src="//www.ghostlifestyle.com/cdn/shop/files/Loyalty_Member_300x.png?v=1613729664">
+            <h5>no points</h5>
+
+            <table>
+              <tbody>
+                <tr>
+                  <td>Earn Enigma® Loyalty Points</td>
+                </tr>
+
+                <tr>
+                  <td>Redeem Points For Products</td>
+                </tr>
+
+                <tr>
+                  <td>Birthday Points</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mobile-tier-content swiper-slide mobile-bronze swiper-slide-next" >
+            <img class="loyalty-card" src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/BRONZE.png?v=1741638662">
+            <img class="loyalty-title" src="//www.ghostlifestyle.com/cdn/shop/files/Loyalty_Bronze_300x.png?v=1614304460">
+            <h5>5,000 points</h5>
+
+            <table>
+              <tbody>
+                <tr>
+                  <td>Earn Enigma® Loyalty Points</td>
+                </tr>
+
+                <tr>
+                  <td>Redeem Points For Products</td>
+                </tr>
+
+                <tr>
+                  <td>Birthday Points</td>
+                </tr>
+
+                <tr>
+                  <td>Access to Exclusive Merch</td>
+                </tr>
+
+                <tr>
+                  <td>Exclusive Offers &amp; Promotions</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mobile-tier-content swiper-slide mobile-silver" >
+            <img class="loyalty-card" src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/SILVER.png?v=1741638662">
+            <img class="loyalty-title" src="//www.ghostlifestyle.com/cdn/shop/files/Loyalty_Silver_300x.png?v=1613729663">
+            <h5>12,500 points</h5>
+
+            <table>
+              <tbody>
+                <tr>
+                  <td>Earn Enigma® Loyalty Points</td>
+                </tr>
+
+                <tr>
+                  <td>Redeem Points For Products</td>
+                </tr>
+
+                <tr>
+                  <td>Birthday Points</td>
+                </tr>
+
+                <tr>
+                  <td>Access to Exclusive Merch</td>
+                </tr>
+
+                <tr>
+                  <td>Exclusive Offers &amp; Promotions</td>
+                </tr>
+
+                <tr>
+                  <td>Earn <span class="highlight">15% more</span> Enigma® Loyalty Points</td>
+                </tr>
+
+                <tr>
+                  <td>Free Shipping on <span class="highlight">points purchases</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mobile-tier-content swiper-slide mobile-gold" >
+            <img class="loyalty-card" src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/Beige_and_Black_Minimalist_Loyalty_Card.png?v=1741638662">
+            <img class="loyalty-title" src="//www.ghostlifestyle.com/cdn/shop/files/Loyalty_Gold_300x.png?v=1614305227">
+            <h5>25,000 points*</h5>
+
+            <table>
+              <tbody>
+                <tr>
+                  <td>Earn Enigma® Loyalty Points</td>
+                </tr>
+
+                <tr>
+                  <td>Redeem Points For Products</td>
+                </tr>
+
+                <tr>
+                  <td>Birthday Points</td>
+                </tr>
+
+                <tr>
+                  <td>Access to Exclusive Merch</td>
+                </tr>
+
+                <tr>
+                  <td>Exclusive Offers &amp; Promotions</td>
+                </tr>
+
+                <tr>
+                  <td>Earn <span class="highlight">25% more</span> Enigma® Loyalty Points</td>
+                </tr>
+
+                <tr>
+                  <td>Free Shipping on <span class="highlight">points purchases</span></td>
+                </tr>
+
+                <tr>
+                  <td>Free Shipping on <span class="highlight">all purchases</span></td>
+                </tr>
+
+                <tr>
+                  <td>Early Access to Launches</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span></swiper-carousel>
+     </div>
+      <span id="tier-end-of-carousel"></span>
+    </div>
+  </div>
+</div>
+<style>
+
+  .points-table {
+    padding: 120px 0 100px;
+}
+  .section-inner .container{
+    max-width:1400px;
+    margin:0 auto;
+  }
+  .points-table table thead th {
+    vertical-align: bottom;
+    text-align: center;
+    padding: 0 20px 25px;
+    width: 20%;
+}
+  .points-table table thead th h5, .points-table table thead th .h5 {
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    text-align: left;
+    margin-bottom: 0;
+}
+.points-table table thead th.paln_title .loyalty-card {
+    width: 200px;
+    max-width: 90%;
+    position: relative;
+    top: -22px;
+    margin-bottom: 10px;
+    box-shadow: 0 12px 21px #0003;
+    border-radius: 10px;
+}
+  .points-table table thead th.paln_title.gold h5 {
+    color: #ba9655;
+    margin-top: 20px;
+}
+  .points-table table td.gold label {
+    color: #ba9655;
+    border-color: #ba9655;
+}
+  .points-table table td.bronze label {
+    color: #af7250;
+    border-color: #af7250;
+}
+  .points-table table td.member label {
+    color: #f24f58;
+    border-color: #f24f58;
+}
+  .points-table table td.silver label {
+    color: #878787;
+    border-color: #878787;
+}
+  .points-table table thead th.paln_title .loyalty-title {
+    max-width: 175px;
+    max-height: 50px;
+}
+  .points-table table thead th.paln_title.member h5 {
+    color: #f24f58;
+    margin-top: 20px;
+}
+  .points-table table thead th.paln_title h5 {
+    color: #af7250;
+    margin-top: 20px;
+}
+  .points-table table thead th.paln_title h5, .points-table table thead th.paln_title .h5 {
+    text-align: center;
+}
+  .points-table table thead th h5, .points-table table thead th .h5 {
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    text-align: left;
+    margin-bottom: 0;
+}
+  .points-table table th, .points-table table td {
+    text-align: left;
+    padding: 18px 20px;
+    border: 1px solid #c4c6ca;
+    border-top: 0;
+    border-left: 0;
+}
+  .points-table table tbody tr td {
+    font-size: 13px;
+    letter-spacing: .06em;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+  .points-table table td label {
+    font-size: 28px;
+    width: 32px;
+    height: 32px;
+    line-height: 28px;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    border: 2px solid #282828;
+    border-radius: 50%;
+}
+  .points-table table td label:after {
+    content: "\2605";
+}
+  .points-table table td label {
+    font-size: 28px;
+    width: 32px;
+    height: 32px;
+    line-height: 28px;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    border: 2px solid #282828;
+    border-radius: 50%;
+}
+  .mobile-tiers-wrapper {
+    display: none;
+}
+@media screen and (max-width:990px){
+  .points-table {
+    display: none;
+  }
+  .mobile-tiers-wrapper {
+    display: block;
+}
+  .mobile-tiers-wrapper table tr td {
+    font-size: 13px;
+    letter-spacing: .06em;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 10px;
+    border: 1px solid #e1e8ee;
+    
+}
+  .mobile-tiers {
+    width: 100%;
+}
+  .mobile-tiers-wrapper  table{
+    width:100%;
+  }
+  .mobile-tiers-wrapper .mobile-tiers .mobile-tier-content {
+    text-align: center;
+    padding: 35px 0 15px;
+}
+  .mobile-tiers-wrapper .mobile-tiers .mobile-tier-content .loyalty-card {
+    max-width: 200px;
+}
+  .mobile-tiers-wrapper table tr td {
+    font-size: 12px;
+}
+  .mobile-tiers-wrapper .mobile-tiers .mobile-tier-content .loyalty-title {
+    max-width: 175px;
+    max-height: 50px;
+    margin: 20px auto 5px;
+}
+  .mobile-tiers-wrapper img{
+    display:block;
+    margin:0 auto;
+  }
+}
+  @media screen and (max-width:690px){
+  .mobile-tiers-wrapper .mobile-tiers .mobile-tier-content .loyalty-card {
+    max-width: 250px;
+}
+  }
+</style>
+<script>
+
+  
+class SwiperCustom {
+  constructor(container) {
+    this.container = container;
+    this.sectionId = container.getAttribute("data-section-id");
+    this.namespace = ".swipercol-" + this.sectionId;
+
+    this.perviewDesktop = container.getAttribute("data-perview-desktop") || 3;
+    this.perviewTablet = container.getAttribute("data-perview-tablet") || 2.2;
+    this.perviewMobile = container.getAttribute("data-perview-mobile") || 1.3;
+    this.spaceBetweenDesktop =
+      container.getAttribute("data-space-desktop") || 20;
+    this.spaceBetweenMobile = container.getAttribute("data-space-mobile") || 10;
+    this.sliderEffect = container.getAttribute("data-effect") || "none";
+    this.autoplay = container.getAttribute("data-autoplay");
+    this.speed = container.getAttribute("data-speed");
+    this.initObserver();
+  }
+
+  initObserver() {
+    const observer = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            this.initSwiper();
+            observer.unobserve(this.container);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(this.container);
+  }
+
+  initSwiper() {
+    this.swiper = new Swiper(this.namespace, {
+      slidesPerView: this.perviewMobile,
+      freeMode: false,
+      slidesPerGroup: 1,
+      autoHeight: true,
+      calculateHeight: true,
+      freeModeSticky: false,
+      centeredSlides: false,
+      grabCursor: false,
+      watchSlidesVisibility: true,
+      watchSlidesProgress: true,
+      preloadImages: true,
+      updateOnImagesReady: true,
+      spaceBetween: this.spaceBetweenMobile,
+      observer: true,
+      speed: this.speed,
+      observeParents: true,
+      loop: this.autoplay ? true : false,
+      autoplay: this.autoplay
+        ? {
+            delay: parseInt(this.autoplay),
+            disableOnInteraction: false,
+          }
+        : false,
+      effect: this.sliderEffect,
+      breakpoints: {
+        991: {
+          slidesPerView: this.perviewDesktop,
+          spaceBetween: this.spaceBetweenDesktop,
+        },
+        600: {
+          slidesPerView: this.perviewTablet,
+          spaceBetween: this.spaceBetweenDesktop,
+        },
+      },
+      scrollbar: {
+        el: document.querySelector(this.namespace + " .swiper-scrollbar"),
+      },
+      navigation: {
+        nextEl: document.querySelector(this.namespace + " .swiper-button-next"),
+        prevEl: document.querySelector(this.namespace + " .swiper-button-prev"),
+      },
+      pagination: {
+        el: document.querySelector(this.namespace + " .swiper-pagination"),
+        type: "custom",
+        renderCustom: (swiper, current, total) => {
+          return `${current} / ${total}`;
+        },
+      },
+      keyboard: {
+        enabled: true,
+        onlyInViewport: true,
+      },
+      on: {
+        init: () => {
+          this.container.style.opacity = "1";
+        },
+      },
+    });
+  }
+}
+
+function initializeSwipers() {
+  const containers = document.querySelectorAll(".swiper-container");
+  containers.forEach((container) => {
+    new SwiperCustom(container);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initializeSwipers);
+</script>
+{% schema %}
+  {
+    "name": "Points Table",
+    "settings": [
+  {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+   {
+      "type": "header",
+      "content": "t:sections.media_hero.settings.content.header.content"
+    },
+    {
+      "id": "content_width",
+      "type": "range",
+      "label": "t:sections.media_hero.settings.content_width.label",
+      "info": "t:sections.media_hero.settings.content_width.info",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 500
+    },
+    ],
+    "presets":[
+      {
+        "name":"Points Table"
+      }
+    ]
+  }
+{% endschema %}

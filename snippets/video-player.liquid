@@ -1,0 +1,261 @@
+{%- liquid
+  comment
+    Renders a video player for internal and external videos.
+
+    Required params:
+      - video_type: { String } The video type. Can be:
+        - 'video': A Shopify video.
+        - 'external_video': An externally hosted video (ie, YouTube/Vimeo)
+      - video: { Object } The video being rendered. Will be one of the following objects:
+        - video: From a 'video' setting
+        - video: From a 'video_url' setting
+        - media: From product media
+
+    Optional parameters:
+      - show_poster: { Boolean: false } Whether to show a poster image. This will come from the video directly, or from the 'poster_image' parameter.
+      - poster_image: { Object } A custom poster image. This is used for external videos that are sourced from a 'video_url' setting.
+      - is_product_media: { Boolean: false } Whether the video is being rendered as part of the product page media display.
+      - is_within_media_lightbox: { Boolean: false } Whether the video is being rendered as part of the product page media lightbox display.
+      # TODO: fallback_alt: { String } Alt text to be used if the supplied video has none.
+      - media_aspect_ratio: { String } The aspect ratio of the container that the video is displayed in.
+      - focal_point: { String } The focal point of the video. Can be:
+        - 'center'
+        - 'top'
+        - 'bottom'
+        - 'left'
+        - 'right'
+      - allow_crop: { Boolean: false } Allow the video to be cropped if media_aspect_ratio doesn't match the video.
+      - video_width: { String } The width of the section that the video is displaying in. Can be:
+        - 'narrow'
+        - 'wide'
+        - 'page-width'
+        - 'full-width'
+        - 'full-width-background'
+        - 'full-width-padded'
+      - placeholder_name: { String } The name of the Shopify placeholder SVG to use.
+  endcomment
+
+  assign is_video = false
+  assign is_shopify_video = false
+  assign is_external_video = false
+  assign has_poster_image = true
+
+  if media_aspect_ratio
+    if media_aspect_ratio == 'natural'
+      # Default to "Landscape (16:9)"
+      assign media_aspect_ratio_value = 1.775
+    else
+      capture media_aspect_ratio_value
+        render 'get-aspect-ratio-value', aspect_ratio: media_aspect_ratio
+      endcapture
+
+      assign media_aspect_ratio_value = media_aspect_ratio_value | plus: 0
+    endif
+  endif
+
+  if video != blank
+    assign is_video = true
+
+    if video_type == 'video'
+      assign is_shopify_video = true
+      assign video_aspect_ratio = video.aspect_ratio
+      assign poster_image = video.preview_image
+
+      if media_aspect_ratio == 'natural'
+        assign media_aspect_ratio_value = video_aspect_ratio
+      endif
+    elsif video_type == 'external_video'
+      assign is_external_video = true
+
+      if is_product_media
+        assign external_video_type = video.host
+        assign external_video_id = video.external_id
+        assign video_aspect_ratio = video.aspect_ratio
+        assign poster_image = video.preview_image
+
+        if media_aspect_ratio == 'natural'
+          assign media_aspect_ratio_value = video_aspect_ratio
+        endif
+      else
+        assign external_video_type = video.type
+        assign external_video_id = video.id
+        assign video_aspect_ratio = media_aspect_ratio_value
+      endif
+
+      # External videos added through the theme editor needs a cover image option
+      if poster_image == blank
+        assign has_poster_image = false
+      endif
+    endif
+  else
+    assign video_aspect_ratio = media_aspect_ratio_value
+  endif
+
+  # Only external videos added through the theme editor have properly formatted poster images
+  # The rest require the addition of the image_url filter to show
+  unless video_type == 'external_video' and is_product_media == false and poster_image == blank
+    assign poster_image_src = poster_image | image_url
+  endunless
+-%}
+
+{%- if is_video -%}
+  {%- liquid
+    # The player vars below update when the poster is enabled to allow for the poster click to mimic the iframe's play button to start the video.
+    # This is further supported in the external-video.js
+    assign player_vars_youtube = '?enablejsapi=1'
+    assign player_vars_vimeo = ''
+
+    if show_poster
+      assign player_vars_youtube = '?enablejsapi=1&autoplay=1'
+      assign player_vars_vimeo = '?muted=0&autoplay=1'
+
+      # Image sizes for poster
+      capture image_sizes
+        render 'get-full-width-image-sizes', width: video_width
+      endcapture
+    endif
+
+    if external_video_type == 'youtube'
+      assign modal_video_url = 'https://www.youtube.com/embed/' | append: external_video_id | append: player_vars_youtube
+    elsif external_video_type == 'vimeo'
+      assign modal_video_url = 'https://player.vimeo.com/video/' | append: external_video_id | append: player_vars_vimeo
+    elsif video_type == 'video'
+      # Looping through Shopify videos to get first valid url source
+      for source in video.sources
+        if source.format == 'mp4'
+          assign modal_video_url = source.url
+          break
+        endif
+      endfor
+    endif
+  -%}
+
+  {%- if show_poster -%}
+    {%- capture poster_play_button -%}
+      <button class="video-player__poster-play-icon" js-poster-play-button js-update-carousel-tabindex aria-label="{{ 'general.accessibility.play_video' | t }}">
+        {%- render 'icon-utility', icon: 'media-play', width: 18, height: 20 -%}
+      </button>
+    {%- endcapture -%}
+  {%- endif -%}
+
+  {%- if is_within_media_lightbox -%}
+    <a
+      href="#"
+      class="lightbox-media no-transition"
+      data-pswp-type="video"
+      data-is-background-video="false"
+      data-video-url="{{ modal_video_url }}"
+      data-external-video-id="{{ external_video_id }}"
+      data-external-video-host="{{ external_video_type }}"
+      data-show-poster="{{ show_poster }}"
+      data-media-aspect-ratio="{{ media_aspect_ratio_value }}"
+      data-video-aspect-ratio="{{ video_aspect_ratio }}"
+      data-cropped="true"
+
+      {%- if show_poster %}
+        data-video-poster="{{ poster_image_src }}"
+      {%- endif -%}
+
+      style="--video-aspect-ratio:{{ video_aspect_ratio }}"
+      tabindex="-1"
+    >
+      {%- render 'image',
+        image: poster_image_src,
+        src_set_type: 'grid',
+        fallback_alt: fallback_alt,
+        no_crop: is_within_media_lightbox,
+        include_placeholder: true,
+        placeholder_name: placeholder_name,
+        object_fit: 'cover',
+        focal_point: focal_point,
+        sizes: image_sizes,
+        prioritize_loading: true
+      -%}
+      {{ poster_play_button }}
+
+      <div class="product-media__lightbox-zoom">
+        {%- render 'icon-utility', icon: 'media-zoom-in', width: 18, height: 18, class: 'product-media__zoom-icon' -%}
+      </div>
+
+      {%- if show_poster -%}
+        <template
+          js-lightbox-video-poster-container
+          data-lightbox-video-aspect-ratio="{{ video_aspect_ratio }}"
+        >
+          {%- if has_poster_image -%}
+            {%- # Intentionally empty img tag to populate via media-lightbox.js -%}
+            <img
+              class="lightbox-video__poster-image"
+              width="100%"
+              height="100%"
+              js-lightbox-video-poster
+            >
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'lightbox-video__poster-placeholder' }}
+          {%- endif -%}
+
+          {{ poster_play_button }}
+        </template>
+      {%- endif -%}
+    </a>
+  {%- else -%}
+    <div
+      class="
+        video-player-wrapper
+        {%- if media_aspect_ratio_value > video_aspect_ratio and allow_crop == false %} mismatched-aspect-video{%- endif -%}
+        {%- if allow_crop %} cropped-video{%- endif -%}
+      "
+      js-video-player-container
+      data-video-source="{{ video_type }}"
+      data-show-poster="{{ show_poster }}"
+      data-media-aspect-ratio="{{ media_aspect_ratio }}"
+      data-media-aspect-ratio-value="{{ media_aspect_ratio_value }}"
+      style="
+        --media-aspect-ratio: {{ media_aspect_ratio_value }};
+        --video-aspect-ratio: {{ video_aspect_ratio }};
+        --focal-point: {{ focal_point }};
+      "
+
+      {%- if show_poster -%}
+        data-has-poster="{{ has_poster_image }}"
+      {%- endif -%}
+    >
+      {%- if show_poster -%}
+        <div class="video-poster__container">
+          {%- render 'image',
+            image: poster_image_src,
+            src_set_type: 'grid',
+            include_placeholder: true,
+            placeholder_name: placeholder_name,
+            fallback_alt: fallback_alt,
+            no_crop: is_within_media_lightbox,
+            object_fit: 'cover',
+            focal_point: focal_point,
+            aspect_ratio: media_aspect_ratio,
+            sizes: image_sizes,
+            prioritize_loading: true
+          -%}
+
+          {{ poster_play_button }}
+        </div>
+      {%- endif -%}
+
+      {%- if is_shopify_video -%}
+        {%- assign video_html = video
+          | video_tag: class: 'video-player', data-video-internal: '', autoplay: false, controls: true
+        -%}
+        {{ video_html }}
+      {%- elsif is_external_video -%}
+        <div
+          class="video-player"
+          data-video-external
+          data-video-external-target
+          data-video-provider="{{ external_video_type }}"
+          data-video-id="{{ external_video_id }}"
+          data-video-url="{{ modal_video_url }}"
+          js-update-carousel-tabindex
+        ></div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+{%- endif -%}

@@ -1,0 +1,50 @@
+{%- liquid
+  comment
+    Renders a localization form for selecting a language.
+
+    Required parameters:
+      - id: { String } A unique string to be used for the localization form ID. Generally, should note where the
+          form is being rendered (eg. "footer" or "header").
+      - checkmark_icon: { String } The checkmark icon to display next to the current language.
+  endcomment
+-%}
+<localization-form>
+  {%- form 'localization', id: id -%}
+    <ul class="localization-list">
+      {% for language in localization.available_languages %}
+        {%- liquid
+          if language.iso_code == localization.language.iso_code
+            assign is_current = true
+          else
+            assign is_current = false
+          endif
+        -%}
+
+        <li class="localization-list__item">
+          <a
+            class="localization-option cluster no-wrap"
+            href="#"
+            lang="{{ language.iso_code }}"
+            aria-current="{{ is_current }}"
+            data-value="{{ language.iso_code }}"
+            js-localization-option
+          >
+            <span class="localization-option__label">{{ language.endonym_name | capitalize }}</span>
+
+            {%- if is_current -%}
+              {{ checkmark_icon }}
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    <input
+      type="hidden"
+      name="language_code"
+      id="{{ id }}"
+      value="{{ localization.language.iso_code }}"
+      js-localization-input
+    >
+  {%- endform -%}
+</localization-form>

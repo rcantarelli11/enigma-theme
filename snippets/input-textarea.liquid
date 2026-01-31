@@ -1,0 +1,119 @@
+{%- liquid
+  comment
+    Renders a textarea.
+
+    Required parameters:
+      - id: { String } The textarea's ID.
+      - name: { String } The textarea's name.
+      - label: { String } The textarea's label.
+
+    Optional parameters:
+      - class: { String } The textarea's class.
+      - placeholder: { String } The textarea's placeholder. This should only be used when
+          the 'label_type' is 'external'.
+      - default_value: { String } The textarea's default value.
+      - required: { Boolean: false } Whether the textarea is required.
+      - label_type: { String: 'internal' } The label type. Can be:
+        - 'internal': Displays inside the textarea container.
+        - 'external': Displays outside the textarea container.
+      - help_text: { String } Text to be shown below the textarea.
+      - has_error: { Boolean: false } Whether there's an error associated with the textarea.
+      - error_message: { String } The message to display when there's an error associated
+          with the textarea.
+      - error_custom_id: { String } ID to add as a means to control error message style or func.
+      - force_render_error_container: { Boolean: false } Always render an error container, even when empty.
+      - form_id: { String } ID of the form to connect the input with.
+      - max_length_value: { Number } Limit character length allowed within textarea.
+      - row_count: { Number } Limit row count of textarea.
+  endcomment
+
+  assign label_type = label_type | default: 'internal'
+
+  capture label_type_class
+    echo 'label-[[lt]]' | replace: '[[lt]]', label_type
+  endcapture
+
+  if required
+    assign label = 'general.forms.required_label' | t: label: label
+  endif
+
+  capture label_element
+    echo '<label for="[[id]]">[[label]]</label>' | replace: '[[id]]', id | replace: '[[label]]', label
+  endcapture
+
+  assign has_max_length = false
+
+  if max_length_value
+    assign has_max_length = true
+  endif
+
+  assign has_row_count = false
+
+  if row_count
+    assign has_row_count = true
+  endif
+-%}
+
+<div class="custom-input-wrapper">
+  <div class="custom-input custom-input--textarea {{ label_type_class }} {%- if has_error %} has-error{%- endif -%}">
+    {%- liquid
+      if label_type == 'external'
+        echo label_element
+      endif
+    -%}
+
+    <textarea
+      id="{{ id }}"
+      name="{{ name }}"
+
+      {%- if class != blank %}
+        class="{{ class }}"
+      {%- endif -%}
+
+      placeholder="{{ placeholder }}"
+
+      {%- if form_id != blank -%}
+        form="{{ form_id }}"
+      {%- endif -%}
+
+      {%- if has_max_length -%}
+        maxlength="{{ max_length_value }}"
+      {%- endif -%}
+
+      {%- if has_row_count -%}
+        rows="{{ row_count }}"
+      {%- endif -%}
+
+      {%- if required %}
+        required
+      {%- endif -%}
+    >
+      {%- liquid
+        if default_value != blank
+          echo default_value
+        endif
+      -%}
+    </textarea>
+
+    {%- liquid
+      if label_type == 'internal'
+        echo label_element
+      endif
+    -%}
+  </div>
+
+  {%- if force_render_error_container or has_error and error_message != blank -%}
+    <div
+      class="notification-display error-display"
+      {% if error_custom_id != blank %}
+        id="{{ error_custom_id }}"
+      {%- endif -%}
+    >
+      {{ error_message }}
+    </div>
+  {%- endif -%}
+
+  {%- if help_text != blank -%}
+    <div class="custom-input-help-text">{{ help_text }}</div>
+  {%- endif -%}
+</div>

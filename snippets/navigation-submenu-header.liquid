@@ -1,0 +1,28 @@
+{% liquid
+  comment
+    Renders a header for a submenu. This header contains controls to navigate back to the previous menu or close the submenu when in a mobile/drawer context.
+
+    Required parameters:
+      - link: { Object } The link associated with the item.
+      - level: { Number } The menu level associated with the header. Can be from 0-2 (0 is for the top-most level).
+      - link_loop: { Object } The parent forloop for iterating through the current level of links.
+  endcomment
+%}
+
+<header class="submenu__header submenu-header">
+  <div class="submenu-header__inner">
+    {%- if link != blank -%}
+      <label
+        class="submenu-header__control submenu-header__control--back"
+        for="level-{{ level }}-link-{{ link_loop.index }}-submenu-{{ link.handle | strip }}"
+      >
+        <span class="visually-hidden">{{ 'sections.navigation_menu.previous_menu' | t }}</span>
+        {% render 'icon-utility', icon: 'chevron-left', width: 9, height: 16 %}
+      </label>
+    {%- endif -%}
+
+    <div class="submenu-header__title">
+      {{ link.title | escape | default: '&nbsp;' }}
+    </div>
+  </div>
+</header>

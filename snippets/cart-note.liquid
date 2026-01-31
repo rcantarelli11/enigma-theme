@@ -1,0 +1,33 @@
+<cart-note>
+  <details
+    class="cart-note__details"
+    aria-expanded="false"
+    data-populated="{%- if cart.note != blank -%}true{%- else -%}false{%- endif -%}"
+  >
+    <summary>
+      {%- # Button snippet not used because it imposes a href on a which breaks details/summary behaviour -%}
+      <a class="btn btn--style-text underlined cart-note__add-button fs-body-75">
+        {{- 'cart.general.note.add' | t -}}
+      </a>
+      <a class="btn btn--style-text underlined cart-note__edit-button fs-body-75">
+        {{- 'cart.general.note.edit' | t -}}
+      </a>
+      <a class="btn btn--style-text underlined cart-note__close-button fs-body-75">
+        {{- 'cart.general.note.close' | t -}}
+      </a>
+    </summary>
+
+    <div class="cart-note__textarea-wrap" cart-note-input>
+      {%- assign textarea_label = 'cart.general.order_note_label' | t -%}
+
+      {%- render 'input-textarea',
+        id: 'CartSpecialInstructions',
+        name: 'note',
+        label: textarea_label,
+        placeholder: textarea_label,
+        default_value: cart.note,
+        render_error_container: true
+      -%}
+    </div>
+  </details>
+</cart-note>

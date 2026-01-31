@@ -1,0 +1,23 @@
+{%- liquid
+  comment
+    Renders an "Email" block for the contact form.
+
+    Required parameters:
+      - block: { Object } The associated block.
+  endcomment
+
+  capture input_id
+    echo 'email--[[bid]]' | replace: '[[bid]]', block.id
+  endcapture
+-%}
+
+<div class="contact-form__element contact-form__element--{{ block.settings.width }}" {{ block.shopify_attributes }}>
+  {%- render 'input-text',
+    id: input_id,
+    name: 'contact[email]',
+    label: block.settings.label,
+    placeholder: block.settings.label,
+    input_type: 'email',
+    required: true
+  -%}
+</div>

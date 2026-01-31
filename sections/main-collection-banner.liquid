@@ -1,0 +1,715 @@
+{{ 'component-collection-banner.css' | asset_url | stylesheet_tag }}
+{%- render 'inline-scripts', script_name: 'visibility-watcher' -%}
+
+<div
+  class="section"
+  data-section-id="{{ section.id }}"
+  style="
+    {% render 'settings-section-padding' %}
+    {%- # TODO: Can we be selective about which color variables to update? -%}
+    {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+  "
+>
+  <div class="section-inner section-inner--width-{{ section.settings.width }}">
+    {%- # TODO: Can the banner be snippetized and used for heros/slideshows? -%}
+    <visibility-watcher data-watch-child-selector=".banner">
+      <div
+        class="banner animating-image-wrap {%- if section.settings.show_banner_image %} banner--has-image{%-else %} ta-c{%- endif -%}"
+        {%- if section.settings.show_banner_image -%}
+          {%- liquid
+            capture overlay_css_vars
+              echo 'background,background-gradient,text,text-alpha-70'
+            endcapture
+          -%}
+
+          style="
+            --overlay-opacity: {{ section.settings.overlay_opacity }}%;
+            {% render 'color-scheme-to-vars', color_scheme: section.settings.overlay_color_scheme, css_vars: overlay_css_vars -%}
+          "
+        {%- endif -%}
+      >
+        {%- capture banner_content -%}
+          <div
+            class="
+              banner__content collection_banner
+              {%- if section.settings.show_product_count %}
+                collection_banner--has-product-count
+              {%- endif %}
+              content-blocks
+              ff-body fs-body-100
+            "
+            style="--max-content-width: {{ section.settings.content_max_width }}px;"
+          >
+            {% liquid
+              capture heading_font_class
+                render 'settings-text-size', type: 'heading', size: section.settings.heading_font_size
+                echo ' '
+                render 'settings-text-size', type: 'heading_mobile', size: section.settings.heading_mobile_font_size
+              endcapture
+            -%}
+            <div class="devCollectionTimer">
+            {% if collection.products_count <= 0 %}
+              <custom-countdown end-time="{{ section.settings.end_time }}">
+                    <div class="countdown">
+                          <li> <span class="days devCustomfont">00</span> Days</li>
+                          <li><span class="hours devCustomfont">00</span> Hours</li> 
+                            <li><span class="minutes devCustomfont">00</span> Minutes</li> 
+                          <li> <span class="seconds devCustomfont">00</span>Seconds</li>
+               </div> 
+                <div class="content-block--spacer"><hr></div>
+               <h1
+                class="
+                  banner-content__heading
+                  content-block
+                  content-block--heading
+                  ff-heading
+                  {{ heading_font_class -}}
+                  {%- if section.settings.enable_text_animation %}
+                    animation-heading
+                  {%- endif -%}
+                "
+              >
+                Coming Soon
+              </h1>
+              </custom-countdown>
+              
+              {% endif %}
+            </div>
+
+            <div class="content-block-wrapper content-block-wrapper--heading">
+             {% if collection.products_count > 0 %}
+              <h1
+                class="
+                  banner-content__heading
+                  content-block
+                  content-block--heading
+                  ff-heading
+                  {{ heading_font_class -}}
+                  {%- if section.settings.enable_text_animation %}
+                    animation-heading
+                  {%- endif -%}
+                "
+              >
+                {% if collection.handle == 'all' %}
+                  {%- assign collection_title_all = 'Enigma® products'| replace: '®', '<span class="collection_trademark">®</span>' %}
+                 {{- collection_title_all -}} 
+                {% else %}
+                 {%- assign collection_title = collection.title | replace: '®', '<span class="collection_trademark">®</span>' %}
+                 {{- collection_title -}} 
+                {% endif %}
+              </h1>
+              {% endif %}
+            </div>
+
+            {%- if section.settings.show_product_count -%}
+              <span class="collection_banner__product-count {%- if section.settings.enable_text_animation %} animation-content{%- endif -%}">
+                {{- 'collections.general.product_count' | t: count: collection.products_count -}}
+              </span>
+            {%- endif -%}
+
+            {%- if section.settings.show_collection_description and collection.description != blank -%}
+              <div class="collection_banner__description rte {%- if section.settings.enable_text_animation %} animation-content{%- endif -%}">
+                {{ collection.description }}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endcapture -%}
+
+        {%- if section.settings.show_banner_image -%}
+          {%- liquid
+            if collection.image == blank 
+               assign banner_image = section.settings.image
+             else
+             assign banner_image  banner_image = collection.image
+             endif
+          
+            capture banner_image_sizes
+              render 'get-full-width-image-sizes', width: section.settings.width
+            endcapture
+          -%}
+
+          <div
+            class="
+              banner__image-wrapper
+              {%- if section.settings.banner_height_type == 'custom' %}
+                banner__image-wrapper--custom-height
+              {%- endif -%}
+            "
+            {%- if section.settings.banner_height_type == 'custom' %}
+              style="{%- render 'settings-custom-height', local_settings: section.settings -%}"
+            {%- endif -%}
+          >
+            {%- unless section.settings.image_animation == 'none' -%}
+              {% render 'animating-image-revealer', type: section.settings.image_animation %}
+            {%- endunless -%}
+
+            {%- liquid
+              capture image_class
+                echo 'banner__image banner__image--[[screen]]'
+              endcapture
+
+              capture desktop_image_class
+                echo image_class | replace: '[[screen]]', 'desktop'
+              endcapture
+            -%}
+
+            {%- render 'image',
+              image: banner_image,
+              class: desktop_image_class,
+              sizes: banner_image_sizes,
+              src_set_type: 'full-width',
+              focal_point: 'image-presentation',
+              include_placeholder: true,
+              placeholder_name: 'hero-apparel-1',
+              placeholder_natural_fallback_ratio: 'landscape-wide-alt'
+            -%}
+
+            {%- if section.settings.mobile_image != blank -%}
+              {%- capture mobile_image_class -%}
+                {{ image_class | replace: '[[screen]]', 'mobile' }}
+              {%- endcapture -%}
+
+              {%- render 'image',
+                image: section.settings.mobile_image,
+                class: mobile_image_class,
+                sizes: banner_image_sizes,
+                src_set_type: 'full-width',
+                focal_point: 'image-presentation'
+              -%}
+            {%- endif -%}
+          </div>
+
+          <div class="banner__overlay"></div>
+
+          {%- liquid
+            capture content_alignment_vertical
+              echo section.settings.text_alignment | split: '_' | first
+            endcapture
+
+            capture content_alignment_horizontal
+              echo section.settings.text_alignment | split: '_' | last
+            endcapture
+          -%}
+
+          <div
+            class="
+              banner__content-wrapper
+              content-alignment-vertical--{{ content_alignment_vertical }}
+              content-alignment-horizontal--{{ content_alignment_horizontal }}
+            "
+          >
+            {{ banner_content }}
+          </div>
+        {%- else -%}
+          {{ banner_content }}
+        {%- endif -%}
+      </div>
+    </visibility-watcher>
+  </div>
+</div>
+
+<script>
+  class CustomCountdown extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    const endTime = new Date(this.getAttribute("end-time"));
+    this.updateCountdown(endTime);
+
+    this.timerInterval = setInterval(() => {
+      this.updateCountdown(endTime);
+    }, 1000);
+  }
+
+  disconnectedCallback() {
+    clearInterval(this.timerInterval);
+  }
+
+  updateCountdown(endTime) {
+    const now = new Date();
+    const diff = endTime - now;
+
+    if (diff <= 0) {
+      this.querySelector(".countdown").style.display = "none";
+      clearInterval(this.timerInterval);
+      return;
+    }
+    const totalDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const totalHours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    this.querySelector(".days").textContent = String(totalDays).padStart(
+      2,
+      "0"
+    );
+    this.querySelector(".hours").textContent = String(totalHours).padStart(
+      2,
+      "0"
+    );
+    this.querySelector(".minutes").textContent = String(minutes).padStart(
+      2,
+      "0"
+    );
+    this.querySelector(".seconds").textContent = String(seconds).padStart(
+      2,
+      "0"
+    );
+  }
+}
+
+customElements.define("custom-countdown", CustomCountdown);
+</script>
+      
+<style>
+    .countdown {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: .5rem;
+}
+  .countdown {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: .5rem;
+    justify-content: center;
+}
+.countdown li {
+    align-items: center;
+    background-color: transparent;
+    border-radius: .375rem;
+    text-transform:capitalize;
+    display: flex;
+    flex-direction: column;
+    min-width: 60px;
+    padding: .5rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-align: center;
+    text-transform: lowercase;
+    position: relative;
+    font-family: manrope;
+    background-image: linear-gradient(to bottom, #79edfc, #3f919c);
+   color:black;
+}
+
+   .countdown li .devCustomfont {
+        font-size: 26px;
+        font-weight: 500;
+        line-height: 1.25;
+        text-transform: uppercase;
+   }
+
+  .devCollectionTimer hr{
+    margin:2rem 0;
+  }
+  .countdown li::after {
+    --tw-translate-x: -50%;
+    --tw-translate-y: -50%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+     background-image: url('https://cdn.shopify.com/s/files/1/0736/7481/7794/files/qvdruuy0wtm83nmnpt.svg?v=1741636075');
+    content: "";
+    display: block;
+    height: 1.5rem;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+        transform: translate(-50%, -50%);
+    width: 100%;
+}
+</style>
+
+{% schema %}
+{
+  "name": "t:sections.main_collection_banner.name",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main_collection_banner.settings.text.header.content"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "label": "t:shared.settings.text_size.label_heading",
+      "info": "t:shared.settings.text_size.info",
+      "default": 7
+    },
+    {
+      "type": "range",
+      "id": "heading_mobile_font_size",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "label": "t:shared.settings.text_size.label_heading_mobile",
+      "info": "t:shared.settings.text_size.info",
+      "default": 7
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "t:sections.main_collection_banner.settings.text.show_collection_description.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "t:sections.main_collection_banner.settings.text.show_product_count.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "content_max_width",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "label": "t:shared.settings.max_width.content.label",
+      "default": 500,
+      "info": "t:shared.settings.max_width.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main_collection_banner.settings.banner_image.header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_banner_image",
+      "label": "t:sections.main_collection_banner.settings.banner_image.show_banner_image.label"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.main_collection_banner.settings.banner_image.paragraph.content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.main_collection_banner.settings.banner_image.image.label"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "t:sections.main_collection_banner.settings.banner_image.mobile_image.label"
+    },
+    {
+      "type": "radio",
+      "id": "banner_height_type",
+      "label": "t:sections.main_collection_banner.settings.banner_image.banner_height_type.label",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "t:shared.settings.height_type.options.adapt"
+        },
+        {
+          "value": "custom",
+          "label": "t:shared.settings.height_type.options.custom"
+        }
+      ],
+      "default": "adapt"
+    },
+    {
+      "type": "select",
+      "id": "custom_desktop_height",
+      "label": "t:sections.main_collection_banner.settings.banner_image.custom_desktop_height.label",
+      "options": [
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "250px",
+          "label": "t:shared.settings.custom_height.options.fixed.250px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "350px",
+          "label": "t:shared.settings.custom_height.options.fixed.350px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "450px",
+          "label": "t:shared.settings.custom_height.options.fixed.450px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "550px",
+          "label": "t:shared.settings.custom_height.options.fixed.550px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "650px",
+          "label": "t:shared.settings.custom_height.options.fixed.650px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "750px",
+          "label": "t:shared.settings.custom_height.options.fixed.750px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "50vh",
+          "label": "t:shared.settings.custom_height.options.relative.50vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "60vh",
+          "label": "t:shared.settings.custom_height.options.relative.60vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "70vh",
+          "label": "t:shared.settings.custom_height.options.relative.70vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "80vh",
+          "label": "t:shared.settings.custom_height.options.relative.80vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "90vh",
+          "label": "t:shared.settings.custom_height.options.relative.90vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "100vh",
+          "label": "t:shared.settings.custom_height.options.relative.100vh"
+        }
+      ],
+      "default": "450px"
+    },
+    {
+      "type": "select",
+      "id": "custom_mobile_height",
+      "label": "t:sections.main_collection_banner.settings.banner_image.custom_mobile_height.label",
+      "options": [
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "150px",
+          "label": "t:shared.settings.custom_height.options.fixed.150px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "250px",
+          "label": "t:shared.settings.custom_height.options.fixed.250px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "350px",
+          "label": "t:shared.settings.custom_height.options.fixed.350px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "450px",
+          "label": "t:shared.settings.custom_height.options.fixed.450px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "550px",
+          "label": "t:shared.settings.custom_height.options.fixed.550px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "650px",
+          "label": "t:shared.settings.custom_height.options.fixed.650px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.fixed.group",
+          "value": "750px",
+          "label": "t:shared.settings.custom_height.options.fixed.750px"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "50vh",
+          "label": "t:shared.settings.custom_height.options.relative.50vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "60vh",
+          "label": "t:shared.settings.custom_height.options.relative.60vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "70vh",
+          "label": "t:shared.settings.custom_height.options.relative.70vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "80vh",
+          "label": "t:shared.settings.custom_height.options.relative.80vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "90vh",
+          "label": "t:shared.settings.custom_height.options.relative.90vh"
+        },
+        {
+          "group": "t:shared.settings.custom_height.options.relative.group",
+          "value": "100vh",
+          "label": "t:shared.settings.custom_height.options.relative.100vh"
+        }
+      ],
+      "default": "350px"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "t:sections.main_collection_banner.settings.banner_image.text_alignment.label",
+      "options": [
+        {
+          "value": "top_left",
+          "label": "t:shared.options.alignment.full.top_left"
+        },
+        {
+          "value": "top_center",
+          "label": "t:shared.options.alignment.full.top_center"
+        },
+        {
+          "value": "top_right",
+          "label": "t:shared.options.alignment.full.top_right"
+        },
+        {
+          "value": "center_left",
+          "label": "t:shared.options.alignment.full.center_left"
+        },
+        {
+          "value": "center_center",
+          "label": "t:shared.options.alignment.full.center_center"
+        },
+        {
+          "value": "center_right",
+          "label": "t:shared.options.alignment.full.center_right"
+        },
+        {
+          "value": "bottom_left",
+          "label": "t:shared.options.alignment.full.bottom_left"
+        },
+        {
+          "value": "bottom_center",
+          "label": "t:shared.options.alignment.full.bottom_center"
+        },
+        {
+          "value": "bottom_right",
+          "label": "t:shared.options.alignment.full.bottom_right"
+        }
+      ],
+      "default": "center_center"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:shared.settings.section_settings.width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:shared.settings.section_settings.width.options.page_width"
+        },
+        {
+          "value": "full-width",
+          "label": "t:shared.settings.section_settings.width.options.full_width"
+        },
+        {
+          "value": "full-width-background",
+          "label": "t:shared.settings.section_settings.width.options.full_width_background"
+        },
+        {
+          "value": "full-width-padded",
+          "label": "t:shared.settings.section_settings.width.options.full_width_padded"
+        }
+      ],
+      "info": "t:shared.settings.section_settings.width.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main_collection_banner.settings.banner_image_overlay.header.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "overlay_color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_4"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:shared.settings.overlay.overlay_opacity.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 20,
+      "info": "t:shared.settings.overlay.overlay_opacity.info"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.animation.header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_text_animation",
+      "label": "t:shared.settings.animation.text.enable_text_animation.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "image_animation",
+      "label": "t:sections.main_collection_banner.settings.animation.banner_image_transition.label",
+      "options": [
+        {
+          "value": "none",
+          "label": "t:shared.settings.animation.image.options.none"
+        },
+        {
+          "value": "fade",
+          "label": "t:shared.settings.animation.image.options.fade"
+        },
+        {
+          "value": "iris",
+          "label": "t:shared.settings.animation.image.options.iris"
+        }
+      ],
+      "default": "iris"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 20
+    },
+    {
+        "type": "text",
+        "id": "end_time",
+        "label": "Endtime",
+        "info": "Format:YYYY-MM-DDTHH:MM:SS",
+        "default":"2024-11-28T23:59:59"
+    }
+  ]
+}
+{% endschema %}

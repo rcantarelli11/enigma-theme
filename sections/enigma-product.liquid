@@ -1,0 +1,318 @@
+{%- liquid
+  assign product = section.settings.product | default: product
+  assign current_variant = product.selected_or_first_available_variant
+  assign featured_image = current_variant.featured_image | default: product.featured_image
+-%}
+
+<section class="enigma-pdp enigma-section" id="enigma-product-{{ section.id }}">
+  <div class="enigma-container">
+    <div class="enigma-pdp__layout">
+      <!-- Gallery -->
+      <div class="enigma-pdp__gallery">
+        <div class="enigma-pdp__main-image" data-product-main-image>
+          {%- if featured_image != blank -%}
+            {{ featured_image | image_url: width: 1200 | image_tag: loading: 'eager', sizes: '(min-width: 768px) 50vw, 100vw', id: 'product-main-img' }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder' }}
+          {%- endif -%}
+        </div>
+        {%- if product.images.size > 1 -%}
+          <div class="enigma-pdp__thumbnails">
+            {%- for image in product.images -%}
+              <button
+                class="enigma-pdp__thumbnail{% if image == featured_image %} active{% endif %}"
+                data-thumbnail
+                data-image-url="{{ image | image_url: width: 1200 }}"
+                aria-label="View {{ image.alt | default: product.title }}"
+              >
+                {{ image | image_url: width: 128 | image_tag: loading: 'lazy' }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- Product Info -->
+      <div class="enigma-pdp__info">
+        {%- if product.type != blank -%}
+          <p class="enigma-label">{{ product.type }}</p>
+        {%- endif -%}
+
+        <h1 class="enigma-h2" style="font-size: clamp(1.75rem, 3vw, 2.5rem);">{{ product.title }}</h1>
+
+        <div class="enigma-pdp__price">
+          {%- if current_variant.compare_at_price > current_variant.price -%}
+            <span style="text-decoration: line-through; color: var(--text-muted); margin-right: 0.75rem; font-weight: 400;">{{ current_variant.compare_at_price | money }}</span>
+          {%- endif -%}
+          <span data-product-price>{{ current_variant.price | money }}</span>
+        </div>
+
+        {%- if product.metafields.descriptors.subtitle != blank -%}
+          <p class="enigma-body-lg">{{ product.metafields.descriptors.subtitle.value }}</p>
+        {%- endif -%}
+
+        {%- form 'product', product, id: 'enigma-product-form', data-product-form: '' -%}
+          {%- liquid
+            assign has_real_variants = false
+            if product.variants.size > 1 or product.variants.first.title != 'Default Title'
+              assign has_real_variants = true
+            endif
+          -%}
+          <div class="enigma-pdp__variants{% unless has_real_variants %} enigma-pdp__variants--single{% endunless %}">
+            {%- for option in product.options_with_values -%}
+              <div>
+                <p class="enigma-pdp__variant-label">{{ option.name }}</p>
+                <div class="enigma-pdp__variant-options" data-option-group="{{ forloop.index0 }}">
+                  {%- for value in option.values -%}
+                    <button
+                      type="button"
+                      class="enigma-pdp__variant-option{% if value == option.selected_value %} selected{% endif %}"
+                      data-option-value="{{ value }}"
+                      data-option-index="{{ forloop.index0 }}"
+                    >
+                      {{ value }}
+                    </button>
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endfor -%}
+
+            <select name="id" class="visually-hidden" data-variant-select>
+              {%- for variant in product.variants -%}
+                <option
+                  value="{{ variant.id }}"
+                  {% if variant == current_variant %}selected{% endif %}
+                  {% unless variant.available %}disabled{% endunless %}
+                  data-price="{{ variant.price }}"
+                  data-compare-price="{{ variant.compare_at_price }}"
+                >
+                  {{ variant.title }}
+                </option>
+              {%- endfor -%}
+            </select>
+          </div>
+
+          <div class="enigma-pdp__add-to-cart">
+            <div class="enigma-pdp__quantity">
+              <button type="button" data-qty-minus aria-label="Decrease quantity">−</button>
+              <input type="number" name="quantity" value="1" min="1" max="10" data-qty-input aria-label="Quantity">
+              <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+            </div>
+            <button
+              type="submit"
+              class="enigma-btn enigma-btn--primary enigma-btn--lg"
+              style="flex: 1;"
+              {% unless current_variant.available %}disabled{% endunless %}
+              data-add-to-cart
+            >
+              {%- if current_variant.available -%}
+                Add to Cart — {{ current_variant.price | money }}
+              {%- else -%}
+                Sold Out
+              {%- endif -%}
+            </button>
+          </div>
+
+          <!-- Free shipping bar -->
+          <div class="enigma-shipping-bar">
+            <p class="enigma-shipping-bar__text">
+              {%- if current_variant.price >= 7000 -%}
+                ✓ You qualify for <strong>free shipping!</strong>
+              {%- else -%}
+                {%- assign remaining = 7000 | minus: current_variant.price -%}
+                Add <strong>{{ remaining | money }}</strong> more for <strong>free shipping</strong>
+              {%- endif -%}
+            </p>
+            <div class="enigma-shipping-bar__progress">
+              {%- assign progress = current_variant.price | times: 100 | divided_by: 7000 -%}
+              {%- if progress > 100 %}{% assign progress = 100 %}{% endif -%}
+              <div class="enigma-shipping-bar__fill" style="width: {{ progress }}%"></div>
+            </div>
+          </div>
+        {%- endform -%}
+
+        <!-- Trust features -->
+        <div class="enigma-pdp__features">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'feature' -%}
+              <div class="enigma-pdp__feature" {{ block.shopify_attributes }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+                <span>{{ block.settings.text }}</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        <!-- Description accordion -->
+        {%- if product.description != blank -%}
+          <details class="enigma-pdp__accordion" style="border-top: 1px solid var(--border); padding-top: var(--space-lg);">
+            <summary style="cursor: pointer; font-weight: 600; font-size: 0.875rem; display: flex; justify-content: space-between; align-items: center;">
+              Description
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="enigma-body mt-md" style="padding-bottom: var(--space-md);">
+              {{ product.description }}
+            </div>
+          </details>
+        {%- endif -%}
+
+        <!-- Ingredients (if available via metafield) -->
+        {%- if product.metafields.custom.ingredients != blank -%}
+          <details class="enigma-pdp__accordion" style="border-top: 1px solid var(--border); padding-top: var(--space-lg);">
+            <summary style="cursor: pointer; font-weight: 600; font-size: 0.875rem; display: flex; justify-content: space-between; align-items: center;">
+              Ingredients
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </summary>
+            <div class="enigma-body mt-md" style="padding-bottom: var(--space-md);">
+              {{ product.metafields.custom.ingredients.value }}
+            </div>
+          </details>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sticky Add to Cart (Mobile) -->
+<div class="enigma-sticky-atc" data-sticky-atc>
+  <div class="enigma-sticky-atc__inner">
+    <div class="enigma-sticky-atc__info">
+      <p class="enigma-sticky-atc__title">{{ product.title }}</p>
+      <p class="enigma-sticky-atc__price" data-sticky-price>{{ current_variant.price | money }}</p>
+    </div>
+    <button
+      class="enigma-btn enigma-btn--primary"
+      data-sticky-add-to-cart
+      {% unless current_variant.available %}disabled{% endunless %}
+    >
+      {%- if current_variant.available -%}
+        Add to Cart
+      {%- else -%}
+        Sold Out
+      {%- endif -%}
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Quantity buttons
+  const minus = document.querySelector('[data-qty-minus]');
+  const plus = document.querySelector('[data-qty-plus]');
+  const input = document.querySelector('[data-qty-input]');
+
+  if (minus && plus && input) {
+    minus.addEventListener('click', () => { if (input.value > 1) input.value = parseInt(input.value) - 1; });
+    plus.addEventListener('click', () => { if (input.value < 10) input.value = parseInt(input.value) + 1; });
+  }
+
+  // Thumbnail gallery
+  const thumbnails = document.querySelectorAll('[data-thumbnail]');
+  const mainImg = document.querySelector('#product-main-img');
+
+  thumbnails.forEach(thumb => {
+    thumb.addEventListener('click', () => {
+      thumbnails.forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      if (mainImg) mainImg.src = thumb.dataset.imageUrl;
+    });
+  });
+
+  // Variant selection
+  const optionBtns = document.querySelectorAll('[data-option-value]');
+  const variantSelect = document.querySelector('[data-variant-select]');
+  const priceEl = document.querySelector('[data-product-price]');
+  const atcBtn = document.querySelector('[data-add-to-cart]');
+
+  optionBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.closest('[data-option-group]');
+      group.querySelectorAll('[data-option-value]').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      // Build selected options
+      const selectedOptions = [];
+      document.querySelectorAll('[data-option-group]').forEach(g => {
+        const sel = g.querySelector('.selected');
+        if (sel) selectedOptions.push(sel.dataset.optionValue);
+      });
+
+      // Find matching variant
+      const options = variantSelect.querySelectorAll('option');
+      options.forEach(opt => {
+        if (opt.textContent.trim() === selectedOptions.join(' / ')) {
+          variantSelect.value = opt.value;
+          if (priceEl) {
+            const price = parseInt(opt.dataset.price);
+            priceEl.textContent = '$' + (price / 100).toFixed(2);
+          }
+          if (atcBtn) {
+            if (opt.disabled) {
+              atcBtn.disabled = true;
+              atcBtn.textContent = 'Sold Out';
+            } else {
+              atcBtn.disabled = false;
+              const price = parseInt(opt.dataset.price);
+              atcBtn.textContent = 'Add to Cart — $' + (price / 100).toFixed(2);
+            }
+          }
+        }
+      });
+    });
+  });
+
+  // Sticky ATC visibility
+  const stickyAtc = document.querySelector('[data-sticky-atc]');
+  const addToCartSection = document.querySelector('.enigma-pdp__add-to-cart');
+
+  if (stickyAtc && addToCartSection) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        stickyAtc.classList.toggle('visible', !entry.isIntersecting);
+      },
+      { threshold: 0 }
+    );
+    observer.observe(addToCartSection);
+  }
+
+  // Sticky ATC click -> submit form
+  const stickyBtn = document.querySelector('[data-sticky-add-to-cart]');
+  const form = document.querySelector('[data-product-form]');
+  if (stickyBtn && form) {
+    stickyBtn.addEventListener('click', () => form.requestSubmit());
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Enigma Product",
+  "tag": "div",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Trust feature",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Lab tested & third-party verified"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Enigma Product",
+      "blocks": [
+        { "type": "feature", "settings": { "text": "Lab tested & third-party verified" } },
+        { "type": "feature", "settings": { "text": "Clinically dosed ingredients" } },
+        { "type": "feature", "settings": { "text": "No proprietary blends or fillers" } },
+        { "type": "feature", "settings": { "text": "Free shipping on orders over $70" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,7 @@
+<div class="cart-items" js-cart-items>
+  {%- liquid
+    for item in cart.items
+      render 'cart-item', item: item
+    endfor
+  -%}
+</div>

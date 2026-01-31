@@ -1,0 +1,105 @@
+{%- liquid
+  comment
+    Renders cart cross-sell products.
+
+    Required parameters
+      - placement: { String: 'cart-page' or 'cart-drawer' }
+      - position: { String: 'below-subtotal' or 'below-line-items'}
+  endcomment
+
+  case settings.cart_cross_sell_source
+    when 'collection'
+      assign product_pool = settings.cart_cross_sell_collection.products
+    when 'product_list'
+      assign product_pool = settings.cart_cross_sell_product_list
+  endcase
+
+  assign cart_item_ids = cart.items | map: 'product_id'
+  assign items_count = 0
+
+  assign within_drawer = false
+  if placement == 'cart-drawer'
+    assign within_drawer = true
+  endif
+
+  capture items
+    for prod in product_pool
+      if items_count >= settings.cart_cross_sells_max_products
+        break
+      elsif cart_item_ids contains prod.id or prod.available == false
+        continue
+      endif
+
+      assign items_count = items_count | plus: 1
+      render 'cross-sells-item', prod: prod, within_drawer: within_drawer
+    endfor
+  endcapture
+
+  case placement
+    when 'cart-drawer'
+      assign peek = '40px'
+      assign peek_above_720 = '40px'
+      assign peek_above_1024 = '40px'
+      assign columns_above_1440 = 1
+      assign gap = '12px'
+      assign gap_above_1024 = '12px'
+    when 'cart-page'
+      assign peek = '35px'
+      assign peek_above_720 = '150px'
+      assign peek_above_1024 = '0px'
+      if position == 'below-line-items'
+        assign columns_above_1440 = 2
+      else
+        assign columns_above_1440 = 1
+      endif
+      assign gap = '16px'
+      assign gap_above_1024 = '16px'
+  endcase
+
+  echo 'component-cross-sells.css' | asset_url | stylesheet_tag
+  render 'inline-scripts', script_name: 'visibility-watcher'
+
+  if settings.enable_quick_shopping
+    echo 'component-product-item-quick-shopping.css' | asset_url | stylesheet_tag
+    echo 'component-product-blocks.css' | asset_url | stylesheet_tag
+    render 'inline-scripts', script_name: 'product-block-variant-selector'
+    render 'inline-scripts', script_name: 'product-block-buy-buttons'
+    render 'inline-scripts', script_name: 'product-media'
+    render 'inline-scripts', script_name: 'scroll-slider'
+  endif
+-%}
+
+{%- if items_count > 0 -%}
+  <cross-sells class="cross-sells--layout-{{ section.settings.cross_sells_layout }}">
+    <visibility-watcher class="cross-sells-inner">
+      <div class="cross-sells__header">
+        <h3 class="cross-sells__heading ff-heading fs-body-200">{{ settings.cart_cross_sells_heading }}</h3>
+
+        {%- if section.settings.cross_sells_layout == 'slider' -%}
+          <div class="cross-sells__nav_items">
+            {%- render 'scroll-slider-navigation-buttons', size: 'small', display: 'inline' -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.cross_sells_layout == 'slider' -%}
+        {%- render 'scroll-slider',
+          id: 'cross-sells',
+          slider_items: items,
+          columns: 1,
+          gap: gap,
+          gap_above_1024: gap_above_1024,
+          peek: peek,
+          peek_above_720: peek_above_720,
+          peek_above_1024: peek_above_1024,
+          navigation_container: 'cross-sells',
+          columns_above_1440: columns_above_1440,
+          animate: true,
+          animation_size: 'small'
+        -%}
+      {%- else -%}
+        <div class="cross-sells__items">{{ items }}</div>
+      {%- endif -%}
+    </visibility-watcher>
+  </cross-sells>
+{%- endif -%}

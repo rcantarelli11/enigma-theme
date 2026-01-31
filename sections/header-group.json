@@ -1,0 +1,18 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "enigma-header": {
+      "type": "enigma-header",
+      "settings": {
+        "logo": "shopify://shop_images/Asset_400_c25e46ee-29b8-45ee-9989-8d8976b0052c.png",
+        "menu": "main-menu-new",
+        "show_announcement": true,
+        "announcement_text": "<p>Bundle and save 10% + Free Shipping on orders over $70<\/p>"
+      }
+    }
+  },
+  "order": [
+    "enigma-header"
+  ]
+}

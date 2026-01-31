@@ -1,0 +1,43 @@
+{%- liquid
+  comment
+    Renders a single content block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+
+    Optional parameters:
+      - forloop: { Object } The forloop object for the current block iteration.
+      - animate_heading: { Boolean } If the heading block should animate.
+      - animate_text: { Boolean } If blocks with text should animate.
+      - animate_image: { Boolean } If the image block should animate.
+      - animate_divider: { Boolean } If the divider block should animate.
+      - alignment: { String } The block's horizontal alignment. Can be:
+        - "left"
+        - "center"
+        - "right"
+  endcomment
+
+  assign animate_heading = animate_heading | default: true, allow_false: true
+  assign animate_text = animate_text | default: false, allow_false: true
+  assign animate_image = animate_image | default: false, allow_false: true
+  assign animate_divider = animate_divider | default: false, allow_false: true
+-%}
+
+{% case block.type -%}
+  {% when 'overline' -%}
+    {% render 'content-block-overline', block: block, animate: animate_text -%}
+  {% when 'heading' -%}
+    {% render 'content-block-heading', block: block, animate: animate_heading, alignment: alignment -%}
+  {% when 'text' -%}
+    {% render 'content-block-text', block: block, animate: animate_text -%}
+  {% when 'button' -%}
+    {% render 'content-block-button', block: block, forloop: forloop, alignment: alignment, animate: animate_text -%}
+  {% when 'image' -%}
+    {% render 'content-block-image', block: block, animate: animate_image, alignment: alignment -%}
+  {% when 'divider' -%}
+    {% render 'content-block-divider', block: block, animate: animate_divider -%}
+  {% when 'spacer' -%}
+    {% render 'content-block-spacer', block: block -%}
+  {% when 'liquid' -%}
+    {% render 'content-block-liquid', block: block -%}
+{%- endcase %}

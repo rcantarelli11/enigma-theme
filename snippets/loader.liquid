@@ -1,0 +1,49 @@
+{% liquid
+  comment
+    Renders a loader display.
+
+    Optional parameters:
+      - background_color_var: { String: '--color-text' } A CSS variable name to use as the loader background color.
+      - foreground_color_var: { String: '--color-text-alpha-20' } A CSS variable name to use as the loader
+          foreground color.
+      - loader_size: { Number: 20 } The width of the loader (in pixels).
+      - tag_name: { String: div } The tag of the loader element
+      - style: { String } styles to apply to the loader element
+
+
+    TODO: what is the benefit of background_color_var over `transparent`?
+  endcomment
+
+  capture loader_styles
+    assign background_color_var = background_color_var | default: '--color-text'
+    assign foreground_color_var = foreground_color_var | default: '--color-text-alpha-20'
+    assign loader_size = loader_size | default: 20
+
+    echo '--loader-background-color: var([[bcv]]); ' | replace: '[[bcv]]', background_color_var
+    echo '--loader-foreground-color: var([[fcv]]); ' | replace: '[[fcv]]', foreground_color_var
+    echo '--loader-size: [[ls]]px;' | replace: '[[ls]]', loader_size
+    if style
+      echo style
+    endif
+  endcapture
+
+  assign tag_name = tag_name | default: 'div'
+%}
+
+<{{ tag_name }}
+  class="loader"
+  style="{{ loader_styles }}"
+  js-loader
+>
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    role="presentation"
+    class="loader__spinner"
+    viewBox="0 0 66 66"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <circle class="loader__circle-background" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+    <circle class="loader__circle" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+  </svg>
+</{{ tag_name }}>

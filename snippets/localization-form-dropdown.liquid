@@ -1,0 +1,126 @@
+{% liquid
+  comment
+    Renders the language and/or country (ie. currency) selector dropdowns.
+
+    Required parameters:
+      - id: { String } A unique string to be used for the localization form ID. Generally, should note where the
+          form is being rendered (eg. "footer" or "header").
+      - show_language_selector: { Boolean } Whether to show the language selector dropdown.
+      - show_country_selector: { Boolean } Whether to show the country selector dropdown.
+      - if show_country_selector == true
+        - show_country_names: { Boolean } Whether to show the country names in the dropdown.
+        - show_country_flags: { Boolean } Whether to show the country flags in the dropdown.
+      - alignment: { String } The alignment of the disclosure dropdown (eg. "above" or "below").
+      - trigger_roll_animation: { Boolean } Whether to animate the disclosure trigger on hover.
+  endcomment
+
+  echo 'component-localization-form.css' | asset_url | stylesheet_tag
+  render 'inline-scripts', script_name: 'localization-form'
+
+  if section.settings.show_language_selector and section.settings.show_country_selector
+    assign localization_class = 'localization--language-and-country'
+  elsif section.settings.show_language_selector
+    assign localization_class = 'localization--language'
+  elsif section.settings.show_country_selector
+    assign localization_class = 'localization--country'
+  endif
+
+  assign trigger_classes = 'localization-trigger-label cluster btn btn--style-outline fs-body-75'
+
+  capture checkmark_icon
+    render 'icon-utility', icon: 'checkmark', width: 14, height: 14
+  endcapture
+
+  capture disclosure_trigger_structure_content
+    echo '<span class="[[tc]]">' | replace: '[[tc]]', trigger_classes
+    echo '[[trigger_content]]'
+    render 'icon-utility', icon: 'chevron-down-small', width: 10, height: 10
+    echo '</span>'
+  endcapture
+
+  capture disclosure_trigger_structure
+    # double trigger content for roll animation
+    if trigger_roll_animation
+      echo '<div class="localization-trigger-wrapper">[[dtss]][[dtss]]</div>' | replace: '[[dtss]]', disclosure_trigger_structure_content
+    else
+      echo disclosure_trigger_structure_content
+    endif
+  endcapture
+%}
+
+{%- if show_language_selector and localization.available_languages.size > 1 -%}
+  {%- liquid
+    assign id = 'language-' | append: id
+    assign trigger_content = localization.language.endonym_name | capitalize
+
+    capture disclosure_trigger
+      echo disclosure_trigger_structure | replace: '[[trigger_content]]', trigger_content
+    endcapture
+  -%}
+
+  {%- capture language_form -%}
+    {% render 'localization-form-language',
+      id: id,
+      checkmark_icon: checkmark_icon
+    %}
+  {%- endcapture -%}
+
+  {%- capture language_disclosure -%}
+    {% render 'disclosure',
+      trigger: disclosure_trigger,
+      content: language_form,
+      alignment: alignment
+    %}
+  {%- endcapture -%}
+{%- endif -%}
+
+{%- if show_country_selector and localization.available_countries.size > 1 -%}
+  {%- liquid
+    assign id = 'country-' | append: id
+
+    capture trigger_content
+      if show_country_flags
+        echo localization.country | image_url: width: 20 | image_tag: class: 'localization-option__flag'
+      endif
+
+      if show_country_names
+        assign label_structure = '<span class="localization-trigger-label__country-name t-overflow-ellipsis">[[cn]]</span> <span class="localization-trigger-label__currency">([[ccic]] [[ccs]])</span>'
+      else
+        assign label_structure = '<span class="localization-trigger-label__currency">[[ccic]] [[ccs]]</span>'
+      endif
+
+      echo label_structure | replace: '[[ccic]]', localization.country.currency.iso_code | replace: '[[ccs]]', localization.country.currency.symbol | replace: '[[cn]]', localization.country.name
+    endcapture
+
+    capture disclosure_trigger
+      echo disclosure_trigger_structure | replace: '[[trigger_content]]', trigger_content
+    endcapture
+  -%}
+
+  {%- capture country_form -%}
+    {% render 'localization-form-country',
+      id: id,
+      show_country_flags: show_country_flags,
+      show_country_names: show_country_names,
+      checkmark_icon: checkmark_icon,
+      label_structure: label_structure
+    %}
+  {%- endcapture -%}
+
+  {%- capture country_disclosure -%}
+    {% render 'disclosure',
+      trigger: disclosure_trigger,
+      content: country_form,
+      alignment: alignment
+    %}
+  {%- endcapture -%}
+{%- endif -%}
+
+
+
+{%- if language_disclosure != blank or country_disclosure != blank -%}
+  <div class="localization-wrapper cluster fs-body-75 {{ localization_class }}{% if trigger_roll_animation %} localization-wrapper--trigger-roll-animation{% endif %}">
+    {{ language_disclosure }}
+    {{ country_disclosure }}
+  </div>
+{%- endif -%}

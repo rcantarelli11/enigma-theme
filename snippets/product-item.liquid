@@ -1,0 +1,329 @@
+{%- liquid
+  comment
+    Renders a product listing item.
+
+    Required parameters:
+      - prod: { Object } The associated product. We use 'prod' to avoid collision with the global
+          'product' object.
+      - swatch_variant_options: { Object } An array of swatch variant options (based on
+          'settings.swatch_variant_options').
+      - custom_swatch_color_key_map: { Object } An array of custom color keys (names).
+      - custom_swatch_color_value_map: { Object } An array of custom color values (HEX values).
+      - image_sizes: { String } A list of responsive image sizes (for the 'sizes' attribute).
+
+      Optional parameters:
+        - placeholder: { Boolean: false } Whether the product item is a placeholder.
+        - placeholder_name: { String } The name of the placeholder SVG to use.
+        - load_animation_stagger_index: { Number } Used to stagger image load animations in certain situations.
+  endcomment
+
+  assign placeholder = placeholder | default: false, allow_false: true
+
+  unless placeholder
+    # Swatch details
+    assign has_swatches = false
+    assign has_sibling_swatches = false
+
+    if settings.enable_product_listing_swatches and prod.has_only_default_variant == false
+      assign sibling_products = prod.metafields.eclipse.sibling_collection.value.products | default: prod.metafields.eclipse.siblings_collection.value.products
+
+      capture first_swatch_variant_option
+        render 'get-first-swatch-variant-option', prod: prod, swatch_variant_options: swatch_variant_options
+      endcapture
+
+      if sibling_products != blank
+        assign has_swatches = true
+        assign has_sibling_swatches = true
+      elsif first_swatch_variant_option != blank
+        assign has_swatches = true
+
+        for option in prod.options
+          capture downcased_option
+            echo option | downcase
+          endcapture
+
+          if downcased_option == first_swatch_variant_option
+            assign swatch_option_index = forloop.index0
+            break
+          endif
+        endfor
+      endif
+
+      case settings.product_listing_swatch_size
+        when 'small'
+          assign max_swatches = 6
+        when 'medium'
+          assign max_swatches = 5
+        when 'large'
+          assign max_swatches = 4
+        when 'x-large'
+          assign max_swatches = 3
+      endcase
+    endif
+
+    # Price and discount details
+    capture price_details
+      render 'get-product-price-details', prod: prod, discount_format: settings.product_listing_sale_badge_format
+    endcapture
+
+    assign split_price_details = price_details | split: ', '
+
+    for detail in split_price_details
+      assign key = detail | split: ':' | first | strip
+      assign value = detail | split: ':' | last | strip
+
+      case key
+        when 'has_discount'
+          if value == 'true'
+            assign has_discount = true
+          else
+            assign has_discount = false
+          endif
+        when 'discount_varies'
+          if value == 'true'
+            assign discount_varies = true
+          else
+            assign discount_varies = false
+          endif
+        when 'compare_at_price_varies'
+          if value == 'true'
+            assign compare_at_price_varies = true
+          else
+            assign compare_at_price_varies = false
+          endif
+        when 'largest_discount'
+          assign largest_discount = value | plus: 0
+        when 'has_unit_price'
+          if value == 'true'
+            assign has_unit_price = true
+          else
+            assign has_unit_price = false
+          endif
+        when 'unit_price'
+          if has_unit_price
+            assign unit_price = value | plus: 0
+          endif
+        when 'unit_price_measurement_value'
+          if has_unit_price
+            assign unit_price_measurement_value = value | plus: 0
+          endif
+        when 'unit_price_measurement_unit'
+          if has_unit_price
+            assign unit_price_measurement_unit = value
+          endif
+      endcase
+    endfor
+  endunless
+
+  assign quick_shopping_enabled = false
+  if settings.enable_quick_shopping and placeholder == false
+    assign quick_shopping_enabled = true
+  endif
+-%}
+
+<product-item class="ta-c">
+  {%- # Images -%}
+  <div class="product-item__image-wrapper {%- if settings.product_listing_show_second_image_on_hover and prod.media.size > 1 %} product-item__image-wrapper--has-hover{%- endif -%}">
+    {%- capture main_image -%}
+      {%- render 'image',
+        image: prod.featured_media.preview_image,
+        aspect_ratio: settings.product_listing_aspect_ratio,
+        object_fit: 'cover',
+        src_set_type: 'grid',
+        include_placeholder: true,
+        placeholder_name: placeholder_name,
+        lazy_load_effect: 'fade',
+        lazy_load_stagger_index: lazy_load_stagger_index,
+        sizes: image_sizes
+      -%}
+    {%- endcapture -%}
+
+    {%- if placeholder -%}
+      <div class="product-item__image product-item__image--main">
+        {{ main_image }}
+      </div>
+    {%- else -%}
+      <a
+        href="{{ prod.url }}"
+        class="product-item__image product-item__image--main"
+        aria-label="{{ 'general.accessibility.view_product' | t: product: prod.title }}"
+        tabindex="-1"
+      >
+        {{ main_image }}
+      </a>
+    {%- endif -%}
+
+    {%- if settings.product_listing_show_second_image_on_hover and prod.media.size > 1 -%}
+      <a
+        href="{{ prod.url }}"
+        class="product-item__image product-item__image--hover"
+        aria-label="{{ 'general.accessibility.view_product' | t: product: prod.title }}"
+        tabindex="-1"
+      >
+        {%- liquid
+          # With search and filtering, Shopify can update the output of 'featured_media', so
+          # we need to ensure that we have a unique image
+          if prod.featured_media != prod.media[0]
+            assign hover_media_index = 0
+          else
+            assign hover_media_index = 1
+          endif
+        -%}
+
+        {%- render 'image',
+          image: prod.media[hover_media_index].preview_image,
+          aspect_ratio: settings.product_listing_aspect_ratio,
+          object_fit: 'cover',
+          src_set_type: 'grid',
+          sizes: image_sizes
+        -%}
+      </a>
+    {%- endif -%}
+
+    {%- # Swatch images -%}
+    {%- if has_swatches -%}
+      {%- capture swatch_image_structure -%}
+        <a
+          href="[[pu]]"
+          class="product-item__image product-item__image--swatch"
+          data-swatch-value="[[value]]"
+          js-product-item-swatch-image
+          aria-label="{{ 'general.accessibility.view_product' | t: product: prod.title }}"
+          tabindex="-1"
+        >
+          [[si]]
+        </a>
+      {%- endcapture -%}
+
+      {%- if has_sibling_swatches -%}
+        {%- for sibling_product in sibling_products limit: max_swatches -%}
+          {%- capture swatch_image -%}
+            {%- render 'image',
+              image: sibling_product.featured_media,
+              aspect_ratio: settings.product_listing_aspect_ratio,
+              object_fit: 'cover',
+              src_set_type: 'grid',
+              sizes: image_sizes
+            -%}
+          {%- endcapture -%}
+
+          {{
+            swatch_image_structure
+            | replace: '[[pu]]', sibling_product.url
+            | replace: '[[value]]', sibling_product.metafields.eclipse.sibling_option_name
+            | replace: '[[si]]', swatch_image
+          }}
+        {%- endfor -%}
+      {%- else -%}
+        {%- liquid
+          # We update this index as we loop through the variants so that we can jump to where we've already been
+          assign variant_index = 0
+
+          for value in prod.options_by_name[first_swatch_variant_option].values limit: max_swatches
+            for variant in prod.variants offset: variant_index
+              if variant.options[swatch_option_index] == value
+                assign variant_index = forloop.index0
+
+                if variant.image != blank
+                  capture swatch_image
+                    render 'image', image: variant.image, aspect_ratio: settings.product_listing_aspect_ratio, object_fit: 'cover', src_set_type: 'grid', sizes: image_sizes
+                  endcapture
+
+                  echo swatch_image_structure | replace: '[[pu]]', prod.url | replace: '[[value]]', value | replace: '[[si]]', swatch_image
+                  break
+                endif
+              endif
+            endfor
+          endfor
+        -%}
+      {%- endif -%}
+    {%- endif %}
+
+    {%- # Badges -%}
+    {%- if settings.product_listing_show_sale_badge or settings.product_listing_show_sold_out_badge -%}
+      <div class="product-item__badges ff-body fs-body-75">
+        {%- if settings.product_listing_show_sold_out_badge and prod.available == false -%}
+          <span class="product-item__sold-out-badge">
+            {{- 'products.general.sold_out' | t -}}
+          </span>
+        {%- elsif settings.product_listing_show_sale_badge and has_discount -%}
+          {%- render 'discount-display',
+            display_type: 'badge',
+            discount_format: settings.product_listing_sale_badge_format,
+            discount_amount: largest_discount,
+            discount_varies: discount_varies,
+            custom_class: 'product-item__sale-badge'
+          -%}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- # Quick shopping -%}
+    {%- if quick_shopping_enabled -%}
+      {%- render 'inline-scripts', script_name: 'product-item-quick-shopping' -%}
+      {%- render 'product-item-quick-shopping', prod: prod -%}
+    {%- endif -%}
+  </div>
+
+  <div class="product-item__details ff-body">
+    {%- if has_swatches -%}
+      {%- render 'product-item-swatches',
+        prod: prod,
+        is_sibling_swatches: has_sibling_swatches,
+        sibling_products: sibling_products,
+        swatch_variant_option: first_swatch_variant_option,
+        custom_swatch_color_key_map: custom_swatch_color_key_map,
+        custom_swatch_color_value_map: custom_swatch_color_value_map
+      -%}
+    {%- endif -%}
+
+    {%- if settings.product_listing_show_vendor and placeholder == false -%}
+      <span class="product-item__vendor fs-body-75">{{ prod.vendor }}</span>
+    {%- endif -%}
+
+    {%- if placeholder -%}
+      <span class="product-item__title fs-product-listing-title">
+        {{- 'general.onboarding.product_title' | t -}}
+      </span>
+    {%- else -%}
+      <a
+        href="{{ prod.url }}"
+        class="product-item__title fs-product-listing-title"
+        aria-label="{{ 'general.accessibility.view_product' | t: product: prod.title }}"
+      >
+        {{ prod.title }}
+      </a>
+    {%- endif -%}
+
+    <div class="product-item__price">
+      {%- render 'product-price-display',
+        prod: prod,
+        price_scope: 'product-card',
+        compare_at_price_varies: compare_at_price_varies,
+        has_discount: has_discount,
+        discount_varies: discount_varies,
+        placeholder: placeholder
+      -%}
+
+      {%- if has_unit_price and placeholder == false -%}
+        {%- render 'unit-price-display',
+          unit_price: unit_price,
+          unit_price_measurement_value: unit_price_measurement_value,
+          unit_price_measurement_unit: unit_price_measurement_unit
+        -%}
+      {%- endif -%}
+    </div>
+
+    {%- liquid
+      if settings.product_listing_show_product_ratings
+        if settings.product_listing_rating_display_type == 'rating-and-count'
+          assign stars_layout = 'single-icon'
+        else
+          assign stars_layout = 'default'
+        endif
+
+        render 'product-rating-display', prod: prod, stars_layout: stars_layout, text_display: settings.product_listing_rating_display_type
+      endif
+    -%}
+  </div>
+</product-item>

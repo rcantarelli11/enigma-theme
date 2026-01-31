@@ -1,0 +1,144 @@
+{% liquid
+  comment
+    Renders a blog post's meta for the "Blog posts" section.
+
+    Required parameters:
+      - article: { Object } The article to render.
+
+    Optional parameters:
+      - local_blog: { Object } The blog object associated with the article. This will be used to link the meta tag to a tag-filtered blog URL.
+      - within_sidebar: { Boolean } Whether the meta is being rendered within the sidebar.
+      - animate_heading: { Boolean } Applies the shared animation reveal class to the heading.
+          Use in conjunction with the visibility watcher and animation mixins.
+  endcomment
+
+  if section.settings.show_article_tags and article.tags != blank
+    assign has_tags = true
+  else
+    assign has_tags = false
+  endif
+
+  if section.settings.enable_thumbnail_hover and article.image != blank
+    assign has_thumbnail = true
+  else
+    assign has_thumbnail = false
+  endif
+
+  capture heading_text_size_classes
+    if within_sidebar != true and section.settings.layout_style == 'featured-article' or is_featured
+      render 'settings-text-size', type: 'heading', size: section.settings.heading_font_size
+      echo ' '
+      render 'settings-text-size', type: 'heading_mobile', size: section.settings.heading_mobile_font_size
+    else
+      echo 'fs-heading-5-base'
+    endif
+  endcapture
+%}
+
+<div class="blog-posts-meta">
+  {% if within_sidebar %}
+    <a
+      class="
+        blog-posts-meta__sidebar-link
+        {% if has_thumbnail %}
+          blog-posts-meta__sidebar-link--has-thumbnail
+        {% else %}
+          blog-posts-meta__sidebar-link--no-thumbnail
+        {%- endif -%}
+      "
+      {% if article != blank %}
+        href="{{ article.url }}"
+      {% endif %}
+      js-sidebar-link
+      tabindex="-1"
+      aria-hidden="true"
+    >
+    </a>
+
+    {% if has_thumbnail %}
+      <div class="blog-posts-meta__sidebar-image-wrapper" js-image-wrapper>
+        {% render 'image',
+          class: 'blog-posts-meta__sidebar-image',
+          image: article.image,
+          sizes: '320px',
+          aspect_ratio: 'square',
+          object_fit: 'cover',
+          include_placeholder: false
+        %}
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {% if has_tags %}
+    {% capture article_tag %}
+      {% render 'article-tag', article: article, local_blog: local_blog %}
+    {% endcapture %}
+
+    {% if article_tag != blank %}
+      <div class="blog-posts-meta__category ff-overline fs-overline-small">
+        {{ article_tag }}
+      </div>
+    {% endif %}
+  {% elsif article == blank %}
+    <div class="blog-posts-meta__category ff-overline fs-overline-small">
+      {{ 'general.onboarding.article_tag' | t }}
+    </div>
+  {% endif %}
+
+  <div class="blog-posts-meta__title-wrapper {{ heading_text_size_classes }}">
+    <div class="blog-posts-meta__title ff-heading {{ heading_text_size_classes }} {%- if animate_heading %} animation-heading{%- endif %}">
+      {% if article != blank %}
+        <a href="{{ article.url }}">
+          {{ article.title }}
+        </a>
+      {% else %}
+        {{ 'general.onboarding.article_title' | t }}
+      {% endif %}
+    </div>
+  </div>
+
+  {% if section.settings.show_published_date or section.settings.show_author %}
+    <div class="blog-posts-meta__publish-info cluster fs-body-75 t-opacity-70">
+      {% if section.settings.show_published_date %}
+        {% if article != blank %}
+          {{ article.published_at | date: format: 'abbreviated_date' }}
+        {% else %}
+          {{ 'now' | date: format: 'abbreviated_date' }}
+        {% endif %}
+      {% endif %}
+
+      {% if section.settings.show_published_date and section.settings.show_author %}
+        <span class="publish-info__separator"></span>
+      {% endif %}
+
+      {% if section.settings.show_author %}
+        {% if article != blank %}
+          {{ article.author }}
+        {% else %}
+          {{ 'general.onboarding.article_author' | t }}
+        {% endif %}
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% unless within_sidebar %}
+    {% if section.settings.show_excerpt and article.excerpt_or_content != blank %}
+      <p class="blog-posts-meta__excerpt">{{ article.excerpt_or_content | strip_html | truncatewords: 30 }}</p>
+    {% endif %}
+    {% if article == blank %}
+      <p class="blog-posts-meta__excerpt">{{ 'general.onboarding.article_excerpt' | t }}</p>
+    {% endif %}
+
+    {% if section.settings.show_read_more_button %}
+      {% assign read_more_label = 'blogs.article.read_more' | t %}
+      {% render 'button',
+        wrapper_class: 'blog-posts-meta__button',
+        label: read_more_label,
+        link: article.url,
+        button_style: section.settings.button_style,
+        button_size: 'small',
+        underlined: true
+      %}
+    {% endif %}
+  {% endunless %}
+</div>

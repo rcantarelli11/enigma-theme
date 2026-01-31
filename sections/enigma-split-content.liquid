@@ -1,0 +1,88 @@
+<section class="enigma-section" id="enigma-split-{{ section.id }}">
+  <div class="enigma-container">
+    <div class="enigma-split{% if section.settings.reverse %} enigma-split--reverse{% endif %}">
+      <div class="enigma-split__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 768px) 50vw, 100vw' }}
+        {%- else -%}
+          {{ 'collection-1' | placeholder_svg_tag: 'placeholder' }}
+        {%- endif -%}
+      </div>
+
+      <div class="enigma-split__content">
+        {%- if section.settings.label != blank -%}
+          <p class="enigma-label">{{ section.settings.label }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.title != blank -%}
+          <h2 class="enigma-h3">{{ section.settings.title }}</h2>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <p class="enigma-body-lg">{{ section.settings.text }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.button_text != blank -%}
+          <div>
+            <a href="{{ section.settings.button_link }}" class="enigma-btn enigma-btn--primary">
+              {{ section.settings.button_text }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Enigma Split Content",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Why Enigma?"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>We don't cut corners. Every formula is crafted with premium, clinically-dosed ingredients for real results.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse",
+      "label": "Reverse layout",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Learn More"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Enigma Split Content"
+    }
+  ]
+}
+{% endschema %}

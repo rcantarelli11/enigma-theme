@@ -1,0 +1,914 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "slideshow_1": {
+      "type": "slideshow",
+      "blocks": {
+        "image": {
+          "type": "image",
+          "disabled": true,
+          "settings": {
+            "content_max_width": 600,
+            "text_position": "bottom_left",
+            "mobile_text_position": "bottom_center",
+            "overline": "Overline",
+            "heading": "Image Slide",
+            "heading_font_size": 6,
+            "heading_tag": "h2",
+            "text": "Tell your brand's story through images",
+            "text_font_size": 4,
+            "button_1_link": "",
+            "button_1_label": "Button",
+            "button_1_style": "solid",
+            "button_2_link": "",
+            "button_2_label": "Button",
+            "button_2_style": "outline",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 30
+          }
+        },
+        "video": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/shutterstock_3425466605.mov",
+            "video_focal_point": "center",
+            "mobile_video_focal_point": "center",
+            "content_max_width": 520,
+            "text_position": "bottom_left",
+            "mobile_text_position": "bottom_center",
+            "overline": "",
+            "heading": "Performance Nutrition for Hybrid Athletes",
+            "heading_font_size": 5,
+            "heading_tag": "h2",
+            "text": "Clinically dosed supplements for strength, endurance, and recovery.",
+            "text_font_size": 4,
+            "button_1_link": "shopify://collections/all",
+            "button_1_label": "Shop Supplements",
+            "button_1_style": "outline",
+            "button_2_link": "",
+            "button_2_label": "",
+            "button_2_style": "solid",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 60
+          }
+        }
+      },
+      "block_order": [
+        "image",
+        "video"
+      ],
+      "settings": {
+        "color_scheme": "scheme_1",
+        "enable_autoplay": true,
+        "time_between_slides": 6,
+        "custom_desktop_height": "100vh",
+        "custom_mobile_height": "80vh",
+        "pagination_alignment": "center",
+        "mobile_pagination_alignment": "center",
+        "pagination_background": "#222222",
+        "pagination_foreground": "#ffffff",
+        "pagination_background_opacity": 15,
+        "navigation_cursor_background": "#ffffff",
+        "navigation_cursor_foreground": "#000000",
+        "enable_text_animation": true,
+        "slide_animation": "iris",
+        "width": "full-width",
+        "top_padding": 0,
+        "bottom_padding": 0
+      }
+    },
+    "custom_collection_list_yqNX8j": {
+      "type": "custom-collection-list",
+      "blocks": {
+        "infos_piJUQT": {
+          "type": "infos",
+          "settings": {
+            "image": "shopify://shop_images/Category_-_SUPPLEMENTS..webp",
+            "badge": "",
+            "title": "supplements",
+            "button_label": "Shop Now",
+            "url": "shopify://collections/all"
+          }
+        },
+        "infos_nHgqQP": {
+          "type": "infos",
+          "settings": {
+            "image": "shopify://shop_images/Category_-_BUNDLES.webp",
+            "badge": "",
+            "title": "bundles",
+            "button_label": "Shop Now",
+            "url": "shopify://pages/bundle-page"
+          }
+        },
+        "infos_aFGrw3": {
+          "type": "infos",
+          "settings": {
+            "image": "shopify://shop_images/unnamed_2.webp",
+            "badge": "Coming Soon",
+            "title": "apparel",
+            "button_label": "Shop Now",
+            "url": "shopify://collections/apparel"
+          }
+        },
+        "infos_hznJgU": {
+          "type": "infos",
+          "settings": {
+            "image": "shopify://shop_images/unnamed_3.webp",
+            "badge": "Coming Soon",
+            "title": "merch",
+            "button_label": "Shop Now",
+            "url": "shopify://collections/merch"
+          }
+        }
+      },
+      "block_order": [
+        "infos_piJUQT",
+        "infos_nHgqQP",
+        "infos_aFGrw3",
+        "infos_hznJgU"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "selected_collections": [],
+        "layout": "grid",
+        "show_slider_indicator": false,
+        "column_count_desktop": "4",
+        "column_count_mobile": "2",
+        "image_source": "collection_image",
+        "image_aspect_ratio": "portrait-alt",
+        "collection_item_color_scheme": "",
+        "overlay_opacity": 20,
+        "width": "page-width",
+        "top_padding": 40,
+        "bottom_padding": 40
+      }
+    },
+    "collection_list": {
+      "type": "collection-list",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Shop All",
+        "selected_collections": [
+          "hydration-powders",
+          "creatine-powders",
+          "mushroom-blends",
+          "preworkouts"
+        ],
+        "layout": "slider",
+        "show_slider_indicator": false,
+        "column_count_desktop": "4",
+        "column_count_mobile": "1",
+        "image_source": "collection_image",
+        "image_aspect_ratio": "portrait",
+        "collection_item_color_scheme": "scheme_4",
+        "overlay_opacity": 50,
+        "width": "full-width-padded",
+        "top_padding": 30,
+        "bottom_padding": 40
+      }
+    },
+    "featured_collection_1": {
+      "type": "featured-collection",
+      "blocks": {
+        "promotion_tile": {
+          "type": "promotion-tile",
+          "settings": {
+            "min_height": 300,
+            "image": "shopify://shop_images/2.webp",
+            "link": "shopify://collections/whey-protein",
+            "heading": "Enigma® Protein Powders",
+            "heading_font_size": 3,
+            "text": "",
+            "text_font_size": 3,
+            "text_alignment": "top_left",
+            "button_label": "SHOP NOW",
+            "button_style": "solid",
+            "button_placement": "bottom-anchored",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "promotion_tile"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Protein for Growth and Recovery",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "Enigma’s protein powders provide the perfect balance of taste and functionality. Support muscle growth, recovery, and daily protein needs with clean ingredients and great flavors.",
+        "section_header_link_url": "",
+        "section_header_link_label": "Shop All",
+        "collection": "whey-protein",
+        "max_products": 8,
+        "column_count_desktop": "3",
+        "column_count_mobile": "1",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 80
+      }
+    },
+    "slideshow_2": {
+      "type": "slideshow",
+      "blocks": {
+        "video": {
+          "type": "video",
+          "settings": {
+            "video": "shopify://files/videos/1101122933-preview.mp4",
+            "video_focal_point": "center",
+            "mobile_video_focal_point": "center",
+            "content_max_width": 700,
+            "text_position": "center_center",
+            "mobile_text_position": "center_center",
+            "overline": "",
+            "heading": "",
+            "heading_font_size": 7,
+            "heading_tag": "h2",
+            "text": "",
+            "text_font_size": 3,
+            "button_1_link": "",
+            "button_1_label": "",
+            "button_1_style": "outline",
+            "button_2_link": "",
+            "button_2_label": "",
+            "button_2_style": "solid",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "video"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "enable_autoplay": false,
+        "time_between_slides": 6,
+        "custom_desktop_height": "750px",
+        "custom_mobile_height": "650px",
+        "pagination_alignment": "right",
+        "mobile_pagination_alignment": "center",
+        "pagination_background": "#000000",
+        "pagination_foreground": "#ffffff",
+        "pagination_background_opacity": 60,
+        "navigation_cursor_background": "#ffffff",
+        "navigation_cursor_foreground": "#000000",
+        "enable_text_animation": true,
+        "slide_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    },
+    "featured_collection_jKB8FD": {
+      "type": "featured-collection",
+      "blocks": {
+        "promotion_tile_TdwVFq": {
+          "type": "promotion-tile",
+          "settings": {
+            "min_height": 300,
+            "image": "shopify://shop_images/3.webp",
+            "link": "shopify://collections/hydration-powders",
+            "heading": "Enigma® Hydration Powders",
+            "heading_font_size": 3,
+            "text": "",
+            "text_font_size": 3,
+            "text_alignment": "top_left",
+            "button_label": "SHOP NOW",
+            "button_style": "solid",
+            "button_placement": "bottom-anchored",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "promotion_tile_TdwVFq"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Hydrate Smarter, Perform Better",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "Replenish your body with hydration powders that go beyond water, delivering electrolytes and functional ingredients to support endurance and recovery.",
+        "section_header_link_url": "",
+        "section_header_link_label": "Shop All",
+        "collection": "hydration-powders",
+        "max_products": 8,
+        "column_count_desktop": "3",
+        "column_count_mobile": "1",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 80
+      }
+    },
+    "featured_collection_EzNWTw": {
+      "type": "featured-collection",
+      "blocks": {
+        "promotion_tile_t7bPJV": {
+          "type": "promotion-tile",
+          "settings": {
+            "min_height": 300,
+            "image": "shopify://shop_images/shutterstock_1501477580_1.jpg",
+            "link": "shopify://collections/creatine-powders",
+            "heading": "Creatine Powders",
+            "heading_font_size": 3,
+            "text": "",
+            "text_font_size": 3,
+            "text_alignment": "top_left",
+            "button_label": "Shop now",
+            "button_style": "solid",
+            "button_placement": "bottom-anchored",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 40
+          }
+        }
+      },
+      "block_order": [
+        "promotion_tile_t7bPJV"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Strength That Lasts",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "Enigma’s creatine powder helps you push your limits, enhancing strength, endurance, and lean muscle mass.",
+        "section_header_link_url": "",
+        "section_header_link_label": "Shop All",
+        "collection": "creatine-powders",
+        "max_products": 8,
+        "column_count_desktop": "3",
+        "column_count_mobile": "1",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 80
+      }
+    },
+    "featured_collection_8JMAcQ": {
+      "type": "featured-collection",
+      "blocks": {
+        "promotion_tile_4ceygy": {
+          "type": "promotion-tile",
+          "settings": {
+            "min_height": 300,
+            "image": "shopify://shop_images/Category_-_PREWORKOUTS_1.webp",
+            "link": "shopify://collections/preworkouts",
+            "heading": "Enigma® Pre Workouts",
+            "heading_font_size": 3,
+            "text": "",
+            "text_font_size": 3,
+            "text_alignment": "top_left",
+            "button_label": "SHOP NOW",
+            "button_style": "solid",
+            "button_placement": "bottom-anchored",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "promotion_tile_4ceygy"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Energy to Power Through",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "Prepare for your workouts with Enigma’s preworkouts, designed to boost focus, energy, and endurance for maximum performance.",
+        "section_header_link_url": "",
+        "section_header_link_label": "Shop All",
+        "collection": "preworkouts",
+        "max_products": 8,
+        "column_count_desktop": "3",
+        "column_count_mobile": "1",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 80
+      }
+    },
+    "featured_collection_UqUVb3": {
+      "type": "featured-collection",
+      "blocks": {
+        "promotion_tile_B7P9KG": {
+          "type": "promotion-tile",
+          "settings": {
+            "min_height": 300,
+            "image": "shopify://shop_images/shutterstock_1162484791_1.jpg",
+            "link": "shopify://collections/mushroom-blends",
+            "heading": "Mushroom Blends",
+            "heading_font_size": 3,
+            "text": "",
+            "text_font_size": 3,
+            "text_alignment": "top_left",
+            "button_label": "Shop now",
+            "button_style": "solid",
+            "button_placement": "bottom-anchored",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "promotion_tile_B7P9KG"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Ancient Wisdom for Modern Wellness",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "Our fermented mushroom blends combine six ancient mushroom species with prebiotics and vitamin C to support digestion, immunity, and overall health.",
+        "section_header_link_url": "",
+        "section_header_link_label": "Shop All",
+        "collection": "mushroom-blends",
+        "max_products": 8,
+        "column_count_desktop": "3",
+        "column_count_mobile": "1",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 80
+      }
+    },
+    "reviews_banner_Lk6P4L": {
+      "type": "reviews-banner",
+      "blocks": {
+        "reviews_LWmM9B": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_TjYfyb": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_J848jX": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_fxgXb6": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_369rYY": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_DjCqGz": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_XEmaQA": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_VkBUWg": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_cfNfgy": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        }
+      },
+      "block_order": [
+        "reviews_LWmM9B",
+        "reviews_TjYfyb",
+        "reviews_J848jX",
+        "reviews_fxgXb6",
+        "reviews_369rYY",
+        "reviews_DjCqGz",
+        "reviews_XEmaQA",
+        "reviews_VkBUWg",
+        "reviews_cfNfgy"
+      ],
+      "settings": {
+        "devBg": "",
+        "devTitle": "YOUR JOURNEY SIMPLIFIED WITH",
+        "c_sec_stars_show": false,
+        "devrevText": "ENIGMA",
+        "devUrl": "",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "c_revs_Bg": "#ffffff",
+        "c_show_read_more": false,
+        "c_show_rev_arr": false,
+        "c_show_rev_dots": false
+      }
+    },
+    "image_with_text": {
+      "type": "image-with-text",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "disabled": true,
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Rewards That Go Further",
+            "heading_font_size": 8,
+            "heading_tag": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Earn loyalty points on every purchase. Redeem for exclusive discounts and rewards while enjoying the supplements you love</p>",
+            "text_font_size": 3
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "button_link": "shopify://pages/loyalty",
+            "button_label": "Learn More About Rewards",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "overline",
+        "heading",
+        "text",
+        "button"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "image": "shopify://shop_images/shutterstock_327558938.jpg",
+        "aspect_ratio": "natural",
+        "mobile_aspect_ratio": "natural",
+        "media_link": "",
+        "desktop_media_width": 50,
+        "desktop_media_position": "right",
+        "mobile_media_position": "above",
+        "media_breathing_room": 0,
+        "content_width": "custom-width",
+        "custom_width": 500,
+        "content_position": "center_center",
+        "text_alignment": "left",
+        "container_color_scheme": "scheme_2",
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    },
+    "featured_collection_2": {
+      "type": "featured-collection",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Hydrate Smarter, Perform Better",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "Replenish your body with hydration powders that go beyond water, delivering electrolytes and functional ingredients to support endurance and recovery.",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "collection": "hydration-powders",
+        "max_products": 12,
+        "column_count_desktop": "4",
+        "column_count_mobile": "2",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 40,
+        "bottom_padding": 60
+      }
+    },
+    "rich_text_88CbgN": {
+      "type": "rich-text",
+      "blocks": {
+        "image_UAPRFg": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/ENIGMA_LOYALTY_12_4998ad85-8a39-4866-ba5f-f8e663579cd6.png",
+            "image_size": 410,
+            "image_size_mobile": 250,
+            "enable_corner_radius": true
+          }
+        }
+      },
+      "block_order": [
+        "image_UAPRFg"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "text_alignment": "center",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "slideshow_3": {
+      "type": "slideshow",
+      "blocks": {
+        "image": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/Category_-_SUPPLEMENTS_-_BANNER_2.webp",
+            "content_max_width": 700,
+            "text_position": "center_center",
+            "mobile_text_position": "center_center",
+            "overline": "",
+            "heading": "",
+            "heading_font_size": 7,
+            "heading_tag": "h2",
+            "text": "",
+            "text_font_size": 3,
+            "button_1_link": "",
+            "button_1_label": "",
+            "button_1_style": "solid",
+            "button_2_link": "",
+            "button_2_label": "",
+            "button_2_style": "solid",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 0
+          }
+        }
+      },
+      "block_order": [
+        "image"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "enable_autoplay": false,
+        "time_between_slides": 6,
+        "custom_desktop_height": "80vh",
+        "custom_mobile_height": "70vh",
+        "pagination_alignment": "right",
+        "mobile_pagination_alignment": "center",
+        "pagination_background": "#000000",
+        "pagination_foreground": "#ffffff",
+        "pagination_background_opacity": 0,
+        "navigation_cursor_background": "#ffffff",
+        "navigation_cursor_foreground": "#000000",
+        "enable_text_animation": true,
+        "slide_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 40,
+        "bottom_padding": 60
+      }
+    },
+    "blog_posts": {
+      "type": "blog-posts",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Blog posts",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "View all",
+        "blog": "news",
+        "layout_style": "grid",
+        "grid_image_aspect_ratio": "portrait-alt",
+        "number_of_articles": 5,
+        "show_author": false,
+        "show_published_date": true,
+        "show_article_tags": true,
+        "overlay_color_scheme": "",
+        "overlay_opacity": 0,
+        "heading_font_size": 5,
+        "heading_mobile_font_size": 3,
+        "show_excerpt": true,
+        "show_read_more_button": true,
+        "button_style": "solid",
+        "enable_scrolling_hover_text": true,
+        "scroll_duration": 10,
+        "scroll_direction": "normal",
+        "latest_posts_heading": "Latest posts",
+        "enable_thumbnail_hover": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    },
+    "17380931283c7510d8": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_7yhDzh": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "",
+            "title_color": "",
+            "title_size_v2": 0,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_7yhDzh"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Enigma Instagram Feed",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "multi_column": {
+      "type": "multi-column",
+      "blocks": {
+        "column_item_1": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "image": "shopify://shop_images/Banner..png",
+            "heading": "",
+            "text": "",
+            "button_link": "",
+            "button_label": ""
+          }
+        },
+        "column_item_2": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "image": "shopify://shop_images/Banner_2.png",
+            "heading": "",
+            "text": "",
+            "button_link": "",
+            "button_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_item_1",
+        "column_item_2"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Discover all",
+        "column_spacing": "small",
+        "column_count_desktop": "2",
+        "column_count_mobile": "1",
+        "enable_slider_on_desktop": false,
+        "enable_slider_on_mobile": false,
+        "show_slider_indicator": false,
+        "text_alignment": "left",
+        "heading_font_size": 2,
+        "heading_mobile_font_size": 2,
+        "item_title_heading_tag": "h3",
+        "text_font_size": 3,
+        "button_style": "solid",
+        "media_aspect_ratio": "natural",
+        "media_position": "above_content",
+        "width": "full-width-padded",
+        "top_padding": 80,
+        "bottom_padding": 80
+      }
+    },
+    "video_hero_JpXCQq": {
+      "type": "video-hero",
+      "blocks": {
+        "heading_aVLLpb": {
+          "type": "heading",
+          "settings": {
+            "heading": "Discover Our New Products",
+            "heading_font_size": 6,
+            "heading_tag": "h2"
+          }
+        },
+        "button_fmpTjC": {
+          "type": "button",
+          "settings": {
+            "button_link": "shopify://collections/all",
+            "button_label": "Shop Now",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "heading_aVLLpb",
+        "button_fmpTjC"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "video": "shopify://files/videos/shutterstock_1101122933.mov",
+        "video_focal_point": "center",
+        "mobile_video_focal_point": "center",
+        "background_link": "",
+        "custom_desktop_height": "350px",
+        "custom_mobile_height": "350px",
+        "content_width": 580,
+        "text_position_desktop": "bottom_left",
+        "text_position_mobile": "bottom_left",
+        "overlay_color_scheme": "",
+        "overlay_opacity": 20,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 40,
+        "bottom_padding": 40
+      }
+    }
+  },
+  "order": [
+    "slideshow_1",
+    "custom_collection_list_yqNX8j",
+    "collection_list",
+    "featured_collection_1",
+    "slideshow_2",
+    "featured_collection_jKB8FD",
+    "featured_collection_EzNWTw",
+    "featured_collection_8JMAcQ",
+    "featured_collection_UqUVb3",
+    "reviews_banner_Lk6P4L",
+    "image_with_text",
+    "featured_collection_2",
+    "rich_text_88CbgN",
+    "slideshow_3",
+    "blog_posts",
+    "17380931283c7510d8",
+    "multi_column",
+    "video_hero_JpXCQq"
+  ]
+}

@@ -1,0 +1,18 @@
+{% liquid
+  comment
+    Renders a spacer block (vertical whitespace).
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - animate: { Boolean } Apply animation class to potentially animate
+  endcomment
+-%}
+
+<div
+  class="content-block content-block--spacer{% if animate %} animation-content{% endif %}"
+  style="
+    --spacer-height: {{ block.settings.space }}px;
+    --spacer-height-mobile: {{ block.settings.space_mobile }}px;
+  "
+  {{ block.shopify_attributes }}
+></div>

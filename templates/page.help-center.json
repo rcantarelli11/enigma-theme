@@ -1,0 +1,335 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "top_padding": 80,
+        "bottom_padding": 50
+      }
+    },
+    "image_hero_CW6Cmf": {
+      "type": "image-hero",
+      "blocks": {
+        "heading_3VAU7d": {
+          "type": "heading",
+          "settings": {
+            "heading": "Enigma® Help Center",
+            "heading_font_size": 6,
+            "heading_tag": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_3VAU7d"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "image": "shopify://shop_images/Diseno_sin_titulo_53.png",
+        "background_link": "",
+        "custom_desktop_height": "350px",
+        "custom_mobile_height": "450px",
+        "content_width": 500,
+        "text_position_desktop": "center_center",
+        "text_position_mobile": "center_center",
+        "overlay_color_scheme": "",
+        "overlay_opacity": 35,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 30,
+        "bottom_padding": 0
+      }
+    },
+    "collapsible_content_Urd4EG": {
+      "type": "collapsible-content",
+      "blocks": {
+        "heading_gLH3qe": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Returns & Exchanges"
+          }
+        },
+        "row_cV3739": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "How do I initiate a return or exchange?",
+            "text": "<p>To start a return or exchange, please contact our customer service team within 30 days of receiving your order. Ensure that the products are unopened and in their original packaging.</p>"
+          }
+        },
+        "row_F43rMA": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "What is your return policy?",
+            "text": "<p>We accept returns for unopened products within 30 days of purchase. Refunds are processed to the original payment method.</p>"
+          }
+        },
+        "heading_7daGk9": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Order Questions"
+          }
+        },
+        "row_qCAHJV": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Can I modify or cancel my order after placing it?",
+            "text": "<p>Orders can be modified or canceled within 1 hour of placement. Please reach out to our support team promptly to request changes.</p>"
+          }
+        },
+        "row_6bAyyk": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "How do I track my order?",
+            "text": "<p>Once your order ships, you'll receive a tracking number via email. You can also track your order through your Enigma Energy account.</p>"
+          }
+        },
+        "heading_R4dFdC": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Shipping & Delivery"
+          }
+        },
+        "row_pwHrpz": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "What are your shipping options and rates?",
+            "text": "<p>We offer free standard shipping on all orders. Expedited shipping options are available at checkout for an additional fee.</p>"
+          }
+        },
+        "row_a4eCDj": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Do you ship internationally?",
+            "text": "<p>Currently, we ship within the United States. We're working on expanding our shipping destinations soon.</p>"
+          }
+        },
+        "heading_BMeJUD": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Product Questions"
+          }
+        },
+        "row_ahHQq6": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Are your products suitable for vegans?",
+            "text": "<p>Many of our products are vegan-friendly. Please check the product description for specific dietary information.</p>"
+          }
+        },
+        "row_nhPHem": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Do your supplements contain allergens?",
+            "text": "<p>Our products are manufactured in facilities that process common allergens. Detailed allergen information is available on each product page.</p>"
+          }
+        },
+        "heading_edQpdC": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Loyalty Program"
+          }
+        },
+        "row_TBaWqR": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "How does the Enigma Energy Loyalty Program work?",
+            "text": "<p>Earn points with every purchase, which can be redeemed for discounts on future orders. Sign up through your account dashboard.</p>"
+          }
+        },
+        "row_Jnz8Cx": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Do loyalty points expire?",
+            "text": "<p>Loyalty points are valid for 12 months from the date they are earned.</p>"
+          }
+        },
+        "heading_AdEzfY": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Gift With Purchase"
+          }
+        },
+        "row_qRhtjr": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "How do I qualify for a gift with my purchase?",
+            "text": "<p>We occasionally offer gifts with purchases during special promotions. Details will be provided on our website and through our newsletter.</p>"
+          }
+        },
+        "heading_dyn9Ra": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Subscriptions"
+          }
+        },
+        "row_hni9yh": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Can I subscribe to receive products regularly?",
+            "text": "<p>Yes, we offer subscription options for select products. Choose your preferred delivery frequency and enjoy discounted pricing.</p>"
+          }
+        },
+        "row_qNUedj": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "How do I manage or cancel my subscription?",
+            "text": "<p>Manage your subscriptions through your account dashboard. You can pause, modify, or cancel at any time.</p>"
+          }
+        },
+        "heading_JebBT3": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Work With Enigma Energy"
+          }
+        },
+        "row_bJbUHH": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Are there partnership opportunities available?",
+            "text": "<p>We're always looking for passionate individuals and businesses to collaborate with. Contact us through our partnership inquiry form.</p>"
+          }
+        },
+        "heading_zWQmE7": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Gift Cards, Discounts & Payments"
+          }
+        },
+        "row_W6ejdx": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Do you offer gift cards?",
+            "text": "<p>Yes, digital gift cards are available for purchase on our website. They can be used toward any product.</p>"
+          }
+        },
+        "row_QPidtj": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "How do I apply a discount code?",
+            "text": "<p>Enter your discount code at checkout in the designated field. Ensure the code is valid and applicable to your order.</p>"
+          }
+        },
+        "heading_qChWhp": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Enigma Energy Products"
+          }
+        },
+        "row_4fgGH7": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "What flavors are available for your protein powders?",
+            "text": "<p>Our protein powders come in Chocolate and Vanilla flavors.</p>"
+          }
+        },
+        "row_XJfAy3": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Are your hydration powders sugar-free?",
+            "text": "<p>Yes, our hydration powders are formulated without added sugars.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_gLH3qe",
+        "row_cV3739",
+        "row_F43rMA",
+        "heading_7daGk9",
+        "row_qCAHJV",
+        "row_6bAyyk",
+        "heading_R4dFdC",
+        "row_pwHrpz",
+        "row_a4eCDj",
+        "heading_BMeJUD",
+        "row_ahHQq6",
+        "row_nhPHem",
+        "heading_edQpdC",
+        "row_TBaWqR",
+        "row_Jnz8Cx",
+        "heading_AdEzfY",
+        "row_qRhtjr",
+        "heading_dyn9Ra",
+        "row_hni9yh",
+        "row_qNUedj",
+        "heading_JebBT3",
+        "row_bJbUHH",
+        "heading_zWQmE7",
+        "row_W6ejdx",
+        "row_QPidtj",
+        "heading_qChWhp",
+        "row_4fgGH7",
+        "row_XJfAy3"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "Welcome to the Enigma Energy Help Center. Find answers to your questions about our products, orders, shipping, and more.",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "row_heading_font": "body",
+        "row_heading_text_size": 3,
+        "button_link": "",
+        "button_label": "",
+        "button_style": "solid",
+        "width": "narrow",
+        "top_padding": 30,
+        "bottom_padding": 50
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_hero_CW6Cmf",
+    "collapsible_content_Urd4EG"
+  ]
+}

@@ -1,0 +1,47 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {
+        "sticky_subtotal_sidebar": false,
+        "cross_sells_layout": "slider",
+        "cross_sells_position": "below-line-items",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "featured_collection_Yxm8Fa": {
+      "type": "featured-collection",
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "Recommended Products",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Shop now",
+        "collection": "hydration-powders",
+        "max_products": 8,
+        "column_count_desktop": "3",
+        "column_count_mobile": "1",
+        "show_slider_indicator": true,
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    }
+  },
+  "order": [
+    "main",
+    "featured_collection_Yxm8Fa"
+  ]
+}

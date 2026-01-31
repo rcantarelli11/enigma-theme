@@ -1,0 +1,126 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "color_scheme": "scheme_1",
+        "heading_font_size": 8,
+        "heading_mobile_font_size": 8,
+        "show_collection_description": true,
+        "show_product_count": true,
+        "content_max_width": 1000,
+        "show_banner_image": true,
+        "banner_height_type": "custom",
+        "custom_desktop_height": "60vh",
+        "custom_mobile_height": "350px",
+        "text_alignment": "center_center",
+        "overlay_color_scheme": "scheme_2",
+        "overlay_opacity": 25,
+        "enable_text_animation": true,
+        "image_animation": "fade",
+        "width": "full-width-padded",
+        "top_padding": 40,
+        "bottom_padding": 0
+      }
+    },
+    "collection_list": {
+      "type": "collection-list",
+      "settings": {
+        "color_scheme": "",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "selected_collections": [],
+        "layout": "slider",
+        "show_slider_indicator": true,
+        "column_count_desktop": "4",
+        "column_count_mobile": "2",
+        "image_source": "collection_image",
+        "image_aspect_ratio": "landscape",
+        "collection_item_color_scheme": "scheme_2",
+        "overlay_opacity": 26,
+        "width": "page-width",
+        "top_padding": 40,
+        "bottom_padding": 0
+      }
+    },
+    "rich_text": {
+      "type": "rich-text",
+      "blocks": {
+        "divider": {
+          "type": "divider",
+          "settings": {
+            "thickness": 1,
+            "space_above": 0,
+            "space_below": 0,
+            "space_above_mobile": 0,
+            "space_below_mobile": 0
+          }
+        }
+      },
+      "block_order": ["divider"],
+      "settings": {
+        "color_scheme": "",
+        "content_width": "page-width",
+        "custom_width": 650,
+        "text_alignment": "center",
+        "top_padding": 60,
+        "bottom_padding": 0
+      }
+    },
+    "product_grid": {
+      "type": "main-collection-product-grid",
+      "blocks": {
+        "promotion_tile": {
+          "type": "promotion-tile",
+          "settings": {
+            "position": 7,
+            "width": "full",
+            "mobile_width": "full",
+            "min_height": 600,
+            "min_height_mobile": 300,
+            "link": "",
+            "heading": "Promotion tile",
+            "heading_font_size": 6,
+            "text": "",
+            "text_font_size": 3,
+            "content_max_width": 500,
+            "text_alignment": "center_center",
+            "button_label": "Button",
+            "button_style": "solid",
+            "button_placement": "standard",
+            "overlay_color_scheme": "scheme_4",
+            "overlay_opacity": 28
+          }
+        }
+      },
+      "block_order": ["promotion_tile"],
+      "settings": {
+        "color_scheme": "",
+        "products_per_page": 20,
+        "column_count_desktop": "3",
+        "column_count_mobile": "2",
+        "show_total_result_count": true,
+        "enable_sorting": true,
+        "enable_filtering": true,
+        "show_sticky_filter_and_sort_button": true,
+        "filter_group_open_state": "first",
+        "width": "page-width",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    }
+  },
+  "order": ["banner", "collection_list", "rich_text", "product_grid"]
+}

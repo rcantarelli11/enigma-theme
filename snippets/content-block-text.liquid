@@ -1,0 +1,28 @@
+{% liquid
+  comment
+    Renders a text block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - animate: { Boolean } Apply animation class to potentially animate
+  endcomment
+
+  if block.settings.text != blank
+    assign text_class = 'content-block content-block--text ff-body rte'
+    if animate
+      assign text_class = text_class | append: ' animation-content'
+    endif
+
+    capture text_size_class
+      render 'settings-text-size', type: 'text', size: block.settings.text_font_size
+    endcapture
+
+    assign text_class = text_class | append: ' ' | append: text_size_class
+  endif
+-%}
+
+{% if block.settings.text != blank -%}
+  <div class="{{ text_class }}" {{ block.shopify_attributes }}>
+    {{ block.settings.text }}
+  </div>
+{%- endif %}

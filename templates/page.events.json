@@ -1,0 +1,331 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main_page": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "content_width": "custom-width",
+        "custom_width": 750,
+        "top_padding": 80,
+        "bottom_padding": 60
+      }
+    },
+    "rich_text": {
+      "type": "rich-text",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Rich text",
+            "heading_font_size": 5,
+            "heading_tag": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "text_font_size": 3
+          }
+        }
+      },
+      "block_order": [
+        "overline",
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "color_scheme": "scheme_1",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "text_alignment": "center",
+        "top_padding": 100,
+        "bottom_padding": 0
+      }
+    },
+    "multi_column": {
+      "type": "multi-column",
+      "blocks": {
+        "column_item_1": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "heading": "Column item",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_link": "",
+            "button_label": ""
+          }
+        },
+        "column_item_2": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "heading": "Column item",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_link": "",
+            "button_label": ""
+          }
+        },
+        "column_item_3": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "heading": "Column item",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_link": "",
+            "button_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_item_1",
+        "column_item_2",
+        "column_item_3"
+      ],
+      "settings": {
+        "color_scheme": "scheme_1",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "",
+        "column_spacing": "small",
+        "column_count_desktop": "3",
+        "column_count_mobile": "1",
+        "enable_slider_on_desktop": false,
+        "enable_slider_on_mobile": false,
+        "show_slider_indicator": false,
+        "text_alignment": "left",
+        "heading_font_size": 2,
+        "heading_mobile_font_size": 2,
+        "item_title_heading_tag": "h3",
+        "text_font_size": 3,
+        "button_style": "solid",
+        "media_aspect_ratio": "square",
+        "media_position": "above_content",
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 80
+      }
+    },
+    "slideshow": {
+      "type": "slideshow",
+      "blocks": {
+        "image": {
+          "type": "image",
+          "settings": {
+            "content_max_width": 500,
+            "text_position": "center_center",
+            "mobile_text_position": "center_center",
+            "overline": "",
+            "heading": "Image slide",
+            "heading_font_size": 8,
+            "heading_tag": "h2",
+            "text": "",
+            "text_font_size": 3,
+            "button_1_link": "",
+            "button_1_label": "",
+            "button_1_style": "solid",
+            "button_2_link": "",
+            "button_2_label": "",
+            "button_2_style": "solid",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 30
+          }
+        }
+      },
+      "block_order": [
+        "image"
+      ],
+      "settings": {
+        "color_scheme": "scheme_5",
+        "enable_autoplay": false,
+        "time_between_slides": 6,
+        "custom_desktop_height": "60vh",
+        "custom_mobile_height": "60vh",
+        "pagination_alignment": "left",
+        "mobile_pagination_alignment": "left",
+        "pagination_background": "#ffffff",
+        "pagination_foreground": "#000000",
+        "pagination_background_opacity": 50,
+        "navigation_cursor_background": "#ffffff",
+        "navigation_cursor_foreground": "#000000",
+        "enable_text_animation": true,
+        "slide_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 10
+      }
+    },
+    "image_with_text_1": {
+      "type": "image-with-text",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image with text",
+            "heading_font_size": 8,
+            "heading_tag": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "text_font_size": 3
+          }
+        }
+      },
+      "block_order": [
+        "overline",
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "color_scheme": "scheme_5",
+        "aspect_ratio": "square",
+        "mobile_aspect_ratio": "natural",
+        "media_link": "",
+        "desktop_media_width": 50,
+        "desktop_media_position": "right",
+        "mobile_media_position": "above",
+        "media_breathing_room": 0,
+        "text_alignment": "left",
+        "container_color_scheme": "scheme_1",
+        "width": "full-width-padded",
+        "top_padding": 50,
+        "bottom_padding": 0
+      }
+    },
+    "image_with_text_2": {
+      "type": "image-with-text",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Image with text",
+            "heading_font_size": 8,
+            "heading_tag": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "text_font_size": 3
+          }
+        }
+      },
+      "block_order": [
+        "overline",
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "color_scheme": "scheme_5",
+        "aspect_ratio": "square",
+        "mobile_aspect_ratio": "natural",
+        "media_link": "",
+        "desktop_media_width": 50,
+        "desktop_media_position": "left",
+        "mobile_media_position": "above",
+        "media_breathing_room": 0,
+        "text_alignment": "left",
+        "container_color_scheme": "scheme_1",
+        "width": "full-width-padded",
+        "top_padding": 50,
+        "bottom_padding": 10
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Subscribe to our Emails",
+            "heading_font_size": 3,
+            "heading_tag": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Subscribe to get updates about our run clubs and races. Be the first to hear about our sales and limited edition products!</p>",
+            "text_font_size": 3
+          }
+        },
+        "email_form": {
+          "type": "email-form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "overline",
+        "heading",
+        "text",
+        "email_form"
+      ],
+      "settings": {
+        "color_scheme": "scheme_5",
+        "content_max_width": 500,
+        "banner_height_type": "custom",
+        "custom_desktop_height": "60vh",
+        "custom_mobile_height": "450px",
+        "text_alignment": "center_center",
+        "overlay_color_scheme": "scheme_2",
+        "overlay_opacity": 30,
+        "image_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 40,
+        "bottom_padding": 60
+      }
+    }
+  },
+  "order": [
+    "main_page",
+    "rich_text",
+    "multi_column",
+    "slideshow",
+    "image_with_text_1",
+    "image_with_text_2",
+    "newsletter"
+  ]
+}

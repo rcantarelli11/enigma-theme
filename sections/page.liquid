@@ -1,0 +1,136 @@
+{{ 'section-page.css' | asset_url | stylesheet_tag }}
+{% render 'inline-scripts', script_name: 'visibility-watcher' %}
+{% render 'inline-scripts', script_name: 'rte-container' %}
+
+<div
+  class="section page-section"
+  style="
+    {% render 'settings-section-padding' %}
+    {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+    --custom-width: {{ section.settings.custom_width }}px;
+    --max-content-width: {{ section.settings.content_max_width }}px;
+  "
+>
+  <div class="section-inner section-inner--width-{{ section.settings.content_width }}">
+    <div class="page-section__header">
+      <visibility-watcher
+        class="page-section__heading-wrapper fs-heading-display-3"
+        data-watch-parent-selector=".page-section__header"
+      >
+        <h2 class="page-section__heading ff-heading fs-heading-display-3 ta-c animation-heading">
+          {{ section.settings.page.title }}
+        </h2>
+      </visibility-watcher>
+    </div>
+
+    <div class="page-section__content rte ff-body{% if section.settings.enable_corner_radius %} rte--with-rounded-images{% endif %}">
+      {% if section.settings.page != blank -%}
+        <rte-container>
+          {{ section.settings.page.content }}
+        </rte-container>
+      {%- else -%}
+        <div class="page-section__placeholder-wrapper placeholder">
+          {{ 'page' | placeholder_svg_tag: 'page-placeholder' }}
+        </div>
+      {%- endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.page_section.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "custom.overlay"
+    ]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "page",
+      "id": "page",
+      "label": "t:sections.page_section.settings.page.label"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.content_layout.header.content"
+    },
+    {
+      "type": "radio",
+      "id": "content_width",
+      "label": "t:shared.settings.content_layout.content_width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:shared.settings.content_layout.content_width.options.page"
+        },
+        {
+          "value": "custom-width",
+          "label": "t:shared.settings.content_layout.content_width.options.custom"
+        }
+      ],
+      "default": "custom-width"
+    },
+    {
+      "type": "range",
+      "id": "custom_width",
+      "label": "t:shared.settings.content_layout.custom_width.label",
+      "info": "t:shared.settings.content_layout.custom_width.info",
+      "min": 400,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 650
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.image_rounding.content_images_header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_corner_radius",
+      "default": true,
+      "label": "t:shared.settings.image_rounding.enable_corner_radius.label",
+      "info": "t:shared.settings.image_rounding.enable_corner_radius.info"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.page_section.name",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

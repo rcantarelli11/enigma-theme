@@ -1,0 +1,57 @@
+{% liquid
+  comment
+    Renders a standard line item price display.
+
+    Required parameters:
+      - item { Object }: The line_item object.
+  endcomment
+
+  assign has_discount = false
+  assign final_price = item.original_price
+
+  # Determine whether we have a discount
+  # Shopify discounts take precedence, then discounts based on compare price
+  if item.original_line_price > item.final_line_price or item.variant.compare_at_price > item.variant.price
+    assign has_discount = true
+    assign final_price = item.final_price
+
+    if item.original_line_price > item.final_line_price
+      assign original_price = item.original_price
+    else
+      assign original_price = item.variant.compare_at_price
+    endif
+  endif
+
+  # Using 'displayed' naming variables to split pricing logic out to prevent result mutations
+  if settings.zero_dollar_price_format == 'replace' and final_price == 0
+    assign displayed_final_price = 'general.currency.zero_dollar_price_custom_text' | t
+
+  elsif settings.zero_dollar_price_format == 'hide' and final_price == 0
+    assign displayed_final_price = ''
+  else
+    if settings.show_currency_codes_on_products
+      assign displayed_final_price = final_price | money_with_currency
+    else
+      assign displayed_final_price = final_price | money
+    endif
+  endif
+
+  # We're not showing the currency on original prices
+  assign displayed_original_price = original_price | money
+
+  capture price_class
+    echo 'price__main'
+
+    if has_discount
+      echo ' price__main--sale'
+    endif
+  endcapture
+%}
+
+<span class="price">
+  <span class="{{ price_class }}">{{ displayed_final_price }}</span>
+
+  {%- if has_discount -%}
+    <s class="price__strikethrough">{{ displayed_original_price }}</s>
+  {%- endif -%}
+</span>

@@ -1,0 +1,27 @@
+<div class="active" id="page-transition-overlay"></div>
+
+<script>
+  const pageTransitionOverlay = document.getElementById('page-transition-overlay')
+  const internalReferrer = document.referrer.includes(document.location.origin)
+  const winPerf = window.performance
+  const navTypeLegacy = winPerf?.navigation?.type
+  const navType = winPerf?.getEntriesByType('navigation')?.[0]?.type
+
+  // Avoid transitioning if we aren't navigating within the site
+  // Otherwise, fallback for the case that app JS breaks
+  if (!internalReferrer || navType !== 'navigate' || navTypeLegacy !== 0) {
+    pageTransitionOverlay.classList.add('skip-animation')
+
+    setTimeout(() => {
+      pageTransitionOverlay.classList.remove('active')
+
+      setTimeout(() => {
+        pageTransitionOverlay.classList.remove('skip-animation')
+      }, 1)
+    }, 1)
+  } else {
+    setTimeout(() => {
+      pageTransitionOverlay.className = ''
+    }, 500)
+  }
+</script>

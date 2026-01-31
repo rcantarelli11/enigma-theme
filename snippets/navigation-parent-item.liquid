@@ -1,0 +1,58 @@
+{%- liquid
+  comment
+    Renders a set of elements that are used to:
+      - indicate a menu is a parent (has children).
+      - manage visible state of the submenu.
+      - link to the linked page.
+
+    When combined with related CSS, on mobile/drawer only mode, the link is hidden and the label is styled the same as other standalone links. When the user taps the label, the submenu is shown.
+    On desktop, the link is shown and the label is hidden. When the user hovers over the link, the submenu is shown, while allowing the user to click the link.
+
+    Required parameters:
+      - link: { Object } The link associated with the item.
+      - link_loop: { Object } The parent forloop for iterating through the current level of links.
+
+    Optional parameters:
+      - is_top_level: { Boolean: false } Whether the parent item is a top level item which determines the font styling to use.
+  endcomment
+
+  assign is_top_level = is_top_level | default: false, allow_false: true
+
+  if is_top_level
+    assign menu_level = '1'
+  else
+    assign menu_level = '2'
+  endif
+-%}
+
+{%- capture content -%}
+  <span class="submenu__link-text-wrapper">
+    <span class="submenu__link-text" data-content="{{ link.title | escape }}">
+      {{ link.title | escape }}
+    </span>
+  </span>
+
+  {% render 'icon-utility', icon: 'chevron-right-small', width: 8.5, height: 13.5 %}
+{%- endcapture -%}
+
+{%- if url == '#' -%}
+  <span class="submenu__link submenu__link--fragment submenu__link--heading submenu__parent-item submenu__item-display-text">
+    {{ content }}
+  </span>
+{%- else -%}
+  <a class="submenu__link submenu__link--heading submenu__parent-item submenu__item-display-text" href="{{ link.url }}">
+    {{ content }}
+  </a>
+{%- endif -%}
+
+<label
+  class="submenu__list-control submenu__parent-item submenu__item-display-text"
+  for="level-{{ menu_level }}-link-{{ link_loop.index }}-submenu-{{ link.handle | strip }}"
+>
+  <input
+    class="submenu__list-control-input"
+    type="checkbox"
+    id="level-{{ menu_level }}-link-{{ link_loop.index }}-submenu-{{ link.handle | strip }}"
+  >
+  {{ content }}
+</label>

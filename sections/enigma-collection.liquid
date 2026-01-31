@@ -1,0 +1,67 @@
+{%- liquid
+  assign per_page = section.settings.products_per_page | default: 12
+-%}
+
+<section class="enigma-collection enigma-section" id="enigma-collection-{{ section.id }}">
+  <div class="enigma-container">
+    <div class="enigma-collection__header">
+      {%- if collection.description != blank -%}
+        <p class="enigma-label mb-sm">{{ collection.title }}</p>
+        <h1 class="enigma-h2">{{ collection.title }}</h1>
+        <p class="enigma-body mt-md" style="max-width: 560px; margin-left: auto; margin-right: auto;">{{ collection.description }}</p>
+      {%- else -%}
+        <h1 class="enigma-h2">{{ collection.title }}</h1>
+      {%- endif -%}
+      <p class="enigma-collection__count">{{ collection.products_count }} products</p>
+    </div>
+
+    {%- paginate collection.products by per_page -%}
+      <div class="enigma-collection__grid">
+        {%- for product in collection.products -%}
+          {%- render 'enigma-product-card', product: product -%}
+        {%- endfor -%}
+      </div>
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="enigma-pagination mt-xl" style="display: flex; justify-content: center; gap: 0.5rem;" aria-label="Pagination">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="enigma-btn enigma-btn--secondary" style="padding: 0.625rem 1rem;">← Prev</a>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a href="{{ part.url }}" class="enigma-btn enigma-btn--ghost" style="padding: 0.625rem 0.75rem;">{{ part.title }}</a>
+            {%- else -%}
+              <span class="enigma-btn" style="padding: 0.625rem 0.75rem; color: var(--accent);">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="enigma-btn enigma-btn--secondary" style="padding: 0.625rem 1rem;">Next →</a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Enigma Collection",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 4,
+      "max": 24,
+      "step": 4,
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "Enigma Collection"
+    }
+  ]
+}
+{% endschema %}

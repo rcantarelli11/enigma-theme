@@ -1,0 +1,14 @@
+{%- comment -%}
+  Renders CSS variables for section padding.
+
+  Usage:
+    style="{% render 'settings-section-padding' %}"
+
+  Note: This snippet should only be used inside a section (the presence of the section object
+    is assumed).
+{%- endcomment -%}
+
+{% liquid
+  echo '--section-padding-top: [[spt]]px;' | replace: '[[spt]]', section.settings.top_padding
+  echo ' --section-padding-bottom: [[spb]]px;' | replace: '[[spb]]', section.settings.bottom_padding
+-%}

@@ -1,0 +1,304 @@
+{% liquid
+  comment
+    Scroll snap web component with mobile first optional settings.
+
+    Required parameters:
+      - id: { String } The slider ID. Used for custom emit events needed to hook into the slider (ie. product thumbnail
+        active states). Should be unique.
+      - slider_items: { String } HTML of slider items.
+      - columns: { Number } The number of columns. This is used for all screen sizes if an override is not used.
+      - gap: { String (any valid CSS width): '20px' } The gap between slides. This is used for all screen sizes if an override is not used.
+      - peek: { String (any valid CSS width): '0px' } The amount that the next offscreen slide will peek into view.
+
+    Optional parameters:
+      - style: { String } Inline CSS styles to apply to the slider.
+      - navigation_container: { String } The CSS selector of the container that contains the navigation elements.
+      - columns_above_540: { Number } The number of columns on screens above 540px.
+      - columns_above_720: { Number } The number of columns on screens above 720px.
+      - columns_above_860: { Number } The number of columns on screens above 860px.
+      - columns_above_960: { Number } The number of columns on screens above 960px.
+      - columns_above_1024: { Number } The number of columns on screens above 1024px.
+      - columns_above_1200: { Number } The number of columns on screens above 1200px.
+      - columns_above_1440: { Number } The number of columns on screens above 1440px.
+      - gap_above_540: { String (any valid CSS width) } The gap between slides on screens above 540px.
+      - gap_above_720: { String (any valid CSS width) } The gap between slides on screens above 720px.
+      - gap_above_860: { String (any valid CSS width) } The gap between slides on screens above 860px.
+      - gap_above_960: { String (any valid CSS width) } The gap between slides on screens above 960px.
+      - gap_above_1024: { String (any valid CSS width) } The gap between slides on screens above 1024px.
+      - gap_above_1200: { String (any valid CSS width) } The gap between slides on screens above 1200px.
+      - gap_above_1440: { String (any valid CSS width) } The gap between slides on screens above 1440px.
+      - peek_above_540: { String (any valid CSS width) } The amount that the next offscreen slide will peek into
+        view on screens above 540px.
+      - peek_above_720: { String (any valid CSS width) } The amount that the next offscreen slide will peek into
+        view on screens above 720px.
+      - peek_above_860: { String (any valid CSS width) } The amount that the next offscreen slide will peek into
+        view on screens above 860px.
+      - peek_above_960: { String (any valid CSS width) } The amount that the next offscreen slide will peek into
+        view on screens above 960px.
+      - peek_above_1024: { String (any valid CSS width) } The amount that the next offscreen slide will peek into
+        view on screens above 1024px.
+      - peek_above_1200: { String (any valid CSS width) } The amount that the next offscreen slide will peek into
+        view on screens above 1200px.
+      - peek_above_1440: { String (any valid CSS width) } The amount that the next offscreen slide will peek into
+        view on screens above 1400px.
+      - full_width_below_720: { Boolean } Whether the slider should extend to the edges of the screen (beyond
+        the default site padding) on screens below 720px.
+      - full_width_below_860: { Boolean } Whether the slider should extend to the edges of the screen (beyond
+        the default site padding) on screens below 860px.
+      - full_width_below_960: { Boolean } Whether the slider should extend to the edges of the screen (beyond
+        the default site padding) on screens below 960px.
+      - full_width_below_1024: { Boolean } Whether the slider should extend to the edges of the screen (beyond
+        the default site padding) on screens below 1024px.
+      - peek_and_full_width_below_720: { Boolean } Whether the slider should extend to the edges of the screen (beyond
+        the default site padding), and let the next offscreen slide peek into view, on screens below 720px. This is
+        required to ensure proper amouint of peek is shown.
+      - peek_and_full_width_below_860: { Boolean } Whether the slider should extend to the edges of the screen (beyond
+        the default site padding), and let the next offscreen slide peek into view, on screens below 960px. This is
+        required to ensure proper amouint of peek is shown.
+      - peek_and_full_width_below_860: { Boolean } Whether the slider should extend to the edges of the screen (beyond
+        the default site padding), and let the next offscreen slide peek into view, on screens below 960px. This is
+        required to ensure proper amouint of peek is shown.
+      - peek_and_full_width_below_1024: { Boolean } Whether the slider should extend to the edges of the screen (beyond
+        the default site padding), and let the next offscreen slide peek into view, on screens below 1024px. This is
+        required to ensure proper amouint of peek is shown.
+      - disable_below_720: { Boolean } Whether the slider should be disabled on screens below 720px.
+      - disable_above_720: { Boolean } Whether the slider should be disabled on screens above 720px.
+      - disable_below_860: { Boolean } Whether the slider should be disabled on screens below 860px.
+      - disable_above_860: { Boolean } Whether the slider should be disabled on screens above 860px.
+      - disable_above_960: { Boolean } Whether the slider should be disabled on screens above 960px.
+      - disable_above_1024: { Boolean } Whether the slider should be disabled on screens above 1024px.
+      - disable_below_1024: { Boolean } Whether the slider should be disabled on screens below 1024px.
+      - slider_wrapper_classes: { String } Class(es) to be applied to the slider container.
+      - autoplay: { Boolean } Whether the slider should autoplay.
+      - autoplay_delay: { Number } The delay (in ms) between slide changes.
+      - autoplay_pause_on_hover: { Boolean } Whether the slider should pause on hover when autplaying.
+      - slideshow { Boolean } Whether the slider should be treated as a slideshow, will load more functionality (autoplay, loop back to beginning)
+      - loop_back_to_start: { Boolean: false } Whether the last slide should have a next button that slides back to the first slide.
+      - loop_back_to_start_mobile: { Boolean: false } Whether the last slide should have a next button that slides back to the first slide.
+      - animate: { Boolean: false } Whether the animate the slider on load or coming into view.
+      - animation_size: { String: 'regular' } The animation size (changes the amount that the content translates in the animation). Can be:
+        - 'regular'
+        - 'small'
+      - include_assets: { Boolean: true } Whether to include the associated JS/CSS files.
+      - initialization_strategy: { String: 'auto' } The strategy for initializing the slider. Can be:
+        - 'auto': Initialize on slider resize (uses ResizeObserver)
+        - 'manual': Manually trigger initialization through the init event (refer to event.js)
+
+    Note: If you want to have only 1 column, set the gap to 0. Otherwise, navigation will slide to an offset position.
+  endcomment
+
+  assign componentTag = 'scroll-slider-component'
+
+  if slideshow
+    assign componentTag = 'slideshow-component'
+  endif
+
+  assign slider_columns = columns | default: 2
+  assign slider_peek = peek | default: '0px'
+  assign slider_gap = gap | default: '20px'
+
+  assign animate = animate | default: false, allow_false: true
+  assign animation_size = animation_size | default: 'regular'
+
+  assign container_class = 'scroll-slider'
+
+  if full_width_below_720
+    assign container_class = container_class | append: ' scroll-slider--full-width-below-720'
+  elsif full_width_below_860
+    assign container_class = container_class | append: ' scroll-slider--full-width-below-860'
+  elsif full_width_below_960
+    assign container_class = container_class | append: ' scroll-slider--full-width-below-960'
+  elsif full_width_below_1024
+    assign container_class = container_class | append: ' scroll-slider--full-width-below-1024'
+  else
+    assign container_class = container_class | append: ' scroll-slider--standard-width'
+  endif
+
+  if peek_and_full_width_below_720
+    assign container_class = container_class | append: ' scroll-slider--peek-and-full-width-below-720'
+  elsif peek_and_full_width_below_860
+    assign container_class = container_class | append: ' scroll-slider--peek-and-full-width-below-860'
+  elsif peek_and_full_width_below_960
+    assign container_class = container_class | append: ' scroll-slider--peek-and-full-width-below-960'
+  elsif peek_and_full_width_below_1024
+    assign container_class = container_class | append: ' scroll-slider--peek-and-full-width-below-1024'
+  endif
+
+  if disable_below_720
+    assign container_class = container_class | append: ' scroll-slider--scroll-above-720-only'
+  elsif disable_above_720
+    assign container_class = container_class | append: ' scroll-slider--scroll-below-720-only'
+  elsif disable_below_860
+    assign container_class = container_class | append: ' scroll-slider--scroll-above-860-only'
+  elsif disable_above_860
+    assign container_class = container_class | append: ' scroll-slider--scroll-below-860-only'
+  elsif disable_below_960
+    assign container_class = container_class | append: ' scroll-slider--scroll-above-960-only'
+  elsif disable_above_960
+    assign container_class = container_class | append: ' scroll-slider--scroll-below-960-only'
+  elsif disable_below_1024
+    assign container_class = container_class | append: ' scroll-slider--scroll-above-1024-only'
+  elsif disable_above_1024
+    assign container_class = container_class | append: ' scroll-slider--scroll-below-1024-only'
+  else
+    assign container_class = container_class | append: ' scroll-slider--scroll-all-sizes'
+  endif
+
+  if animate
+    assign container_class = container_class | append: ' animation-slider'
+
+    if animation_size == 'small'
+      assign container_class = container_class | append: ' animation-slider--small'
+    endif
+  endif
+
+  assign scroll_slider_style = '--columns: [[c]];' | replace: '[[c]]', slider_columns
+
+  if columns_above_540 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --columns-above-540: [[c]];' | replace: '[[c]]', columns_above_540
+  endif
+
+  if columns_above_720 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --columns-above-720: [[c]];' | replace: '[[c]]', columns_above_720
+  endif
+
+  if columns_above_860 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --columns-above-860: [[c]];' | replace: '[[c]]', columns_above_860
+  endif
+
+  if columns_above_960 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --columns-above-960: [[c]];' | replace: '[[c]]', columns_above_960
+  endif
+
+  if columns_above_1024 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --columns-above-1024: [[c]];' | replace: '[[c]]', columns_above_1024
+  endif
+
+  if columns_above_1200 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --columns-above-1200: [[c]];' | replace: '[[c]]', columns_above_1200
+  endif
+
+  if columns_above_1440 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --columns-above-1400: [[c]];' | replace: '[[c]]', columns_above_1440
+  endif
+
+  assign scroll_slider_style = scroll_slider_style | append: ' --peek: [[p]];' | replace: '[[p]]', slider_peek
+
+  if peek_above_540 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --peek-above-540: [[p]];' | replace: '[[p]]', peek_above_540
+  endif
+
+  if peek_above_720 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --peek-above-720: [[p]];' | replace: '[[p]]', peek_above_720
+  endif
+
+  if peek_above_860 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --peek-above-860: [[p]];' | replace: '[[p]]', peek_above_860
+  endif
+
+  if peek_above_960 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --peek-above-960: [[p]];' | replace: '[[p]]', peek_above_960
+  endif
+
+  if peek_above_1024 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --peek-above-1024: [[p]];' | replace: '[[p]]', peek_above_1024
+  endif
+
+  if peek_above_1200 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --peek-above-1200: [[p]];' | replace: '[[p]]', peek_above_1200
+  endif
+
+  if peek_above_1440 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --peek-above-1400: [[p]];' | replace: '[[p]]', peek_above_1440
+  endif
+
+  assign scroll_slider_style = scroll_slider_style | append: ' --gap: [[g]];' | replace: '[[g]]', slider_gap
+
+  if gap_above_540 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --gap-above-540: [[g]];' | replace: '[[g]]', gap_above_540
+  endif
+
+  if gap_above_720 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --gap-above-720: [[g]];' | replace: '[[g]]', gap_above_720
+  endif
+
+  if gap_above_860 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --gap-above-860: [[g]];' | replace: '[[g]]', gap_above_860
+  endif
+
+  if gap_above_960 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --gap-above-960: [[g]];' | replace: '[[g]]', gap_above_960
+  endif
+
+  if gap_above_1024 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --gap-above-1024: [[g]];' | replace: '[[g]]', gap_above_1024
+  endif
+
+  if gap_above_1200 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --gap-above-1200: [[g]];' | replace: '[[g]]', gap_above_1200
+  endif
+
+  if gap_above_1440 != blank
+    assign scroll_slider_style = scroll_slider_style | append: ' --gap-above-1400: [[g]];' | replace: '[[g]]', gap_above_1440
+  endif
+
+  assign scroll_slider_class = 'scroll-slider__slider'
+
+  if slider_wrapper_classes != blank
+    assign scroll_slider_class = scroll_slider_class | append: ' ' | append: slider_wrapper_classes
+  endif
+
+  if loop_back_to_start != true
+    assign loop_back_to_start = false
+  endif
+
+  if loop_back_to_start_mobile != true
+    assign loop_back_to_start_mobile = false
+  endif
+
+  if style
+    assign scroll_slider_style = scroll_slider_style | append: ' ' | append: style
+  endif
+
+  assign initialization_strategy = initialization_strategy | default: 'auto'
+
+  assign include_assets = include_assets | default: true, allow_false: true
+
+  if include_assets
+    echo 'component-scroll-slider.css' | asset_url | stylesheet_tag
+    render 'inline-scripts', script_name: 'scroll-slider'
+
+    if slideshow
+      render 'inline-scripts', script_name: 'slideshow'
+    endif
+  endif
+-%}
+
+<{{ componentTag }}
+  class="{{ container_class }}"
+  style="{{ scroll_slider_style }}"
+  data-id="{{ id }}"
+  data-navigation-container="{{ navigation_container }}"
+  data-autoplay="{{ autoplay }}"
+  data-autoplay-delay="{{ autoplay_delay | times: 1000 }}"
+  data-autoplay-pause-on-hover="{{ autoplay_pause_on_hover }}"
+  data-loop-back-to-start="{{ loop_back_to_start }}"
+  data-loop-back-to-start-mobile="{{ loop_back_to_start_mobile }}"
+  data-initialization-strategy="{{ initialization_strategy }}"
+
+  {% if slideshow %}
+    data-is-slideshow="true"
+  {% endif %}
+  js-scroll-slider-component
+>
+  <div class="{{ scroll_slider_class }}" js-scroll-slider>
+    {{ slider_items }}
+
+    {%- if loop_back_to_start_mobile -%}
+      <div class="scroll-slider__mobile-loop-nav">
+        {%- render 'icon-utility', icon: 'return' -%}
+        {{- 'general.navigation.return' | t -}}
+      </div>
+    {%- endif -%}
+  </div>
+</{{ componentTag }}>

@@ -1,0 +1,53 @@
+{%- liquid
+  comment
+    Renders an image block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+
+    Optional parameters:
+      - animate: { Boolean } Apply animation class to potentially animate
+      - alignment: { String } The block's horizontal alignment, may be needed if not using the content-blocks snippet.
+        Can be:
+        - "left"
+        - "center"
+        - "right"
+  endcomment
+
+  assign block_classes = 'content-block content-block--image content-blocks--alignment-[[alignment]]'
+  assign block_classes = block_classes | replace: '[[alignment]]', alignment
+
+  if animate
+    assign block_classes = block_classes | append: ' animation-content'
+  endif
+
+  assign image_size = block.settings.image_size
+  assign image_size_mobile = block.settings.image_size_mobile
+
+  capture image_sizes
+    render 'get-tile-image-sizes', image_width_unit: 'px', desktop_image_width: image_size, tablet_image_width: image_size, mobile_image_width: image_size_mobile
+  endcapture
+
+  capture src_set_sizes
+    render 'get-limited-src-set-sizes', desktop_image_width: image_size, mobile_image_width: image_size_mobile
+  endcapture
+-%}
+
+<div
+  class="{{ block_classes }}"
+  style="
+    --image-max-width: {{ image_size }}px;
+    --image-max-width-mobile: {{ image_size_mobile }}px;
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="image-block__inner">
+    {% render 'image',
+      image: block.settings.image,
+      sizes: image_sizes,
+      src_set_width_values: src_set_sizes,
+      include_placeholder: true,
+      allowed_to_round: block.settings.enable_corner_radius
+    -%}
+  </div>
+</div>

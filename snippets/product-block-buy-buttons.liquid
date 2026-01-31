@@ -1,0 +1,83 @@
+{%- liquid
+  comment
+    Renders the "Buy buttons" product block.
+
+    Required parameters:
+      - prod: { Object } Current product object.
+      - variant: { Object } Current variant object.
+      - block: { Object } Buy button theme settings.
+      - form_id: { String } The form ID to associate the inputs with
+      - product_price_display: { HTML } The rendered price HTML from the product-price-display snippet.
+      - has_sibling_products: { Boolean } If product has sibling products to include in Sticky add to cart.
+      - is_featured: { Boolean } Whether the section is a Featured product (applicable to the Sticky add to cart).
+  endcomment
+
+  assign disable_variant = false
+
+  if variant.available
+    assign add_to_cart_label = 'products.product.add_to_cart' | t
+  else
+    assign add_to_cart_label = 'products.product.sold_out' | t
+    assign disable_variant = true
+  endif
+
+  assign add_to_cart_button_style = block.settings.add_to_cart_btn_style
+  assign button_classes = 'buy-buttons__add-to-cart btn btn--style-[[atcbs]]' | replace: '[[atcbs]]', add_to_cart_button_style
+
+  assign show_gift_recipient_form_label = 'products.gift_card_recipient.enable' | t
+-%}
+
+{%- render 'inline-scripts', script_name: 'product-block-buy-buttons' -%}
+
+<product-block-buy-buttons
+  class="product-details__buy-buttons"
+  style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  data-enable-gift-card-recipient-form="{{ section.settings.enable_gift_card_recipient }}"
+  js-product-block
+  js-product-block-allowed-in-quickview
+  js-product-block-buy-buttons
+  {{ block.shopify_attributes }}
+>
+  {% # Show recipient fields checkbox (fields are within product form) %}
+  {%- if section.settings.enable_gift_card_recipient and prod.gift_card? -%}
+    <div class="gift-card-recipient__show-form-checkbox">
+      {%- render 'input-checkbox',
+        id: 'gift-card-show-form',
+        name: show_gift_recipient_form_label,
+        value: 'show gift card recipient form',
+        label: show_gift_recipient_form_label
+      -%}
+    </div>
+  {%- endif -%}
+
+  {% # Form includes gift card recipient fields, add to cart, and dynamic checkout buttons %}
+  {%- render 'product-form',
+    prod: prod,
+    variant: variant,
+    show_dynamic_checkout: block.settings.show_dynamic_checkout,
+    add_to_cart_button_style: add_to_cart_button_style,
+    add_to_cart_label: add_to_cart_label,
+    button_classes: button_classes,
+    disable_variant: disable_variant,
+    form_id: form_id,
+    product_price_display: product_price_display,
+    has_sibling_products: has_sibling_products,
+    is_featured: is_featured
+  -%}
+
+  {%- if cart.taxes_included or shop.shipping_policy.body != blank -%}
+    <div class="product__policies rte">
+      {%- if cart.taxes_included -%}
+        {{ 'products.product.include_taxes' | t }}
+      {%- endif -%}
+      {%- if shop.shipping_policy.body != blank -%}
+        {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- # Pickup availability -%}
+  {%- if block.settings.show_pickup_availability -%}
+    {%- render 'pickup-availability', prod: prod, variant: variant, section_id: section.id -%}
+  {%- endif -%}
+</product-block-buy-buttons>

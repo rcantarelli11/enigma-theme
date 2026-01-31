@@ -1,0 +1,28 @@
+{% liquid
+  comment
+    Renders an empty container for the scroll slider page dots. The scroll slider JS
+    handles populating the dots based on the markup in the template.
+
+    Optional parameters:
+      - hide_below_720: { Boolean } Whether the dots should show on screens below 720px.
+  endcomment
+
+  assign hide_below_720 = hide_below_720 | default: true, allow_false: true
+-%}
+
+<div class="scroll-slider-page-dots" data-scroll-slider-page-dots data-hide-below-720="{{ hide_below_720 }}">
+  <div class="scroll-slider-page-dots-inner" data-scroll-slider-page-dots-inner></div>
+  <template>
+    <div class="scroll-slider-page-dot-wrapper">
+      <button
+        type="button"
+        class="scroll-slider-page-dot"
+        data-go-to="[[number]]"
+        aria-label="{{ 'general.accessibility.carousel_select' | t }}"
+        data-scroll-slider-page-dot
+      >
+        <div class="scroll-slider-page-dot-inner"></div>
+      </button>
+    </div>
+  </template>
+</div>

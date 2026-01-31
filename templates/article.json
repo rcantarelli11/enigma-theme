@@ -1,0 +1,77 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-article",
+      "blocks": {
+        "featured_image": {
+          "type": "featured_image",
+          "settings": {
+            "width": "page-width",
+            "height_type": "adapt",
+            "custom_desktop_height": "450px",
+            "custom_mobile_height": "350px",
+            "focal_point_x": 50,
+            "focal_point_y": 50,
+            "mobile_focal_point_x": 50,
+            "mobile_focal_point_y": 50
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "enable_full_width_title": true,
+            "heading_font_size": 6,
+            "show_tags": true,
+            "show_author": false,
+            "show_date": true
+          }
+        },
+        "content": {
+          "type": "content",
+          "settings": {}
+        },
+        "tags": {
+          "type": "tags",
+          "settings": {
+            "heading_text": "Read more from:"
+          }
+        },
+        "social_share": {
+          "type": "social_sharing",
+          "settings": {
+            "enable_os_sharing": false
+          }
+        }
+      },
+      "block_order": [
+        "featured_image",
+        "title",
+        "content",
+        "tags",
+        "social_share"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "show_back_link": true,
+        "content_width": "page-width",
+        "custom_width": 1000,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "top_padding": 80,
+        "bottom_padding": 50
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

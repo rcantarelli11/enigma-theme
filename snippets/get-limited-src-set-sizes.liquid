@@ -1,0 +1,43 @@
+{%- liquid
+  comment
+    Renders a very limited string for the srcset image attribute to prevent unnecesarry coverage.
+    Can only have 2 set sizes in px width passed in, desktop and mobile.
+    Returns a sorted and unique string of mobile, 2x mobile, desktop, 2x desktop.
+
+    Required parameters:
+      - desktop_image_width: { Number } The set px width of the desktop image.
+      - mobile_image_width: { Number } The set px width of the mobile image.
+  endcomment
+
+  assign doubled_desktop_image_width = desktop_image_width | times: 2
+  assign doubled_mobile_image_width = mobile_image_width | times: 2
+
+  # The smaller width setting can be small enough that even doubled it's less than the other setting
+  # so this allows for properly incremental ranges
+  if desktop_image_width > mobile_image_width
+    if desktop_image_width > doubled_mobile_image_width
+      assign src_set_sizes = '719.9px, [[double_mobile]], 1440px, [[double_desktop]]'
+    else
+      assign src_set_sizes = '719.9px, 1440px, [[double_mobile]], [[double_desktop]]'
+    endif
+  else
+    if mobile_image_width > doubled_desktop_image_width
+      assign src_set_sizes = '1440px, [[double_desktop]], 719.9px, [[double_mobile]]'
+    else
+      assign src_set_sizes = '1440px, 719.9px, [[double_desktop]], [[double_mobile]]'
+    endif
+  endif
+-%}
+
+{% assign src_set_sizes = src_set_sizes
+  | replace: '1440px', desktop_image_width
+  | replace: '[[double_desktop]]', doubled_desktop_image_width
+  | replace: '719.9px', mobile_image_width
+  | replace: '[[double_mobile]]', doubled_mobile_image_width
+%}
+
+{%- liquid
+  # It's possible for values to be repeated so this strips out any duplication
+  assign src_set_sizes = src_set_sizes | split: ', ' | uniq | join: ', '
+  echo '[[source_set_sizes]]' | replace: '[[source_set_sizes]]', src_set_sizes
+-%}

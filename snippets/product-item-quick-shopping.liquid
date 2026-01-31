@@ -1,0 +1,149 @@
+{%- liquid
+  comment
+    Renders a Quick add button when only default variant or renders a Quick view button and modal with variants.
+
+    Required parameters:
+      - prod: { Object } Product object
+
+
+    Optional parameters:
+      - minimal_button: { Boolean: false } Whether the minimal product item button styling and copy should be used.
+      - within_dialog: { Boolean: false } Whether quick shopping is nested within a dialog so that can be accounted for.
+      - error_placement: { String: 'above' } Where the error message should show in relation to the Quick shopping button. Can be:
+        - 'above'
+        - 'below'
+      - quick_view_only: { Boolean: false } Whether to prevent 'quick-add' functionlity.
+  endcomment
+
+  assign minimal_button = minimal_button | default: false, allow_false: true
+  assign within_dialog = within_dialog | default: false, allow_false: true
+  assign error_placement = error_placement | default: 'above'
+  assign quick_view_only = quick_view_only | default: false, allow_false: true
+
+  if prod.has_only_default_variant
+    assign has_variants = false
+  else
+    assign has_variants = true
+  endif
+
+  assign quick_view_enabled = false
+  if has_variants or settings.quick_shopping_type == 'quick-view' or quick_view_only
+    assign quick_view_enabled = true
+  endif
+-%}
+
+{%- capture quick_shop_error -%}
+  <span class="product-item__quick-shop-error notification-display error-display" js-quick-shop-error></span>
+{%- endcapture -%}
+
+<product-item-quick-shopping
+  class="product-item__quick-shopping ff-body"
+  js-quick-shopping-wrapper
+  data-product-id="{{ prod.id }}"
+  data-product-url="{{ prod.url }}"
+  data-within-dialog="{{ within_dialog }}"
+>
+  {%- if error_placement == 'above' -%}
+    {{ quick_shop_error }}
+  {%- endif -%}
+
+  {%- liquid
+    case settings.quick_shopping_type
+      when 'quick-add'
+        capture quick_shop_button_text
+          if minimal_button
+            echo 'products.product.add' | t
+          else
+            if has_variants
+              echo 'products.product.choose_options' | t
+            else
+              echo 'products.product.add_to_cart' | t
+            endif
+          endif
+        endcapture
+
+        capture quick_shop_button_icon
+          if minimal_button == false
+            if settings.cart_icon_type == 'cart' or settings.cart_icon_type == 'no-icon'
+              render 'icon-utility', icon: 'quick-add-cart', width: 20, height: 20
+            else
+              render 'icon-utility', icon: 'quick-add-bag', width: 20, height: 20
+            endif
+          endif
+        endcapture
+
+      when 'quick-view'
+        capture quick_shop_button_text
+          echo 'products.product.quick_view' | t
+        endcapture
+
+        capture quick_shop_button_icon
+          if minimal_button == false
+            render 'icon-utility', icon: 'quick-view', width: 20, height: 20
+          endif
+        endcapture
+    endcase
+
+    capture button_attributes
+      if settings.quick_shopping_type == 'quick-add' and quick_view_only == false
+        echo ' data-variant-id="[[dvi]]"' | replace: '[[dvi]]', prod.variants.first.id
+        echo 'data-type="quick-add"'
+      else
+        echo 'data-type="quick-view"'
+      endif
+
+      echo ' data-has-variants="[[dhv]]"' | replace: '[[dhv]]', has_variants
+      echo ' js-quick-shop-button'
+    endcapture
+
+    capture button_style
+      if minimal_button
+        echo 'product-item__quick-shop-button btn btn--style-outline btn--size-small btn--width-regular'
+      else
+        echo 'product-item__quick-shop-button btn btn--style-solid btn--style-icon'
+      endif
+    endcapture
+
+    assign full_width_btn = true
+    if minimal_button
+      assign full_width_btn = false
+    endif
+  -%}
+
+  {%- render 'inline-scripts', script_name: 'button-with-state' -%}
+
+  {%- render 'button-with-state',
+    label: quick_shop_button_text,
+    class: button_style,
+    button_attributes: button_attributes,
+    wrapper_attributes: 'js-quick-shop-button-wrapper',
+    mobile_button_icon: quick_shop_button_icon,
+    full_width_button: full_width_btn
+  -%}
+
+  {%- if quick_view_enabled -%}
+    {%- assign quick_view_name = 'quick-view-[[pid]]' | replace: '[[pid]]', prod.id -%}
+
+    {%- capture quick_view_content -%}
+      {% # TODO: prod and sibling products not referenced in snippet file, can get rid of? %}
+      {% render 'product-item-quick-view-modal', prod: prod, sibling_products: sibling_products %}
+    {%- endcapture -%}
+
+    <template js-quick-view-template>
+      {%- render 'modal',
+        name: quick_view_name,
+        content: quick_view_content,
+        color: 'popup-modal',
+        class: 'modal product-quick-view',
+        close_button: true,
+        backdrop: true,
+        backdrop_dismiss: true,
+        scroll_lock: true
+      -%}
+    </template>
+  {%- endif -%}
+
+  {%- if error_placement == 'below' -%}
+    {{ quick_shop_error }}
+  {%- endif -%}
+</product-item-quick-shopping>

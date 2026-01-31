@@ -1,0 +1,8 @@
+{%- # Outputs the standard link elements for canonical URLs and the favicon. -%}
+
+<link rel="canonical" href="{{ canonical_url }}">
+<link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+{% if settings.favicon != blank -%}
+  <link rel="shortcut icon" href="{{ settings.favicon | image_url: width: 32, height: 32 }}" type="image/png">
+{%- endif %}

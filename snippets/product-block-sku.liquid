@@ -1,0 +1,42 @@
+{%- liquid
+  comment
+    Renders the "Sku" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - variant: { Object } The current product variant.
+  endcomment
+
+  capture sku_font_class
+    case block.settings.text_size
+      when 'x-small'
+        echo 'fs-body-50'
+      when 'small'
+        echo 'fs-body-75'
+      when 'medium'
+        echo 'fs-body-100'
+      when 'large'
+        echo 'fs-body-150'
+      when 'x-large'
+        echo 'fs-body-200'
+    endcase
+  endcapture
+
+  assign sku_visible = false
+  if variant.sku != blank
+    assign sku_visible = true
+  endif
+-%}
+
+<product-block-sku
+  class="product-details__sku {{ sku_font_class }}"
+  style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  js-product-block
+  js-product-block-sku
+  {{ block.shopify_attributes }}
+>
+  {% # Div required so that the onVariantChange functionality can update innerHTML %}
+  <div data-variant-sku-visible="{{ sku_visible }}">
+    {{ variant.sku }}
+  </div>
+</product-block-sku>

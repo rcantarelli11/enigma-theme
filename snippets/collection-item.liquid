@@ -1,0 +1,82 @@
+{% liquid
+  comment
+    Renders a collection item.
+
+    Required parameters:
+      - coll: { Object } The collection object.
+
+    Optional parameters:
+      - image_aspect_ratio: { String } The image's aspect ratio.
+      - image_source: { String } Whether the image should be:
+        - "collection_image" - The collection's featured image
+        - "first_product_image" - The featured image of the first product in the collection
+      - image_sizes: { String } - A list of responsive image sizes (for the 'sizes' attributes).
+      - index { Number } - Index of collection item. Used to cycle through placeholder illustration and stagger reveal animations.
+  endcomment
+
+  if coll
+    assign metafield_image_override = coll.metafields.eclipse.collection_list_image
+    assign tag_name = 'a'
+    assign href = coll.url
+  else
+    assign tag_name = 'div'
+  endif
+
+  if metafield_image_override != blank
+    assign collection_image = metafield_image_override.value
+  else
+    if image_source == 'first_product_image'
+      assign collection_image = coll.products.first.featured_image
+    else
+      assign collection_image = coll.image | default: coll.products.first.featured_image
+    endif
+  endif
+
+  if collection_image == blank
+    if index
+      assign placeholder_name_index = index | modulo: 4 | plus: 1
+      assign placeholder_name = 'collection-apparel-' | append: placeholder_name_index
+    else
+      assign placeholder_name = 'collection-apparel-4'
+    endif
+  endif
+-%}
+
+{% capture content %}
+
+  {%
+    render 'image'
+    image: collection_image,
+    class: 'collection-item__image',
+    aspect_ratio: image_aspect_ratio,
+    sizes: image_sizes,
+    include_placeholder: true,
+    placeholder_name: placeholder_name,
+    load_animation_effect: "blur",
+    load_animation_stagger_index: index
+  %}
+
+  <div class="collection-item__overlay"></div>
+  <div class="collection-item__content">
+    <div class="collection-item__title ff-heading">
+      {% if coll -%}
+        {{ coll.title }}
+      {%- else -%}
+        {{ 'collections.general.collection_label' | t }}
+      {%- endif %}
+    </div>
+
+    <span class='icon-wrap'>
+      {% render 'icon-utility', icon: 'arrow-right-small', width: 16, height: 16 %}
+    </span>
+  </div>
+{% endcapture %}
+
+<{{ tag_name }}
+  class="collection-item"
+  {% if href %}
+    href="{{ href }}"
+  {% endif %}
+>
+  {{ content }}
+</{{ tag_name }}>

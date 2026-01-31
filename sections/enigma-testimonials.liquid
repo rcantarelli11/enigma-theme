@@ -1,0 +1,160 @@
+<section class="enigma-testimonials enigma-section enigma-section--lg" id="enigma-testimonials-{{ section.id }}">
+  <div class="enigma-container enigma-container--narrow">
+    <div class="enigma-testimonials__header">
+      {%- if section.settings.label != blank -%}
+        <p class="enigma-label mb-sm">{{ section.settings.label }}</p>
+      {%- endif -%}
+      <h2 class="enigma-h2">{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="enigma-testimonials__slider" data-testimonial-slider>
+      {%- for block in section.blocks -%}
+        <div class="enigma-testimonial{% unless forloop.first %} hidden{% endunless %}" data-testimonial="{{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          <div class="enigma-testimonial__stars">★★★★★</div>
+          <blockquote class="enigma-testimonial__quote">
+            "{{ block.settings.quote }}"
+          </blockquote>
+          <p class="enigma-testimonial__author">
+            {{ block.settings.author }}
+            {%- if block.settings.product != blank -%}
+              <span style="color: var(--accent);"> · {{ block.settings.product }}</span>
+            {%- endif -%}
+          </p>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.blocks.size > 1 -%}
+      <div class="enigma-testimonials__dots mt-lg" style="display: flex; gap: 0.5rem; justify-content: center;">
+        {%- for block in section.blocks -%}
+          <button
+            class="enigma-testimonials__dot{% if forloop.first %} active{% endif %}"
+            data-testimonial-dot="{{ forloop.index0 }}"
+            aria-label="Testimonial {{ forloop.index }}"
+            style="width: 8px; height: 8px; border-radius: 50%; background: {% if forloop.first %}var(--accent){% else %}var(--border){% endif %}; transition: background 300ms;"
+          ></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+  (function() {
+    const slider = document.querySelector('#enigma-testimonials-{{ section.id }} [data-testimonial-slider]');
+    if (!slider) return;
+
+    const testimonials = slider.querySelectorAll('[data-testimonial]');
+    const dots = document.querySelectorAll('#enigma-testimonials-{{ section.id }} [data-testimonial-dot]');
+    if (testimonials.length <= 1) return;
+
+    let current = 0;
+    let interval;
+
+    function show(index) {
+      testimonials.forEach(t => t.classList.add('hidden'));
+      dots.forEach(d => { d.style.background = 'var(--border)'; d.classList.remove('active'); });
+      testimonials[index].classList.remove('hidden');
+      if (dots[index]) {
+        dots[index].style.background = 'var(--accent)';
+        dots[index].classList.add('active');
+      }
+      current = index;
+    }
+
+    function next() {
+      show((current + 1) % testimonials.length);
+    }
+
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        clearInterval(interval);
+        show(parseInt(dot.dataset.testimonialDot));
+        interval = setInterval(next, 5000);
+      });
+    });
+
+    interval = setInterval(next, 5000);
+  })();
+</script>
+
+<style>
+  .enigma-testimonial.hidden { display: none; }
+</style>
+
+{% schema %}
+{
+  "name": "Enigma Testimonials",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "REVIEWS"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "What Athletes Say"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "The best pre-workout I've ever used. Clean energy, no crash, incredible focus."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Alex M."
+        },
+        {
+          "type": "text",
+          "id": "product",
+          "label": "Product name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Enigma Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The best pre-workout I've ever used. Clean energy, no crash, incredible focus.",
+            "author": "Alex M.",
+            "product": "Energy Powder"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Finally a protein that actually tastes good. The chocolate flavor is unreal.",
+            "author": "Sarah K.",
+            "product": "Whey Protein Isolate"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "quote": "I've tried every hydration powder on the market. Enigma's Lychee Splash is on another level.",
+            "author": "Marcus T.",
+            "product": "Hydration Powder"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

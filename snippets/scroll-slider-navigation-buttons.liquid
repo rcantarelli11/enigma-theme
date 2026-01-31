@@ -1,0 +1,71 @@
+{% liquid
+  comment
+    Renders navigation buttons for the scroll slider.
+
+    Note: These buttons should be rendered within ".scroll-slider-wrap-outer" and after ".scroll-slider-wrap"
+
+    Optional parameters:
+      size: { String } The button size. Can be:
+        - 'small'
+        - 'regular'
+        - 'large'
+      display: { String: 'overlaid' } Where the buttons are being displayed. Can be:
+        - 'overlaid': Overlaid on top of the slider.
+        - 'inline': Somewhere inline with the slider.
+  endcomment
+
+  assign display = display | default: 'overlaid'
+
+  capture prev_icon
+    if display == 'overlaid'
+      render 'icon-utility', icon: 'chevron-with-stem-left', width: 21, height: 20
+    else
+      render 'icon-utility', icon: 'chevron-left-small', width: 8, height: 12
+    endif
+  endcapture
+
+  capture next_icon
+    if display == 'overlaid'
+      render 'icon-utility', icon: 'chevron-with-stem-right', width: 21, height: 20
+    else
+      render 'icon-utility', icon: 'chevron-right-small', width: 8, height: 12
+    endif
+  endcapture
+
+  capture prev_class
+    echo 'scroll-slider-nav-button scroll-slider-nav-button--[[display]] prev' | replace: '[[display]]', display
+  endcapture
+
+  capture next_class
+    echo 'scroll-slider-nav-button scroll-slider-nav-button--[[display]] next' | replace: '[[display]]', display
+  endcapture
+
+  assign prev_label = 'general.accessibility.previous' | t
+  assign next_label = 'general.accessibility.next' | t
+-%}
+
+{{ 'component-scroll-slider-buttons.css' | asset_url | stylesheet_tag }}
+
+{%- render 'button',
+  label: prev_icon,
+  button_style: 'icon',
+  require_link: false,
+  aria_label: prev_label,
+  class: prev_class,
+  wrapper_class: 'scroll-slider-nav-button-wrapper prev',
+  button_attributes: 'name="prev" js-scroll-slider-prev-button',
+  button_size: size,
+  hidden: true
+-%}
+
+{%- render 'button',
+  label: next_icon,
+  button_style: 'icon',
+  require_link: false,
+  aria_label: next_label,
+  class: next_class,
+  wrapper_class: 'scroll-slider-nav-button-wrapper next',
+  button_attributes: 'name="next" js-scroll-slider-next-button',
+  button_size: size,
+  hidden: true
+-%}

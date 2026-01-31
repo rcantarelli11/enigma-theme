@@ -1,0 +1,69 @@
+{%- liquid
+  comment
+    Renders a newsletter signup form.
+
+    Required parameters:
+      - form_id: { String } The unique ID for the form.
+
+    Optional parameters:
+      - form_tags: { String: 'newsletter' } The tags to submit with the form.
+  endcomment
+
+  assign input_label = 'general.newsletter_form.email_placeholder' | t
+  assign success_message = 'general.newsletter_form.confirmation' | t
+  assign form_tags = form_tags | default: 'newsletter'
+-%}
+
+{%- form 'customer', class: 'content__newsletter-form', id: form_id -%}
+  {%- liquid
+    # ensure the entered email remains in the form if invalid
+    capture form_value
+      if form.email
+        echo form.email
+      elsif customer.email != blank
+        echo customer.email
+      endif
+    endcapture
+  -%}
+
+  <div class="newsletter-form custom-input-wrapper">
+    <div class="newsletter-form__email custom-input {%- if form_errors %} has-error{%- endif -%}">
+      <input type="hidden" name="contact[tags]" value="{{ form_tags }}">
+
+      {% liquid
+        assign input_id = form_id | append: '-input'
+
+        capture input_attributes
+          echo ' autocorrect="off"'
+          echo ' autocapitalize="off"'
+        endcapture
+      %}
+
+      {% render 'input-text',
+        id: input_id,
+        name: 'contact[email]',
+        label: input_label,
+        input_type: 'email',
+        class: 'newsletter-form__email-input',
+        placeholder: input_label,
+        default_value: form_value,
+        required: true,
+        use_required_label: false,
+        label_type: 'internal',
+        attributes: input_attributes
+      %}
+
+      <button
+        type="submit"
+        name="commit"
+        id="{{ id }}-submit"
+        class="newsletter-form__button btn btn--style-icon btn--style-inline-icon"
+        aria-label="{{ 'general.newsletter_form.submit' | t }}"
+      >
+        {% render 'icon-utility', icon: 'arrow', width: 18.667, height: 16 %}
+      </button>
+    </div>
+
+    {%- render 'form-status', form: form, form_id: 'newsletter-email', success_message: success_message -%}
+  </div>
+{%- endform -%}

@@ -1,0 +1,36 @@
+{% liquid
+  comment
+    Renders a "Heading" text block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - animate: { Boolean } Apply animation class to potentially animate.
+      - alignment: { String } The horizontal alignment of the heading. Can be:
+        - 'left'
+        - 'center'
+        - 'right'
+  endcomment
+
+  if block.settings.heading != blank
+    assign heading_tag = block.settings.heading_tag | default: 'h2'
+    assign heading_class = 'content-block content-block--heading ff-heading rte'
+
+    if animate
+      assign heading_class = heading_class | append: ' animation-heading'
+    endif
+
+    capture heading_size_class
+      render 'settings-text-size', type: 'heading', size: block.settings.heading_font_size
+    endcapture
+
+    assign heading_class = heading_class | append: ' ' | append: heading_size_class
+  endif
+-%}
+
+{% if block.settings.heading != blank -%}
+  <div class="content-block-wrapper content-block-wrapper--heading content-alignment-horizontal--{{ alignment }} {{ heading_size_class }}">
+    <{{ heading_tag }} class="{{ heading_class }}" {{ block.shopify_attributes }}>
+      {{ block.settings.heading }}
+    </{{ heading_tag }}>
+  </div>
+{%- endif %}

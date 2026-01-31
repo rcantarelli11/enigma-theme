@@ -1,0 +1,155 @@
+{
+  "sections": {
+    "hero": {
+      "type": "enigma-hero",
+      "settings": {
+        "label": "POWER BEYOND LIMITS",
+        "title": "Fuel Your Potential",
+        "subtitle": "Premium supplements crafted to optimize performance, recovery, and wellness.",
+        "min_height": 100,
+        "overlay_opacity_top": 30,
+        "overlay_opacity_mid": 60,
+        "overlay_opacity_bottom": 95,
+        "button_text": "Shop Now",
+        "button_link": "/collections/all",
+        "button_text_2": "Our Story",
+        "button_link_2": "/pages/about-us"
+      }
+    },
+    "trust-bar": {
+      "type": "enigma-trust-bar",
+      "blocks": {
+        "lab": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "lab",
+            "title": "Lab Tested",
+            "text": "Third-party verified"
+          }
+        },
+        "clean": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "leaf",
+            "title": "Clean Formula",
+            "text": "No fillers or junk"
+          }
+        },
+        "shipping": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Shipping",
+            "text": "Orders over $70"
+          }
+        },
+        "dosed": {
+          "type": "trust_item",
+          "settings": {
+            "icon": "bolt",
+            "title": "Clinically Dosed",
+            "text": "Real ingredients, real results"
+          }
+        }
+      },
+      "block_order": ["lab", "clean", "shipping", "dosed"]
+    },
+    "featured-collection": {
+      "type": "enigma-featured-collection",
+      "settings": {
+        "label": "BEST SELLERS",
+        "title": "Most Popular",
+        "collection": "best-sellers",
+        "products_to_show": 4,
+        "show_view_all": true
+      }
+    },
+    "split-1": {
+      "type": "enigma-split-content",
+      "settings": {
+        "label": "THE ENIGMA DIFFERENCE",
+        "title": "Built for Athletes Who Demand More",
+        "text": "<p>Every formula is crafted with premium, clinically-dosed ingredients. No proprietary blends. No fillers. No BS. Just transparent, effective nutrition that delivers real results.</p>",
+        "reverse": false,
+        "button_text": "View All Products",
+        "button_link": "/collections/all"
+      }
+    },
+    "collection-energy": {
+      "type": "enigma-featured-collection",
+      "settings": {
+        "label": "ENERGY & FOCUS",
+        "title": "Pre-Workouts",
+        "collection": "preworkouts",
+        "products_to_show": 4,
+        "show_view_all": true
+      }
+    },
+    "split-2": {
+      "type": "enigma-split-content",
+      "settings": {
+        "label": "HYDRATION",
+        "title": "Hydrate Smarter, Perform Better",
+        "text": "<p>Replenish your body with hydration powders that go beyond water. Unique flavors like Lychee, Yuzu, and Matcha Green Tea — delivering electrolytes and functional ingredients to support endurance and recovery.</p>",
+        "reverse": true,
+        "button_text": "Shop Hydration",
+        "button_link": "/collections/hydration-powders"
+      }
+    },
+    "testimonials": {
+      "type": "enigma-testimonials",
+      "settings": {
+        "label": "REVIEWS",
+        "title": "What Athletes Say"
+      },
+      "blocks": {
+        "review-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The best pre-workout I've ever used. Clean energy, no crash, incredible focus. This is the real deal.",
+            "author": "Alex M.",
+            "product": "Energy Powder"
+          }
+        },
+        "review-2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "Finally a protein that actually tastes good AND has clean ingredients. The chocolate flavor is unreal.",
+            "author": "Sarah K.",
+            "product": "Whey Protein Isolate"
+          }
+        },
+        "review-3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "I've tried every hydration powder on the market. Enigma's Lychee Splash is on another level.",
+            "author": "Marcus T.",
+            "product": "Hydration Powder"
+          }
+        }
+      },
+      "block_order": ["review-1", "review-2", "review-3"]
+    },
+    "newsletter": {
+      "type": "enigma-newsletter",
+      "settings": {
+        "label": "JOIN THE COMMUNITY",
+        "title": "Get 10% Off Your First Order",
+        "text": "Join the Enigma community for exclusive drops, training tips, and early access.",
+        "placeholder": "Enter your email",
+        "button_text": "Subscribe",
+        "disclaimer": "No spam. Unsubscribe anytime."
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "trust-bar",
+    "featured-collection",
+    "split-1",
+    "collection-energy",
+    "split-2",
+    "testimonials",
+    "newsletter"
+  ]
+}

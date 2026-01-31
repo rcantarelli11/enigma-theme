@@ -1,0 +1,151 @@
+{%- liquid
+  comment
+    Renders product items within the scroll slider.
+
+    Required parameters:
+      - product_items: { Object } Collection, selected products, or recommended products to show within slider.
+      - column_count_mobile: { String } The number of grid columns on mobile.
+      - column_count_tablet: { String } The number of grid columns on tablet.
+      - column_count_desktop: { String } The number of grid columns on desktop.
+      - show_slider_indicator: { Boolean } Whether slider indicator should be visible.
+      - max_products: { Number } Limit of available product items.
+      - section_width: { String } The section width setting to inform image sizes.
+  endcomment
+
+  echo 'component-product-item.css' | asset_url | stylesheet_tag
+  render 'inline-scripts', script_name: 'product-item'
+
+  if show_slider_indicator
+    render 'inline-scripts', script_name: 'scroll-slider-with-scroll-indicator'
+  endif
+
+  assign gap = '16px'
+  assign gap_above_720 = '20px'
+  assign gap_above_1440 = '28px'
+
+  if column_count_desktop == '4'
+    assign gap_above_1024 = '24px'
+  else
+    assign gap_above_1024 = '28px'
+  endif
+
+  # Slider peek
+  if column_count_mobile == '1'
+    assign peek = '4%'
+  else
+    assign peek = '2%'
+  endif
+
+  if column_count_desktop == '4'
+    assign peek_above_720 = '4%'
+  else
+    assign peek_above_720 = '8%'
+  endif
+
+  assign has_slides = false
+  assign product_items_size = product_items.products.size
+
+  if product_items != blank and product_items_size > 0
+    assign has_slides = true
+  endif
+
+  # Slider item count (for scroll indicator)
+  if has_slides
+    assign slider_item_count = product_items_size | at_most: max_products
+  else
+    assign slider_item_count = max_products
+  endif
+
+  capture slider_id
+    echo 'product-slider-[[sid]]' | replace: '[[sid]]', section.id
+  endcapture
+-%}
+
+<div class="section-slider-wrap-outer scroll-slider-wrap-outer">
+  <div class="section-slider-wrap scroll-slider-wrap">
+    {%- liquid
+      # Swatch data
+      if settings.enable_product_listing_swatches or settings.enable_filter_swatches
+        assign swatch_variant_options = settings.swatch_variant_options | split: ','
+
+        capture custom_swatch_color_maps
+          render 'get-custom-swatch-color-maps'
+        endcapture
+
+        assign custom_swatch_color_key_map = custom_swatch_color_maps | split: ' | ' | first | split: ','
+        assign custom_swatch_color_value_map = custom_swatch_color_maps | split: ' | ' | last | split: ','
+      endif
+
+      # Image sizes
+      capture product_item_image_sizes
+        render 'get-grid-image-sizes', section_width: section_width, desktop_column_count: column_count_desktop, tablet_column_count: column_count_tablet, mobile_column_count: column_count_mobile
+      endcapture
+    -%}
+
+    {%- capture slider_items -%}
+      {%- if has_slides  -%}
+        {%- for prod in product_items.products limit: max_products -%}
+          {%- render 'product-item',
+            prod: prod,
+            swatch_variant_options: swatch_variant_options,
+            custom_swatch_color_key_map: custom_swatch_color_key_map,
+            custom_swatch_color_value_map: custom_swatch_color_value_map,
+            load_animation_stagger_index: forloop.index0,
+            image_sizes: product_item_image_sizes
+          -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..max_products) -%}
+          {%- liquid
+            capture placeholder_suffix
+              cycle '1', '2', '3', '4'
+            endcapture
+
+            capture placeholder_name
+              echo 'product-apparel-[[ps]]' | replace: '[[ps]]', placeholder_suffix
+            endcapture
+          -%}
+
+          {%- render 'product-item',
+            placeholder: true,
+            placeholder_name: placeholder_name,
+            swatch_variant_options: swatch_variant_options,
+            custom_swatch_color_key_map: custom_swatch_color_key_map,
+            custom_swatch_color_value_map: custom_swatch_color_value_map,
+            load_animation_stagger_index: forloop.index0,
+            image_sizes: product_item_image_sizes
+          -%}
+        {%- endfor -%}
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {%- capture slider -%}
+      {%- render 'scroll-slider',
+        id: slider_id,
+        slider_items: slider_items,
+        columns: column_count_mobile,
+        columns_above_720: column_count_tablet,
+        columns_above_1024: column_count_desktop,
+        gap: gap,
+        gap_above_720: gap_above_720,
+        gap_above_1024: gap_above_1024,
+        peek: peek,
+        peek_above_720: peek_above_720,
+        slider_wrapper_classes: 'standard-grid standard-grid--with-count-based-gaps',
+        navigation_container: ".scroll-slider-wrap-outer",
+        animate: true
+      -%}
+    {%- endcapture -%}
+
+    {%- if show_slider_indicator -%}
+      <scroll-slider-with-scroll-indicator>
+        {{ slider }}
+        {% render 'scroll-indicator', item_count: slider_item_count %}
+      </scroll-slider-with-scroll-indicator>
+    {%- else -%}
+      {{ slider }}
+    {%- endif -%}
+  </div>
+
+  {% render 'scroll-slider-navigation-buttons', size: 'large' %}
+</div>

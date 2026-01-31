@@ -1,0 +1,202 @@
+{% liquid
+  comment
+    Renders a banner as a tile alongside other content with animation support.
+
+    Required parameters:
+      - local_settings: { Object } The Shopify settings object for the parent section.
+          Used for overlay styles and custom height settings generators.
+
+    Optional parameters:
+      - image: { Object } The image to show on desktop.
+      - mobile_image: { Object } The image to show on mobile.
+      - include_placeholder: { Boolean: true } Whether to show a placeholder.
+      - show_banner_image: { Boolean: true } Whether to show the banner image.
+      - show_banner_video: { Boolean: false } Whether to show the banner video.
+      - video: { Object } See background-video.liquid
+      - mobile_video: { Object } See background-video.liquid
+      - video_focal_point: { String } See background-video.liquid
+      - mobile_video_focal_point: { String } See background-video.liquid
+      - image_animation: { String: 'none' } The animation type for the banner image. Can be:
+        - 'none'
+        - 'fade'
+        - 'iris'
+      - content: { HTML } HTML content to show within the banner. Supports animation classes:
+        - 'animation-heading'
+        - 'animation-overline'
+        - 'animation-content'
+      - content_max_width: { Number } The max-width of the content, set in pixels.
+      - content_alignment: { String } The position and alignment of the content. eg: center_center
+      - mobile_content_alignment: { String } The position and alignment of the content on mobile. eg: center_center
+      - footer_content: { HTML } HTML content to show in the footer of the banner content. Supports animation classes:
+        - 'animation-heading'
+        - 'animation-overline'
+        - 'animation-content'
+      - background_link: { String } URL that is linked to from a "background" link
+      - aria_label: { String } The aria-label attribute (suggested if passing in background_link).
+      - aspect_ratio: { String } Setting aspect ratio as text (ex. 'square', 'landscape-alt') that will get converted properly with the aspect-ratio.css vars.
+      - mobile_aspect_ratio: { String } Mobile setting aspect ratio as text (as above).
+      - section_width: { String } The section's width setting (section.settings.width) to allow for more accurate image sizes. Can be:
+        - 'full-width-padded'
+        - 'page-width'
+      - image_width_unit: { String } The width unit for the image for accurate image sizes. Can be:
+        - 'percentage'
+        - 'px'
+      - desktop_image_width: { Number } The width of the image on desktop for accurate image sizes
+      - tablet_image_width: { Number } The width of the image on tablet for accurate image sizes.
+      - mobile_image_width: { Number } The width of the image on mobile for accurate image sizes.
+  endcomment
+
+  assign show_banner_image = show_banner_image | default: true, allow_false: true
+  assign show_banner_video = show_banner_video | default: false, allow_false: true
+  assign image_animation = image_animation | default: 'none'
+  assign include_placeholder = include_placeholder | default: true, allow_false: true
+  assign content_alignment_vertical = content_alignment | split: '_' | first
+  assign content_alignment_horizontal = content_alignment | split: '_' | last
+
+  if mobile_content_alignment
+    assign mobile_content_alignment_vertical = mobile_content_alignment | split: '_' | first
+    assign mobile_content_alignment_horizontal = mobile_content_alignment | split: '_' | last
+  endif
+
+  if show_banner_video
+    render 'inline-scripts', script_name: 'background-video'
+  endif
+%}
+
+{%- render 'inline-scripts', script_name: 'visibility-watcher' -%}
+
+<div
+  class="banner-tile animating-image-wrap {%- if show_banner_image %} banner-tile--has-image{%-else %} ta-c{%- endif -%}"
+  data-aspect-ratio="{{ aspect_ratio }}"
+  data-mobile-aspect-ratio="{{ mobile_aspect_ratio }}"
+  style="
+    {%- if show_banner_image or show_banner_video -%}
+      {% render 'settings-overlay-styles', local_settings: local_settings %}
+    {%- endif -%}
+  "
+>
+  <visibility-watcher data-watch-parent-selector=".banner-tile">
+    {%- capture banner_tile_content -%}
+      <div
+        class="banner-tile__content"
+        {%- if content_max_width != blank -%}
+          style="--max-content-width: {{ content_max_width }}px;"
+        {%- endif -%}
+      >
+        {{ content }}
+      </div>
+    {%- endcapture -%}
+
+    {%- if show_banner_image or show_banner_video -%}
+      <div
+        class="banner-tile__media-wrapper"
+      >
+        {%- if show_banner_video -%}
+          {%- render 'background-video',
+            video: video,
+            enable_mobile_video: true,
+            mobile_video: mobile_video,
+            focal_point: video_focal_point,
+            mobile_focal_point: mobile_video_focal_point,
+            placeholder_name: 'hero-apparel-1',
+            aspect_ratio: aspect_ratio,
+            mobile_aspect_ratio: mobile_aspect_ratio
+          -%}
+
+        {%- elsif show_banner_image -%}
+          {%- liquid
+            capture banner_image_sizes
+              render 'get-tile-image-sizes', section_width: section_width, image_width_unit: image_width_unit, desktop_image_width: desktop_image_width
+            endcapture
+
+            if mobile_image != blank
+              capture banner_image_sizes
+                render 'get-tile-image-sizes', section_width: section_width, image_width_unit: image_width_unit, desktop_image_width: desktop_image_width, breakpoint_min: 'tablet'
+              endcapture
+
+              capture mobile_banner_image_sizes
+                render 'get-tile-image-sizes', breakpoint_max: 'mobile'
+              endcapture
+            endif
+
+            assign image_class = 'banner-tile__image banner-tile__image--[[screen]]'
+
+            capture desktop_image_class
+              echo image_class | replace: '[[screen]]', 'desktop'
+            endcapture
+          -%}
+
+          {%- render 'image',
+            image: image,
+            class: desktop_image_class,
+            sizes: banner_image_sizes,
+            src_set_type: 'grid',
+            focal_point: 'image-presentation',
+            include_placeholder: include_placeholder,
+            placeholder_name: 'hero-apparel-1',
+            placeholder_natural_fallback_ratio: 'landscape-wide-alt',
+            load_animation_effect: 'blur'
+          -%}
+
+          {%- if mobile_image != blank -%}
+            {%- capture mobile_image_class -%}
+              {{ image_class | replace: '[[screen]]', 'mobile' }}
+            {%- endcapture -%}
+
+            {%- render 'image',
+              image: mobile_image,
+              class: mobile_image_class,
+              src_set_type: 'mobile-only-full-width',
+              sizes: mobile_banner_image_sizes,
+              focal_point: 'image-presentation',
+              aspect_ratio: mobile_aspect_ratio
+            -%}
+          {%- endif -%}
+        {% endif %}
+
+        {%- unless image_animation == 'none' -%}
+          {% comment %}
+            Note: this must be AFTER the media otherwise some obscure bug is triggered in iOS 16 where
+            the banner's border-radius doesn't apply
+          {% endcomment %}
+          {% render 'animating-image-revealer', type: image_animation %}
+        {%- endunless -%}
+      </div>
+
+      <div class="banner-tile__overlay"></div>
+      {% if background_link %}
+        <a
+          class="banner-tile__background_link"
+          href="{{ background_link }}"
+          {%- if aria_label != blank -%}
+            aria-label="{{ aria_label }}"
+          {%- endif -%}
+        ></a>
+      {% endif %}
+      <div
+        class="
+          banner-tile__content-wrapper
+          content-alignment-vertical--{{ content_alignment_vertical }}
+          content-alignment-horizontal--{{ content_alignment_horizontal }}
+          {%  if mobile_content_alignment %}
+            mobile-content-alignment-vertical--{{ mobile_content_alignment_vertical }}
+            mobile-content-alignment-horizontal--{{ mobile_content_alignment_horizontal }}
+          {% endif %}
+        "
+      >
+        {{ banner_tile_content }}
+
+        {%- if footer_content != blank -%}
+          <div class="banner-tile__footer-content">
+            {{ footer_content }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- else -%}
+      {{ banner_tile_content }}
+      {%- if footer_content != blank -%}
+        {{ footer_content }}
+      {%- endif -%}
+    {%- endif -%}
+  </visibility-watcher>
+</div>

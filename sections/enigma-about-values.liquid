@@ -1,0 +1,102 @@
+<section class="enigma-about-values enigma-section enigma-section--lg">
+  <div class="enigma-container">
+    <div style="text-align: center; margin-bottom: var(--space-2xl);">
+      <p class="enigma-label mb-sm">{{ section.settings.label }}</p>
+      <h2 class="enigma-h2">{{ section.settings.title }}</h2>
+    </div>
+
+    <div class="enigma-about-values__grid">
+      {%- for block in section.blocks -%}
+        <div class="enigma-about-values__card" {{ block.shopify_attributes }}>
+          <div class="enigma-about-values__icon">
+            {%- case block.settings.icon -%}
+              {%- when 'transparency' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              {%- when 'quality' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2 L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26Z"/></svg>
+              {%- when 'honesty' -%}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+            {%- endcase -%}
+          </div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem;">{{ block.settings.title }}</h3>
+          <p style="color: var(--text-secondary); line-height: 1.7;">{{ block.settings.text }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .enigma-about-values__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-xl);
+  }
+
+  @media (min-width: 768px) {
+    .enigma-about-values__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .enigma-about-values__card {
+    text-align: center;
+    padding: var(--space-xl);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: border-color var(--duration-normal), transform var(--duration-normal);
+  }
+
+  .enigma-about-values__card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+  }
+
+  .enigma-about-values__icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--space-lg);
+    color: var(--accent);
+  }
+
+  .enigma-about-values__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "About Values",
+  "settings": [
+    { "type": "text", "id": "label", "label": "Label", "default": "WHAT WE STAND FOR" },
+    { "type": "text", "id": "title", "label": "Title", "default": "Our Values" }
+  ],
+  "blocks": [
+    {
+      "type": "value",
+      "name": "Value",
+      "settings": [
+        { "type": "select", "id": "icon", "label": "Icon", "options": [
+          { "value": "transparency", "label": "Eye (Transparency)" },
+          { "value": "quality", "label": "Star (Quality)" },
+          { "value": "honesty", "label": "Check (Honesty)" }
+        ], "default": "transparency" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Transparency" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Full label disclosure. No proprietary blends. You see exactly what you're putting in your body." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Values",
+      "blocks": [
+        { "type": "value", "settings": { "icon": "transparency", "title": "Transparency", "text": "Full label disclosure. No proprietary blends. You see exactly what you're putting in your body." } },
+        { "type": "value", "settings": { "icon": "quality", "title": "Quality", "text": "Clean ingredients from trusted suppliers. Every batch tested. No shortcuts." } },
+        { "type": "value", "settings": { "icon": "honesty", "title": "Honesty", "text": "We don't make claims we can't back up. No miracle promises. Just effective nutrition." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

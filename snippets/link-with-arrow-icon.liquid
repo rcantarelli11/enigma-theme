@@ -1,0 +1,40 @@
+{%- liquid
+  comment
+    Renders a text link with an arrow icon. On hover, the text underline and arrow icon animate.
+
+    Required parameters:
+      - link: { String } Link URL
+      - label: { String } Link label
+
+    Optional parameters:
+      - direction: { String: 'right' } The direction that the arrow points. Can be:
+        - 'left'
+        - 'right'
+  endcomment
+
+  assign direction = direction | default: 'right'
+-%}
+
+{%- capture icon -%}
+  <span class="link-with-arrow-icon__icon">
+    {% render 'hover-arrow', direction: direction %}
+  </span>
+{%- endcapture -%}
+
+{%- capture text -%}
+  <span class="link-with-arrow-icon__text">{{ label }}</span>
+{%- endcapture -%}
+
+{%- liquid
+  capture inner
+    if direction == 'left'
+      echo icon
+      echo text
+    else
+      echo text
+      echo icon
+    endif
+  endcapture
+-%}
+
+<a href="{{ link }}" class="link-with-arrow-icon fs-body-150">{{ inner }}</a>

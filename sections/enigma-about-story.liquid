@@ -1,0 +1,43 @@
+<section class="enigma-about-story enigma-section">
+  <div class="enigma-container" style="max-width: 800px; margin: 0 auto;">
+    <div class="enigma-about-story__content">
+      {{ section.settings.content }}
+    </div>
+  </div>
+</section>
+
+<style>
+  .enigma-about-story__content {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+
+  .enigma-about-story__content p {
+    margin-bottom: 1.5rem;
+  }
+
+  .enigma-about-story__content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .enigma-about-story__content strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "About Story",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Story content",
+      "default": "<p>Every supplement brand screams the loudest, slaps a celebrity on the label, and hopes you don't flip the bottle around. Proprietary blends. Underdosed ingredients. $60 tubs of marketing.</p><p>We wanted something different. Something honest.</p><p>Enigma was built on a simple idea: <strong>if the product is good, you don't need to hide what's in it.</strong> Every formula is fully transparent — every ingredient, every dose, right on the label. No fillers. No blends. No games.</p>"
+    }
+  ],
+  "presets": [{ "name": "About Story" }]
+}
+{% endschema %}

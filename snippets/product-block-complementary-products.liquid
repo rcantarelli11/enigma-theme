@@ -1,0 +1,92 @@
+{%- liquid
+  comment
+    Renders the "Complementary products" product block.
+
+    Required parameters:
+      - prod: { Object } The current product object.
+      - block: { Object } The associated block object.
+  endcomment
+
+  if block.settings.product_source == 'app' or block.settings.product_source == 'list' and block.settings.product_list != blank
+    assign show_block = true
+  else
+    assign show_block = false
+  endif
+
+  render 'inline-scripts', script_name: 'product-block-complementary-products'
+  render 'inline-scripts', script_name: 'visibility-watcher'
+
+  if settings.enable_quick_shopping
+    render 'inline-scripts', script_name: 'product-item-quick-shopping'
+  endif
+-%}
+
+{%- # Still show the block in the editor if there are no products -%}
+{%- if request.design_mode or show_block -%}
+  <product-block-complementary-products
+    {{ block.shopify_attributes }}
+    style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+    data-product-source="{{ block.settings.product_source }}"
+    data-section-id="{{ section.id }}"
+    data-product-id="{{ prod.id }}"
+    data-max-products="{{ block.settings.max_products }}"
+    js-product-block-complementary-products-component
+  >
+    <visibility-watcher class="product-block-complementary-products-inner">
+      <div class="product-block-complementary-products__header">
+        {%- if block.settings.heading != blank -%}
+          <h2 class="product-block-complementary-products__header-heading ff-heading-in-body fs-heading-in-body-200">
+            {{- block.settings.heading -}}
+          </h2>
+        {%- endif -%}
+
+        <div class="product-block-complementary-products__header-nav">
+          {%- render 'scroll-slider-navigation-buttons', size: 'small', display: 'inline' -%}
+        </div>
+      </div>
+
+      {%- liquid
+        capture items
+          if show_block == false
+            for i in (1..block.settings.max_products)
+              capture placeholder_suffix
+                cycle '1', '2', '3', '4'
+              endcapture
+
+              capture placeholder_name
+                echo 'product-apparel-[[ps]]' | replace: '[[ps]]', placeholder_suffix
+              endcapture
+
+              render 'complementary-product-item', show_product_thumbnail: block.settings.show_product_thumbnails, placeholder_name: placeholder_name
+            endfor
+          else
+            if block.settings.product_source == 'list'
+              for list_product in block.settings.product_list limit: block.settings.max_products
+                render 'complementary-product-item', prod: list_product, show_product_thumbnail: block.settings.show_product_thumbnails
+              endfor
+            else
+              if recommendations.performed? and recommendations.products_count > 0
+                for recommended_product in recommendations.products
+                  render 'complementary-product-item', prod: recommended_product, show_product_thumbnail: block.settings.show_product_thumbnails
+                endfor
+              endif
+            endif
+          endif
+        endcapture
+      -%}
+
+      {%- render 'scroll-slider',
+        id: 'product-block-complementary-products',
+        slider_items: items,
+        columns: 1,
+        gap: '12px',
+        peek: '60px',
+        peek_above_720: '300px',
+        peek_above_1024: '0px',
+        navigation_container: 'product-block-complementary-products',
+        animate: true,
+        animation_size: 'small'
+      -%}
+    </visibility-watcher>
+  </product-block-complementary-products>
+{%- endif -%}

@@ -1,0 +1,74 @@
+{%- liquid
+  comment
+    Renders the "Description" product block.
+
+    Required parameters:
+      - prod: { Object } The current product object.
+      - block: { Object } The associated block object.
+  endcomment
+
+  capture description_title_class
+    echo 'description__title ff-heading-in-body fs-heading-in-body-200'
+  endcapture
+
+  capture description_font_size
+    case block.settings.text_size
+      when 'small'
+        echo 'fs-body-50'
+      when 'medium'
+        echo 'fs-body-100'
+      when 'large'
+        echo 'fs-body-150'
+    endcase
+  endcapture
+
+  capture description_content_class
+    echo 'description__content rte '
+    echo description_font_size
+  endcapture
+-%}
+
+{%- if prod.description != blank -%}
+  <div
+    class="
+      product-block product-details__description stack
+      {%- if block.settings.display_as_collapsible_row %}
+        has-accordion
+      {%- endif -%}
+    "
+    style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+    {{ block.shopify_attributes }}
+  >
+    {%- if block.settings.display_as_collapsible_row -%}
+      {%- capture description_content -%}
+        <div class="description__content-wrapper">
+          {{ prod.description }}
+        </div>
+      {%- endcapture -%}
+
+      {% capture accordion_content %}
+        {%- render 'accordion-item',
+          title: block.settings.title,
+          title_class: description_title_class,
+          content: description_content,
+          content_class: description_content_class,
+          open: block.settings.expand_by_default,
+          omit_default_styling: true,
+          block_id: block.id
+        -%}
+      {% endcapture %}
+
+      {% render 'accordion', items: accordion_content %}
+
+    {%- else -%}
+      {%- if block.settings.title != blank -%}
+        <div class="{{ description_title_class }}">
+          {{ block.settings.title }}
+        </div>
+      {%- endif -%}
+      <div class="{{ description_content_class }}">
+        {{ prod.description }}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

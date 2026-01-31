@@ -1,0 +1,265 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_hero_VecTQE": {
+      "type": "image-hero",
+      "blocks": {
+        "heading_FVTDQp": {
+          "type": "heading",
+          "settings": {
+            "heading": "Enigma® Bundles",
+            "heading_font_size": 8,
+            "heading_tag": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_FVTDQp"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "image": "shopify://shop_images/Bundle_-_BANNER.webp",
+        "background_link": "",
+        "custom_desktop_height": "450px",
+        "custom_mobile_height": "350px",
+        "content_width": 500,
+        "text_position_desktop": "center_center",
+        "text_position_mobile": "center_center",
+        "overlay_color_scheme": "",
+        "overlay_opacity": 20,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "width": "full-width",
+        "top_padding": 0,
+        "bottom_padding": 0
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "top_padding": 80,
+        "bottom_padding": 60
+      }
+    },
+    "rich_text_1": {
+      "type": "rich-text",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Heading",
+            "heading_font_size": 8,
+            "heading_tag": "h1"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "text_font_size": 3
+          }
+        }
+      },
+      "block_order": [
+        "overline",
+        "heading",
+        "text"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "text_alignment": "center",
+        "top_padding": 60,
+        "bottom_padding": 0
+      }
+    },
+    "slideshow_1": {
+      "type": "slideshow",
+      "blocks": {
+        "image": {
+          "type": "image",
+          "settings": {
+            "content_max_width": 700,
+            "text_position": "center_center",
+            "mobile_text_position": "center_center",
+            "overline": "",
+            "heading": "",
+            "heading_font_size": 7,
+            "heading_tag": "h2",
+            "text": "",
+            "text_font_size": 3,
+            "button_1_link": "",
+            "button_1_label": "",
+            "button_1_style": "solid",
+            "button_2_link": "",
+            "button_2_label": "",
+            "button_2_style": "solid",
+            "overlay_color_scheme": "",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "image"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "enable_autoplay": false,
+        "time_between_slides": 6,
+        "custom_desktop_height": "80vh",
+        "custom_mobile_height": "50vh",
+        "pagination_alignment": "right",
+        "mobile_pagination_alignment": "center",
+        "pagination_background": "#000000",
+        "pagination_foreground": "#ffffff",
+        "pagination_background_opacity": 60,
+        "navigation_cursor_background": "#ffffff",
+        "navigation_cursor_foreground": "#000000",
+        "enable_text_animation": true,
+        "slide_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 10
+      }
+    },
+    "collapsible_content_1": {
+      "type": "collapsible-content",
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": true,
+            "icon": "none",
+            "heading": "Question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": true,
+            "icon": "none",
+            "heading": "Question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": true,
+            "icon": "none",
+            "heading": "Question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": true,
+            "icon": "none",
+            "heading": "Question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Button",
+        "row_heading_font": "body",
+        "row_heading_text_size": 7,
+        "button_link": "",
+        "button_label": "",
+        "button_style": "solid",
+        "width": "narrow",
+        "top_padding": 30,
+        "bottom_padding": 60
+      }
+    },
+    "featured_collection_1": {
+      "type": "featured-collection",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_5",
+        "section_header_heading": "Featured collection",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Button",
+        "collection": "",
+        "max_products": 8,
+        "column_count_desktop": "4",
+        "column_count_mobile": "2",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 20
+      }
+    },
+    "17413753073c080a69": {
+      "type": "apps",
+      "blocks": {
+        "mbc_bundle_builder_mbc_builder_widget_7T4PwF": {
+          "type": "shopify://apps/mbc-bundle-builder/blocks/mbc-builder-widget/b2760cbb-20b7-41db-a8ab-c4b55296aac0",
+          "settings": {
+            "builder_id": "1591"
+          }
+        }
+      },
+      "block_order": [
+        "mbc_bundle_builder_mbc_builder_widget_7T4PwF"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "width": "page-width",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    }
+  },
+  "order": [
+    "image_hero_VecTQE",
+    "main",
+    "rich_text_1",
+    "slideshow_1",
+    "collapsible_content_1",
+    "featured_collection_1",
+    "17413753073c080a69"
+  ]
+}

@@ -1,0 +1,175 @@
+{%- capture close_icon -%}
+  {% render 'icon-utility' icon: 'cross' %}
+{%- endcapture -%}
+
+{%- capture left_chevron_with_stem_icon -%}
+  {% render 'icon-utility', icon: 'chevron-with-stem-left', width: 20, height: 18 %}
+{%- endcapture -%}
+
+{%- capture right_chevron_with_stem_icon -%}
+  {% render 'icon-utility', icon: 'chevron-with-stem-right', width: 20, height: 18 %}
+{%- endcapture -%}
+
+{%- capture zoom_icon -%}
+  {% render 'icon-utility' icon: 'media-zoom-in' %}
+{%- endcapture -%}
+
+{%- capture zoom_in_icon -%}
+  {% render 'icon-utility' icon: 'media-zoom-in' %}
+  <span class="zoom-icon__text zoom-in fs-body-75">{{ 'general.accessibility.zoom_in' | t }}</span>
+{%- endcapture -%}
+
+{%- capture zoom_out_icon -%}
+  {% render 'icon-utility' icon: 'media-zoom-out' %}
+  <span class="zoom-icon__text zoom-out fs-body-75">{{ 'general.accessibility.zoom_out' | t }}</span>
+{%- endcapture -%}
+
+{%- capture play_icon -%}
+  {% render 'icon-utility' icon: 'media-play' %}
+{%- endcapture -%}
+
+{%- capture pause_icon -%}
+  {% render 'icon-utility' icon: 'media-pause' %}
+{%- endcapture -%}
+
+{%- # Litmus test to see whether @property is supported -%}
+<style>
+  @property --property-test {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 100%;
+  }
+</style>
+
+<script>
+  console.log('Eclipse v4.0.0 by Fluorescent');
+
+  // Remove no-js class once JS is available.
+  document.documentElement.classList.remove('no-js');
+  document.documentElement.classList.add('js');
+
+  // Determine whether @property is supported.
+  const propertyTestValue = window.getComputedStyle(document.documentElement).getPropertyValue('--property-test')
+
+  if (propertyTestValue === "") {
+    document.documentElement.classList.add('prop-value-api-not-supported');
+  } else {
+    document.documentElement.classList.add('prop-value-api-supported');
+  }
+
+  // Determine whether the user preferes reduced motion, or animations should be enabled.
+  if (window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true) {
+    document.documentElement.classList.add('prefers-reduced-motion');
+  } else {
+    document.documentElement.classList.add('do-anim');
+  }
+
+  window.theme = {
+    version: 'v4.0.0',
+    themeName: 'Eclipse',
+    moneyFormat: {{ shop.money_format | json }},
+    coreData: {
+      n: "Eclipse",
+      v: "v4.0.0",
+    },
+    strings: {
+      name: {{ shop.name | json }},
+      accessibility: {
+        playVideo: {{ 'general.accessibility.play' | t | json }},
+        pauseVideo: {{ 'general.accessibility.pause' | t | json }},
+        carouselSelect:  {{ 'general.accessibility.carousel_select' | t | json }},
+        carouselPause: {{ 'general.accessibility.carousel_pause' | t | json }},
+        carouselPlay: {{ 'general.accessibility.carousel_play' | t | json }}
+      },
+      product: {
+        review: {{ 'products.product.write_a_review' | t | json }}
+      },
+      products: {
+        product: {
+          unavailable: {{ 'products.product.unavailable' | t | json }},
+          unitPrice: {{ 'products.product.unit_price_label' | t | json }},
+          unitPriceSeparator: {{ 'general.accessibility.unit_price_separator' | t | json }},
+          sku: {{ 'products.product.sku' | t | json }}
+        },
+        giftCardRecipientErrors: {
+          email: {{ 'products.gift_card_recipient.errors.email_html' | t | json }},
+          name: {{ 'products.gift_card_recipient.errors.name_html' | t | json }},
+          message: {{ 'products.gift_card_recipient.errors.message_html' | t | json }},
+          {% # Format exception for send_on so it can match error key from Shopify %}
+          send_on: {{ 'products.gift_card_recipient.errors.send_on_html' | t | json }},
+        }
+      },
+      cart: {
+        editCartNote: {{ 'cart.general.order_note_button_edit' | t | json }},
+        addCartNote: {{ 'cart.general.order_note_button_add' | t | json }},
+        quantityError: {{ 'cart.general.error' | t | json }}
+      },
+      pagination: {
+        viewing: {{ 'general.pagination.viewing' | t | json }},
+        products: {{ 'general.pagination.products' | t | json }},
+        results: {{ 'general.pagination.results' | t | json }}
+      }
+    },
+    routes: {
+      root: "{{ routes.root_url }}",
+      cart: {
+        base: "{{ routes.cart_url }}",
+        add: "{{ routes.cart_add_url }}",
+        change: "{{ routes.cart_change_url }}",
+        update: "{{ routes.cart_update_url }}",
+        clear: "{{ routes.cart_clear_url }}",
+        // Manual routes until Shopify adds support
+        shipping: "{% if routes.root_url == '/' %}/cart/shipping_rates{% else %}{{ routes.root_url }}/cart/shipping_rates{% endif %}"
+      },
+      // Manual routes until Shopify adds support
+      products: "{% if routes.root_url == '/' %}/products{% else %}{{ routes.root_url }}/products{% endif %}",
+      productRecommendations: "{{ routes.product_recommendations_url }}",
+      predictiveSearch: '{{ routes.predictive_search_url }}',
+      search: '{{ routes.search_url }}'
+    },
+    icons: {
+      leftChevronWithStem: {{ left_chevron_with_stem_icon | json }},
+      rightChevronWithStem: {{ right_chevron_with_stem_icon | json }},
+      close: {{ close_icon | json }},
+      zoom: {{ zoom_icon | json }},
+      zoomIn: {{ zoom_in_icon | json }},
+      zoomOut: {{ zoom_out_icon | json }},
+      play: {{ play_icon | json }},
+      pause: {{ pause_icon | json }}
+    }
+  }
+
+  {% liquid
+    # Save the predictive search searchable fields for access in JS.
+    assign searchable_fields = 'author, body, product_type, tag, title, variant_barcode, variant_sku, variant_title, vendor' | split: ', '
+
+    capture searchable_field_params
+      for field in searchable_fields
+        capture field_key
+          echo 'searchable_fields_' | append: field
+        endcapture
+
+        if settings[field_key]
+          case field
+            when 'variant_barcode'
+              echo 'variants.barcode,'
+            when 'variant_sku'
+              echo 'variants.sku,'
+            when 'variant_title'
+              echo 'variants.title,'
+            else
+              echo field | append: ','
+          endcase
+        endif
+      endfor
+    endcapture
+  -%}
+
+  {% if searchable_field_params != blank -%}
+    window.theme.searchableFields = "{{ searchable_field_params | remove_last: ',' }}";
+  {%- endif %}
+
+  {% if template.directory == 'customers' or template == 'product' %}
+    window.theme.allCountryOptionTags = {{ all_country_option_tags | json }};
+  {% endif %}
+</script>

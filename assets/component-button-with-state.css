@@ -1,0 +1,386 @@
+:root{
+  --js-mobile:(max-width: 719.9px);
+  --js-tablet:(min-width: 720px);
+  --js-below-small-desktop:(max-width: 1023.9px);
+  --js-small-desktop:(min-width: 1024px);
+  --js-desktop:(min-width: 1440px);
+  --js-max-page-width:(min-width: 1600px);
+}
+.button-with-state-wrapper{
+  display:flex;
+  justify-content:right;
+}
+@media (max-width: 1023.9px){
+.button-with-state-wrapper{
+    justify-content:initial
+}
+  }
+@media (min-width: 1024px) and (hover: hover){
+    .button-with-state-wrapper.btn--full-width{
+      width:100%;
+    }
+      .button-with-state-wrapper.btn--full-width .btn--style-outline:not(.btn--size-small){
+        margin-top:1px;
+        margin-left:1px;
+      }
+  }
+.button-with-state[data-has-alt-mobile-button]{
+    position:relative;
+    width:34px;
+    height:34px;
+    background-color:var(--color-background);
+    color:var(--color-text);
+    box-shadow:0px 0px 1px 0px rgba(0, 0, 0, 0.05), 0px 2px 6px 0px rgba(0, 0, 0, 0.12);
+    overflow:hidden;
+  }
+.button-with-state[data-has-alt-mobile-button].adding .button-with-state__label--mobile .label-idle, .button-with-state[data-has-alt-mobile-button].success .button-with-state__label--mobile .label-idle{
+          transform:scale(0.5);
+          opacity:0;
+          transition-property:opacity, transform;
+          transition-duration:var(--animation-timing-100);
+          transition-timing-function:var(--ease-out-quart);
+        }
+.button-with-state[data-has-alt-mobile-button].adding .button-with-state__label--mobile .label-adding{
+          transform:scale(1);
+          opacity:1;
+          transition-property:opacity, transform;
+          transition-duration:var(--animation-timing-100);
+          transition-delay:var(--animation-timing-100);
+          transition-timing-function:var(--ease-out-quart);
+        }
+.button-with-state[data-has-alt-mobile-button].success .button-with-state__label--mobile .label-success{
+          visibility:visible;
+          transform:translateX(0);
+          transition:transform var(--animation-timing-300) var(--ease-out-quart);
+        }
+.button-with-state[data-has-alt-mobile-button].success .button-with-state__label--mobile .label-success svg{
+            margin-top:1px;
+            stroke-dashoffset:44;
+          }
+.button-with-state[data-has-alt-mobile-button]:hover{
+      background-color:var(--color-background);
+      color:var(--color-text);
+    }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--mobile .label-idle,
+      .button-with-state[data-has-alt-mobile-button] .button-with-state__label--mobile .label-adding,
+      .button-with-state[data-has-alt-mobile-button] .button-with-state__label--mobile .label-success{
+        position:absolute;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--mobile .label-idle{
+        transition-property:opacity, transform;
+        transition-duration:var(--animation-timing-100);
+        transition-timing-function:var(--ease-out-quart);
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--mobile .label-adding{
+        opacity:0;
+        transform:scale(0.5);
+        transition-property:opacity, transform;
+        transition-duration:var(--animation-timing-100);
+        transition-timing-function:var(--ease-out-quart);
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--mobile .label-success{
+        visibility:hidden;
+        color:var(--color-notifications-success);
+        transform:translateX(-4px);
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--mobile .label-success svg{
+          stroke-dasharray:22;
+          stroke-dashoffset:22;
+          transition:stroke-dashoffset var(--animation-timing-300) var(--ease-out-quart);
+        }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--hidden{
+      visibility:hidden;
+    }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop{
+      position:absolute;
+      top:-1px;
+      right:-1px;
+      bottom:-1px;
+      left:-1px;
+      display:none;
+      padding:var(--button-padding);
+    }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-default{
+        position:absolute;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        padding:var(--button-padding);
+        background-color:var(--color-solid-button-background);
+        color:var(--color-solid-button-text);
+        transition:color var(--animation-timing-200) var(--ease-out-quart), transform var(--animation-timing-400) var(--ease-out-quart);
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-active{
+        visibility:hidden;
+        position:absolute;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        display:flex;
+        align-items:center;
+        padding:var(--button-padding);
+        background-color:var(--color-accent);
+        color:var(--color-accent-foreground);
+        transform:scaleY(0);
+        transform-origin:bottom;
+        transition:transform var(--animation-timing-400) var(--ease-out-quart), visibility 0s var(--animation-timing-400) var(--ease-out-quart);
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-idle,
+      .button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-adding,
+      .button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-success{
+        position:absolute;
+        left:0;
+        right:0;
+        overflow:hidden;
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-idle{
+        display:block;
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-idle .label-idle__inner{
+          display:block;
+          transform:translateY(0);
+          transition:transform var(--animation-timing-400) var(--ease-out-quart);
+        }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-adding,
+      .button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-success{
+        visibility:hidden;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-adding .label-adding__inner{
+          display:flex;
+          justify-content:center;
+          transform:translateY(-20px);
+          opacity:0;
+          transition-property:opacity, transform;
+          transition-duration:var(--animation-timing-400);
+          transition-timing-function:var(--ease-out-quart);
+        }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-success{
+        transform:translateX(-10px);
+      }
+.button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop .label-success svg{
+          stroke-dasharray:26;
+          stroke-dashoffset:26;
+          transition:stroke-dashoffset var(--animation-timing-300) var(--ease-out-quart);
+        }
+@media (min-width: 1024px) and (hover: hover){
+.button-with-state[data-has-alt-mobile-button]{
+      width:100%;
+      height:auto;
+      padding:var(--button-padding);
+      background-color:transparent;
+      border-radius:var(--radius-button);
+      opacity:0
+  }
+          .button-with-state[data-has-alt-mobile-button].adding .label-active .label-idle, .button-with-state[data-has-alt-mobile-button].success .label-active .label-idle{
+            visibility:hidden;
+            transition:visibility 0s var(--animation-timing-400) var(--ease-out-quart);
+          }
+
+            .button-with-state[data-has-alt-mobile-button].adding .label-active .label-idle .label-idle__inner, .button-with-state[data-has-alt-mobile-button].success .label-active .label-idle .label-idle__inner{
+              transform:translateY(100%);
+            }
+          .button-with-state[data-has-alt-mobile-button].adding .label-active .label-adding{
+            visibility:visible;
+          }
+
+            .button-with-state[data-has-alt-mobile-button].adding .label-active .label-adding .label-adding__inner{
+              transform:translateY(0);
+              opacity:1;
+              transition-property:opacity, transform;
+              transition-duration:var(--animation-timing-400);
+              transition-timing-function:var(--ease-out-quart);
+            }
+          .button-with-state[data-has-alt-mobile-button].success .label-active .label-success{
+            visibility:visible;
+            transform:translateX(0);
+            transition:transform var(--animation-timing-400) var(--ease-out-quart);
+          }
+
+            .button-with-state[data-has-alt-mobile-button].success .label-active .label-success svg{
+              stroke-dashoffset:54;
+            }
+          .button-with-state[data-has-alt-mobile-button].active .button-with-state__label--desktop .label-default, .button-with-state[data-has-alt-mobile-button]:hover .button-with-state__label--desktop .label-default, .user-is-tabbing .button-with-state[data-has-alt-mobile-button]:focus .button-with-state__label--desktop .label-default{
+            color:var(--color-solid-button-background);
+            transform:translateY(-50%);
+          }
+
+          .button-with-state[data-has-alt-mobile-button].active .button-with-state__label--desktop .label-active, .button-with-state[data-has-alt-mobile-button]:hover .button-with-state__label--desktop .label-active, .user-is-tabbing .button-with-state[data-has-alt-mobile-button]:focus .button-with-state__label--desktop .label-active{
+            visibility:visible;
+            transform:scaleY(1);
+            transition:transform var(--animation-timing-400) var(--ease-out-quart);
+          }
+
+      .user-is-tabbing .button-with-state[data-has-alt-mobile-button]:focus{
+        opacity:1;
+      }
+
+      .button-with-state[data-has-alt-mobile-button] .button-with-state__label--mobile{
+        display:none;
+      }
+
+      .button-with-state[data-has-alt-mobile-button] .button-with-state__label--desktop{
+        display:block;
+      }
+    }
+.button-with-state:not([data-has-alt-mobile-button]){
+    width:100%;
+    height:auto;
+    border-radius:var(--radius-button);
+    opacity:1;
+  }
+.button-with-state:not([data-has-alt-mobile-button]).btn--style-outline:not(.btn--size-small){
+      width:calc(100% - 2px);
+    }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop{
+      position:absolute;
+      top:-1px;
+      right:-1px;
+      bottom:-1px;
+      left:-1px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-default{
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        transition:color var(--animation-timing-200) var(--ease-out-quart), transform var(--animation-timing-400) var(--ease-out-quart);
+      }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-active{
+        visibility:hidden;
+        position:absolute;
+        top:0;
+        right:0;
+        bottom:0;
+        left:0;
+        display:flex;
+        align-items:center;
+        transform:scaleY(0);
+        transform-origin:bottom;
+        transition:transform var(--animation-timing-400) var(--ease-out-quart), visibility 0s var(--animation-timing-400) var(--ease-out-quart);
+      }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-idle,
+      .button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-adding,
+      .button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-success{
+        position:absolute;
+        left:0;
+        right:0;
+
+        overflow:hidden;
+      }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-idle{
+        display:block;
+      }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-idle .label-idle__inner{
+          display:block;
+          text-align:center;
+          transform:translateY(0);
+          transition:transform var(--animation-timing-400) var(--ease-out-quart);
+        }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-adding,
+      .button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-success{
+        visibility:hidden;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-adding .label-adding__inner{
+          display:flex;
+          justify-content:center;
+          transform:translateY(-20px);
+          opacity:0;
+          transition-property:opacity, transform;
+          transition-duration:var(--animation-timing-400);
+          transition-timing-function:var(--ease-out-quart);
+        }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-success{
+        transform:translateX(-10px);
+      }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--desktop .label-success svg{
+          stroke-dasharray:26;
+          stroke-dashoffset:26;
+          transition:stroke-dashoffset var(--animation-timing-300) var(--ease-out-quart);
+        }
+.button-with-state:not([data-has-alt-mobile-button]) .label-active{
+      visibility:hidden;
+      position:absolute;
+      top:0;
+      right:0;
+      bottom:0;
+      left:0;
+      padding:var(--button-padding);
+      background-color:var(--color-accent);
+      color:var(--color-accent-foreground);
+      transform:scaleY(0);
+      transform-origin:bottom;
+      transition:transform var(--animation-timing-400) var(--ease-out-quart), visibility 0s var(--animation-timing-400) var(--ease-out-quart);
+    }
+.button-with-state:not([data-has-alt-mobile-button]).adding .label-active .label-idle, .button-with-state:not([data-has-alt-mobile-button]).success .label-active .label-idle{
+          visibility:hidden;
+          transition:visibility 0s var(--animation-timing-400) var(--ease-out-quart);
+        }
+.button-with-state:not([data-has-alt-mobile-button]).adding .label-active .label-idle .label-idle__inner, .button-with-state:not([data-has-alt-mobile-button]).success .label-active .label-idle .label-idle__inner{
+            transform:translateY(100%);
+          }
+.button-with-state:not([data-has-alt-mobile-button]).adding .label-active .label-adding{
+          visibility:visible;
+        }
+.button-with-state:not([data-has-alt-mobile-button]).adding .label-active .label-adding .label-adding__inner{
+            transform:translateY(0);
+            opacity:1;
+            transition-property:opacity, transform;
+            transition-duration:var(--animation-timing-400);
+            transition-timing-function:var(--ease-out-quart);
+          }
+.button-with-state:not([data-has-alt-mobile-button]).success .label-active .label-success{
+          visibility:visible;
+          transform:translateX(0);
+          transition:transform var(--animation-timing-400) var(--ease-out-quart);
+        }
+.button-with-state:not([data-has-alt-mobile-button]).success .label-active .label-success svg{
+            stroke-dashoffset:54;
+          }
+.button-with-state:not([data-has-alt-mobile-button]).active .button-with-state__label--desktop .label-default, .button-with-state:not([data-has-alt-mobile-button]):hover .button-with-state__label--desktop .label-default, .user-is-tabbing .button-with-state:not([data-has-alt-mobile-button]):focus .button-with-state__label--desktop .label-default{
+          color:var(--color-solid-button-background);
+          transform:translateY(-50%);
+        }
+.button-with-state:not([data-has-alt-mobile-button]).active .button-with-state__label--desktop .label-active, .button-with-state:not([data-has-alt-mobile-button]):hover .button-with-state__label--desktop .label-active, .user-is-tabbing .button-with-state:not([data-has-alt-mobile-button]):focus .button-with-state__label--desktop .label-active{
+          visibility:visible;
+          transform:scaleY(1);
+          transition:transform var(--animation-timing-400) var(--ease-out-quart);
+        }
+.button-with-state:not([data-has-alt-mobile-button]) .button-with-state__label--hidden{
+      visibility:hidden;
+    }
+.no-js .button-with-state:not([data-has-alt-mobile-button]){
+      display:none;
+    }
+.button-with-state.btn--style-outline{
+    top:0;
+    right:1px;
+    bottom:0;
+    left:0;
+    top:initial;
+    right:initial;
+    bottom:initial;
+    left:initial;
+    box-shadow:0 0 0 1px var(--color-outline-button-text-and-border-alpha-50);
+    transition:box-shadow var(--animation-timing-200) var(--ease-out-quart);
+  }
+.button-with-state:hover.btn--style-outline, .user-is-tabbing .button-with-state:focus.btn--style-outline{
+      box-shadow:0 0 0 1px var(--color-accent);
+    }

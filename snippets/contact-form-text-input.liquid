@@ -1,0 +1,28 @@
+{%- liquid
+  comment
+    Renders a "Text input" block for the contact form.
+
+    Required parameters:
+      - block: { Object } The associated block.
+  endcomment
+
+  capture input_id
+    echo 'text-input--[[bid]]' | replace: '[[bid]]', block.id
+  endcapture
+
+  assign downcased_label = block.settings.label | downcase
+
+  capture input_name
+    echo 'contact[[[label]]]' | replace: '[[label]]', downcased_label | escape
+  endcapture
+-%}
+
+<div class="contact-form__element contact-form__element--{{ block.settings.width }}" {{ block.shopify_attributes }}>
+  {%- render 'input-text',
+    id: input_id,
+    name: input_name,
+    label: block.settings.label,
+    placeholder: block.settings.label,
+    required: block.settings.required
+  -%}
+</div>

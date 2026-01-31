@@ -1,0 +1,71 @@
+{% liquid
+  comment
+    Renders a single item for an accordion widget (see 'accordion.liquid').
+
+    Required parameters:
+      - title: { String } The item title.
+      - content: { String } The item content.
+
+    Optional parameters:
+      - open: { Boolean } Whether to display the item as open by default.
+      - class: { String } A custom class to add to the 'details' element.
+      - title_class: { String } Optional classes to add to the summary text.
+      - content_class: { String } Optional classes to add to the inner text.
+      - icon_width: { Number: 14 } The width of the toggle icons (in pixels).
+      - icon_height: { Number: 14 } The height of the toggle icons (in pixels).
+      - omit_default_spacing: { Boolean: false } Whether to prevent default margin and padding to control as needed.
+      - attributes: { String } Any attributes to set on the details element.
+      - custom_icon: { HTML } Custom icon markup.
+      - block_id: { String } The associated block ID.
+  endcomment
+
+  assign icon_width = icon_width | default: 14
+  assign icon_height = icon_height | default: 14
+  assign show_default_spacing = true
+  assign omit_default_spacing = omit_default_spacing | default: false
+
+  if omit_default_spacing
+    assign show_default_spacing = false
+  endif
+%}
+
+<accordion-item
+  {% if block_id != blank -%}
+    data-block-id="{{ block_id }}"
+  {%- endif -%}
+>
+  <details
+    class="accordion-item {%- if class != blank %} {{ class }}{%- endif -%}"
+    data-show-default-spacing="{{ show_default_spacing }}"
+    {%- if open %}
+      open
+    {%- endif %}
+    {{ attributes }}
+    js-accordion-item
+  >
+    <summary
+      class="accordion-item__title {%- if title_class != blank %} {{ title_class }}{%- endif -%}"
+      js-accordion-item-summary
+    >
+      {{ title }}
+
+      {% if custom_icon %}
+        {{ custom_icon }}
+      {% else %}
+        <span
+          class="accordion-item-title__icon"
+          style="--icon-width: {{ icon_width }}px; --icon-height: {{ icon_height }}px;"
+        >
+          {%- render 'icon-utility', icon: 'chevron-down', width: icon_width, height: icon_height -%}
+        </span>
+      {% endif %}
+    </summary>
+
+    <div
+      class="accordion-item__content {%- if content_class != blank %} {{ content_class }}{%- endif -%}"
+      js-accordion-item-content
+    >
+      {{ content }}
+    </div>
+  </details>
+</accordion-item>

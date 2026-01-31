@@ -1,0 +1,86 @@
+{%- liquid
+  comment
+    Renders the section header (used in conjunction with the 'section-header.js' generator).
+
+    Required parameters:
+      - section: { Object } The parent section.
+
+    Optional parameters:
+      - fallback_url: { String } A URL to use for the link if the setting is blank.
+      - animate_heading: { Boolean } Applies the shared animation reveal class to the heading.
+          Use in conjunction with the visibility watcher and animation mixins.
+      - include_animation_assets: { Boolean: true }: Whether to include animation assets (eg. visiblity watcher).
+      - size_class: { String } The size class to apply to the heading.
+      - center_align: { Boolean: false } Whether to center-align the content. Only applies if there's no link.
+  endcomment
+
+  assign include_animation_assets = include_animation_assets | default: true, allow_false: true
+  assign show_link = false
+  assign link_url = section.settings.section_header_link_url | default: fallback_url
+
+  if link_url != blank and section.settings.section_header_link_label != blank
+    assign show_link = true
+    assign center_align = false
+  else
+    assign center_align = center_align | default: false, allow_false: true
+  endif
+
+  capture section_header_class
+    echo 'section-header'
+
+    if center_align
+      echo ' section-header--alignment-center'
+    endif
+  endcapture
+
+  if section.settings.section_header_heading != blank
+    assign size_class = size_class | default: 'fs-heading-1-base'
+
+    capture title_class
+      echo 'section-header__content-title ff-heading [[sc]]' | replace: '[[sc]]', size_class
+
+      if animate_heading
+        echo ' animation-heading'
+      endif
+    endcapture
+  endif
+
+  capture link
+    if show_link
+      render 'link-with-arrow-icon', link: link_url, label: section.settings.section_header_link_label
+    endif
+  endcapture
+
+  if include_animation_assets and animate_heading and header_title != blank
+    render 'inline-scripts', script_name: 'visibility-watcher'
+  endif
+-%}
+
+{%- unless section.settings.section_header_heading == blank
+  and section.settings.section_header_text == blank
+  and show_link == false
+-%}
+  <visibility-watcher data-watch-child-selector=".section-header">
+    <div class="{{ section_header_class }}">
+      <div class="section-header__content">
+        {%- if section.settings.section_header_heading != blank -%}
+          <div class="section-header__content-title-wrapper">
+            <{{ section.settings.section_header_heading_tag }} class="{{ title_class }}">
+              {{ section.settings.section_header_heading }}
+            </{{ section.settings.section_header_heading_tag }}>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.section_header_text != blank -%}
+          <p class="section-header__content-text">{{ section.settings.section_header_text }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if show_link -%}
+        <div class="section-header__link">
+          {{- link -}}
+        </div>
+      {%- endif -%}
+    </div>
+  </visibility-watcher>
+{%- endunless -%}

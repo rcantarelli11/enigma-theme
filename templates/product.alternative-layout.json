@@ -1,0 +1,448 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "product_overview": {
+      "type": "main-product--default",
+      "blocks": {
+        "vendor": {
+          "type": "vendor",
+          "disabled": true,
+          "settings": {
+            "bottom_padding": 12
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "bottom_padding": 22
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "title": "",
+            "text_size": "medium",
+            "display_as_collapsible_row": false,
+            "expand_by_default": false,
+            "bottom_padding": 30
+          }
+        },
+        "icon_with_text_1": {
+          "type": "icon-with-text",
+          "settings": {
+            "icon": "general-checkmark",
+            "text": "Icon with text",
+            "link": "",
+            "bottom_padding": 16
+          }
+        },
+        "icon_with_text_2": {
+          "type": "icon-with-text",
+          "settings": {
+            "icon": "general-checkmark",
+            "text": "Icon with text",
+            "link": "",
+            "bottom_padding": 36
+          }
+        },
+        "quantity-selector": {
+          "type": "quantity-selector",
+          "disabled": true,
+          "settings": {
+            "show_label": false,
+            "bottom_padding": 32
+          }
+        },
+        "variant-selector": {
+          "type": "variant-selector",
+          "settings": {
+            "selector_style": "chips",
+            "chip_layout": "3_column",
+            "popup_option_name": "Size",
+            "icon": "clothing-ruler",
+            "popup_link_text": "Size Guide",
+            "popup_page_content": "",
+            "bottom_padding": 36
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_discount": true,
+            "discount_format": "percent-off",
+            "show_shop_pay": false,
+            "show_sale_badge": true,
+            "show_sold_out_badge": true,
+            "badge_alignment": "above",
+            "sale_badge_format": "sale",
+            "bottom_padding": 10
+          }
+        },
+        "buy-buttons": {
+          "type": "buy-buttons",
+          "settings": {
+            "add_to_cart_btn_style": "outline",
+            "show_dynamic_checkout": true,
+            "show_pickup_availability": true,
+            "bottom_padding": 36
+          }
+        },
+        "collapsible_row_1": {
+          "type": "collapsible-row",
+          "settings": {
+            "expand_by_default": false,
+            "heading": "Collapsible row",
+            "content": "",
+            "content_page": "",
+            "custom_liquid": "",
+            "bottom_padding": 48
+          }
+        },
+        "collapsible_row_2": {
+          "type": "collapsible-row",
+          "settings": {
+            "expand_by_default": false,
+            "heading": "Collapsible row",
+            "content": "",
+            "content_page": "",
+            "custom_liquid": "",
+            "bottom_padding": 48
+          }
+        },
+        "collapsible_row_3": {
+          "type": "collapsible-row",
+          "settings": {
+            "expand_by_default": false,
+            "heading": "Collapsible row",
+            "content": "",
+            "content_page": "",
+            "custom_liquid": "",
+            "bottom_padding": 20
+          }
+        },
+        "featured_icon_with_text": {
+          "type": "featured-icon-with-text",
+          "settings": {
+            "icon": "general-checkmark",
+            "heading": "Featured icon with text",
+            "text": "<p>Use this text to highlight information such as an offer, guarantee, or a product feature.</p>",
+            "link": "",
+            "color_icon": "#000000",
+            "color_text": "#000000",
+            "color_background": "#ff6060",
+            "color_background_gradient": "",
+            "bottom_padding": 40
+          }
+        },
+        "icon_with_text_3": {
+          "type": "icon-with-text",
+          "settings": {
+            "icon": "general-checkmark",
+            "text": "Icon with text",
+            "link": "",
+            "bottom_padding": 16
+          }
+        },
+        "icon_with_text_4": {
+          "type": "icon-with-text",
+          "settings": {
+            "icon": "general-checkmark",
+            "text": "Icon with text",
+            "link": "",
+            "bottom_padding": 40
+          }
+        },
+        "complementary_products": {
+          "type": "complementary-products",
+          "settings": {
+            "heading": "You may also like",
+            "show_product_thumbnails": true,
+            "max_products": 3,
+            "product_source": "list",
+            "product_list": [],
+            "bottom_padding": 36
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "enable_os_sharing": false,
+            "bottom_padding": 24
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "description",
+        "icon_with_text_1",
+        "icon_with_text_2",
+        "quantity-selector",
+        "variant-selector",
+        "price",
+        "buy-buttons",
+        "collapsible_row_1",
+        "collapsible_row_2",
+        "collapsible_row_3",
+        "featured_icon_with_text",
+        "icon_with_text_3",
+        "icon_with_text_4",
+        "complementary_products",
+        "share"
+      ],
+      "settings": {
+        "color_scheme": "scheme_1",
+        "sticky_effect_container": "product_details",
+        "media_position_desktop": "left",
+        "gallery_layout_desktop": "thumbnails_below",
+        "media_thumbnail_size": 75,
+        "media_gallery_size_desktop": 50,
+        "media_aspect_ratio": "portrait-alt",
+        "enable_video_autoplay": false,
+        "enable_image_zoom": true,
+        "media_gallery_size_mobile": "full_width",
+        "enable_slider_looping": true,
+        "enable_variant_media_grouping": false,
+        "enable_gift_card_recipient": true,
+        "width": "full-width-padded",
+        "top_padding": 30,
+        "bottom_padding": 60
+      }
+    },
+    "slideshow": {
+      "type": "slideshow",
+      "blocks": {
+        "video": {
+          "type": "video",
+          "settings": {
+            "video_focal_point": "top",
+            "mobile_video_focal_point": "center",
+            "content_max_width": 750,
+            "text_position": "bottom_left",
+            "mobile_text_position": "center_center",
+            "overline": "",
+            "heading": "",
+            "heading_font_size": 1,
+            "heading_tag": "h2",
+            "text": "",
+            "text_font_size": 3,
+            "button_1_link": "",
+            "button_1_label": "",
+            "button_1_style": "solid",
+            "button_2_link": "",
+            "button_2_label": "",
+            "button_2_style": "solid",
+            "overlay_color_scheme": "scheme_2",
+            "overlay_opacity": 20
+          }
+        }
+      },
+      "block_order": [
+        "video"
+      ],
+      "settings": {
+        "color_scheme": "scheme_1",
+        "enable_autoplay": true,
+        "time_between_slides": 6,
+        "custom_desktop_height": "650px",
+        "custom_mobile_height": "650px",
+        "pagination_alignment": "right",
+        "mobile_pagination_alignment": "center",
+        "pagination_background": "#000000",
+        "pagination_foreground": "#ffffff",
+        "pagination_background_opacity": 60,
+        "navigation_cursor_background": "#ffffff",
+        "navigation_cursor_foreground": "#000000",
+        "enable_text_animation": true,
+        "slide_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "rich_text": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Rich Text",
+            "heading_font_size": 1,
+            "heading_tag": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading"
+      ],
+      "settings": {
+        "color_scheme": "scheme_1",
+        "content_width": "page-width",
+        "custom_width": 650,
+        "text_alignment": "left",
+        "top_padding": 50,
+        "bottom_padding": 50
+      }
+    },
+    "multi_column": {
+      "type": "multi-column",
+      "blocks": {
+        "column_item_1": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "heading": "Column item",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_link": "",
+            "button_label": "Button"
+          }
+        },
+        "column_item_2": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "heading": "Column item",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_link": "",
+            "button_label": "Button"
+          }
+        }
+      },
+      "block_order": [
+        "column_item_1",
+        "column_item_2"
+      ],
+      "settings": {
+        "color_scheme": "scheme_1",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Button",
+        "column_spacing": "medium",
+        "column_count_desktop": "2",
+        "column_count_mobile": "1",
+        "enable_slider_on_desktop": false,
+        "enable_slider_on_mobile": false,
+        "show_slider_indicator": false,
+        "text_alignment": "left",
+        "heading_font_size": 2,
+        "heading_mobile_font_size": 2,
+        "item_title_heading_tag": "h3",
+        "text_font_size": 3,
+        "button_style": "text",
+        "media_aspect_ratio": "square",
+        "media_position": "above_content",
+        "width": "full-width-padded",
+        "top_padding": 20,
+        "bottom_padding": 20
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "color_scheme": "scheme_1",
+        "section_header_heading": "Featured Collection",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Button",
+        "collection": "",
+        "max_products": 8,
+        "column_count_desktop": "3",
+        "column_count_mobile": "2",
+        "show_slider_indicator": true,
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    },
+    "collapsible_content": {
+      "type": "collapsible-content",
+      "blocks": {
+        "row_1": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "row_2": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "row_3": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "row_4": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "none",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "row_heading_font": "body",
+        "row_heading_text_size": 3,
+        "button_link": "",
+        "button_label": "See all FAQs",
+        "button_style": "solid",
+        "width": "full-width-padded",
+        "top_padding": 10,
+        "bottom_padding": 60
+      }
+    },
+    "recommended_products": {
+      "type": "recommended-products",
+      "disabled": true,
+      "settings": {}
+    }
+  },
+  "order": [
+    "product_overview",
+    "slideshow",
+    "rich_text",
+    "multi_column",
+    "featured_collection",
+    "collapsible_content",
+    "recommended_products"
+  ]
+}

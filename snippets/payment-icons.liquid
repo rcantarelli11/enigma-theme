@@ -1,0 +1,9 @@
+{%- # Renders a list of payment icons. -%}
+
+<div class="payment-icons">
+  {%- liquid
+    for type in shop.enabled_payment_types
+      echo type | payment_type_svg_tag
+    endfor
+  -%}
+</div>

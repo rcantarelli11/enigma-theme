@@ -1,0 +1,23 @@
+{%- liquid
+  comment
+    Renders the "Product rating" product block.
+
+    Required parameters:
+      - prod: { Object } The current product object.
+      - block: { Object } The associated block object.
+  endcomment
+
+  echo 'component-product-rating.css' | asset_url | stylesheet_tag
+-%}
+
+<div
+  class="product-block product-block--product-rating"
+  style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'product-rating-display',
+    prod: prod,
+    text_display: block.settings.text,
+    stars_layout: block.settings.layout
+  -%}
+</div>

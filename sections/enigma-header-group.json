@@ -1,0 +1,16 @@
+{
+  "type": "header",
+  "name": "Enigma Header",
+  "sections": {
+    "enigma-header": {
+      "type": "enigma-header",
+      "settings": {
+        "show_announcement": true,
+        "announcement_text": "<p>Bundle and save 10% + Free Shipping on orders over $70<\/p>"
+      }
+    }
+  },
+  "order": [
+    "enigma-header"
+  ]
+}

@@ -1,0 +1,71 @@
+{%- if section.settings.custom_liquid != blank -%}
+  <div
+    class="
+      section
+      custom-liquid
+    "
+    style="
+      {% render 'settings-section-padding' %}
+      {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+    "
+  >
+    <div class="section-inner">
+      {{ section.settings.custom_liquid }}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.custom_liquid.name",
+  "tag": "section",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "custom.overlay"
+    ]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "t:sections.custom_liquid.settings.custom_liquid.label"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.custom_liquid.presets.name"
+    }
+  ]
+}
+{% endschema %}

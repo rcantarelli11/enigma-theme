@@ -1,0 +1,68 @@
+{%- liquid
+  comment
+    When users customize sections through the theme editor, the HTML of those sections is dynamically added,
+    removed, or re-rendered directly onto the existing DOM, without reloading the entire page. However, any
+    associated JavaScript that runs when the page loads won't run again.
+
+    To avoid JavaScript (webcomponents) not loading when being added to the editor for the first time,
+    this snippet will allow us to attach required scripts to components, and load all scripts to the head
+    of the document when in the editor.
+
+    Optional parameters:
+      - script_name: { String } The name of the script you want to output (excluding the file extension).
+      - load_all: { Boolean } Whether to load all scripts.
+  endcomment
+
+  if load_all
+    capture script_names
+      echo 'accordion-group,'
+      echo 'accordion-item,'
+      echo 'announcement-slider,'
+      echo 'button-with-state,'
+      echo 'blog-navigation,'
+      echo 'cart-count,'
+      echo 'cart-drawer,'
+      echo 'cart-page,'
+      echo 'cart-item,'
+      echo 'cart-note,'
+      echo 'drawer-inner,'
+      echo 'featured-links,'
+      echo 'filter-sort-form,'
+      echo 'impact-logo,'
+      echo 'localization-form,'
+      echo 'main-addresses,'
+      echo 'main-login,'
+      echo 'password-header,'
+      echo 'price-range,'
+      echo 'product-block-complementary-products,'
+      echo 'popup-block,'
+      echo 'popup-modal-link,'
+      echo 'predictive-search-drawer,'
+      echo 'product-block-variant-selector,'
+      echo 'product-block-buy-buttons,'
+      echo 'product-item,'
+      echo 'product-media,'
+      echo 'quantity-input,'
+      echo 'recommended-products,'
+      echo 'scrolling-content,'
+      echo 'scroll-slider,'
+      echo 'scroll-slider-with-scroll-indicator,'
+      echo 'section-footer,'
+      echo 'shoppable-feed,'
+      echo 'slideshow,'
+      echo 'social-share,'
+      echo 'rte-container,'
+      echo 'visibility-watcher,'
+    endcapture
+
+    assign script_names = script_names | remove_last: ',' | split: ','
+
+    for script_name in script_names
+      assign script_url = script_name | append: '.js' | asset_url
+      echo '<script src="[[su]]" type="module"></script>' | replace: '[[su]]', script_url
+    endfor
+  else
+    assign script_url = script_name | append: '.js' | asset_url
+    echo '<script src="[[su]]" type="module"></script>' | replace: '[[su]]', script_url
+  endif
+-%}

@@ -1,0 +1,18 @@
+{% if settings.predictive_search_quick_links_links.links %}
+  <div class="predictive-search__result-set predictive-search__result-set--type-quick-links">
+    {% if settings.predictive_search_quick_links_heading != blank %}
+      <h2 class="predictive-search__result-set__heading">
+        {{ settings.predictive_search_quick_links_heading }}
+      </h2>
+    {% endif %}
+    <ul
+      class="predictive-search__result-set__results predictive-search__result-set__results--text-items"
+    >
+      {% for link in settings.predictive_search_quick_links_links.links %}
+        <li class="predictive-search__result-set__result">
+          <a class="" href="{{ link.url }}">{{ link.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endif %}

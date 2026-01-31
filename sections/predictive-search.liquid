@@ -1,0 +1,154 @@
+{% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign has_query_suggestions = false
+
+    if predictive_search.resources.queries.size > 0
+      assign has_query_suggestions = true
+    endif
+
+    assign total_result_count = predictive_search.resources.queries.size
+    assign total_result_count = total_result_count | plus: predictive_search.resources.products.size
+    assign total_result_count = total_result_count | plus: predictive_search.resources.collections.size
+    assign total_result_count = total_result_count | plus: predictive_search.resources.pages.size
+    assign total_result_count = total_result_count | plus: predictive_search.resources.articles.size
+
+    assign show_vendor = false
+    if settings.predictive_search_show_vendors
+      assign show_vendor = true
+    endif
+
+    assign show_price = false
+    if settings.predictive_search_show_prices
+      assign show_price = true
+    endif
+
+    assign view_all_button_label = 'search.drawer.view_all_for_query' | t: query: predictive_search.terms
+    assign url_encoded_search_terms = predictive_search.terms | url_encode
+    assign view_all_button_link = routes.search_url | append: '?q=' | append: url_encoded_search_terms
+  -%}
+
+  <div
+    class="predictive-search-results"
+    role="listbox"
+    data-total-result-count="{{ total_result_count }}"
+    {%- if has_query_suggestions %}
+      data-has-query-suggestions="true"
+    {%- endif -%}
+  >
+    {%- if total_result_count == 0 -%}
+      <div class="predictive-search__empty-state">
+        <p class="fs-body-150">{{ 'search.drawer.no_results_title' | t: terms: predictive_search.terms }}</p>
+        <p class="t-subdued">{{ 'search.drawer.no_results_paragraph' | t }}</p>
+      </div>
+    {%- else -%}
+      {%- if predictive_search.resources.queries.size > 0 -%}
+        <aside>
+          <div class="predictive-search__result-set predictive-search__result-set--type-queries">
+            <h2 class="predictive-search__result-set__heading ff-overline fs-overline">
+              {{- 'search.result_types.queries' | t -}}
+            </h2>
+
+            <ul
+              class="predictive-search__result-set__results predictive-search__result-set__results--text-items"
+            >
+              {%- for query in predictive_search.resources.queries -%}
+                <li>
+                  <a href="{{ query.url }}">
+                    {{- query.styled_text -}}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        </aside>
+      {%- endif -%}
+
+      <section>
+        {%- if predictive_search.resources.products.size > 0 %}
+          <div class="predictive-search__result-set predictive-search__result-set--type-products">
+            <h2 class="predictive-search__result-set__heading ff-overline fs-overline">
+              {{- 'search.result_types.products' | t -}}
+            </h2>
+
+            <ul class="predictive-search__result-set__results">
+              {%- for product in predictive_search.resources.products -%}
+                <li>
+                  {%- render 'product-item-minimal',
+                    prod: product,
+                    whole_item_linked: true,
+                    show_price: show_price,
+                    show_vendor: show_vendor,
+                    bordered: false
+                  -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if predictive_search.resources.collections.size > 0 -%}
+          <div class="predictive-search__result-set predictive-search__result-set--type-collections">
+            <h2 class="predictive-search__result-set__heading ff-overline fs-overline">
+              {{- 'search.result_types.collections' | t -}}
+            </h2>
+
+            <ul class="predictive-search__result-set__results predictive-search__result-set__results--text-items">
+              {%- for collection in predictive_search.resources.collections -%}
+                <li>
+                  <a href="{{ collection.url }}">
+                    {{ collection.title | escape }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if predictive_search.resources.pages.size > 0 -%}
+          <div class="predictive-search__result-set predictive-search__result-set--type-pages">
+            <h2 class="predictive-search__result-set__heading ff-overline fs-overline">
+              {{- 'search.result_types.pages' | t -}}
+            </h2>
+
+            <ul class="predictive-search__result-set__results predictive-search__result-set__results--text-items">
+              {%- for page in predictive_search.resources.pages -%}
+                <li>
+                  <a href="{{ page.url }}">
+                    {{ page.title | escape }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+
+        {%- if predictive_search.resources.articles.size > 0 -%}
+          <div class="predictive-search__result-set predictive-search__result-set--type-articles">
+            <h2 class="predictive-search__result-set__heading ff-overline fs-overline">
+              {{- 'search.result_types.articles' | t -}}
+            </h2>
+
+            <ul class="predictive-search__result-set__results predictive-search__result-set__results--text-items">
+              {%- for article in predictive_search.resources.articles -%}
+                <li>
+                  <a href="{{ article.url }}">
+                    {{ article.title | escape }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </section>
+    {%- endif -%}
+
+    <template id="view-all-results-button">
+      {%- render 'button',
+        label: view_all_button_label,
+        class: 'predictive-search-drawer__submit-button',
+        link: view_all_button_link
+      -%}
+    </template>
+  </div>
+{%- endif -%}

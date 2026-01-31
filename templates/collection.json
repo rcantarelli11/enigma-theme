@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "main-collection": {
+      "type": "enigma-collection",
+      "settings": {
+        "products_per_page": 12
+      }
+    }
+  },
+  "order": [
+    "main-collection"
+  ]
+}

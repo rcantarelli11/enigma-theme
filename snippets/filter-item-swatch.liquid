@@ -1,0 +1,71 @@
+{%- liquid
+  comment
+    Renders a filter swatch.
+
+    Required parameters:
+      - value: { Object } The filter value.
+      - label: { String } The filter value label.
+      - id: { String } A unique ID for the filter item.
+      - disabled: { String } Whether the filter item is disabled (ie. has any items associated with it).
+      - custom_swatch_color_key_map: { Object } An array of custom swatch color keys (names).
+      - custom_swatch_color_value_map: { Object } An array of custom swatch color values (HEX values).
+  endcomment
+
+  if settings.filter_swatch_layout == 'compact'
+    assign show_tooltip = true
+  else
+    assign show_tooltip = false
+  endif
+
+  if value.swatch.image
+    capture swatch_image_url
+      echo value.swatch.image | image_url: width: 36
+    endcapture
+  endif
+-%}
+
+<div class="filter-item__swatch">
+  <label
+    for="{{ id }}"
+    class="filter-item__swatch-label {%- if disabled %} filter-item__swatch-label--disabled{%- endif -%}"
+    js-swatch-label
+  >
+    <input
+      type="checkbox"
+      id="{{ id }}"
+      class="filter-item-swatch__hidden-input visually-hidden"
+      name="{{ value.param_name }}"
+      value="{{ value.value }}"
+      js-filter-swatch-input
+      tabindex="-1"
+
+      {%- if value.active %}
+        checked
+      {%- endif -%}
+
+      {%- if disabled %}
+        disabled
+      {%- endif -%}
+    >
+
+    {%- render 'swatch',
+      value: label,
+      custom_swatch_color_key_map: custom_swatch_color_key_map,
+      custom_swatch_color_value_map: custom_swatch_color_value_map,
+      color: value.swatch.color,
+      image_url: swatch_image_url,
+      size: 36,
+      show_tooltip: show_tooltip,
+      selected: value.active,
+      disabled: disabled
+    -%}
+
+    {%- # If we don't show the tooltip, then we have the "expanded" layout -%}
+    {%- unless show_tooltip -%}
+      <span class="filter-item-label">
+        <span class="label-text">{{ label }}</span>
+        <span class="label-count">({{ value.count }})</span>
+      </span>
+    {%- endunless -%}
+  </label>
+</div>

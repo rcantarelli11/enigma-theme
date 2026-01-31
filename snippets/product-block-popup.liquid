@@ -1,0 +1,25 @@
+{%- liquid
+  comment
+    Renders the "Popup" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+  endcomment
+-%}
+
+{%- if block.settings.page != blank and block.settings.text != blank -%}
+  <div
+    class="product-block-popup"
+    {{ block.shopify_attributes }}
+    style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  >
+    {% render 'popup-modal-link',
+      wrapper_class: 'product-block',
+      popup_id: block.id,
+      icon: block.settings.icon,
+      custom_image: block.settings.custom_icon_image,
+      link_text: block.settings.text,
+      modal_page: block.settings.page
+    %}
+  </div>
+{%- endif -%}

@@ -1,0 +1,22 @@
+{%- liquid
+  comment
+    Renders the "Title" product block.
+
+    Required parameters:
+      - prod: { Object } The current product object.
+      - block: { Object } The associated block object.
+  endcomment
+
+  assign fallback_title = 'general.onboarding.product_title' | t
+-%}
+
+<div
+  class="product-details__title fs-heading-2-base ff-heading"
+  style="--bottom-spacing: {{ block.settings.bottom_padding | default: 15 }}px;"
+  js-product-block
+  js-product-block-allowed-in-quickview
+  js-product-block-title
+  {{ block.shopify_attributes }}
+>
+  {{ prod.title | default: fallback_title }}
+</div>

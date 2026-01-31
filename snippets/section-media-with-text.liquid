@@ -1,0 +1,77 @@
+{%- liquid
+  comment
+    Renders the image-with-text or video-with-text section
+
+    Required parameters:
+      - section: { Section } The section being rendered
+      - type: { String: 'image' | 'video' } The type of media
+      - media_portion: { String } Generated image or video markup
+  endcomment
+
+  echo 'section-media-with-text.css' | asset_url | stylesheet_tag
+  render 'inline-scripts', script_name: 'visibility-watcher'
+
+  assign container_has_own_color_scheme = false
+  assign desktop_image_padding_percentage = section.settings.media_breathing_room | divided_by: 2
+
+  if section.settings.container_color_scheme != section.settings.color_scheme
+    assign container_has_own_color_scheme = true
+
+    capture container_color_scheme_style
+      render 'color-scheme-to-vars', color_scheme: section.settings.container_color_scheme
+    endcapture
+  endif
+
+  if section.settings.content_width == 'custom-width'
+    assign content_width_value = '[[dcw]]' | replace: '[[dcw]]', section.settings.custom_width | append: 'px'
+  else
+    assign content_width_value = '100%'
+  endif
+
+  assign veritical_content_position = section.settings.content_position | split: '_' | first
+  assign horizontal_content_position = section.settings.content_position | split: '_' | last
+-%}
+
+{%- capture content_portion -%}
+  <div class="media-with-text__content-blocks">
+    <div class="media-with-text__content-blocks-inner">
+      {%- render 'content-blocks',
+        blocks: section.blocks,
+        alignment: section.settings.text_alignment,
+        animate_heading: true
+      -%}
+    </div>
+  </div>
+{%- endcapture -%}
+
+<div
+  class="
+    media-with-text
+    {{ type }}-with-text
+    section
+    media-with-text--desktop-media-position-{{ section.settings.desktop_media_position }}
+    media-with-text--mobile-media-position-{{ section.settings.mobile_media_position }}
+    media-with-text--vertical-content-postion-{{ veritical_content_position }}
+    media-with-text--horizontal-content-postion-{{ horizontal_content_position }}
+    {%- if container_has_own_color_scheme %}
+      media-with-text--container-has-own-color-scheme
+    {%- endif -%}
+    {%- unless desktop_image_padding_percentage == 0 %}
+      media-with-text--media-has-breathing-room
+    {%- endunless -%}
+  "
+  style="
+    {% render 'settings-section-padding' %}
+    {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+    --desktop-media-width: {{ section.settings.desktop_media_width }}%;
+    --desktop-media-breathing-room: {{ desktop_image_padding_percentage }}%;
+    --content-width: {{ content_width_value }};
+  "
+>
+  <div class="section-inner section-inner--width-{{ section.settings.width }}">
+    <div class="media-with-text-inner" style="{{ container_color_scheme_style }}">
+      {{ content_portion }}
+      {{ media_portion }}
+    </div>
+  </div>
+</div>

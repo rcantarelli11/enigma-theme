@@ -1,0 +1,24 @@
+{% liquid
+  comment
+    Renders the Shop Pay banner with installment pricing.
+
+    Required parameters:
+      - prod: { Object } The associated product object.
+  endcomment
+
+  capture payment_terms_id
+    echo 'payment_terms_' | append: prod.id
+  endcapture
+
+  if prod != blank
+    form 'product', prod, id: payment_terms_id, class: 'product-form__shop-pay fs-body-75'
+      echo '<input type="hidden" name="id" value="[[id]]">' | replace: '[[id]]', prod.selected_or_first_available_variant.id
+
+      if request.design_mode
+        echo 'products.product.design_mode_shop_pay' | t
+      else
+        echo form | payment_terms
+      endif
+    endform
+  endif
+-%}

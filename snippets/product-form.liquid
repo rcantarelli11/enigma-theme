@@ -1,0 +1,205 @@
+{%- liquid
+  comment
+    Renders the product form, which is largely empty as we are connecting inputs with
+    with the form attribute to prevent duplication and allow for more control.
+
+    Note: This snippet should only be used on the product template, within the context of
+      the "Product overview" section because the presence of the product and section
+      objects are assumed.
+
+    Required parameters:
+      - prod: { Object } The associated product object.
+      - variant: { Object } The current variant's object.
+
+    Optional parameters:
+      - form_id: { String } The form ID.
+      - hidden: { Boolean: false } If form should be hidden.
+      - show_dynamic_checkout: { Boolean } Whether to include Shopify's checkout with our Buy button block.
+      - product_price_display: { String } The formatted price to show for the Sticky ATC.
+      - disable_variant: { Boolean } Whether the Buy button should be disabled based.
+      - has_sibling_products: { Boolean } If product has sibling products to include for the Sticky add to cart.
+      - is_featured: { Boolean } Whether the section is a Featured product (applicable to the Sticky add to cart).
+      - button_classes: { String } Add to cart button classes.
+      - add_to_cart_button_style: { String } Styling for Buy buttons.
+      - add_to_cart_label: { String } Copy for Buy buttons.
+  endcomment
+
+  echo 'component-button-with-state.css' | asset_url | stylesheet_tag
+
+  assign form_classes = 'product-form product-form-' | append: section.id
+
+  if hidden
+    assign form_classes = form_classes | append: ' visually-hidden'
+  endif
+
+  assign gcr_string = 'gift-card-recipient'
+
+  assign is_featured = is_featured | default: false
+-%}
+
+{% unless prod == blank %}
+  {% form 'product',
+    prod,
+    id: form_id,
+    class: form_classes,
+    data-product-form: '',
+    data-product-handle: prod.handle,
+    data-current-product-id: variant.id
+  %}
+    {% # Hidden default inputs if required blocks to add to cart are not included %}
+    {%- liquid
+      assign quantity_enabled = section.blocks | where: 'type', 'quantity-selector'
+    -%}
+    {%- if quantity_enabled == blank %}
+      <input type="hidden" name="quantity" value="1">
+    {%- endif -%}
+
+    <input type="hidden" name="id" value="{{ prod.selected_or_first_available_variant.id }}">
+
+    {% # Gift card recipient form %}
+    {%- if section.settings.enable_gift_card_recipient and prod.gift_card? -%}
+      <div class="gift-card-recipient__fields" data-section-id="{{ section.id }}">
+        {%- liquid
+          # Recipient email address
+          assign email_field_id = gcr_string | append: '-email--' | append: section.id
+          assign email_field_label = 'products.gift_card_recipient.email' | t
+        %}
+        {%- render 'input-text',
+          id: email_field_id,
+          name: 'properties[Recipient email]',
+          label: email_field_label,
+          placeholder: email_field_label,
+          input_type: 'email',
+          class: 'gift-card-recipient__input input',
+          attributes: 'js-recipient-email-input'
+        -%}
+
+        {%- liquid
+          # Recipient name
+          assign text_field_id = gcr_string | append: '-name--' | append: section.id
+          assign text_field_label = 'products.gift_card_recipient.name' | t
+        -%}
+        {%- render 'input-text',
+          id: text_field_id,
+          name: 'properties[Recipient name]',
+          label: text_field_label,
+          placeholder: text_field_label,
+          class: 'gift-card-recipient__input input'
+        -%}
+
+        {%- liquid
+          # Recipient message
+          assign message_field_id = gcr_string | append: '-message--' | append: section.id
+          assign message_field_label = 'products.gift_card_recipient.message' | t
+          assign message_field_help_text = 'products.gift_card_recipient.message_character_limit' | t
+        -%}
+        {%- render 'input-textarea',
+          id: message_field_id,
+          name: 'properties[Message]',
+          label: message_field_label,
+          placeholder: message_field_label,
+          max_length_value: 200,
+          row_count: 3,
+          help_text: message_field_help_text,
+          class: 'gift-card-recipient__input input'
+        -%}
+
+        {%- liquid
+          # Recipient send date (using input snippet classes and structure to match styling)
+          assign shopify_max_days_to_send = 90
+          assign seconds = shopify_max_days_to_send | times: 24 | times: 60 | times: 60
+          assign min_date = 'now' | date: '%Y-%m-%d'
+          assign max_date = 'now' | date: '%s' | plus: seconds | date: '%Y-%m-%d'
+          assign send_on_input_id = '[[gcrs]]-send_on--[[si]]' | replace: '[[gcrs]]', gcr_string | replace: '[[si]]', section.id
+          assign send_on_label = 'products.gift_card_recipient.send_on' | t
+
+          capture send_on_attributes
+            echo 'min="[[min]]" ' | replace: '[[min]]', min_date
+            echo 'max="[[max]]" ' | replace: '[[max]]', max_date
+            echo 'pattern="\d{4}-\d{2}-\d{2}"'
+          endcapture
+        -%}
+        {%- render 'input-text',
+          id: send_on_input_id,
+          name: 'properties[Send on]',
+          default_value: form.send_on,
+          label: send_on_label,
+          input_type: 'date',
+          class: 'gift-card-recipient__input input',
+          attributes: send_on_attributes
+        -%}
+
+        <input
+          type="hidden"
+          id="{{ gcr_string }}-control--{{ section.id }}"
+          name="properties[__shopify_send_gift_card_to_recipient]"
+          value="if_present"
+        >
+        <input
+          type="hidden"
+          id="{{ gcr_string }}-timezone-offset--{{ section.id }}"
+          name="properties[__shopify_offset]"
+          value=""
+          disabled
+        >
+      </div>
+    {%- endif -%}
+
+    {% # No-js Gift card recipient form errors, otherwise js handles errors via cart api %}
+    {%- render 'form-status', form: form, form_id: form_id -%}
+
+    {% # All 422 errors with js enabled (gift card recipient, no stock, etc) %}
+    <div
+      class="buy-buttons__add-to-cart-error notification-display error-display"
+      js-add-to-cart-error
+    ></div>
+
+    <div js-buy-buttons>
+      {%- # Standard add to cart button -%}
+      {%- render 'inline-scripts', script_name: 'button-with-state' -%}
+      {%- render 'button-with-state',
+        label: add_to_cart_label,
+        class: button_classes,
+        button_attributes: 'js-add-to-cart-button',
+        wrapper_attributes: 'js-add-to-cart-button-wrapper',
+        disabled: disable_variant,
+        type: 'submit',
+        full_width_button: true
+      -%}
+
+      {% # No-js add to cart button %}
+      {%- render 'button',
+        linkless_type: 'submit',
+        label: add_to_cart_label,
+        button_style: add_to_cart_button_style,
+        button_width: 'full',
+        require_link: false,
+        class: 'no-js__add-to-cart-button'
+      -%}
+
+      {%- # Dynamic checkout button -%}
+      {%- if show_dynamic_checkout -%}
+        <div class="dynamic-checkout-container {% if variant.available == false -%} disabled{%- endif -%}">
+          {{ form | payment_button }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if is_featured == false
+      and section.settings.enable_sticky_add_to_cart_desktop
+      or section.settings.enable_sticky_add_to_cart_mobile
+    -%}
+      {%- render 'product-sticky-add-to-cart',
+        prod: prod,
+        variant: variant,
+        product_price_display: product_price_display,
+        add_to_cart_label: add_to_cart_label,
+        button_classes: button_classes,
+        disable_variant: disable_variant,
+        enable_mobile: section.settings.enable_sticky_add_to_cart_mobile,
+        enable_desktop: section.settings.enable_sticky_add_to_cart_desktop,
+        has_sibling_products: has_sibling_products
+      -%}
+    {%- endif -%}
+  {% endform %}
+{% endunless %}

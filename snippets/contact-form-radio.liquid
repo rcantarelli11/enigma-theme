@@ -1,0 +1,51 @@
+{%- liquid
+  comment
+    Renders a "Radio button" block for the contact form.
+
+    Required parameters:
+      - block: { Object } The associated block.
+  endcomment
+-%}
+
+<div
+  class="contact-form__element contact-form__element--multi contact-form__element--{{ block.settings.width }}"
+  {{ block.shopify_attributes }}
+>
+  <div class="contact-form__element-label fs-body-100">
+    {%- liquid
+      if block.settings.required
+        echo 'general.forms.required_label' | t: label: block.settings.label
+      else
+        echo block.settings.label
+      endif
+    -%}
+  </div>
+
+  {%- for i in (1..10) -%}
+    {%- capture setting_id -%}option_{{ i }}{%- endcapture -%}
+
+    {%- if block.settings[setting_id] != blank -%}
+      {%- liquid
+        assign downcased_option = block.settings[setting_id] | downcase | escape
+
+        capture input_id
+          echo 'radio-[[option]]--[[bid]]' | replace: '[[option]]', downcased_option | replace: '[[bid]]', block.id
+        endcapture
+
+        assign downcased_label = block.settings.label | downcase | escape
+
+        capture input_name
+          echo 'contact[[[label]]]' | replace: '[[label]]', downcased_label
+        endcapture
+      -%}
+
+      {%- render 'input-radio',
+        id: input_id,
+        name: input_name,
+        label: block.settings[setting_id],
+        value: downcased_option,
+        required: block.settings.required
+      -%}
+    {%- endif -%}
+  {%- endfor -%}
+</div>

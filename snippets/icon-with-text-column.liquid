@@ -1,0 +1,100 @@
+{% liquid
+  comment
+    Renders an icon with text column.
+
+    Required parameters:
+      - heading: { String } The column's heading.
+      - text: { String } The column's text.
+      - desktop_alignment: { String } A string noting how the icon and text should be aligned
+        on desktop.
+  endcomment
+-%}
+
+{% unless block.settings.heading == blank
+  and block.settings.text == blank
+  and block.settings.icon == blank
+  and block.settings.custom_icon_image == blank
+%}
+  <div
+    class="icon-with-text-column"
+    data-desktop-alignment="{{ desktop_alignment }}"
+    {{ block.shopify_attributes }}
+  >
+    {% liquid
+      assign icon_wrapper_tag = 'div'
+      assign icon_wrapper_attributes = 'class="icon-with-text-column__icon-wrapper"'
+
+      if block.settings.link != blank
+        assign icon_wrapper_tag = 'a'
+        assign icon_wrapper_link = ' href="[[link]]"' | replace: '[[link]]', block.settings.link
+        assign icon_wrapper_attributes = icon_wrapper_attributes | prepend: icon_wrapper_link
+      endif
+
+      capture icon_content
+        if block.settings.custom_icon_image != blank
+          assign iwd = section.settings.icon_width_desktop
+          assign iwm = section.settings.icon_width_mobile
+          assign iwd2x = section.settings.icon_width_desktop | times: 2
+          assign iwm2x = section.settings.icon_width_mobile | times: 2
+
+          capture sizes
+            if iwd == iwm
+              echo '[[iwm]]px' | replace: '[[iwm]]', iwm
+            else
+              echo '(min-width: 720px) [[iwd]]px, [[iwm]]px' | replace: '[[iwd]]', iwd | replace: '[[iwm]]', iwm
+            endif
+          endcapture
+
+          capture src_set_widths_string
+            echo '[[iwd]],[[iwd2x]],[[iwm]],[[iwm2x]]' | replace: '[[iwd]]', iwd | replace: '[[iwm]]', iwm | replace: '[[iwd2x]]', iwd2x | replace: '[[iwm2x]]', iwm2x
+          endcapture
+
+          assign src_set_widths_array = src_set_widths_string | split: ','
+          assign src_set_width_values = src_set_widths_array | uniq | sort | join: ','
+
+          render 'image', wrapper_class: 'custom-icon', image: block.settings.custom_icon_image, sizes: sizes, src_set_width_values: src_set_width_values, aspect_ratio: 'natural'
+        else
+          if block.settings.icon != 'none'
+            render 'icon-editorial', icon: block.settings.icon, size: section.settings.icon_width_desktop, size_mobile: section.settings.icon_width_mobile
+          endif
+        endif
+      endcapture
+    -%}
+
+    <div class="icon-with-text-column__icon-wrap">
+      {% unless icon_content == blank -%}
+        <{{ icon_wrapper_tag }}
+          {{ icon_wrapper_attributes }}
+          {% if block.settings.link %}
+            {% if block.settings.heading %}
+              aria-labelledby="{{ block.id }}-heading"
+            {% else %}
+              title="{{ 'general.accessibility.visit_link' | t: link: block.settings.link }}"
+            {% endif %}
+          {% endif %}
+        >
+          {{ icon_content }}
+        </{{ icon_wrapper_tag }}>
+      {%- endunless %}
+    </div>
+
+    <div class="icon-with-text-column__text-wrap">
+      {% if block.settings.heading != blank -%}
+        <div
+          {% if block.settings.link %}
+            id="{{ block.id }}-heading"
+          {% endif %}
+          class="icon-with-text-column__heading ff-heading ff-heading-in-body fs-heading-in-body-200"
+        >
+          {{ block.settings.heading }}
+        </div>
+      {%- endif %}
+
+      {% if block.settings.text != blank -%}
+        <div class="icon-with-text-column__text rte">
+          {{ block.settings.text }}
+        </div>
+      {%- endif %}
+    </div>
+  </div>
+{% endunless %}

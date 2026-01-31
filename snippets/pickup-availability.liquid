@@ -1,0 +1,121 @@
+{%- liquid
+  comment
+    Renders the pickup availability feature with results displayed in a drawer.
+
+    Required parameters:
+      - prod: { Object } Current product object.
+      - variant: { Object } Current variant object.
+      - section_id: { String } Used to generate a unique name for the drawer's modal.
+  endcomment
+
+  assign pick_up_availabilities = variant.store_availabilities | where: 'pick_up_enabled', true
+  assign available_locations = pick_up_availabilities | where: 'available'
+  assign closest_location = available_locations.first
+  assign drawer_name = 'store-availability-drawer-' | append: section_id
+%}
+<div
+  class="buy-buttons__store-availability {% if available_locations.size == 0 -%}disabled{%- endif -%}"
+  js-store-availability-container
+  js-remove-from-quick-view
+>
+  <div class="store-availability__icon">
+    {% render 'icon-utility', icon: 'checkmark', width: 10, height: 8 %}
+  </div>
+
+  <div class="store-availability__information">
+    <p class="store-availability__store-location">
+      {{- 'store_availability.general.pick_up_available_at' | t: location_name: closest_location.location.name -}}
+    </p>
+
+    <p class="store-availability__pickup-time fs-body-75">{{ closest_location.pick_up_time }}</p>
+
+    <a
+      href="#"
+      class="store-availability__more-information--link"
+      js-store-availability-drawer-trigger
+      data-drawer-id="{{ drawer_name }}"
+    >
+      {{- 'store_availability.general.view_store_info' | t -}}
+    </a>
+  </div>
+
+  <div class="store-availability__drawer" js-store-availability-drawer>
+    {%- capture header_content -%}
+      <div class="store-availability-drawer__header">
+        <div class="header-content__left">
+          {%- render 'modal-close-button' -%}
+        </div>
+
+        <div class="header-content__center">
+          <h3 class="fs-body-200">{{ prod.title }}</h3>
+
+          {% unless prod.has_only_default_variant %}
+            <p class="fs-body-60">{{ variant.title }}</p>
+          {% endunless %}
+        </div>
+      </div>
+    {%- endcapture -%}
+
+    {%- capture drawer_inner_content -%}
+      {%- liquid
+        assign pick_up_availabilities = variant.store_availabilities | where: 'pick_up_enabled', true
+       -%}
+
+      {%- for store in variant.store_availabilities -%}
+        {%- liquid
+          if store.available
+            assign availability_label = 'store_availability.general.pick_up_available' | t
+          else
+            assign availability_label = 'store_availability.general.pick_up_currently_unavailable' | t
+          endif
+        -%}
+
+        <div class="store-availability-drawer__store-container">
+          <div class="store-availability-drawer__icon">
+            {%- if store.available -%}
+              {% render 'icon-utility', icon: 'checkmark', width: 10, height: 8, class: 'store-availability-drawer-icon available-icon' %}
+            {%- else -%}
+              {% render 'icon-utility', icon: 'cross', width: 10, height: 8, class: 'store-availability-drawer-icon unavailable-icon' %}
+            {%- endif -%}
+          </div>
+
+          <div class="store-availability-drawer__information">
+            <p class="store__location-name">{{ store.location.name }}</p>
+
+            <p class="store__pickup-status fs-body-75">{{ availability_label }}</p>
+
+            <div class="store__address fs-body-60">{{ store.location.address | format_address }}</div>
+
+            {%- if store.location.address.phone.size > 0 -%}
+              <p class="store__phone fs-body-60">{{ store.location.address.phone }}</p>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    {%- capture store_availability_drawer_inner -%}
+      {%- render 'drawer-inner', header_content: header_content, main_content: drawer_inner_content -%}
+    {%- endcapture -%}
+
+    {%- liquid
+      capture drawer_title
+        echo 'store_availability.drawer.title' | t
+      endcapture
+
+      capture drawer_description
+        echo 'store_availability.drawer.description' | t: title: prod.title
+      endcapture
+    -%}
+
+    {%- render 'drawer',
+      name: drawer_name,
+      class: 'buy-button-dialog',
+      title: drawer_title,
+      description: drawer_description,
+      content: store_availability_drawer_inner,
+      close_button: false,
+      alignment: 'right'
+    -%}
+  </div>
+</div>

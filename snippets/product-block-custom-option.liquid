@@ -1,0 +1,97 @@
+{%- liquid
+  comment
+    Renders a "Custom option" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - form_id: { String } The form ID to associate the inputs with
+  endcomment
+
+  assign input_name = 'properties[[[fl]]]' | replace: '[[fl]]', block.settings.field_label | escape
+-%}
+
+<div
+  class="product-block product-block--custom-option"
+  style="--bottom-spacing: {{ block.settings.bottom_padding }}px;"
+  js-product-block
+  js-product-block-allowed-in-quickview
+  js-product-block-custom-option
+  {{ block.shopify_attributes }}
+>
+  {%- case block.settings.field_type -%}
+    {%- when 'text' -%}
+      {% assign field_placeholder_escaped = block.settings.field_placeholder | escape %}
+      {% render 'input-text',
+        id: block.id,
+        name: input_name,
+        label: block.settings.field_label,
+        placeholder: field_placeholder_escaped,
+        label_type: 'external',
+        help_text: block.settings.instructions,
+        form_id: form_id
+      %}
+    {%- when 'long-text' -%}
+      {% assign field_placeholder_escaped = block.settings.field_placeholder | escape %}
+      {% render 'input-textarea',
+        id: block.id,
+        name: input_name,
+        label: block.settings.field_label,
+        placeholder: field_placeholder_escaped,
+        label_type: 'external',
+        help_text: block.settings.instructions,
+        form_id: form_id,
+        row_count: 3
+      %}
+    {%- when 'checkbox' -%}
+      {%- assign checked_value_escaped = block.settings.checked_value | escape -%}
+      {% render 'input-checkbox',
+        id: block.id,
+        name: input_name,
+        label: block.settings.field_label,
+        value: checked_value_escaped,
+        help_text: block.settings.instructions,
+        form_id: form_id
+      %}
+    {%- when 'list' -%}
+      {%- assign list_options = block.settings.list_options | split: ', ' -%}
+
+      {%- capture options -%}
+        {%- for option in list_options -%}
+          <option value="{{ option | escape }}">{{ option }}</option>
+        {%- endfor -%}
+      {%- endcapture -%}
+
+      {%- if block.settings.list_style == 'dropdown' -%}
+        {% render 'input-select',
+          id: block.id,
+          name: input_name,
+          options: options,
+          label: block.settings.field_label,
+          label_type: 'external',
+          help_text: block.settings.instructions,
+          form_id: form_id
+        %}
+      {%- elsif block.settings.list_style == 'radio-buttons' -%}
+        <div class="custom-input-wrapper label-external">
+          <label for="{{ input_name }}">{{ block.settings.field_label }}</label>
+
+          {%- for option in list_options -%}
+            {%- assign option_escaped = option | escape -%}
+            {%- assign input_id = block.id | append: '--' | append: option | handle -%}
+            {% render 'input-radio',
+              id: input_id,
+              name: input_name,
+              value: option_escaped,
+              label: option,
+              checked: forloop.first,
+              form_id: form_id
+            %}
+          {%- endfor -%}
+
+          {%- if block.settings.instructions != blank -%}
+            <div class="custom-input-help-text">{{ block.settings.instructions }}</div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+  {%- endcase -%}
+</div>

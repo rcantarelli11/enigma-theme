@@ -1,0 +1,35 @@
+{%- if cart.cart_level_discount_applications.size > 0 -%}
+  <ul class="cart-discounts">
+    {%- for discount_application in cart.cart_level_discount_applications -%}
+      <li class="cart-discount fs-body-75">
+        <label>{{ 'cart.general.discounts.discount' | t }} ({{ discount_application.title }})</label>
+
+        <span>-{{ discount_application.total_allocated_amount | money }}</span>
+      </li>
+    {%- endfor -%}
+  </ul>
+{%- endif -%}
+
+<div class="cart-subtotal ff-heading-in-body fs-heading-in-body-200" js-inline-subtotal>
+  <label>{{ 'cart.general.subtotal' | t }}</label>
+
+  {% if settings.show_currency_codes_on_cart_totals %}
+    <span>{{ cart.total_price | money_with_currency }}</span>
+  {% else %}
+    <span>{{ cart.total_price | money }}</span>
+  {% endif %}
+</div>
+
+<p class="cart-tax-note fs-body-50 t-opacity-70">
+  {%- liquid
+    if cart.taxes_included and shop.shipping_policy.body != blank
+      echo 'cart.general.taxes_included_and_shipping_policy_html' | t: link: shop.shipping_policy.url
+    elsif cart.taxes_included
+      echo 'cart.general.taxes_included_but_shipping_at_checkout' | t
+    elsif shop.shipping_policy.body != blank
+      echo 'cart.general.taxes_and_shipping_policy_at_checkout_html' | t: link: shop.shipping_policy.url
+    else
+      echo 'cart.general.taxes_and_shipping_at_checkout' | t
+    endif
+  -%}
+</p>

@@ -1,0 +1,111 @@
+{%- if settings.enable_predictive_search -%}
+  {%- liquid
+    echo 'component-predictive-search-drawer.css' | asset_url | stylesheet_tag
+    echo 'component-product-item-minimal.css' | asset_url | stylesheet_tag
+
+    render 'inline-scripts', script_name: 'predictive-search-drawer'
+
+    assign searchable_fields = 'author,body,product_type,tag,title,variant_barcode,variant_sku,variant_title,vendor' | split: ','
+
+    capture searchable_field_parameter
+      for field in searchable_fields
+        capture field_key
+          echo 'predictive_search_searchable_fields_' | append: field
+        endcapture
+
+        if settings[field_key]
+          case field
+            when 'variant_barcode'
+              echo 'variants.barcode,'
+            when 'variant_sku'
+              echo 'variants.sku,'
+            when 'variant_title'
+              echo 'variants.title,'
+            else
+              echo field | append: ','
+          endcase
+        endif
+      endfor
+    endcapture
+
+    assign searchable_fields = searchable_fields | remove_last: ','
+  -%}
+
+  {%- capture header_content -%}
+    <div class="predictive-search-drawer__header-content">
+      {%- render 'modal-close-button',
+        form_class: "predictive-search-drawer__header-content-left",
+        class: "predictive-search-drawer__close-button"
+      -%}
+
+      <form
+        class="search-form"
+        action="{{ routes.search_url }}"
+        method="get"
+        role="search"
+      >
+        {% render 'search-input' %}
+      </form>
+    </div>
+  {%- endcapture -%}
+
+  {%- capture drawer_inner_content -%}
+    <div class="predictive-search-drawer_default-state">
+      {% render 'predictive-search-quick-links' %}
+    </div>
+
+    <div class="predictive-search-drawer_results-container"></div>
+  {%- endcapture -%}
+
+  {%- capture footer_content -%}
+    <div class="predictive-search-drawer__footer-content"></div>
+  {%- endcapture -%}
+
+  {%- capture drawerContent -%}
+    <predictive-search-drawer
+      data-section-id="{{ section.id }}"
+      data-displayed-state="default"
+      data-searchable-fields="{{ searchable_field_parameter }}"
+      data-max-results-per-category="{{ settings.predictive_search_max_category_results }}"
+    >
+      {%- render 'drawer-inner',
+        header_content: header_content,
+        main_content: drawer_inner_content,
+        footer_content: footer_content,
+        main_content_class: 'scrollbars-hidden',
+      -%}
+    </predictive-search-drawer>
+  {%- endcapture -%}
+
+  {%- liquid
+    capture drawer_title
+      echo 'search.drawer.drawer_title' | t
+    endcapture
+
+    capture drawer_description
+      echo 'search.drawer.drawer_description' | t
+    endcapture
+  -%}
+
+  {%- render 'drawer',
+    name: 'predictiveSearchDrawer',
+    alignment: 'right',
+    title: drawer_title,
+    description: drawer_description,
+    content: drawerContent,
+    omit_inner: true,
+    close_button: false
+  -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.predictive_search_drawer.name",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "To customize the search drawer, go to [Theme settings > Predictive search](/editor?context=theme&category=predictive%20search)."
+    }
+  ]
+}
+{% endschema %}

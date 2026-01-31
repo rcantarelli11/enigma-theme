@@ -1,0 +1,30 @@
+{% liquid
+  comment
+    Renders a disclosure - a trigger that displays popover content.
+
+    Required parameters:
+      - trigger: { String } The content for the disclosure trigger. This will always show.
+      - content: { String } The content for the disclosure popover. This is shown on trigger click.
+
+    Optional parameters:
+      - alignment: { String: 'below' } How the popover content should be aligned with the trigger. Can be:
+          - 'above'
+          - 'below'
+          - 'overlaid': Only use this option when support for no-js isn't needed. Without JS, there's no
+              way to close the disclosure.
+  endcomment
+
+  assign alignment = alignment | default: 'below'
+%}
+
+<disclosure-component>
+  <details class="disclosure-wrapper disclosure--alignment-{{ alignment }}">
+    <summary class="disclosure-trigger">
+      {{- trigger -}}
+    </summary>
+
+    <div class="disclosure-content">
+      {{- content -}}
+    </div>
+  </details>
+</disclosure-component>

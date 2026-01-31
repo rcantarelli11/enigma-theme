@@ -1,0 +1,63 @@
+{% liquid
+  comment
+    Renders social meta tags.
+
+    Images are provided at 1920px wide as that's the maximum for sharing on
+    popular platforms (TikTok is the current max).
+  endcomment
+
+  assign social_type = 'website'
+  assign social_title = page_title | strip_html | escape
+  assign social_description = page_description | strip_html | escape
+  assign social_image = page_image | image_url: width: 1920
+
+  case template.name
+    when 'product'
+      assign social_type = 'product'
+      assign social_title = product.title | strip_html | escape
+      assign social_price = product.selected_or_first_available_variant.price | money_without_currency | strip_html | escape
+      assign social_currency = cart.currency.iso_code
+
+      if product.featured_media
+        assign product_image = product.selected_variant.featured_media.preview_image | default: product.featured_media.preview_image
+        assign social_image = product_image | image_url: width: 1920
+      endif
+    when 'collection'
+      if collection.image
+        assign social_image = collection.image | image_url: width: 1920
+      endif
+    when 'blog'
+      for article in blog.articles
+        if article.image
+          assign social_image = article.image | image_url: width: 1920
+          break
+        endif
+      endfor
+    when 'article'
+      assign social_type = 'article'
+
+      if article.image
+        assign social_image = article.image | image_url: width: 1920
+      endif
+  endcase
+-%}
+
+<meta property="og:url" content="{{ canonical_url }}">
+<meta property="og:site_name" content="{{ shop.name }}">
+<meta property="og:type" content="{{ social_type | default: 'website' }}">
+<meta property="og:title" content="{{ social_title | default: shop.name }}">
+<meta property="og:description" content="{{ social_description | default: shop.name }}">
+<meta property="og:image" content="http:{{ social_image }}">
+<meta property="og:image:secure_url" content="https:{{ social_image }}">
+
+{% if template.name == 'product' -%}
+  <meta property="og:price:amount" content="{{ social_price }}">
+  <meta property="og:price:currency" content="{{ social_currency }}">
+{%- endif %}
+
+<meta name="twitter:title" content="{{ social_title | default: shop.name }}">
+<meta name="twitter:description" content="{{ social_description | default: shop.name }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https:{{ social_image }}">
+<meta name="twitter:image:width" content="480">
+<meta name="twitter:image:height" content="480">

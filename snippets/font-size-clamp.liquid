@@ -1,0 +1,51 @@
+{%- liquid
+  comment
+    Renders a clamp() value for font sizes to offer fluid typograpghy sizing. This means that we can
+    allow the font to grow with the viewport while staying within the bounds of a minimum (mobile size)
+    and maximum (desktop size) font size.
+
+    Note: The approach is based on https://css-tricks.com/linearly-scale-font-size-with-css-clamp-based-on-the-viewport/
+
+    We know the minimum and maximum font sizes, as well as the starting and ending viewport widths (ie.
+    where the minimum font size should stop being enforced, and where the maximum font size should start
+    being enforced), so we need to calculate parameters that will supply a preferred value within that
+    range. The parameters are:
+      - yAxisIntersection: The relative browser font size (rem). The formula is:
+        - yAxisIntersection = (-minViewportWidth * slope) + minFontSize
+      - slope: A viewport width value (vw). The formula is:
+        - slope = (maxFontSize - minFontSize) / (maxViewportWidth - minViewportWidth)
+
+    With these parameters, the formula for a preferred value is:
+      - preferredValue = (slope * 100)vw + (yAxisIntersection)rem
+
+    Required parameters:
+      - desktop_size: { Number } The base font size on desktop (in pixels).
+      - multiplier: { Number } A multiplier for the specific font level. For example, headings have a base font size, but
+        there are multiple levels of headings, each with their own multiplier.
+      - mobile_scale: { Number } A percentage value representing what percentage the mobile font size should be of the
+        desktop font size.
+  endcomment
+
+  assign multiplier = multiplier | times: 1.0
+  assign pixels_per_rem = 16 | times: 1.0
+  assign mobile_scale = mobile_scale | times: 0.01
+
+  # Viewport widths need to be in rem
+  assign min_viewport_width = 480 | divided_by: pixels_per_rem
+  assign max_viewport_width = 1200 | divided_by: pixels_per_rem
+
+  # Font sizes need to be in rem
+  assign min_font_size = desktop_size | times: 1.0 | times: multiplier | times: mobile_scale | divided_by: pixels_per_rem | round: 4
+  assign max_font_size = desktop_size | times: 1.0 | times: multiplier | divided_by: pixels_per_rem | round: 4
+
+  assign font_size_difference = max_font_size | minus: min_font_size
+  assign viewport_difference = max_viewport_width | minus: min_viewport_width
+  assign slope = font_size_difference | divided_by: viewport_difference
+
+  assign negative_min_viewport_width = min_viewport_width | times: -1.0
+  assign y_axis_intersection = slope | times: negative_min_viewport_width | plus: min_font_size | round: 4
+
+  assign slope_times_100 = slope | times: 100 | round: 4
+-%}
+
+clamp({{ min_font_size }}rem, {{ y_axis_intersection }}rem + {{ slope_times_100 }}vw, {{ max_font_size }}rem)

@@ -1,0 +1,84 @@
+{%- liquid
+  comment
+    Renders the "Featured icon with text" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+  endcomment
+
+  assign block_class = 'product-block-featured-icon'
+
+  capture block_styles
+    assign block_background = block.settings.color_background_gradient | default: block.settings.color_background
+
+    echo '--bottom-spacing: [[bp]]px;' | replace: '[[bp]]', block.settings.bottom_padding
+    echo ' --background-style: [[bb]];' | replace: '[[bb]]', block_background
+    echo ' --color-icon: [[ci]];' | replace: '[[ci]]', block.settings.color_icon
+    echo ' --color-text: [[ct]];' | replace: '[[ct]]', block.settings.color_text
+  endcapture
+
+  capture block_style_attribute
+    echo 'style="[[bs]]"' | replace: '[[bs]]', block_styles
+  endcapture
+-%}
+
+{%- capture block_content -%}
+  {%- assign icon = block.settings.custom_icon_image | default: block.settings.icon -%}
+
+  {%- if icon != 'none' -%}
+    <div class="product-block-featured-icon__icon">
+      {%- liquid
+        if block.settings.custom_icon_image != blank
+          render 'image', image: icon, sizes: '32px', src_set_type: 'icon', object_fit: 'contain'
+        else
+          render 'icon-editorial', icon: icon, size: 32
+        endif
+      -%}
+    </div>
+  {%- endif -%}
+
+  <div class="product-block-featured-icon__text-wrapper">
+    {%- if block.settings.heading != blank -%}
+      {%- liquid
+        capture block_heading
+          # If there's a link, we need to strip any HTML links out of the heading
+          if block.settings.link != blank
+            render 'remove-links', text: block.settings.heading
+          else
+            echo block.settings.heading
+          endif
+        endcapture
+      -%}
+
+      <span class="product-block-featured-icon__heading fs-body-100">{{ block_heading }}</span>
+    {%- endif -%}
+
+    {%- if block.settings.text != blank -%}
+      {%- liquid
+        capture block_text
+          # If there's a link, we need to strip any HTML links out of the text
+          if block.settings.link != blank
+            render 'remove-links', text: block.settings.text
+          else
+            echo block.settings.text
+          endif
+        endcapture
+      -%}
+
+      <div class="product-block-featured-icon__text fs-body-75 rte">{{ block_text }}</div>
+    {%- endif -%}
+  </div>
+{%- endcapture -%}
+
+{%- if block.settings.link != blank -%}
+  <a
+    href="{{ block.settings.link }}"
+    class="{{ block_class }}"
+    {{ block_style_attribute }}
+    {{ block.shopify_attributes }}
+  >
+    {{- block_content -}}
+  </a>
+{%- else -%}
+  <div class="{{ block_class }}" {{ block_style_attribute }} {{ block.shopify_attributes }}>{{ block_content }}</div>
+{%- endif -%}

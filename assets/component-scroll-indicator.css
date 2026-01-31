@@ -1,0 +1,79 @@
+:root{
+  --js-mobile:(max-width: 719.9px);
+  --js-tablet:(min-width: 720px);
+  --js-below-small-desktop:(max-width: 1023.9px);
+  --js-small-desktop:(min-width: 1024px);
+  --js-desktop:(min-width: 1440px);
+  --js-max-page-width:(min-width: 1600px);
+}
+.scroll-indicator{
+  width:100%;
+  height:2px;
+  position:relative;
+  background:var(--color-text-alpha-20);
+}
+.scroll-indicator__cursor{
+  height:2px;
+  position:absolute;
+  background:var(--color-text);
+  --width:calc(100% / var(--item-count));
+  left:0;
+  width:calc(100% / var(--item-count));
+  width:var(--width);
+  transition:all var(--animation-timing-300) var(--ease-out-quart);
+  margin-left:calc((100% / var(--item-count)) * var(--percentage) * -1);
+  margin-left:calc(calc(100% / var(--item-count)) * var(--percentage) * -1);
+  margin-left:calc(var(--width) * var(--percentage) * -1);
+}
+scroll-slider-with-scroll-indicator .scroll-slider--scroll-all-sizes > .scroll-slider__slider, .section-slider-wrap scroll-slider-with-scroll-indicator .scroll-slider--scroll-all-sizes > .scroll-slider__slider{
+      padding-bottom:var(--spacing-300);
+    }
+@media (min-width: 720px){
+scroll-slider-with-scroll-indicator .scroll-slider--scroll-all-sizes > .scroll-slider__slider, .section-slider-wrap scroll-slider-with-scroll-indicator .scroll-slider--scroll-all-sizes > .scroll-slider__slider{
+    padding-bottom:var(--spacing-500);
+    }
+  }
+@media (min-width: 720px){
+        scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-above-720-only > .scroll-slider__slider, .section-slider-wrap scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-above-720-only > .scroll-slider__slider{
+          padding-bottom:var(--spacing-300);
+        }
+          @media (min-width: 720px){
+        scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-above-720-only > .scroll-slider__slider, .section-slider-wrap scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-above-720-only > .scroll-slider__slider{
+    padding-bottom:var(--spacing-500);
+        }
+  }
+      }
+@media (max-width: 719.9px){
+        scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-above-720-only ~ .scroll-indicator, .section-slider-wrap scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-above-720-only ~ .scroll-indicator{
+          display:none;
+        }
+      }
+@media (max-width: 719.9px){
+        scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-below-720-only > .scroll-slider__slider, .section-slider-wrap scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-below-720-only > .scroll-slider__slider{
+          padding-bottom:var(--spacing-300);
+        }
+          @media (min-width: 720px){
+        scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-below-720-only > .scroll-slider__slider, .section-slider-wrap scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-below-720-only > .scroll-slider__slider{
+    padding-bottom:var(--spacing-500);
+        }
+  }
+      }
+@media (min-width: 720px){
+        scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-below-720-only ~ .scroll-indicator, .section-slider-wrap scroll-slider-with-scroll-indicator .scroll-slider.scroll-slider--scroll-below-720-only ~ .scroll-indicator{
+          display:none;
+        }
+      }
+scroll-slider-with-scroll-indicator:has(scroll-slider-component[data-contents-are-scrollable="false"]) .scroll-slider .scroll-slider__slider, .section-slider-wrap scroll-slider-with-scroll-indicator:has(scroll-slider-component[data-contents-are-scrollable="false"]) .scroll-slider .scroll-slider__slider{
+        padding-bottom:0;
+      }
+scroll-slider-with-scroll-indicator:has(scroll-slider-component[data-contents-are-scrollable="false"]) .scroll-indicator, .section-slider-wrap scroll-slider-with-scroll-indicator:has(scroll-slider-component[data-contents-are-scrollable="false"]) .scroll-indicator{
+        display:none;
+      }
+.scroll-slider-wrap-outer:has(scroll-slider-with-scroll-indicator) .scroll-slider-nav-button-wrapper{
+    margin-top:calc(-1 * var(--spacing-300) * 0.5);
+  }
+@media (min-width: 720px){
+.scroll-slider-wrap-outer:has(scroll-slider-with-scroll-indicator) .scroll-slider-nav-button-wrapper{
+      margin-top:calc(-1 * var(--spacing-500) * 0.5)
+  }
+    }

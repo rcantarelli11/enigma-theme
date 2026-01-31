@@ -1,0 +1,67 @@
+{% liquid
+  comment
+    Renders a single article tag. Will prioritize the article categories setting, then fallback to all article tags.
+
+    Required parameters:
+      - article: { Object } The associated article object.
+
+    Optional parameters:
+      - local_blog: { Object } The blog object associated with the article. This will be used to link the tag to a tag-filtered blog URL.
+  endcomment
+
+  if local_blog
+    assign tag_el = 'a'
+  else
+    assign tag_el = 'div'
+  endif
+
+  if settings.article_categories != blank
+    # strip the article categories
+
+    assign tag_allow_list = settings.article_categories | strip | downcase | split: ','
+
+    if tag_allow_list.size > 0
+      assign stripped_tag_allow_list = ''
+
+      for tag in tag_allow_list
+        assign stripped_tag = tag | strip
+        assign stripped_tag_allow_list = stripped_tag_allow_list | append: stripped_tag | append: ','
+      endfor
+    endif
+
+    assign stripped_tag_allow_list = stripped_tag_allow_list | remove_last: ',' | split: ','
+
+    # downcase the article tags
+
+    assign downcased_article_tags = ''
+
+    for article_tag in article.tags
+      assign downcased_article_tag = article_tag | downcase
+      assign downcased_article_tags = downcased_article_tags | append: downcased_article_tag | append: ','
+    endfor
+
+    assign downcased_article_tags = downcased_article_tags | remove_last: ',' | split: ','
+
+    # find first match according to order of categories setting
+
+    for tag in stripped_tag_allow_list
+      if downcased_article_tags contains tag
+        assign featured_tag = tag
+        break
+      endif
+    endfor
+  else
+    assign featured_tag = article.tags.first
+  endif
+%}
+
+{% if featured_tag != blank %}
+  <{{ tag_el }}
+    class="article-tag"
+    {% if local_blog -%}
+      href="{{ local_blog.url }}/tagged/{{ featured_tag | handleize }}"
+    {%- endif %}
+  >
+    {{ featured_tag }}
+  </{{ tag_el }}>
+{% endif %}

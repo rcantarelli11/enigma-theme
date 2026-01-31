@@ -1,0 +1,134 @@
+{%- liquid
+  comment
+    Renders the "Sticky Add to Cart" feature
+
+    Required parameters:
+      - prod: { Object } Current product object.
+      - variant: { Object } Current variant object.
+      - product_price_display: { HTML } The rendered price HTML from the product-price-display snippet.
+      - add_to_cart_label: { String } Translated string for accurate variant availability.
+      - button_classes: { String } Add to cart button classes to match Buy button styling.
+      - enable_mobile: { Boolean } Whether to include feature on mobile and tablet screen sizes.
+      - enable_desktop: { Boolean} Whether to include feature on desktop screen sizes.
+      - has_sibling_products: { Boolean } If product has sibling products to include.
+  endcomment
+
+  assign button_classes = button_classes | append: ' sticky-atc__add-to-cart-button'
+
+  assign show_variant_options = true
+  assign has_only_sibling_products = false
+  if prod.has_only_default_variant
+    if has_sibling_products
+      assign has_only_sibling_products = true
+    else
+      assign show_variant_options = false
+    endif
+  endif
+
+  assign variant_block_enabled = section.blocks | where: 'type', 'variant-selector'
+  if variant_block_enabled == blank
+    assign show_variant_options = false
+  endif
+
+  assign thumbnail_image = prod.featured_media
+  if variant.featured_media
+    assign thumbnail_image = variant.featured_media
+  endif
+-%}
+
+{%- render 'inline-scripts', script_name: 'product-block-variant-selector' -%}
+
+{%- capture sticky_atc_header_content -%}
+  {%- if show_variant_options -%}
+    <span class="sticky-atc__mobile-handlebar"></span>
+  {%- endif -%}
+
+  <div class="sticky-atc__header-content">
+    <div class="header-content--top-padding" js-sticky-atc-modal-handlebar></div>
+    <div class="header-content--details-container">
+      <div class="header-content--left" js-sticky-atc-modal-trigger>
+        <div class="product-thumbnail">
+          {%- render 'image',
+            image: thumbnail_image,
+            aspect_ratio: section.settings.media_aspect_ratio,
+            sizes: '66px',
+            allowed_to_round: true
+          -%}
+        </div>
+        <div class="product-details-container">
+          <div class="product-title fs-body-100-mobile-only fs-body-150">{{ prod.title }}</div>
+          <div class="product-price">
+            {{ product_price_display }}
+
+            {%- if variant.unit_price -%}
+              {%- render 'unit-price-display',
+                unit_price: variant.unit_price,
+                unit_price_measurement_value: variant.unit_price_measurement.reference_value,
+                unit_price_measurement_unit: variant.unit_price_measurement.reference_unit
+              -%}
+            {%- endif -%}
+          </div>
+
+          {%- if show_variant_options -%}
+            <div class="product-variant-details fs-body-75">
+              {%- unless has_only_sibling_products -%}
+                <div>{{ variant.title }}</div>
+              {%- endunless -%}
+
+              <a href="#product-details__variant-selector" class="sticky-atc-link open-dialog-link" js-sticky-atc-modal-trigger>{{ 'products.product.change_option' | t }}</a>
+              <a href="#product-details__variant-selector" class="sticky-atc-link close-dialog-link" js-sticky-atc-modal-close>{{ 'general.accessibility.close_modal' | t }}</a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="header-content--right">
+        {%- render 'inline-scripts', script_name: 'button-with-state' -%}
+
+        {%- render 'button-with-state',
+          label: add_to_cart_label,
+          class: button_classes,
+          button_attributes: 'js-add-to-cart-button',
+          wrapper_attributes: 'js-sticky-atc-add-to-cart-button-wrapper',
+          disabled: disable_variant,
+          type: 'submit',
+        -%}
+      </div>
+    </div>
+  </div>
+{%- endcapture -%}
+
+{%- capture modal_content -%}
+  <div class="sticky-atc--modal-content" >
+      {{ sticky_atc_header_content }}
+      <hr class="modal-content__divider">
+      <div class="modal-content__variant-container" js-sticky-atc-variant-container></div>
+  </div>
+{%- endcapture -%}
+
+<div
+  class="sticky-atc delay-reveal-animation"
+  js-sticky-atc
+  js-remove-from-quick-view
+  data-has-modal-content="{{ show_variant_options }}"
+  data-enable-mobile-sticky-atc="{{ enable_mobile }}"
+  data-enable-desktop-sticky-atc="{{ enable_desktop }}"
+>
+  <div js-sticky-atc-content>
+    <div class="sticky-atc--peeking-content">
+      {{ sticky_atc_header_content }}
+    </div>
+
+    {%- if show_variant_options -%}
+      {%- render 'modal',
+        name: 'sticky-add-to-cart-modal',
+        content: modal_content,
+        color: 'popup-modal',
+        class: 'buy-button-dialog sticky-atc__modal-wrapper height-check-pending modal--will-open',
+        backdrop: true,
+        backdrop_dismiss: true,
+        mobile_only_scroll_lock: true
+      -%}
+    {%- endif -%}
+  </div>
+</div>

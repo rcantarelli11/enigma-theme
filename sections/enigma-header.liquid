@@ -1,0 +1,121 @@
+{%- liquid
+  assign logo = section.settings.logo
+-%}
+
+{%- if section.settings.show_announcement -%}
+<div class="enigma-announcement">
+  {{ section.settings.announcement_text }}
+</div>
+{%- endif -%}
+
+<header class="enigma-header" data-header>
+  <div class="enigma-header__inner">
+    <button class="enigma-header__menu-toggle" data-mobile-menu-open aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
+    </button>
+
+    <a href="/" class="enigma-header__logo">
+      {%- if logo != blank -%}
+        {{ logo | image_url: height: 56 | image_tag: loading: 'eager' }}
+      {%- else -%}
+        <span class="enigma-header__logo-text">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    <nav class="enigma-header__nav" aria-label="Main navigation">
+      {%- for link in section.settings.menu.links -%}
+        <a href="{{ link.url }}"{% if link.active %} class="active"{% endif %}>
+          {{ link.title }}
+        </a>
+      {%- endfor -%}
+    </nav>
+
+    <div class="enigma-header__actions">
+      <a href="/search" class="enigma-header__icon" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </a>
+      <a href="/account" class="enigma-header__icon" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </a>
+      <a href="/cart" class="enigma-header__icon" aria-label="Cart" data-cart-icon data-cart-toggle>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        {%- if cart.item_count > 0 -%}
+          <span class="enigma-header__cart-count" data-cart-count>{{ cart.item_count }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="enigma-mobile-menu" data-mobile-menu>
+  <div class="enigma-mobile-menu__backdrop" data-mobile-menu-close></div>
+  <div class="enigma-mobile-menu__panel">
+    <button class="enigma-mobile-menu__close" data-mobile-menu-close aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+    <nav>
+      <ul class="enigma-mobile-menu__nav">
+        {%- for link in section.settings.menu.links -%}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const menu = document.querySelector('[data-mobile-menu]');
+    const openBtns = document.querySelectorAll('[data-mobile-menu-open]');
+    const closeBtns = document.querySelectorAll('[data-mobile-menu-close]');
+
+    openBtns.forEach(btn => btn.addEventListener('click', () => menu.classList.add('open')));
+    closeBtns.forEach(btn => btn.addEventListener('click', () => menu.classList.remove('open')));
+
+    // Header scroll hide/show
+    let lastScroll = 0;
+    const header = document.querySelector('[data-header]');
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+      if (currentScroll > lastScroll && currentScroll > 100) {
+        header.style.transform = 'translateY(-100%)';
+      } else {
+        header.style.transform = 'translateY(0)';
+      }
+      lastScroll = currentScroll;
+    }, { passive: true });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Enigma Header",
+  "tag": "div",
+  "class": "enigma-header-wrapper",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_announcement",
+      "label": "Show announcement bar",
+      "default": true
+    },
+    {
+      "type": "richtext",
+      "id": "announcement_text",
+      "label": "Announcement text",
+      "default": "<p>Bundle and save 10% + Free Shipping on orders over $70</p>"
+    }
+  ]
+}
+{% endschema %}

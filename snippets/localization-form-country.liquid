@@ -1,0 +1,62 @@
+{%- liquid
+  comment
+    Renders a localization form for selecting a country.
+
+    Required parameters:
+      - id: { String } A unique string to be used for the localization form ID. Generally, should note where the
+          form is being rendered (eg. "footer" or "header").
+      - checkmark_icon: { String } The checkmark icon to display next to the current country.
+      - show_country_flags: { Boolean } Whether to show the country flags in the list.
+      - show_country_names: { Boolean } Whether to show the country names in the list.
+      - label_structure: { String } The structure of the country label. Use '[[ccic]]' to insert the currency ISO code
+          and '[[ccs]]' to insert the currency symbol.
+  endcomment
+-%}
+<localization-form>
+  {%- form 'localization', id: id -%}
+    <ul class="localization-list">
+      {% for country in localization.available_countries %}
+        {%- liquid
+          if country.iso_code == localization.country.iso_code
+            assign is_current = true
+          else
+            assign is_current = false
+          endif
+
+          capture option_label
+            if show_country_flags
+              echo country | image_url: width: 20 | image_tag: class: 'localization-option__flag'
+            endif
+
+            echo label_structure | replace: '[[ccic]]', country.currency.iso_code | replace: '[[ccs]]', country.currency.symbol | replace: '[[cn]]', country.name
+          endcapture
+        -%}
+
+
+        <li class="localization-list__item">
+          <a
+            class="localization-option cluster no-wrap"
+            href="#"
+            aria-current="{{ is_current }}"
+            data-value="{{ country.iso_code }}"
+            js-localization-option
+          >
+            {{ option_label }}
+
+            {%- if is_current -%}
+              {{ checkmark_icon }}
+            {%- endif -%}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    <input
+      type="hidden"
+      name="country_code"
+      id="{{ id }}"
+      value="{{ localization.country.iso_code }}"
+      js-localization-input
+    >
+  {%- endform -%}
+</localization-form>

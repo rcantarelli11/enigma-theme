@@ -1,0 +1,33 @@
+{%- liquid
+  comment
+    Outputs the page title.
+  endcomment
+
+  capture seo_title
+    if request.page_type == 'search' and search.performed == true
+      echo 'search.meta.title' | t
+      echo ' - '
+      echo 'search.meta.description' | t: terms: search.terms
+    else
+      echo page_title
+    endif
+
+    if current_tags
+      assign meta_tags = current_tags | join: ', '
+      assign meta_tags_string = 'general.meta.tags' | t: tags: meta_tags
+
+      echo ' - [[mts]]' | replace: '[[mts]]', meta_tags_string
+    endif
+
+    if current_page != 1
+      assign page_string = 'general.meta.page' | t: page: current_page
+      echo ' - [[ps]]' | replace: '[[ps]]', page_string
+    endif
+
+    unless page_title contains shop.name
+      echo ' - [[sn]]' | replace: '[[sn]]', shop.name
+    endunless
+  endcapture
+-%}
+
+<title>{{ seo_title }}</title>

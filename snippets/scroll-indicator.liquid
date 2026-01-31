@@ -1,0 +1,22 @@
+{% liquid
+  comment
+    Renders a horizontal scroll indicator.
+    Render within a <scroll-slider-with-scroll-indicator> that also contains a
+    scroll-slider
+
+    Required parameters:
+      - item_count: { Number } The number of items that the scroll slider has
+
+    Optional parameters:
+      - class: { String } The indicator's class
+  endcomment
+%}
+
+{{ 'component-scroll-indicator.css' | asset_url | stylesheet_tag }}
+
+<div
+  class="scroll-indicator{% if class %} {{ class }}{% endif %}"
+  style="--item-count: {{ item_count }};"
+>
+  <div class="scroll-indicator__cursor"></div>
+</div>

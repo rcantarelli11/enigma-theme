@@ -1,0 +1,12 @@
+{% liquid
+  comment
+    Renders a scene when there are no articles to show in the "Blog posts" section.
+  endcomment
+-%}
+
+<div class="blog-article-no-item stack ta-c">
+  <p>{{ 'blogs.general.no_articles' | t }}</p>
+
+  {% assign return_to_homepage_label = 'blogs.general.return_to_homepage' | t %}
+  {% render 'button', label: return_to_homepage_label, button_style: 'text', underlined: true, link: routes.root_url %}
+</div>

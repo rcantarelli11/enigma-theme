@@ -1,0 +1,88 @@
+{% liquid
+  comment
+    Renders a column block for the "Multi-column" section.
+
+    Required parameters:
+      - block: { Object } The parent block.
+      - section_settings: { Object } The parent section's settings.
+      - image_sizes: { String } sizes string for images
+  endcomment
+-%}
+
+{% if block.settings.display_media %}
+  {% capture column_media -%}
+    {% if block.settings.video %}
+      {%- render 'background-video',
+        video: block.settings.video,
+        pause_button_content_type: 'icon',
+        aspect_ratio: section_settings.media_aspect_ratio,
+        class: 'multi-column__item-media'
+      -%}
+    {% else  %}
+      {% render 'image',
+        image: block.settings.image,
+        class: 'multi-column__item-media',
+        sizes: image_sizes,
+        aspect_ratio: section_settings.media_aspect_ratio,
+        object_fit: 'cover',
+        include_placeholder: true,
+        placeholder_name: 'detailed-apparel-1'
+      -%}
+    {% endif %}
+  {%- endcapture %}
+{% endif %}
+
+{% capture column_text_content %}
+  {% liquid
+    capture text_font_class
+      render 'settings-text-size', type: 'text', size: section.settings.text_font_size
+    endcapture
+
+    if block.settings.heading != blank
+      capture heading_font_class
+        render 'settings-text-size', type: 'heading_above_mobile', size: section.settings.heading_font_size
+        echo ' '
+        render 'settings-text-size', type: 'heading_mobile', size: section.settings.heading_mobile_font_size
+      endcapture
+
+      echo "<[[tag]] class='multi-column-item__heading ff-heading [[hfc]]'>[[heading]]</[[tag]]>" | replace: "[[tag]]", section.settings.item_title_heading_tag | replace: "[[heading]]", block.settings.heading | replace: "[[hfc]]", heading_font_class
+    endif
+  %}
+
+    {% if block.settings.text != blank %}
+      <div class="multi-column-item__text rte {{ text_font_class }}">{{ block.settings.text }}</div>
+    {% endif %}
+
+    {% if block.settings.button_label != blank -%}
+      {%- render 'button',
+        label: block.settings.button_label,
+        link: block.settings.button_link,
+        button_style: section_settings.button_style,
+        button_size: 'small',
+        underlined: true
+      -%}
+    {%- endif %}
+  {% endcapture %}
+
+<div
+  class="
+    multi-column-item
+    {%- if column_text_content == blank and block.settings.media_full_height %}
+      multi-column-item--full-height-media
+    {%- endif %}
+    animation--item
+  "
+  {{ block.shopify_attributes }}
+>
+  {% if section_settings.media_position == 'above_content' -%}
+    {{ column_media }}
+  {%- endif %}
+
+  {% if column_text_content != blank %}
+    <div class="multi-column__item-text-wrapper">{{ column_text_content }}</div>
+  {% endif %}
+
+  {% if section_settings.media_position == 'below_content' -%}
+    {{ column_media }}
+  {%- endif %}
+</div>

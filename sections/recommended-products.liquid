@@ -1,0 +1,229 @@
+{%- liquid
+  render 'inline-scripts', script_name: 'recommended-products'
+  render 'inline-scripts', script_name: 'visibility-watcher'
+  render 'inline-scripts', script_name: 'product-item'
+
+  if settings.enable_quick_shopping
+    echo 'component-product-item-quick-shopping.css' | asset_url | stylesheet_tag
+    echo 'component-product-blocks.css' | asset_url | stylesheet_tag
+    render 'inline-scripts', script_name: 'product-block-variant-selector'
+    render 'inline-scripts', script_name: 'product-block-buy-buttons'
+    render 'inline-scripts', script_name: 'product-media'
+    render 'inline-scripts', script_name: 'scroll-slider'
+  endif
+
+  echo 'section-recommended-products.css' | asset_url | stylesheet_tag
+
+  # Column counts
+  assign column_count_desktop = section.settings.column_count_desktop
+  assign column_count_tablet = column_count_desktop | at_most: 3
+-%}
+
+<recommended-products
+  class="section recommended-products loading"
+  style="
+    {% render 'settings-section-padding' %}
+    {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+  "
+  data-section-id="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-product-limit="{{ section.settings.max_products }}"
+>
+  <div class="section-inner section-inner--width-{{ section.settings.width }}">
+    {% render 'section-header', section: section, animate_heading: true %}
+
+    <visibility-watcher data-watch-child-selector=".recommended-products__grid">
+      <div
+        class="recommended-products__grid"
+        data-recommendations
+      >
+        {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+          {% render 'product-slider',
+            product_items: recommendations,
+            column_count_mobile: section.settings.column_count_mobile,
+            column_count_tablet: column_count_tablet,
+            column_count_desktop: column_count_desktop,
+            show_slider_indicator: section.settings.show_slider_indicator,
+            max_products: section.settings.max_products,
+            section_width: section.settings.width
+          %}
+        {%- endif -%}
+      </div>
+    </visibility-watcher>
+  </div>
+</recommended-products>
+
+{% schema %}
+{
+  "name": "t:sections.product_recommendations.name",
+  "tag": "section",
+  "limit": 1,
+  "templates": [
+    "product"
+  ],
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.product_recommendations.settings.paragraph.customization.content"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.product_recommendations.settings.paragraph.intro.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_header.header.content"
+    },
+    {
+      "id": "section_header_heading",
+      "type": "text",
+      "label": "t:shared.settings.section_header.heading.label",
+      "default": "t:sections.product_recommendations.settings.header.heading.default"
+    },
+    {
+      "id": "section_header_heading_tag",
+      "type": "select",
+      "label": "t:shared.settings.heading_tag.label",
+      "options": [
+        {
+          "value": "h1",
+          "label": "H1"
+        },
+        {
+          "value": "h2",
+          "label": "H2"
+        },
+        {
+          "value": "h3",
+          "label": "H3"
+        },
+        {
+          "value": "h4",
+          "label": "H4"
+        },
+        {
+          "value": "h5",
+          "label": "H5"
+        },
+        {
+          "value": "h6",
+          "label": "H6"
+        }
+      ],
+      "info": "t:shared.settings.heading_tag.info",
+      "default": "h2"
+    },
+    {
+      "id": "section_header_text",
+      "type": "inline_richtext",
+      "label": "t:shared.settings.section_header.text.label"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.product_list.label"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "t:sections.product_recommendations.settings.max_products.label",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "id": "column_count_desktop",
+      "type": "select",
+      "label": "t:shared.settings.standard_grid.column_count_desktop.label",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "id": "column_count_mobile",
+      "type": "select",
+      "label": "t:shared.settings.standard_grid.column_count_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "id": "show_slider_indicator",
+      "type": "checkbox",
+      "label": "t:shared.settings.show_slider_indicator.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:shared.settings.section_settings.width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:shared.settings.section_settings.width.options.page_width"
+        },
+        {
+          "value": "full-width-padded",
+          "label": "t:shared.settings.section_settings.width.options.full_width_padded_simplified_language"
+        }
+      ],
+      "info": "t:shared.settings.section_settings.width.info"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product_recommendations.presets.name"
+    }
+  ]
+}
+{% endschema %}

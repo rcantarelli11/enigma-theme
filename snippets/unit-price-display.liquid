@@ -1,0 +1,29 @@
+{% liquid
+  comment
+    Renders the unit price display.
+
+    Required parameters:
+      - unit_price { Number }: The unit price.
+      - unit_price_measurement_value { String }: The reference value for the unit price measurement.
+      - unit_price_measurement_unit { String }: The reference unit for the unit price measurement.
+  endcomment
+-%}
+
+<span class="unit-price-wrapper fs-body-60 t-opacity-60" data-unit-price-container>
+  <span class="visually-hidden">{{ 'products.product.unit_price_label' | t }}</span>
+
+  <span class="unit-price">
+    {{ unit_price | money }}
+
+    <span aria-hidden="true">/</span>
+    <span class="visually-hidden">{{ 'general.accessibility.unit_price_separator' | t }}</span>
+
+    {%- liquid
+      if unit_price_measurement_value != 1
+        echo unit_price_measurement_value
+      endif
+
+      echo unit_price_measurement_unit
+    -%}
+  </span>
+</span>

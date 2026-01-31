@@ -1,0 +1,33 @@
+{%- liquid
+  comment
+    Renders text with any HTML links removed.
+
+    Required parameters:
+      - text: { String } The string to remove links from.
+  endcomment
+
+  if text contains '<a href'
+    assign link_split = text | split: '<a '
+
+    for chunk in link_split
+      if chunk contains 'href='
+        assign formatted_chunk = chunk | remove: '</a>'
+        assign chunk_split = formatted_chunk | split: '>'
+
+        for sub_chunk in chunk_split
+          unless sub_chunk contains 'href='
+            if sub_chunk contains '</'
+              echo sub_chunk | append: '>'
+            else
+              echo sub_chunk
+            endif
+          endunless
+        endfor
+      else
+        echo chunk
+      endif
+    endfor
+  else
+    echo text
+  endif
+-%}

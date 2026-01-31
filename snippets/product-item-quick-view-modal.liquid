@@ -1,0 +1,16 @@
+{%- liquid
+  comment
+    Renders the base layout for the product item "Quick view" modal.
+
+    Required parameters:
+      - prod: { Object } The associated product object.
+
+    TODO: currently this only shows the spinner, can we render this a single time rather than for ever product card?
+  endcomment
+-%}
+
+<div class="product-item__quick-view" js-quick-view-content>
+  <div class="loader-wrapper">
+    {% render 'loader', background_color_var: '--color-background', foreground_color_var: '--color-text' %}
+  </div>
+</div>

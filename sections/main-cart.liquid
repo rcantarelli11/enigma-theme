@@ -1,0 +1,200 @@
+{% liquid
+  echo 'component-cart-shared.css' | asset_url | stylesheet_tag
+  echo 'template-cart.css' | asset_url | stylesheet_tag
+  echo 'component-product-item-minimal.css' | asset_url | stylesheet_tag
+  echo 'component-quantity-input.css' | asset_url | stylesheet_tag
+
+  # Fetch this here rather than free-shipping-bar.liquid, otherwise when going from empty
+  # to non-empty state there is a flash of unstyled content
+  if settings.enable_free_shipping_bar and settings.free_shipping_bar_min_amount != blank
+    echo 'component-free-shipping-bar.css' | asset_url | stylesheet_tag
+  endif
+
+  render 'inline-scripts', script_name: 'cart-page'
+  render 'inline-scripts', script_name: 'cart-item'
+  render 'inline-scripts', script_name: 'quantity-input'
+
+  if settings.enable_cart_note
+    echo 'component-cart-note.css' | asset_url | stylesheet_tag
+    render 'inline-scripts', script_name: 'cart-note'
+  endif
+
+  assign continue_shopping_link_label = 'cart.general.continue_shopping' | t
+%}
+<cart-page
+  class="cart page section"
+  data-section-id="{{ section.id }}"
+  data-section-type="cart"
+  style="{% render 'settings-section-padding' %}"
+>
+  <div class="cart__container page__inner section-inner section-inner--width-{{ section.settings.width }}">
+    {%- if cart.item_count > 0 -%}
+      <form action="{{ routes.cart_url }}" method="post" novalidate id="cart-page-form">
+        <div class="cart__header">
+          <h1 class="cart__title ff-heading fs-heading-1-base">{{ 'cart.general.title' | t }}</h1>
+          {% render 'link-with-arrow-icon', link: routes.root_url, label: continue_shopping_link_label %}
+        </div>
+
+        <div class="cart__content">
+          <div class="cart__content__primary">
+            {% render 'cart-items' %}
+
+            {%- liquid
+              if settings.enable_cart_cross_sells and section.settings.cross_sells_position == 'below-line-items'
+                render 'cross-sells', placement: 'cart-page', position: section.settings.cross_sells_position
+              endif
+            -%}
+          </div>
+
+          <div class="cart__content__secondary{% if section.settings.sticky_subtotal_sidebar %} cart__content__secondary--sticky{% endif %}">
+            <div class="cart__footer-wrapper">
+              <div class="cart__footer">
+                {% render 'free-shipping-bar' %}
+
+                <div class="cart__footer-inner" js-cart-text>
+                  {%- liquid
+                    if settings.enable_cart_note
+                      render 'cart-note'
+                    endif
+                  -%}
+
+                  {% render 'cart-summary' %}
+                  {% render 'cart-checkout-button' %}
+
+                  {%- if additional_checkout_buttons -%}
+                    <div class="additional-checkout-buttons additional-checkout-buttons--vertical">
+                      {{ content_for_additional_checkout_buttons }}
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+
+              {%- liquid
+                if settings.enable_cart_cross_sells and section.settings.cross_sells_position == 'below-subtotal'
+                  render 'cross-sells', placement: 'cart-page', position: section.settings.cross_sells_position
+                endif
+              -%}
+            </div>
+          </div>
+        </div>
+      </form>
+    {%- else -%}
+      {% comment %} Cart empty state {% endcomment %}
+      <div class="cart__empty-state">
+        <h1 class="cart__empty-state__message-heading ff-heading fs-heading-1-base">
+          {{ 'cart.general.title' | t }}
+        </h1>
+
+        <p class="cart__empty-state__message-text fs-body-100">{{ 'cart.general.empty_message' | t }}</p>
+
+        {%- assign button_label = 'cart.general.continue_shopping' | t -%}
+
+        {%- render 'button',
+          label: button_label,
+          link: routes.collections_url,
+          button_alignment: 'center',
+          button_style: 'secondary',
+          wrapper_class: 'cart__empty-state__button'
+        -%}
+      </div>
+    {%- endif -%}
+  </div>
+</cart-page>
+
+{% schema %}
+{
+  "tag": "section",
+  "name": "t:sections.main_cart.name",
+  "class": "cart-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "sticky_subtotal_sidebar",
+      "label": "t:sections.main_cart.settings.sticky_subtotal_sidebar.label",
+      "info": "t:sections.main_cart.settings.sticky_subtotal_sidebar.info"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.cart_shared.settings.cross_sells.heading.content",
+      "info": "t:sections.cart_shared.settings.cross_sells.heading.info"
+    },
+    {
+      "type": "select",
+      "id": "cross_sells_layout",
+      "label": "t:sections.cart_shared.settings.cross_sells.layout.label",
+      "options": [
+        {
+          "value": "slider",
+          "label": "t:sections.cart_shared.settings.cross_sells.layout.options.slider"
+        },
+        {
+          "value": "list",
+          "label": "t:sections.cart_shared.settings.cross_sells.layout.options.list"
+        }
+      ],
+      "default": "slider"
+    },
+    {
+      "id": "cross_sells_position",
+      "type": "select",
+      "label": "t:sections.main_cart.settings.cross_sells_position.label",
+      "default": "below-line-items",
+      "options": [
+        {
+          "value": "below-line-items",
+          "label": "t:sections.main_cart.settings.cross_sells_position.option_2"
+        },
+        {
+          "value": "below-subtotal",
+          "label": "t:sections.main_cart.settings.cross_sells_position.option_1"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:shared.settings.section_settings.width.label",
+      "options": [
+        {
+          "value": "wide",
+          "label": "t:shared.settings.section_settings.width.options.wide"
+        },
+        {
+          "value": "page-width",
+          "label": "t:shared.settings.section_settings.width.options.page_width"
+        },
+        {
+          "value": "full-width-padded",
+          "label": "t:shared.settings.section_settings.width.options.full_width_padded_simplified_language"
+        }
+      ],
+      "info": "t:shared.settings.section_settings.width.info",
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,26 @@
+:root{
+  --js-mobile:(max-width: 719.9px);
+  --js-tablet:(min-width: 720px);
+  --js-below-small-desktop:(max-width: 1023.9px);
+  --js-small-desktop:(min-width: 1024px);
+  --js-desktop:(min-width: 1440px);
+  --js-max-page-width:(min-width: 1600px);
+}
+.scrolling-content--item--type-image .image{
+    width:var(--width-mobile);
+  }
+@media (min-width: 720px){
+.scrolling-content--item--type-image .image{
+      width:var(--width-desktop)
+  }
+    }
+.scrolling-content--item--type-icon{
+  display:flex;
+}
+.scrolling-content a{
+    -webkit-text-decoration:none;
+    text-decoration:none;
+  }
+.scrolling-content .highlight{
+    color:var(--color-accent);
+  }

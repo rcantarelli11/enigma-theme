@@ -1,0 +1,144 @@
+{%- liquid
+  comment
+    Renders the social share functionality.
+
+    Required parameters:
+      - enable_os_sharing: { Boolean: false } Whether native OS sharing is enabled.
+      - title: { String } The title for the URL being shared.
+
+    Optional parameters:
+      - image: { Object: page_image } The image for the URL being shared.
+      - text: { String: page_description } The text for the URL being shared.
+      - url: { String } override the shared URL.
+  endcomment
+
+  assign enable_os_sharing = enable_os_sharing | default: false, allow_false: true
+  assign text = text | default: page_description
+  assign image = image | default: page_image
+  assign image_url = image | image_url: width: 1024, height: 1024
+  assign escaped_title = title | url_param_escape
+
+  if url == blank
+    if request.page_type == 'product' and product.selected_variant
+      assign url = request.origin | append: product.selected_variant.url
+    else
+      assign url = request.origin | append: request.path
+    endif
+  endif
+
+  echo 'component-social-share.css' | asset_url | stylesheet_tag
+  render 'inline-scripts', script_name: 'social-share'
+-%}
+
+{%- capture share_text -%}
+  <span class="social-share__share-text fs-body-100">{{ 'general.social.share' | t }}</span>
+{%- endcapture -%}
+
+{%- capture link_structure -%}
+  <a
+    href="[[share_url]]"
+    class="social-share__link social-share__link--[[platform]]"
+    target="_blank"
+    rel="noopener"
+    aria-label="[[label]]"
+  >
+    <div class="share-link__icon">
+      [[icon]]
+    </div>
+
+    <span class="share-link__tooltip fs-body-60">[[label]]</span>
+  </a>
+{%- endcapture -%}
+
+<social-share
+  data-native-share-enabled="{{ enable_os_sharing }}"
+  data-url="{{ url }}"
+  data-text="{{ text | escape }}"
+  data-title="{{ title | escape }}"
+>
+  <div class="social-share social-share--standard" js-social-share-standard-share>
+    {%- liquid
+      echo share_text
+
+      assign platforms = 'twitter, facebook, pinterest' | split: ', '
+
+      for platform in platforms
+        capture share_url
+          case platform
+            when 'twitter'
+              echo '//twitter.com/intent/tweet?text=[[title]]&amp;url=[[url]]' | replace: '[[title]]', escaped_title | replace: '[[url]]', url
+            when 'facebook'
+              echo '//www.facebook.com/sharer.php?u=[[url]]' | replace: '[[url]]', url
+            when 'pinterest'
+              echo '//pinterest.com/pin/create/button/?url=[[url]]&amp;media=[[image_url]]&amp;description=[[title]]' | replace: '[[url]]', url | replace: '[[image_url]]', image_url | replace: '[[title]]', escaped_title
+          endcase
+        endcapture
+
+        capture icon_name
+          echo 'social-[[platform]]' | replace: '[[platform]]', platform
+        endcapture
+
+        capture icon
+          render 'icon-utility', icon: icon_name, width: 20, height: 20
+        endcapture
+
+        capture label
+          echo 'general.social.alt_text.share_on_[[platform]]' | replace: '[[platform]]', platform | t
+        endcapture
+
+        capture social_share_links
+          echo social_share_links
+          echo link_structure | replace: '[[share_url]]', share_url | replace: '[[icon]]', icon | replace: '[[label]]', label
+        endcapture
+      endfor
+    -%}
+
+    <div class="social-share__links cluster">
+      {{ social_share_links }}
+
+      <button
+        class="social-share__link social-share__link--copy"
+        js-social-share-copy-link
+        data-url="{{ url }}"
+        aria-label="{{ 'general.social.copy_link' | t }}"
+      >
+        <div class="share-link__icon">
+          {%- render 'icon-utility', icon: 'copy', width: 20, height: 20 -%}
+        </div>
+
+        <span class="share-link__tooltip ff-body fs-body-60">
+          <span class="tooltip-copy tooltip-copy--idle">
+            {{- 'general.social.copy_link' | t -}}
+          </span>
+
+          <span class="tooltip-copy tooltip-copy--success">
+            {{- 'general.social.link_copied' | t -}}
+          </span>
+
+          <span class="tooltip-copy tooltip-copy--error">
+            {%- liquid
+              # Copying doesn't work in the theme editor
+              if request.design_mode
+                echo 'general.social.theme_editor_link_copy_error' | t
+              else
+                echo 'general.social.link_copy_error' | t
+              endif
+            -%}
+          </span>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  {%- if enable_os_sharing -%}
+    <button
+      class="social-share social-share--native"
+      js-social-share-native-share
+      aria-label="{{ 'general.social.alt_text.share_menu' | t }}"
+    >
+      {%- render 'icon-utility', icon: 'share', width: 20, height: 20 -%}
+
+      {{ share_text }}
+    </button>
+  {%- endif -%}
+</social-share>

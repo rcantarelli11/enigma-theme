@@ -1,0 +1,98 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "custom.overlay",
+  "name": "t:groups.overlay_group.name",
+  "sections": {
+    "cart-drawer": {
+      "type": "cart-drawer",
+      "settings": {
+        "cross_sells_layout": "slider"
+      }
+    },
+    "predictive-search-drawer": {
+      "type": "predictive-search-drawer",
+      "settings": {}
+    },
+    "popups": {
+      "type": "popups",
+      "blocks": {
+        "flyout_signup_T3fjDQ": {
+          "type": "flyout_signup",
+          "settings": {
+            "color_scheme": "scheme_2",
+            "delay_appearance": "timer_30000",
+            "frequency": "0",
+            "show_on_exit_intent": true,
+            "disable_for_account_holders": false,
+            "show_on_specific_page": false,
+            "target_page": "",
+            "overline": "",
+            "heading": "Join us",
+            "heading_font_size": 3,
+            "text": "<p>Signup and get 10% off your first purchase</p>",
+            "text_font_size": 3,
+            "dismiss_text": "No thanks",
+            "footer_text": "<p>By completing this form, you are signing up to receive our emails and can unsubscribe at any time.</p>",
+            "tags": "newsletter",
+            "flyout_position": "bottom_left",
+            "content_alignment": "left",
+            "enable_image": true,
+            "image": "shopify://shop_images/Pop_Up.png",
+            "image_size": "medium",
+            "enable_tab": true,
+            "tab_text": "Get 10% Off",
+            "text_font_size_tab": 4,
+            "tab_position": "left_bottom",
+            "tab_color_scheme": "scheme_1"
+          }
+        },
+        "flyout_ELJ496": {
+          "type": "flyout",
+          "disabled": true,
+          "settings": {
+            "color_scheme": "scheme_2",
+            "delay_appearance": "timer_10000",
+            "frequency": "100000",
+            "show_on_exit_intent": true,
+            "disable_for_account_holders": false,
+            "show_on_specific_page": false,
+            "target_page": "",
+            "overline": "",
+            "heading": "We're currently out of stock",
+            "heading_font_size": 2,
+            "text": "<p>Accepting preorders, with orders set to be delivered once we're back in stock.</p>",
+            "text_font_size": 3,
+            "button_link": "shopify://collections/all",
+            "button_label": "Preorder Now",
+            "dismiss_text": "",
+            "footer_text": "",
+            "flyout_position": "left_center",
+            "content_alignment": "left",
+            "enable_image": true,
+            "image": "shopify://shop_images/Category_-_SUPPLEMENTS..webp",
+            "image_size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "flyout_signup_T3fjDQ",
+        "flyout_ELJ496"
+      ],
+      "disabled": true,
+      "settings": {}
+    }
+  },
+  "order": [
+    "cart-drawer",
+    "predictive-search-drawer",
+    "popups"
+  ]
+}

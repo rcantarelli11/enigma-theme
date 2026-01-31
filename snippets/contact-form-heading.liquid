@@ -1,0 +1,16 @@
+{%- liquid
+  comment
+    Renders a "heading" block for the contact form.
+
+    Required parameters:
+      - block: { Object } The associated block.
+      - alignment: { String } The horizontal alignment of the heading. Can be:
+        - 'left'
+        - 'center'
+        - 'right'
+  endcomment
+-%}
+
+<visibility-watcher class="contact-form__heading-block">
+  {% render 'content-block-heading', block: block, animate: true, alignment: alignment %}
+</visibility-watcher>

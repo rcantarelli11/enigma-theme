@@ -1,0 +1,76 @@
+{% liquid
+  comment
+    Renders a featured item for the "Blog posts" section.
+
+    Required parameters:
+      - article: { Object } The article to render.
+      - image_sizes: { String } sizes string for images
+
+    Optional parameters:
+      - local_blog: { Object } The blog object associated with the article. This will be used to link the meta tag to a tag-filtered blog URL.
+      - animation_index: { Number } Used to multiply the animation delay to provide a sequenced reveal.
+      - placeholder_name: { String } The name of the Shopify placeholder SVG to use.
+  endcomment
+-%}
+
+<div class="blog-posts-featured-item" style="--animation-index: {{ animation_index }}">
+  <a class="blog-posts-featured-item__image" href="{{ article.url }}" tabindex="-1" aria-hidden="true">
+    {% liquid
+      if section.settings.layout_style == 'grid'
+        assign aspect_ratio = section.settings.grid_image_aspect_ratio
+      endif
+    %}
+    {% render 'image',
+      image: article.image,
+      sizes: image_sizes,
+      aspect_ratio: aspect_ratio,
+      object_fit: 'cover',
+      load_animation_effect: 'blur',
+      include_placeholder: true,
+      placeholder_name: placeholder_name
+    %}
+  </a>
+
+  {% if section.settings.layout_style == 'featured-article' %}
+    <div class="blog-posts-featured-item__overlay"></div>
+  {% endif %}
+
+  {% if section.settings.enable_scrolling_hover_text %}
+    {% liquid
+      if section.settings.show_article_tags and article.tags != blank
+        assign has_tags = true
+      else
+        assign has_tags = false
+      endif
+
+      if has_tags
+        capture scrolling_tag
+          render 'article-tag', article: article
+        endcapture
+
+        if scrolling_tag != blank
+          capture scrolling_content
+            echo scrolling_tag
+            echo '<span class="blog-posts-scrolling-content__separator"></span>'
+          endcapture
+        endif
+      endif
+    %}
+
+    {% if scrolling_content != blank %}
+      {% render 'scrolling-content',
+        content: scrolling_content,
+        duration: section.settings.scroll_duration,
+        direction: section.settings.scroll_direction,
+        gap: 36,
+        prevent_tab_focus: true
+      %}
+    {% endif %}
+  {% endif %}
+
+  {% render 'blog-posts-meta', article: article, local_blog: local_blog, animate_heading: true %}
+
+  {% if section.settings.layout_style == 'featured-article' %}
+    <a class="blog-posts-featured-item__link" href="{{ article.url }}" tabindex="-1" aria-hidden="true"></a>
+  {% endif %}
+</div>

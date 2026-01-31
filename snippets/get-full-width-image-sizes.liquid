@@ -1,0 +1,36 @@
+{%- liquid
+  comment
+    Renders a string for a full width image's 'sizes' attribute depending on the 'type' of image and width constraints.
+
+    Required parameters:
+      - width: { String } The width of the banner or video. Can be:
+        - 'narrow'
+        - 'wide'
+        - 'page-width'
+        - 'full-width'
+        - 'full-width-background'
+        - 'full-width-padded'
+  endcomment
+
+  case width
+    when 'narrow'
+      echo '(min-width: 800px) 800px, '
+      echo 'calc(100vw - (2 * 20px)), '
+    when 'wide'
+      echo '(min-width: 1200px) 1200px, '
+      echo 'calc(100vw - (2 * 20px)), '
+    when 'page-width'
+      echo '(min-width: 1600px) 1600px, '
+      echo '(min-width: 1440px) calc(100vw - (2 * 40px)), '
+      echo '(min-width: 1024px) calc(100vw - (2 * 32px)), '
+      echo 'calc(100vw - (2 * 20px)), '
+    when 'full-width-padded'
+      echo '(min-width: 1440px) calc(100vw - (2 * 40px)), '
+      echo '(min-width: 1024px) calc(100vw - (2 * 32px)), '
+      echo 'calc(100vw - (2 * 20px)), '
+  endcase
+
+  # 'full-width-background' and 'full-width' are always 100vw
+  # and all other settings need a final string that doesn't include a calc
+  echo '100vw'
+-%}

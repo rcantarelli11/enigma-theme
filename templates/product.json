@@ -1,0 +1,40 @@
+{
+  "sections": {
+    "main-product": {
+      "type": "enigma-product",
+      "blocks": {
+        "feature-1": {
+          "type": "feature",
+          "settings": { "text": "100% label transparency — every ingredient, every dose" }
+        },
+        "feature-2": {
+          "type": "feature",
+          "settings": { "text": "No proprietary blends" }
+        },
+        "feature-3": {
+          "type": "feature",
+          "settings": { "text": "Third-party tested" }
+        },
+        "feature-4": {
+          "type": "feature",
+          "settings": { "text": "Free shipping on orders over $70" }
+        }
+      },
+      "block_order": ["feature-1", "feature-2", "feature-3", "feature-4"]
+    },
+    "recommendations": {
+      "type": "enigma-featured-collection",
+      "settings": {
+        "label": "COMPLETE YOUR STACK",
+        "title": "Complete Your Stack",
+        "collection": "best-sellers",
+        "products_to_show": 4,
+        "show_view_all": false
+      }
+    }
+  },
+  "order": [
+    "main-product",
+    "recommendations"
+  ]
+}

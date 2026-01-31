@@ -1,0 +1,124 @@
+{% liquid
+  comment
+    Renders a button that shows idle, adding, and success states (eg. product item quick add, and PDP 'Buy button' block, buttons).
+
+    Required parameters:
+      - label: { String } The button label.
+
+    Optional parameters:
+        - class: { String } A class to add to the button.
+        - button_attributes: { String } Any HTML attributes (eg. data attributes) to include with the button.
+        - wrapper_attributes: { String } Any HTML attributes (eg. data attributes) to include with the button's wrapper.
+        - type: { String: 'button' } The button "type" for linkless buttons. Can be:
+          - 'button'
+          - 'submit'
+        - full_width_button: { Boolean: false } If the button should take up the full width or just the content's width.
+        - mobile_button_icon: { String } The HTML content for the mobile button icon. If provided, the icon will display on all
+            screens below small-desktop.
+      - disabled: { Boolean: false } Whether the button is disabled.
+      - aria_label: { String } The aria-label attribute (suggested for all icon buttons).
+  endcomment
+
+  echo 'component-button-with-state.css' | asset_url | stylesheet_tag
+
+  assign full_width_button = full_width_button | default: false, allow_false: true
+
+  assign has_mobile_button = false
+  if mobile_button_icon != blank
+    assign has_mobile_button = true
+  endif
+
+  assign button_classes = 'button-with-state'
+  if class != blank
+    assign button_classes = button_classes | append: ' ' | append: class
+  endif
+
+  if aria_label
+    assign button_attributes = button_attributes | append: 'aria-label="[[al]]"' | replace: '[[al]]', aria_label
+  endif
+%}
+
+{%- if has_mobile_button -%}
+  {%- capture mobile_button_label -%}
+    <span class="button-with-state__label button-with-state__label--mobile">
+      <span class="label-idle">
+        {{ mobile_button_icon }}
+      </span>
+
+      <span class="label-adding">
+        {%- render 'loader',
+          background_color_var: '--color-background',
+          foreground_color_var: '--color-text',
+          loader_size: 18
+        -%}
+      </span>
+
+      <span class="label-success">
+        {%- render 'icon-utility', icon: 'checkmark', width: 20, height: 18 -%}
+      </span>
+    </span>
+  {%- endcapture -%}
+{%- endif -%}
+
+<button-with-state
+  class="button-with-state-wrapper {%- if full_width_button %} btn--full-width{%- endif %}"
+  {{ wrapper_attributes }}
+>
+  <button
+    type="{{ type }}"
+    class="{{ button_classes }}"
+    js-button-with-state
+
+    {%- if has_mobile_button %}
+      data-has-alt-mobile-button
+    {%- endif -%}
+
+    {%- if button_attributes != blank %}
+      {{ button_attributes }}
+    {%- endif -%}
+
+    {%- if disabled %}
+      disabled
+    {%- endif -%}
+  >
+    {%- liquid
+      # Mobile label
+      if has_mobile_button
+        echo mobile_button_label
+      endif
+    -%}
+
+    {%- # Hidden label for button sizing on desktop -%}
+    <span class="button-with-state__label button-with-state__label--hidden">
+      {{ label }}
+    </span>
+
+    {%- # Desktop label -%}
+    <span class="button-with-state__label button-with-state__label--desktop">
+      <span class="label-default">
+        {{ label }}
+      </span>
+
+      <span class="label-active">
+        <span class="label-idle">
+          <span class="label-idle__inner">
+            {{ label }}
+          </span>
+        </span>
+
+        <span class="label-adding">
+          <span class="label-adding__inner">
+            {%- render 'loader',
+              background_color_var: '--color-accent',
+              foreground_color_var: '--color-accent-foreground'
+            -%}
+          </span>
+        </span>
+
+        <span class="label-success">
+          {%- render 'icon-utility', icon: 'checkmark', width: 27, height: 20 -%}
+        </span>
+      </span>
+    </span>
+  </button>
+</button-with-state>

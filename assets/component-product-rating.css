@@ -1,0 +1,13 @@
+.product-rating{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--spacing-75);
+  margin-top:var(--spacing-100);
+}
+
+.product-rating__stars{
+  display:flex;
+  align-items:center;
+  color:var(--color-accent);
+}

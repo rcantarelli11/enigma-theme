@@ -1,0 +1,186 @@
+{% liquid
+  comment
+    Renders a hero-style banner with animation support.
+
+    Required parameters:
+      - local_settings: { Object } The Shopify settings object for the parent section.
+          Used for overlay styles and custom height settings generators.
+
+    Optional parameters:
+      - image: { Object } The image to show on desktop.
+      - mobile_image: { Object } The image to show on mobile.
+      - include_placeholder: { Boolean: true } Whether to show a placeholder.
+      - show_banner_image: { Boolean: true } Whether to show the banner image.
+      - show_banner_video: { Boolean: true } Whether to show the banner video.
+      - video: { Object } See background-video.liquid
+      - mobile_video: { Object } See background-video.liquid
+      - video_focal_point: { String } See background-video.liquid
+      - video_focal_point_mobile: { String } See background-video.liquid
+      - banner_height_type: { String: 'custom' } The height mode to use for the banner. Can be:
+        - 'adapt'
+        - 'custom'
+        - Note: when 'custom' is used, local_settings is assumed to have `custom_mobile_height` and
+                `custom_desktop_height` keys, which are provided by custom-height.js generator
+      - banner_width: { String: 'full-width' } The width string from section-width settings generator. Used to calculate image sizes.
+      - image_animation: { String: 'none' } The animation type for the banner image. Can be:
+        - 'none'
+        - 'fade'
+        - 'iris'
+      - content: { HTML } HTML content to show within the banner. Supports animation classes:
+        - 'animation-heading'
+        - 'animation-overline'
+        - 'animation-content'
+      - content_max_width: { Number } The max-width of the content, set in pixels.
+      - content_alignment: { String } The position and alignment of the content. eg: center_center
+      - mobile_content_alignment: { String } The position and alignment of the content on mobile. eg: center_center
+      - footer_content: { HTML } HTML content to show in the footer of the banner content. Supports animation classes:
+        - 'animation-heading'
+        - 'animation-overline'
+        - 'animation-content'
+      - background_link: { String } URL that is linked to from a "background" link
+
+
+      TODO: do we need show_banner_image and show_banner_video? Why are they not just based on if those optoins are passed in?
+  endcomment
+
+  assign show_banner_image = show_banner_image | default: true, allow_false: true
+  assign show_banner_video = show_banner_video | default: false, allow_false: true
+  assign banner_height_type = banner_height_type | default: 'adapt'
+  assign banner_width = banner_width | default: 'full-width'
+  assign image_animation = image_animation | default: 'none'
+  assign include_placeholder = include_placeholder | default: true, allow_false: true
+  assign content_alignment_vertical = content_alignment | split: '_' | first
+  assign content_alignment_horizontal = content_alignment | split: '_' | last
+
+  if mobile_content_alignment
+    assign mobile_content_alignment_vertical = mobile_content_alignment | split: '_' | first
+    assign mobile_content_alignment_horizontal = mobile_content_alignment | split: '_' | last
+  endif
+
+  if show_banner_video
+    render 'inline-scripts', script_name: 'background-video'
+  endif
+%}
+
+{%- render 'inline-scripts', script_name: 'visibility-watcher' -%}
+
+<div
+  class="banner animating-image-wrap {%- if show_banner_image %} banner--has-image{%-else %} ta-c{%- endif -%}"
+  style="
+    {%- if show_banner_image or show_banner_video -%}
+      {% render 'settings-overlay-styles', local_settings: local_settings %}
+    {%- endif -%}
+
+
+    {%- if banner_height_type == 'custom' %}
+      {%- render 'settings-custom-height', local_settings: local_settings -%}
+    {%- endif -%}
+  "
+>
+  <visibility-watcher data-watch-parent-selector=".banner">
+    {%- capture banner_content -%}
+      <div
+        class="banner__content"
+        style="--max-content-width: {{ content_max_width }}px;"
+      >
+        {{ content }}
+      </div>
+    {%- endcapture -%}
+
+    {%- if show_banner_image or show_banner_video -%}
+      <div
+        class="
+          banner__image-wrapper
+          {%- if banner_height_type == 'custom' %}
+            banner__image-wrapper--custom-height
+          {%- endif -%}
+        "
+      >
+        {%- if show_banner_image -%}
+          {%- liquid
+            capture banner_image_sizes
+              render 'get-full-width-image-sizes', width: banner_width
+            endcapture
+
+            capture image_class
+              echo 'banner__image banner__image--[[screen]]'
+            endcapture
+
+            capture desktop_image_class
+              echo image_class | replace: '[[screen]]', 'desktop'
+            endcapture
+          -%}
+
+          {%- render 'image',
+            image: image,
+            class: desktop_image_class,
+            sizes: banner_image_sizes,
+            src_set_type: 'full-width',
+            focal_point: 'image-presentation',
+            include_placeholder: include_placeholder,
+            placeholder_name: 'hero-apparel-1',
+            placeholder_natural_fallback_ratio: 'landscape-wide-alt'
+          -%}
+
+          {%- if mobile_image != blank -%}
+            {%- capture mobile_image_class -%}
+              {{ image_class | replace: '[[screen]]', 'mobile' }}
+            {%- endcapture -%}
+
+            {%- render 'image',
+              image: mobile_image,
+              class: mobile_image_class,
+              sizes: banner_image_sizes,
+              src_set_type: 'full-width',
+              focal_point: 'image-presentation'
+            -%}
+          {%- endif -%}
+        {% endif %}
+
+        {% if show_banner_video %}
+          {%- render 'background-video',
+            video: video,
+            enable_mobile_video: true,
+            mobile_video: mobile_video,
+            focal_point: video_focal_point,
+            mobile_focal_point: mobile_video_focal_point,
+            placeholder_name: 'hero-apparel-1'
+          -%}
+        {% endif %}
+
+        {%- unless image_animation == 'none' -%}
+          {% comment %}
+            Note: this must be AFTER the media otherwise some obscure bug is triggered in iOS 16 where
+            the banner's border-radius doesn't apply
+          {% endcomment %}
+          {% render 'animating-image-revealer', type: image_animation %}
+        {%- endunless -%}
+      </div>
+
+      <div class="banner__overlay"></div>
+      {% if background_link %}
+        <a class="banner__background_link" href="{{ background_link }}"></a>
+      {% endif %}
+      <div
+        class="
+          banner__content-wrapper
+          content-alignment-vertical--{{ content_alignment_vertical }}
+          content-alignment-horizontal--{{ content_alignment_horizontal }}
+          {%  if mobile_content_alignment %}
+            mobile-content-alignment-vertical--{{ mobile_content_alignment_vertical }}
+            mobile-content-alignment-horizontal--{{ mobile_content_alignment_horizontal }}
+          {% endif %}
+        "
+      >
+        {{ banner_content }}
+
+        <div class="banner__footer-content">
+          {{ footer_content }}
+        </div>
+      </div>
+    {%- else -%}
+      {{ banner_content }}
+      {{ footer_content }}
+    {%- endif -%}
+  </visibility-watcher>
+</div>

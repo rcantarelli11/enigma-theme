@@ -1,0 +1,11 @@
+{% liquid
+  comment
+    Renders the required CSS variables for custom height settings (eg. banners, slideshow, and heros).
+
+    Required:
+      - local_settings: { Object } The Shopify settings object for the parent section or block.
+  endcomment
+
+  echo '--custom-desktop-height: [[cdh]];' | replace: '[[cdh]]', local_settings.custom_desktop_height
+  echo ' --custom-mobile-height: [[cmh]];' | replace: '[[cmh]]', local_settings.custom_mobile_height
+-%}

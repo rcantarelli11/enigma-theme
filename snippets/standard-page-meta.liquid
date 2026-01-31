@@ -1,0 +1,17 @@
+{%- liquid
+  comment
+    Outputs the standard meta tags and the meta description of the current page.
+
+    Optional parameters:
+      - content: { String } Custom content for the meta description. If present, overrides the description for the current resource.
+  endcomment
+
+  assign meta_description_content = content | default: page_description
+-%}
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+{% if meta_description_content != blank -%}
+  <meta name="description" content="{{ meta_description_content | strip_html | escape }}">
+{%- endif %}

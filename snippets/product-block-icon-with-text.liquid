@@ -1,0 +1,75 @@
+{%- liquid
+  comment
+    Renders the "Featured icon with text" product block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+  endcomment
+
+  assign block_class = 'product-block-icon'
+
+  capture block_style_attribute
+    echo 'style="--bottom-spacing: [[bp]]px;"' | replace: '[[bp]]', block.settings.bottom_padding
+  endcapture
+-%}
+
+{%- capture block_content -%}
+  {%- assign icon = block.settings.custom_icon_image | default: block.settings.icon -%}
+
+  {%- if block.settings.custom_icon_image != blank or icon != 'none' -%}
+    <div class="product-block-icon__icon">
+      {%- liquid
+        if block.settings.custom_icon_image != blank
+          render 'image', image: icon, sizes: '28px', src_set_type: 'icon', object_fit: 'contain'
+        else
+          render 'icon-editorial', icon: icon, size: 28
+        endif
+      -%}
+    </div>
+  {%- endif -%}
+
+  {%- liquid
+    # If there's a link and the text contains links, strip the links out
+    capture block_text
+      if block.settings.text contains '<a href' and block.settings.link != blank
+        assign link_split = block.settings.text | split: '<a '
+
+        for chunk in link_split
+          if chunk contains 'href='
+            assign formatted_chunk = chunk | remove: '</a>'
+            assign chunk_split = formatted_chunk | split: '>'
+
+            for sub_chunk in chunk_split
+              unless sub_chunk contains 'href='
+                if sub_chunk contains '</'
+                  echo sub_chunk | append: '>'
+                else
+                  echo sub_chunk
+                endif
+              endunless
+            endfor
+          else
+            echo chunk
+          endif
+        endfor
+      else
+        echo block.settings.text
+      endif
+    endcapture
+  -%}
+
+  <span class="product-block-icon__text fs-body-100">{{ block_text }}</span>
+{%- endcapture -%}
+
+{%- if block.settings.link != blank -%}
+  <a
+    href="{{ block.settings.link }}"
+    class="{{ block_class }}"
+    {{ block_style_attribute }}
+    {{ block.shopify_attributes }}
+  >
+    {{- block_content -}}
+  </a>
+{%- else -%}
+  <div class="{{ block_class }}" {{ block_style_attribute }} {{ block.shopify_attributes }}>{{ block_content }}</div>
+{%- endif -%}

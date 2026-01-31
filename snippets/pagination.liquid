@@ -1,0 +1,105 @@
+{% liquid
+  comment
+    Renders the pagination display for collection and search, based on 'paginate.parts' that
+    Shopify returns.
+
+    Required parameters:
+      - paginate: { Object } The current pagination object.
+      - resource_string: { String } A theme translation key that contains the type of resource that's being paginated.
+
+    Optional parameters:
+      - link_anchor: { String } Used to set a link anchor on the link to scroll the page
+      - alignment: { String: left, center } Alignment, default: center
+  endcomment
+
+  assign alignment = alignment | default: 'center'
+
+  assign pagination_current_item_end = paginate.current_page | times: paginate.page_size
+
+  if pagination_current_item_end > paginate.items
+    assign pagination_current_item_end = paginate.items
+  endif
+
+  assign pagination_resource = resource_string | t
+-%}
+
+<div class="pagination pagination--alignment-{{ alignment }}">
+  {% liquid
+    # Previous button
+    if paginate.previous != blank
+      assign previous_label = 'general.pagination.previous_page' | t: type: pagination_resource
+
+      capture pagination_parts
+        render 'pagination-item', item_type: 'arrow', is_link: true, link: paginate.previous.url, link_anchor: link_anchor, button_type: 'previous', button_label: previous_label
+      endcapture
+    endif
+
+    # Parts
+    #
+    # The parts that Shopify returns are dictated by the current page. There will be a max of
+    # 3 pages, plus an ellipsis (if needed), on either side of the current page.
+    #
+    # We want to display a max of 7 parts on mobile.
+    assign previous_page_index = paginate.current_page | minus: 1
+    assign next_page_index = paginate.current_page | plus: 1
+    assign ellipsis_part_count = 0
+
+    for part in paginate.parts
+      assign item_type = 'none'
+      assign part_label = 'general.pagination.page' | t: number: part.title, type: pagination_resource
+
+      case part.title
+        when paginate.current_page
+          assign item_type = 'active'
+        when '&hellip;'
+          assign item_type = 'ellipsis'
+          assign ellipsis_part_count = ellipsis_part_count | plus: 1
+        when previous_page_index
+          assign item_type = 'previous-page'
+        when next_page_index
+          assign item_type = 'next-page'
+      endcase
+
+      capture pagination_parts
+        echo pagination_parts
+        render 'pagination-item', item_type: item_type, is_link: part.is_link, link: part.url, link_anchor: link_anchor, button_label: part_label, button_text: part.title
+      endcapture
+    endfor
+
+    # Next button
+    if paginate.next != blank
+      assign next_label = 'general.pagination.next_page' | t: type: pagination_resource
+
+      capture pagination_parts
+        echo pagination_parts
+        render 'pagination-item', item_type: 'arrow', is_link: true, link: paginate.next.url, link_anchor: link_anchor, button_type: 'next', button_label: next_label
+      endcapture
+    endif
+
+    # Due to how the parts are output by Shopify, and the number of parts we want to display on
+    # mobile, we need to identify the fourth, and fourth from last, pages.
+    #
+    #   - If the current page is the fourth page, then we need to hide the page after the next page
+    #   - If the current page is fourth from last, then we need to hide the page after the ellipsis
+    assign current_is_fourth = false
+    assign current_is_fourth_from_last = false
+    assign fourth_from_last_page = paginate.pages | minus: 3
+
+    if paginate.current_page == 4
+      assign current_is_fourth = true
+    endif
+
+    if paginate.current_page == fourth_from_last_page
+      assign current_is_fourth_from_last = true
+    endif
+  -%}
+
+  <ul
+    class="pagination__list ff-body"
+    data-current-is-fourth="{{ current_is_fourth }}"
+    data-current-is-fourth-from-last="{{ current_is_fourth_from_last }}"
+    data-ellipsis-part-count="{{ ellipsis_part_count }}"
+  >
+    {{ pagination_parts }}
+  </ul>
+</div>

@@ -1,0 +1,216 @@
+{% liquid
+  comment
+    Renders a single slideshow slide.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - forloop: { Object } The forloop object for the current block iteration.
+      - placeholder_name: { String } The name of the placeholder image to use if no image
+          or video is supplied.
+  endcomment
+
+  if section.index == 1 and forloop.index == 1
+    assign prioritize_loading = true
+  else
+    assign prioritize_loading = false
+  endif
+-%}
+
+<div
+  class="slideshow-slide"
+  data-slide-index="{{ forloop.index0 }}"
+  data-block-id="{{ block.id }}"
+  js-slideshow-slide
+
+  {%- if block.type == 'video' %}
+    js-slideshow-video-slide
+  {%- endif -%}
+
+  {%- if forloop.index0 > 0 %}
+    inert
+  {%- endif %}
+
+  style="
+    --overlay-opacity: {{ block.settings.overlay_opacity }}%;
+    {%- # TODO: Can we be selective about which color variables to update? -%}
+    {% render 'color-scheme-to-vars', color_scheme: block.settings.overlay_color_scheme %}
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="slideshow-slide__media-wrapper">
+    {%- if block.type == 'image' -%}
+      {%- liquid
+        capture slide_image_sizes
+          render 'get-full-width-image-sizes', width: section.settings.width
+        endcapture
+      -%}
+
+      {%- render 'image',
+        image: block.settings.image,
+        focal_point: 'image-presentation',
+        class: 'slideshow-slide__media slideshow-slide__media--image slideshow-slide__media--image-desktop',
+        attributes: 'js-slideshow-desktop-slide-image',
+        object_fit: 'cover',
+        placeholder_name: placeholder_name,
+        prioritize_loading: prioritize_loading,
+        sizes: slide_image_sizes,
+        src_set_type: 'full-width'
+      -%}
+
+      {%- if block.settings.mobile_image != blank -%}
+        {%- render 'image',
+          image: block.settings.mobile_image,
+          focal_point: 'image-presentation',
+          class: 'slideshow-slide__media slideshow-slide__media--image slideshow-slide__media--image-mobile',
+          attributes: 'js-slideshow-mobile-slide-image',
+          object_fit: 'cover',
+          placeholder_name: placeholder_name,
+          prioritize_loading: prioritize_loading,
+          sizes: slide_image_sizes,
+          src_set_type: 'mobile-only-full-width'
+        -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- liquid
+        if block.settings.mobile_video != blank
+          assign has_mobile_video = true
+        else
+          assign has_mobile_video = false
+        endif
+      -%}
+
+      <div class="slideshow-slide__media slideshow-slide__media--video">
+        {%- render 'background-video',
+          video: block.settings.video,
+          placeholder_name: placeholder_name,
+          enable_mobile_video: has_mobile_video,
+          mobile_video: block.settings.mobile_video,
+          focal_point: block.settings.video_focal_point,
+          mobile_focal_point: block.settings.mobile_video_focal_point
+        -%}
+      </div>
+    {%- endif -%}
+
+    <div class="slideshow-slide__overlay"></div>
+  </div>
+
+  {%- liquid
+    assign content_alignment_vertical = block.settings.text_position | split: '_' | first
+    assign content_alignment_horizontal = block.settings.text_position | split: '_' | last
+    assign mobile_content_alignment_vertical = block.settings.mobile_text_position | split: '_' | first
+    assign mobile_content_alignment_horizontal = block.settings.mobile_text_position | split: '_' | last
+  -%}
+
+  <div class="slideshow-slide__content-wrapper">
+    <div
+      class="
+        slideshow-slide__content
+        content-alignment-vertical--{{ content_alignment_vertical }}
+        content-alignment-horizontal--{{ content_alignment_horizontal }}
+        mobile-content-alignment-vertical--{{ mobile_content_alignment_vertical }}
+        mobile-content-alignment-horizontal--{{ mobile_content_alignment_horizontal }}
+      "
+    >
+      <div
+        class="slideshow-slide__content-inner content-blocks ff-body fs-body-100"
+        style="--max-content-width: {{ block.settings.content_max_width }}px;"
+        js-slideshow-slide-content
+      >
+        {%- if block.settings.overline != blank -%}
+          <div
+            class="
+              slideshow-slide-content__overline
+              content-block
+              content-block--overline
+              ff-overline
+              fs-overline
+              {%- if section.settings.enable_text_animation %}
+                animation-slideshow-overline
+              {%- endif -%}
+            "
+          >
+            {{- block.settings.overline -}}
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.heading != blank -%}
+          {% liquid
+            capture heading_font_class
+              render 'settings-text-size', type: 'heading', size: block.settings.heading_font_size
+            endcapture
+          -%}
+
+          <div class="slideshow-slide-content__heading-wrapper content-block content-block--heading {{ heading_font_class }}">
+            <{{ block.settings.heading_tag }}
+              class="
+                slideshow-slide-content__heading
+                rte
+                ff-heading
+                {{ heading_font_class -}}
+                {%- if section.settings.enable_text_animation %}
+                  animation-slideshow-heading
+                {%- endif -%}
+              "
+            >
+              {{- block.settings.heading -}}
+            </{{ block.settings.heading_tag }}>
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.text != blank -%}
+          {% liquid
+            capture text_font_class
+              render 'settings-text-size', type: 'text', size: block.settings.text_font_size
+            endcapture
+          -%}
+
+          <div
+            class="
+              slideshow-slide-content__text
+              rte
+              content-block
+              content-block--text
+              {{ text_font_class -}}
+              {%- if section.settings.enable_text_animation %}
+                animation-slideshow-content
+              {%- endif -%}
+            "
+          >
+            {{- block.settings.text -}}
+          </div>
+        {%- endif -%}
+
+        {%- if block.settings.button_1_label != blank or block.settings.button_2_label != blank -%}
+          <div
+            class="
+              slideshow-slide-content__buttons content-blocks__inline-buttons
+              {%- if section.settings.enable_text_animation %}
+                animation-slideshow-content
+              {%- endif -%}
+            "
+          >
+            {%- if block.settings.button_1_label != blank -%}
+              <div class="slideshow-slide__button content-block content-block--button">
+                {%- render 'button',
+                  label: block.settings.button_1_label,
+                  link: block.settings.button_1_link,
+                  button_style: block.settings.button_1_style
+                -%}
+              </div>
+            {%- endif -%}
+
+            {%- if block.settings.button_2_label != blank -%}
+              <div class="slideshow-slide__button content-block content-block--button">
+                {%- render 'button',
+                  label: block.settings.button_2_label,
+                  link: block.settings.button_2_link,
+                  button_style: block.settings.button_2_style
+                -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>

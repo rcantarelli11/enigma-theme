@@ -1,0 +1,88 @@
+{%- liquid
+  comment
+    Renders a select input.
+
+    Required parameters:
+      - id: { String } The input's ID.
+      - name: { String } The input's name.
+      - label: { String } The input's label.
+      - options: { String } The input's options (HTML formatted).
+
+    Optional parameters:
+      - wrapper_class: { String } The wrapper's class.
+      - class: { String } The input's class.
+      - has_default_value: { Boolean: false } Whether the input has a default value. This should already
+          be set on the supplied options.
+      - required: { Boolean: false } Whether the input is required.
+      - label_type: { String: 'internal' } The label type. Can be:
+        - 'internal': Displays inside the input container.
+        - 'external': Displays outside the input container.
+      - help_text: { String } Text to be shown below the input.
+      - has_error: { Boolean: false } Whether there's an error associated with the input.
+      - error_message: { String } The message to display when there's an error associated
+          with the input.
+      - form_id: { String } ID of the form to connect the input with.
+  endcomment
+
+  assign has_default_value = has_default_value | default: false, allow_false: true
+  assign label_type = label_type | default: 'internal'
+
+  capture label_type_class
+    echo 'label-[[lt]]' | replace: '[[lt]]', label_type
+  endcapture
+
+  if required
+    assign label = 'general.forms.required_label' | t: label: label
+  endif
+
+  capture label_element
+    echo '<label for="[[id]]">[[label]]</label>' | replace: '[[id]]', id | replace: '[[label]]', label
+  endcapture
+-%}
+
+<div class="custom-input-wrapper {{ wrapper_class }}">
+  <div class="custom-input custom-input--select {{ label_type_class }} {%- if has_error %} has-error{%- endif -%}">
+    {%- liquid
+      if label_type == 'external'
+        echo label_element
+      endif
+    -%}
+
+    <select
+      id="{{ id }}"
+      name="{{ name }}"
+
+      {%- if class != blank %}
+        {{ class }}
+      {%- endif -%}
+
+      {%- if form_id != blank -%}
+        form="{{ form_id }}"
+      {%- endif -%}
+
+      {%- if required %}
+        required
+      {%- endif -%}
+    >
+      {%- if label_type == 'internal' and has_default_value == false -%}
+        <option value="placeholder" selected disabled hidden></option>
+      {%- endif -%}
+
+      {{ options }}
+    </select>
+
+    {%- liquid
+      if label_type == 'internal'
+        echo label_element
+      endif
+    -%}
+  </div>
+
+  {%- if has_error and error_message != blank -%}
+    <div class="notification-display error-display">{{ error_message }}</div>
+  {%- endif -%}
+
+  {%- if help_text != blank -%}
+    <div class="custom-input-help-text">{{ help_text }}</div>
+  {%- endif -%}
+</div>

@@ -1,0 +1,30 @@
+{%- liquid
+  comment
+    Renders a "Phone" block for the contact form.
+
+    Required parameters:
+      - block: { Object } The associated block.
+  endcomment
+
+  capture input_id
+    echo 'phone--[[bid]]' | replace: '[[bid]]', block.id
+  endcapture
+
+  assign downcased_label = block.settings.label | downcase | escape
+
+  capture input_name
+    echo 'contact[[[label]]]' | replace: '[[label]]', downcased_label
+  endcapture
+-%}
+
+<div class="contact-form__element contact-form__element--{{ block.settings.width }}" {{ block.shopify_attributes }}>
+  {%- render 'input-text',
+    id: input_id,
+    name: input_name,
+    label: block.settings.label,
+    placeholder: block.settings.label,
+    input_type: 'tel',
+    required: block.settings.required,
+    pattern: '[^a-zA-Z]+'
+  -%}
+</div>

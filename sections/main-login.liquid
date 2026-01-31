@@ -1,0 +1,214 @@
+{% render 'inline-scripts', script_name: 'main-login' %}
+
+<main-login
+  class="login section"
+  data-section-id="{{ section.id }}"
+  data-section-type="login"
+  data-form-mode="login"
+  style="{% render 'settings-section-padding' %}"
+>
+  <div class="section-inner section-inner--width-narrow">
+    <div id="login-form" class="login__form-wrapper">
+      <header class="login__header ta-c">
+        <h1 class="login__heading ff-heading fs-heading-display-3">
+          {{ 'customer.login.title' | t }}
+        </h1>
+      </header>
+
+      {% form 'customer_login', novalidate: 'novalidate', class: 'login__form stack', id: 'CustomerEmail' %}
+        {% liquid
+          assign email_input_label = 'customer.login.email' | t
+
+          capture email_input_attributes
+            echo 'autocomplete="email" '
+            echo 'autocorrect="off" '
+            echo 'autocapitalize="off"'
+          endcapture
+        %}
+
+        {% render 'input-text',
+          id: 'CustomerEmail',
+          name: 'customer[email]',
+          label: email_input_label,
+          required: true,
+          label_type: 'external',
+          input_type: 'email',
+          attributes: email_input_attributes
+        %}
+
+        {% if form.password_needed %}
+          <div class="login__password">
+            <div class="password__label-wrapper spread">
+              {% liquid
+                assign forgot_password_label = 'customer.login.forgot_password' | t
+
+                capture forgot_password_attributes
+                  echo 'js-form-mode-toggle '
+                  echo 'aria-controls="register-form"'
+                endcapture
+              %}
+
+              <label for="CustomerPassword">{{ 'customer.login.password' | t }}</label>
+
+              {% render 'button',
+                label: forgot_password_label,
+                button_style: 'text',
+                linkless_type: 'button',
+                require_link: false,
+                underlined: true,
+                button_attributes: forgot_password_attributes
+              %}
+            </div>
+            <input
+              type="password"
+              class="input"
+              value=""
+              name="customer[password]"
+              id="CustomerPassword"
+            >
+          </div>
+        {% endif %}
+
+        {% render 'form-status', form: form, form_id: 'CustomerEmail' %}
+        <div hidden js-form-success-relay>
+          {% # if success message in password recover, it gets relayed here %}
+        </div>
+
+        {% assign sign_in_label = 'customer.login.sign_in' | t -%}
+        {% render 'button',
+          label: sign_in_label,
+          class: 'login__button',
+          button_width: 'full',
+          linkless_type: 'submit',
+          require_link: false
+        %}
+
+        <div class="login__links ff-body fs-body-100 ta-c">
+          <span>{{ 'customer.login.new_customer' | t }}</span>
+          <a href="{{ routes.account_register_url }}">
+            {{- 'customer.login.create_account' | t -}}
+          </a>
+        </div>
+      {% endform %}
+    </div>
+
+    <div id="recover-form" class="login__form-wrapper">
+      <header class="login__header stack ta-c">
+        <h2 class="login__heading ff-heading fs-heading-display-3">
+          {{ 'customer.recover_password.title' | t }}
+        </h2>
+        <p class="login__subheading fs-body-100">{{ 'customer.recover_password.subtext' | t }}</p>
+      </header>
+
+      <div class="login__main">
+        {% form 'recover_customer_password', class: 'login__form stack' %}
+          {% liquid
+            assign email_input_label = 'customer.recover_password.email' | t
+
+            capture email_input_attributes
+              echo 'autocomplete="email" '
+              echo 'autocorrect="off" '
+              echo 'autocapitalize="off"'
+            endcapture
+          %}
+
+          {% render 'input-text',
+            id: 'RecoverEmail',
+            name: 'email',
+            label: email_input_label,
+            required: true,
+            label_type: 'external',
+            input_type: 'email',
+            attributes: email_input_attributes
+          %}
+
+          {% assign success_msg = 'customer.recover_password.success' | t %}
+          {% render 'form-status', form: form, form_id: 'RecoverEmail', success_message: success_msg %}
+
+          {% assign submit_label = 'customer.recover_password.submit' | t -%}
+          {% render 'button',
+            label: submit_label,
+            class: 'login__button',
+            button_width: 'full',
+            linkless_type: 'submit',
+            require_link: false
+          %}
+
+          {% liquid
+            assign cancel_label = 'customer.recover_password.cancel' | t
+
+            capture cancel_attributes
+              echo 'js-form-mode-toggle '
+              echo 'aria-controls="login-form"'
+            endcapture
+          %}
+          {% render 'button',
+            label: cancel_label,
+            class: 'login__button--cancel',
+            button_style: 'text',
+            button_alignment: 'center',
+            linkless_type: 'button',
+            require_link: false,
+            underlined: true,
+            button_attributes: cancel_attributes
+          %}
+        {% endform %}
+      </div>
+    </div>
+
+    {% comment %}
+      If accounts are set as optional, the following will be shown as an option
+      during checkout, not on the default /login page.
+    {% endcomment %}
+
+    {% if shop.checkout.guest_login %}
+      <div id="guest-form" class="login__form-wrapper ta-c">
+        <h2 class="ff-heading fs-heading-3-base">{{ 'customer.login.guest_title' | t }}</h2>
+
+        {% form 'guest_login' %}
+          {% assign guest_label = 'customer.login.guest_continue' | t %}
+          {% render 'button',
+            label: guest_label,
+            class: 'login__button--guest',
+            button_width: 'full',
+            linkless_type: 'submit',
+            require_link: false
+          %}
+        {% endform %}
+      </div>
+    {% endif %}
+  </div>
+</main-login>
+
+{% schema %}
+{
+  "name": "t:sections.main_login.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ]
+}
+{% endschema %}

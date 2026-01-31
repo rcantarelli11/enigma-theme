@@ -1,0 +1,76 @@
+{% liquid
+  comment
+    Renders Cart Button with count, which has three different
+    styles depending on cart_icon_type global setting
+
+    Optional parameters:
+      - clickable: { Boolean: true } Clickable to view cart. Behaviour depends on cart_type global setting
+
+      Note: this element uses the 'header__button' class because it depends on the dual icon butotn style
+            which depends on that.
+  endcomment
+
+  render 'inline-scripts', script_name: 'cart-count'
+
+  assign clickable = clickable | default: true, allow_false: true
+  assign tag_name = 'div'
+
+  if clickable
+    assign tag_name = 'a'
+  endif
+
+  if settings.cart_icon_type != 'no-icon'
+    assign icon_height = 22
+    assign icon_width = 22
+
+    if settings.cart_icon_type == 'cart'
+      assign icon_width = 24
+    endif
+
+    capture icon-cart
+      render 'icon-utility', icon: settings.cart_icon_type, width: icon_width, height: icon_height
+    endcapture
+  endif
+%}
+
+<{{ tag_name }}
+  class="cart-button header__button btn {%- if settings.cart_icon_type != "no-icon" %} btn--style-inline-icon{%- endif %}{% if class %} {{ class }}{% endif %}"
+  {% if clickable %}
+    aria-label="{{ 'general.accessibility.open_cart' | t }}"
+    href="{{ routes.cart_url }}"
+  {% endif %}
+  {% if clickable and settings.cart_type == 'drawer' %}
+    data-action="show-cart-drawer"
+  {% endif %}
+  data-icon-type="{{ settings.cart_icon_type }}"
+  js-cart-button
+>
+  <div class="cart-button__inner">
+    {% if settings.cart_icon_type != 'no-icon' %}
+      <div class="icon-wrapper">
+        {{ icon-cart }}
+        {% if clickable %}
+          {% # double icon for hover effect %}
+          {{ icon-cart }}
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+
+  <cart-count
+    class="
+      cart-button-count
+      ff-body
+      fs-body-{%- if settings.cart_icon_type != "no-icon" -%}20{%- else -%}60{%- endif %}
+    "
+    data-cart-count="{{ cart.item_count }}"
+  >
+    {%- liquid
+      if cart.item_count > 99
+        echo '99+'
+      else
+        echo cart.item_count
+      endif
+    -%}
+  </cart-count>
+</{{ tag_name }}>

@@ -1,0 +1,1158 @@
+{%- liquid
+  echo 'component-product-item.css' | asset_url | stylesheet_tag
+  echo 'component-product-rating.css' | asset_url | stylesheet_tag
+  echo 'component-pagination.css' | asset_url | stylesheet_tag
+
+  if settings.enable_quick_shopping
+    echo 'component-product-item-quick-shopping.css' | asset_url | stylesheet_tag
+    echo 'component-product-blocks.css' | asset_url | stylesheet_tag
+    render 'inline-scripts', script_name: 'product-block-variant-selector'
+    render 'inline-scripts', script_name: 'product-block-buy-buttons'
+    render 'inline-scripts', script_name: 'product-media'
+    render 'inline-scripts', script_name: 'scroll-slider'
+  endif
+
+  # If we have promo tiles, include the CSS
+  if section.blocks.size > 0
+    echo 'component-promotion-tile.css' | asset_url | stylesheet_tag
+    render 'inline-scripts', script_name: 'background-video'
+  endif
+
+  # If we have filters, include filter CSS and price range JS
+  if section.settings.enable_filtering and collection.filters.size > 0
+    echo 'component-filter-drawer.css' | asset_url | stylesheet_tag
+    echo 'component-filter-form.css' | asset_url | stylesheet_tag
+    render 'inline-scripts', script_name: 'price-range'
+  endif
+
+  # If we have sorting, or filters, include filter/sort JS
+  if section.settings.enable_sorting or section.settings.enable_filtering and collection.filters.size > 0
+    render 'inline-scripts', script_name: 'filter-sort-form'
+  endif
+
+  render 'inline-scripts', script_name: 'product-item'
+
+  # Swatch data
+  if settings.enable_product_listing_swatches or settings.enable_filter_swatches
+    assign swatch_variant_options = settings.swatch_variant_options | split: ','
+
+    capture custom_swatch_color_maps
+      render 'get-custom-swatch-color-maps'
+    endcapture
+
+    assign custom_swatch_color_key_map = custom_swatch_color_maps | split: ' | ' | first | split: ','
+    assign custom_swatch_color_value_map = custom_swatch_color_maps | split: ' | ' | last | split: ','
+  endif
+
+  # Filter init
+  if section.settings.enable_filtering and collection.filters.size > 0
+    assign filters_enabled_and_valid = true
+    assign active_filter_count = 0
+    assign has_open_group = false
+
+    for filter in collection.filters
+      # Update active filter count
+      if filter.type == 'price_range'
+        if filter.min_value.value != blank or filter.max_value.value != blank
+          assign active_filter_count = active_filter_count | plus: 1
+
+          capture active_filters
+            echo active_filters
+
+            render 'active-filter-item', filter: filter
+          endcapture
+        endif
+      elsif filter.active_values.size > 0
+        assign active_filter_count = active_filter_count | plus: filter.active_values.size
+
+        capture active_filters
+          echo active_filters
+
+          for value in filter.active_values
+            render 'active-filter-item', filter: filter, value: value
+          endfor
+        endcapture
+      endif
+
+      capture filter_content
+        echo filter_content
+
+        case section.settings.filter_group_open_state
+          when 'first'
+            if filter.type == 'list' and filter.values.first.param_name contains 'availability'
+              assign is_list_filter = false
+            elsif filter.type == 'list'
+              assign is_list_filter = true
+            endif
+
+            if has_open_group == false and is_list_filter or filter.type == 'price_range'
+              assign group_open = true
+              assign has_open_group = true
+            else
+              assign group_open = false
+            endif
+          when 'all'
+            assign group_open = true
+          when 'none'
+            assign group_open = false
+        endcase
+
+        render 'filter-group', filter: filter, swatch_variant_options: swatch_variant_options, custom_swatch_color_key_map: custom_swatch_color_key_map, custom_swatch_color_value_map: custom_swatch_color_value_map, group_open: group_open
+      endcapture
+    endfor
+  else
+    assign filters_enabled_and_valid = false
+  endif
+
+  # Sorting init
+  if section.settings.enable_sorting
+    assign sort_by_value = collection.sort_by | default: collection.default_sort_by
+    assign sort_by_name = blank
+
+    capture sort_options
+      for option in collection.sort_options
+        assign option_selected = false
+
+        capture escaped_value
+          echo option.value | escape
+        endcapture
+
+        capture escaped_name
+          echo option.name | escape
+        endcapture
+
+        capture option_id
+          echo 'sort-[[ov]]--top-bar' | replace: '[[ov]]', option.value
+        endcapture
+
+        if option.value == sort_by_value
+          assign option_selected = true
+          assign sort_by_name = escaped_name
+        endif
+
+        render 'input-radio', id: option_id, name: 'sort_by--top-bar', value: escaped_value, label: escaped_name, checked: option_selected, include_hidden_label: true
+      endfor
+    endcapture
+  endif
+-%}
+
+{%- # Filter button content is the same between the top bar and sticky button -%}
+{%- if filters_enabled_and_valid -%}
+  {%- capture filter_button_content -%}
+    {%- render 'icon-utility', icon: 'filter', width: 22 -%}
+
+    <span class="filter-button__text fs-body-100">
+      {{- 'shared.filtering_and_sorting.filters' | t -}}
+    </span>
+
+    {%- if active_filter_count > 0 -%}
+      <span class="filter-button__count fs-body-50">{{ active_filter_count }}</span>
+    {%- endif -%}
+  {%- endcapture -%}
+{%- endif -%}
+
+<collection-product-grid
+  class="section"
+  data-section-id="{{ section.id }}"
+  data-filter-enabled="{{ filters_enabled_and_valid }}"
+  data-sort-enabled="{{ section.settings.enable_sorting }}"
+  data-current-sort="{{ sort_by_value }}"
+  data-sticky-filter-sort-enabled="{{ section.settings.show_sticky_filter_and_sort_button }}"
+  js-product-grid-section
+  style="
+    {% render 'settings-section-padding' %}
+    {%- # TODO: Can we be selective about which color variables to update? -%}
+    {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+  "
+>
+  <div class="section-inner section-inner--width-{{ section.settings.width }}">
+    {%- if collection.products_count > 0 or active_filter_count > 0 -%}
+      {%- paginate collection.products by section.settings.products_per_page -%}
+        {%- # Top bar -%}
+        {%- liquid
+          capture top_bar_class
+            echo 'collection-product-grid__top-bar'
+
+            if filters_enabled_and_valid == false and section.settings.enable_sorting
+              echo ' collection-product-grid__top-bar--sort-enabled-only'
+            endif
+
+            echo ' ff-body'
+          endcapture
+        -%}
+
+        {%- if section.settings.enable_sorting
+          or filters_enabled_and_valid
+          or section.settings.show_total_result_count
+        -%}
+          <div class="{{ top_bar_class }}" js-product-grid-top-bar>
+            {%- # Filtering -%}
+            {%- if filters_enabled_and_valid -%}
+              <button
+                class="collection-top-bar__filter-button"
+                aria-label="{{ 'shared.filtering_and_sorting.filters' | t }}"
+                js-filter-drawer-trigger
+              >
+                {{- filter_button_content -}}
+              </button>
+            {%- endif -%}
+
+            {%- if section.settings.show_total_result_count or section.settings.enable_sorting -%}
+              <div class="collection-top-bar__results-and-sort">
+                {%- # Result count -%}
+                {%- if section.settings.show_total_result_count and collection.products_count > 0 -%}
+                  <div class="collection-top-bar__result-count">
+                    {%- if filters_enabled_and_valid or section.settings.enable_sorting -%}
+                      <span class="result-count__showing fs-body-60">{{ 'collections.general.showing' | t }}</span>
+                    {%- endif -%}
+
+                    {%- liquid
+                      assign pagination_current_item_start = paginate.current_offset | plus: 1
+                      assign pagination_current_item_end = paginate.current_page | times: paginate.page_size
+
+                      if pagination_current_item_end > paginate.items
+                        assign pagination_current_item_end = paginate.items
+                      endif
+
+                      capture range
+                        echo '[[pcis]]–[[pcie]]' | replace: '[[pcis]]', pagination_current_item_start | replace: '[[pcie]]', pagination_current_item_end
+                      endcapture
+                    -%}
+
+                    <span class="result-count__count">
+                      {{- 'collections.general.result_count' | t: range: range, total: paginate.items -}}
+                    </span>
+                  </div>
+                {%- endif -%}
+
+                {%- if section.settings.show_total_result_count
+                  and section.settings.enable_sorting
+                  and collection.products_count > 0
+                -%}
+                  <span class="result-sort-divider"></span>
+                {%- endif -%}
+
+                {%- # Sorting -%}
+                {%- if section.settings.enable_sorting -%}
+                  <div class="collection-top-bar__sort-wrapper">
+                    {%- capture sort_trigger -%}
+                      <div class="collection-top-bar-sort__trigger fs-body-100">
+                        <span class="sort-trigger__label">{{ 'shared.filtering_and_sorting.sort_by' | t }}:</span>
+                        <span class="sort-trigger__value" js-sort-trigger-value>{{ sort_by_name }}</span>
+
+                        {%- render 'icon-utility', icon: 'chevron-down-small', width: 12 -%}
+                      </div>
+                    {%- endcapture -%}
+
+                    {%- capture sort_disclosure_structure -%}
+                        <div class="collection-top-bar-sort__disclosure color-popup-modal" js-sort-top-bar>[[options]]</div>
+                      {%- endcapture -%}
+
+                    {%- liquid
+                      capture sort_disclosure
+                        echo sort_disclosure_structure | replace: '[[options]]', sort_options
+                      endcapture
+
+                      render 'disclosure', trigger: sort_trigger, content: sort_disclosure, alignment: 'overlaid'
+                    -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- # Sticky filter and sort button -%}
+        <div
+          class="
+            collection-product-grid__sticky-filter-sort-button
+            {%- if section.settings.show_sticky_filter_and_sort_button %}
+              collection-product-grid__sticky-filter-sort-button--desktop-enabled
+            {%- endif -%}
+          "
+          js-sticky-filter-sort-button
+        >
+          {%- if filters_enabled_and_valid -%}
+            <button
+              class="sticky-filter-sort__filter-button"
+              aria-label="{{ 'shared.filtering_and_sorting.filters' | t }}"
+              js-filter-drawer-trigger--sticky
+            >
+              {{- filter_button_content -}}
+            </button>
+          {%- endif -%}
+
+          {%- if filters_enabled_and_valid and section.settings.enable_sorting -%}
+            <span class="sticky-filter-sort__divider"></span>
+          {%- endif -%}
+
+          {%- if section.settings.enable_sorting -%}
+            <div class="sticky-filter-sort__sort-wrapper">
+              {%- capture sort_trigger -%}
+                <button class="sticky-filter-sort__sort-trigger fs-body-100" aria-label="{{ 'shared.filtering_and_sorting.sort' | t }}" js-sort-drawer-trigger>
+                  {%- render 'icon-utility', icon: 'sort', width: 18 -%}
+
+                  <span class="sort-trigger__label">{{ 'shared.filtering_and_sorting.sort' | t }}</span>
+                </button>
+              {%- endcapture -%}
+
+              <div class="sticky-filter-sort__sort-mobile">{{ sort_trigger }}</div>
+
+              <div class="sticky-filter-sort__sort-desktop">
+                {%- capture sort_disclosure_structure -%}
+                  <div class="sticky-filter-sort__sort-disclosure color-popup-modal" js-sort-sticky-button>[[options]]</div>
+                {%- endcapture -%}
+
+                {%- liquid
+                  # For the :checked attribute and labels to work, we need the 'name' and 'id'/'for' attributes
+                  # to be different between each display
+                  capture sticky_sort_options
+                    echo sort_options | replace: '--top-bar', '--sticky-filter-sort'
+                  endcapture
+
+                  capture sort_disclosure
+                    echo sort_disclosure_structure | replace: '[[options]]', sticky_sort_options
+                  endcapture
+
+                  render 'disclosure', trigger: sort_trigger, content: sort_disclosure, alignment: 'above'
+                -%}
+              </div>
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- # Product grid -%}
+                <div class="devFiltersProductGrid">
+        <div class="devFilters">
+                     {% if section.settings.menu.links.size > 0 %}
+                      <ul>
+                        {% for link in section.settings.menu.links %}
+                          <li>
+                            <a class="link t-opacity-70" href="{{ link.url }}">{{ link.title }}</a>
+                          </li>
+                        {% endfor %}
+                      </ul>
+                 {% endif %}
+        </div>
+        <div
+          class="
+            collection-product-grid__products
+            standard-grid
+            standard-grid--with-count-based-gaps
+            standard-grid--mobile-{{ section.settings.column_count_mobile }}-column
+            standard-grid--desktop-{{ section.settings.column_count_desktop }}-column
+            {%- if collection.products.size == 0 %} collection-product-grid__products--empty{%- endif -%}
+          "
+          js-product-grid
+          style="
+            --column-count-desktop: {{ section.settings.column_count_desktop }};
+            --column-count-mobile: {{ section.settings.column_count_mobile }};
+          "
+        >
+          {%- liquid
+            if paginate.current_page == 1
+              capture promo_index_list
+                for block in section.blocks
+                  # We only care about promos with a position that's less than the number of products on
+                  # the first page. It's also possible that a collection has fewer products than the page
+                  # limit, so we need to check the collection size as well.
+                  if block.settings.position <= section.settings.products_per_page and block.settings.position <= paginate.items
+                    echo block.settings.position
+                    echo ','
+                  endif
+                endfor
+              endcapture
+
+              assign promo_indexes = promo_index_list | remove_last: ',' | split: ',' | uniq
+
+              # Track how many promos have been included so we can consider them when placing others in the grid
+              assign promo_index_offset = 0
+            endif
+          -%}
+
+          {%- for prod in collection.products -%}
+            {%- liquid
+              # Convert to string so that it can be compared against our index list
+              capture current_index
+                echo forloop.index | plus: promo_index_offset
+              endcapture
+
+              capture current_index_plus_one
+                echo current_index | plus: 1
+              endcapture
+            -%}
+
+            {%- if paginate.current_page == 1 and promo_indexes contains current_index -%}
+              {%- for block in section.blocks -%}
+                {%- liquid
+                  # Convert to string so that it can be compared against the outer forloop index
+                  capture position
+                    echo block.settings.position
+                  endcapture
+                -%}
+
+                {%- if position == current_index -%}
+                  {%- liquid
+                    if section.settings.column_count_mobile == '2' and block.settings.mobile_width == 'full' and block.settings.position > 1
+                      assign mobile_promo_index_offset = promo_index_offset | times: 2
+                    else
+                      assign mobile_promo_index_offset = promo_index_offset
+                    endif
+
+                    assign mobile_position = block.settings.position | plus: mobile_promo_index_offset
+                    assign mobile_position_modulo = mobile_position | modulo: 2
+
+                    if section.settings.column_count_mobile == '2' and block.settings.mobile_width == 'full' and mobile_position_modulo == 0
+                      assign has_mobile_specific_promo = true
+                      assign promo_tile_block = block
+                    else
+                      assign has_mobile_specific_promo = false
+                    endif
+
+                    assign tablet_position_modulo = block.settings.position | modulo: 4
+
+                    if section.settings.column_count_desktop == '4' and block.settings.width == 'two-column' and tablet_position_modulo == 3
+                      assign has_tablet_specific_promo = true
+                      assign tablet_promo_position = 'after'
+                      assign promo_tile_block = block
+                    elsif section.settings.column_count_desktop == '4' and block.settings.width == 'full' and tablet_position_modulo == 1 and block.settings.position > 1
+                      assign has_tablet_specific_promo = true
+                    else
+                      assign has_tablet_specific_promo = false
+                    endif
+
+                    assign promo_index_offset = promo_index_offset | plus: 1
+                  -%}
+
+                  {%- render 'promotion-tile',
+                    block: block,
+                    column_count_mobile: section.settings.column_count_mobile,
+                    column_count_desktop: section.settings.column_count_desktop,
+                    class: 'promotion-tile--desktop',
+                    has_mobile_tile: has_mobile_specific_promo,
+                    has_tablet_tile: has_tablet_specific_promo,
+                    section_width: section.settings.width
+                  -%}
+
+                  {%- break -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- # Tablet-specific promo tile -%}
+            {%- if paginate.current_page == 1
+              and section.settings.column_count_desktop == '4'
+              and promo_indexes contains current_index_plus_one
+            -%}
+              {%-
+                # When the product grid has 4 columns on desktop, the promo width is 'full', and the
+                # position is the first column in a row, we need to show the tile 1 spot before the
+                # selected index to prevent blank spaces in the grid on tablet.
+              -%}
+              {%- for block in section.blocks -%}
+                {%- liquid
+                  # Convert to string so that it can be compared against the outer forloop index
+                  capture position
+                    echo block.settings.position
+                  endcapture
+                -%}
+
+                {%- if position == current_index_plus_one -%}
+                  {%- assign position_modulo = block.settings.position | modulo: 4 -%}
+
+                  {%- if position_modulo == 1 and block.settings.position > 1 and block.settings.width == 'full' -%}
+                    {%- render 'promotion-tile',
+                      block: block,
+                      column_count_mobile: section.settings.column_count_mobile,
+                      column_count_desktop: section.settings.column_count_desktop,
+                      class: 'promotion-tile--tablet',
+                      section_width: section.settings.width
+                    -%}
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+
+            {%- liquid
+              assign tablet_columns = section.settings.column_count_desktop | at_most: 3
+
+              capture product_item_image_sizes
+                render 'get-grid-image-sizes', section_width: section.settings.width, desktop_column_count: section.settings.column_count_desktop, tablet_column_count: tablet_columns, mobile_column_count: section.settings.column_count_mobile
+              endcapture
+            -%}
+
+            {%- render 'product-item',
+              prod: prod,
+              swatch_variant_options: swatch_variant_options,
+              custom_swatch_color_key_map: custom_swatch_color_key_map,
+              custom_swatch_color_value_map: custom_swatch_color_value_map,
+              load_animation_stagger_index: forloop.index0,
+              image_sizes: product_item_image_sizes
+            -%}
+
+            {%-
+              # Mobile-specific promo tile
+              #
+              # When the product grid has 2 columns on mobile, we need to show the tile 1 spot
+              # after the selected index to prevent blank spaces in the grid.
+            -%}
+            {%- if has_mobile_specific_promo and promo_tile_block != blank -%}
+              {%- render 'promotion-tile',
+                block: promo_tile_block,
+                column_count_mobile: section.settings.column_count_mobile,
+                column_count_desktop: section.settings.column_count_desktop,
+                class: 'promotion-tile--mobile',
+                section_width: section.settings.width
+              -%}
+
+              {%- liquid
+                assign has_mobile_specific_promo = false
+                assign promo_tile_block = blank
+              -%}
+            {%- endif -%}
+
+            {%-
+              # Tablet-specific promo tile
+              #
+              # When the product grid has 4 columns on desktop, the promo width is 'Two columns', and the
+              # position is the third column in a row, we need to show the tile 1 spot after the
+              # selected index to prevent blank spaces in the grid on tablet.
+            -%}
+            {%- if has_tablet_specific_promo and tablet_promo_position == 'after' -%}
+              {%- render 'promotion-tile',
+                block: promo_tile_block,
+                column_count_mobile: section.settings.column_count_mobile,
+                column_count_desktop: section.settings.column_count_desktop,
+                class: 'promotion-tile--tablet',
+                section_width: section.settings.width
+              -%}
+
+              {%- liquid
+                assign has_tablet_specific_promo = false
+                assign tablet_promo_position = blank
+                assign promo_tile_block = blank
+              -%}
+            {%- endif -%}
+          {%- else -%}
+            <p class="fs-body-100">{{ 'collections.general.no_products' | t }}</p>
+
+            <div class="collection-product-grid__clear fs-body-100">
+              {%- liquid
+                capture clear_link_label
+                  echo 'shared.filtering_and_sorting.clear_all' | t
+                endcapture
+
+                capture clear_link
+                  render 'button', label: clear_link_label, button_style: 'text', button_attributes: 'js-clear-all-link', require_link: false
+                endcapture
+              -%}
+
+              <span>{{ 'collections.general.use_fewer_filters_html' | t: clear_link: clear_link }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+                </div>
+        {%- # Pagination -%}
+        <div class="pagination-wrapper" js-pagination>
+          {%- liquid
+            if paginate.pages > 1
+              render 'pagination', paginate: paginate, resource_string: 'general.pagination.products'
+            endif
+          -%}
+        </div>
+
+        {%- # Loading container -%}
+        <div class="collection-product-grid__loading">
+          {%- render 'loader' -%}
+        </div>
+      {%- endpaginate -%}
+    {%- else -%}
+      <div class="collection-product-grid__empty">
+        <p class="fs-body-100">{{ 'collections.general.empty' | t }}</p>
+
+        <a href="{{ routes.all_products_collection_url }}" class="btn btn--style-text">
+          {{- 'collections.general.view_all_products' | t -}}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%-
+    # Filter drawer
+    #
+    # We need to render the drawer if sorting is enabled because that's where the form lives.
+  -%}
+  {%- if filters_enabled_and_valid or section.settings.enable_sorting -%}
+    {%- capture filter_drawer_header -%}
+      {%- if filters_enabled_and_valid -%}
+        <div class="filter-drawer-header">
+          <h3 class="filter-drawer-header__heading ff-heading fs-heading-5-base" js-filter-drawer-heading>
+            {{- 'shared.filtering_and_sorting.filters' | t }} {{ '([[afc]])' | replace: '[[afc]]', active_filter_count -}}
+          </h3>
+
+          {%-  render 'modal-close-button', button_class: 'filter-drawer-header__close-button' -%}
+        </div>
+      {%- endif -%}
+    {%- endcapture -%}
+
+    {%- capture filter_drawer_main -%}
+      <div class="filter-drawer-loading-overlay"></div>
+
+      <filter-sort-form
+        data-swatch-layout="{{ settings.filter_swatch_layout }}"
+        data-default-sort-by="{{ collection.default_sort_by }}"
+        data-has-open-group="{{ has_open_group }}"
+        js-filter-sort-form-component
+      >
+        <form class="filter-sort-form" js-filter-sort-form>
+          <input type="hidden" name="sort_by" value="{{ sort_by_value }}">
+
+          {%- if filters_enabled_and_valid -%}
+            <div class="active-filters-wrapper" js-active-filters>
+              {%- if active_filter_count > 0 -%}
+                <div class="active-filters">
+                  <div class="active-filters__header">
+                    <span class="active-filters-header__heading fs-body-100">{{ 'shared.filtering_and_sorting.selected_filters' | t }}</span>
+
+                    {%- liquid
+                      capture clear_button_label
+                        echo 'shared.filtering_and_sorting.clear_all' | t
+                      endcapture
+
+                      render 'button', label: clear_button_label, button_style: 'text', button_attributes: 'js-clear-all-button', underlined: true, require_link: false
+                    -%}
+                  </div>
+
+                  <div class="active-filters__list">
+                    {{ active_filters }}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+
+            {{ filter_content }}
+          {%- endif -%}
+        </form>
+      </filter-sort-form>
+    {%- endcapture -%}
+
+    {%- if filters_enabled_and_valid -%}
+      {%- capture button_label -%}
+        <span class="label-idle" js-filter-view-results-label>{{ 'shared.filtering_and_sorting.drawer.show_results' | t: count: collection.products_count }}</span>
+
+        <span class="label-loading">
+          {%- render 'loader',
+            background_color_var: '--color-solid-button-background',
+            foreground_color_var: '--color-solid-button-text',
+            loader_size: 16
+            -%}
+        </span>
+      {%- endcapture -%}
+    {%- endif -%}
+
+    {%- liquid
+      capture filter_drawer_footer
+        if filters_enabled_and_valid
+          render 'button', label: button_label, button_width: 'full', button_attributes: 'js-filter-view-results', require_link: false, wrapper_class: 'filter-drawer-view-results'
+        endif
+      endcapture
+    -%}
+
+    {%- capture filter_drawer_inner -%}
+      {%-  render 'drawer-inner',
+        header_content: filter_drawer_header,
+        main_content: filter_drawer_main,
+        footer_content: filter_drawer_footer,
+        main_content_class: 'scrollbars-hidden'
+      -%}
+    {%- endcapture -%}
+
+    {%- liquid
+      capture drawer_title
+        echo 'shared.filtering_and_sorting.drawer.title' | t
+      endcapture
+
+      capture drawer_description
+        echo 'shared.filtering_and_sorting.drawer.description' | t
+      endcapture
+    -%}
+
+    {%- render 'drawer',
+      name: 'filterDrawer',
+      title: drawer_title,
+      description: drawer_description,
+      class: 'filter-drawer',
+      content: filter_drawer_inner,
+      omit_inner: true,
+      close_button: false
+    -%}
+
+    {%- # Mobile sort drawer -%}
+    {%- if section.settings.enable_sorting -%}
+      {%- capture sort_drawer_content -%}
+        {%-  render 'modal-close-button', form_class: 'mobile-sort-drawer__close-button' -%}
+
+        {%- liquid
+          # For the :checked attribute and labels to work, we need the 'name' and 'id'/'for' attributes
+          # to be different between each display
+          capture drawer_sort_options
+            echo sort_options | replace: '--top-bar', '--drawer'
+          endcapture
+        -%}
+
+        <div class="mobile-sort-drawer__content" js-sort-mobile-drawer>{{ drawer_sort_options }}</div>
+      {%- endcapture -%}
+
+      {%- render 'drawer',
+        name: 'mobileSortDrawer',
+        content: sort_drawer_content,
+        alignment: 'bottom',
+        class: 'mobile-sort-drawer'
+      -%}
+    {%- endif -%}
+  {%- endif -%}
+</collection-product-grid>
+<style>
+  .devFiltersProductGrid {
+    display: flex;
+    gap: 20px;
+}
+  .devFilters {
+    width: 33%;
+}
+  .devFilters a{
+    color: white;
+    opacity: 1;
+    font-weight: bold;
+    background:transparent;
+  }
+   .devFiltersProductGrid li{
+      margin-bottom:20px;
+    }
+  @media screen and (max-width:990px){
+     .devFilters {
+    display:none;
+}
+   
+  }
+</style>
+
+{% schema %}
+{
+  "name": "t:sections.main_collection_product_grid.name",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main_collection_product_grid.settings.grid.header.content"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "t:sections.main_collection_product_grid.settings.grid.products_per_page.label",
+      "min": 1,
+      "max": 50,
+      "step": 1,
+      "default": 18
+    },
+    {
+      "id": "column_count_desktop",
+      "type": "select",
+      "label": "t:shared.settings.standard_grid.column_count_desktop.label",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "id": "column_count_mobile",
+      "type": "select",
+      "label": "t:shared.settings.standard_grid.column_count_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_total_result_count",
+      "label": "t:sections.main_collection_product_grid.settings.grid.show_total_result_count.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.enable_sorting.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.enable_filtering.label",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_sticky_filter_and_sort_button",
+      "label": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.show_sticky_filter_and_sort_button.label",
+      "info": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.show_sticky_filter_and_sort_button.info",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "filter_group_open_state",
+      "label": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.filter_group_open_state.label",
+      "options": [
+        {
+          "value": "first",
+          "label": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.filter_group_open_state.options.first"
+        },
+        {
+          "value": "all",
+          "label": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.filter_group_open_state.options.all"
+        },
+        {
+          "value": "none",
+          "label": "t:sections.main_collection_product_grid.settings.filtering_and_sorting.filter_group_open_state.options.none"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:shared.settings.section_settings.width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:shared.settings.section_settings.width.options.page_width"
+        },
+        {
+          "value": "full-width-padded",
+          "label": "t:shared.settings.section_settings.width.options.full_width_padded_simplified_language"
+        }
+      ],
+      "info": "t:shared.settings.section_settings.width.info",
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Collection Links",
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promotion-tile",
+      "name": "t:shared.blocks.promotion_tile.name",
+      "settings": [
+        {
+          "type": "header",
+          "content": "t:shared.blocks.promotion_tile.settings.layout.header.content"
+        },
+        {
+          "type": "range",
+          "id": "position",
+          "label": "t:shared.blocks.promotion_tile.settings.layout.position.label",
+          "min": 1,
+          "max": 50,
+          "step": 1,
+          "default": 1,
+          "info": "t:shared.blocks.promotion_tile.settings.layout.position.info"
+        },
+        {
+          "type": "select",
+          "id": "width",
+          "label": "t:shared.blocks.promotion_tile.settings.layout.width.label",
+          "options": [
+            {
+              "value": "one-column",
+              "label": "t:shared.blocks.promotion_tile.settings.layout.width.options.one_column"
+            },
+            {
+              "value": "two-column",
+              "label": "t:shared.blocks.promotion_tile.settings.layout.width.options.two_columns"
+            },
+            {
+              "value": "full",
+              "label": "t:shared.blocks.promotion_tile.settings.layout.width.options.full_width"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "mobile_width",
+          "label": "t:shared.blocks.promotion_tile.settings.layout.mobile_width.label",
+          "options": [
+            {
+              "value": "one-column",
+              "label": "t:shared.blocks.promotion_tile.settings.layout.width.options.one_column"
+            },
+            {
+              "value": "full",
+              "label": "t:shared.blocks.promotion_tile.settings.layout.width.options.full_width"
+            }
+          ],
+          "default": "full"
+        },
+        {
+          "type": "range",
+          "id": "min_height",
+          "label": "t:shared.blocks.promotion_tile.settings.layout.min_height.label",
+          "min": 150,
+          "max": 600,
+          "step": 5,
+          "unit": "px",
+          "default": 300,
+          "info": "t:shared.blocks.promotion_tile.settings.layout.min_height.info"
+        },
+        {
+          "type": "range",
+          "id": "min_height_mobile",
+          "label": "t:shared.blocks.promotion_tile.settings.layout.min_height_mobile.label",
+          "min": 150,
+          "max": 600,
+          "step": 5,
+          "unit": "px",
+          "default": 300
+        },
+        {
+          "type": "header",
+          "content": "t:shared.blocks.promotion_tile.settings.media.header.content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:shared.blocks.promotion_tile.settings.media.image.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "t:shared.blocks.promotion_tile.settings.media.mobile_image.label"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "t:shared.blocks.promotion_tile.settings.media.video.label",
+          "info": "t:shared.blocks.promotion_tile.settings.media.video.info"
+        },
+        {
+          "type": "video",
+          "id": "mobile_video",
+          "label": "t:shared.blocks.promotion_tile.settings.media.mobile_video.label",
+          "info": "t:shared.blocks.promotion_tile.settings.media.mobile_video.info"
+        },
+        {
+          "type": "header",
+          "content": "t:shared.blocks.promotion_tile.settings.content.header.content"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:shared.blocks.promotion_tile.settings.content.link.label",
+          "info": "t:shared.blocks.promotion_tile.settings.content.link.info"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "t:shared.blocks.promotion_tile.settings.content.heading.label",
+          "default": "Promotion"
+        },
+        {
+          "type": "range",
+          "id": "heading_font_size",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "label": "t:shared.settings.text_size.label_heading",
+          "info": "t:shared.settings.text_size.info",
+          "default": 3
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "t:shared.blocks.promotion_tile.settings.content.text.label"
+        },
+        {
+          "type": "range",
+          "id": "text_font_size",
+          "min": 1,
+          "max": 8,
+          "step": 1,
+          "label": "t:shared.settings.text_size.label_text",
+          "info": "t:shared.settings.text_size.info",
+          "default": 3
+        },
+        {
+          "type": "range",
+          "id": "content_max_width",
+          "min": 200,
+          "max": 1000,
+          "step": 10,
+          "unit": "px",
+          "label": "t:shared.settings.max_width.content.label",
+          "default": 500,
+          "info": "t:shared.settings.max_width.info"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "t:shared.blocks.promotion_tile.settings.content.text_alignment.label",
+          "options": [
+            {
+              "value": "top_left",
+              "label": "t:shared.options.alignment.full.top_left"
+            },
+            {
+              "value": "top_center",
+              "label": "t:shared.options.alignment.full.top_center"
+            },
+            {
+              "value": "top_right",
+              "label": "t:shared.options.alignment.full.top_right"
+            },
+            {
+              "value": "center_left",
+              "label": "t:shared.options.alignment.full.center_left"
+            },
+            {
+              "value": "center_center",
+              "label": "t:shared.options.alignment.full.center_center"
+            },
+            {
+              "value": "center_right",
+              "label": "t:shared.options.alignment.full.center_right"
+            },
+            {
+              "value": "bottom_left",
+              "label": "t:shared.options.alignment.full.bottom_left"
+            },
+            {
+              "value": "bottom_center",
+              "label": "t:shared.options.alignment.full.bottom_center"
+            },
+            {
+              "value": "bottom_right",
+              "label": "t:shared.options.alignment.full.bottom_right"
+            }
+          ],
+          "default": "top_left"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "t:shared.blocks.promotion_tile.settings.content.button_label.label",
+          "default": "Shop now"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "t:shared.settings.button_style.label",
+          "options": [
+            {
+              "value": "solid",
+              "label": "t:shared.settings.button_style.options.solid"
+            },
+            {
+              "value": "outline",
+              "label": "t:shared.settings.button_style.options.outline"
+            },
+            {
+              "value": "text",
+              "label": "t:shared.settings.button_style.options.text"
+            }
+          ],
+          "default": "solid"
+        },
+        {
+          "type": "select",
+          "id": "button_placement",
+          "label": "t:shared.blocks.promotion_tile.settings.content.button_placement.label",
+          "options": [
+            {
+              "value": "standard",
+              "label": "t:shared.blocks.promotion_tile.settings.content.button_placement.options.standard"
+            },
+            {
+              "value": "bottom-anchored",
+              "label": "t:shared.blocks.promotion_tile.settings.content.button_placement.options.bottom_anchored"
+            }
+          ],
+          "default": "bottom-anchored"
+        },
+        {
+          "type": "header",
+          "content": "t:shared.settings.overlay.header.content"
+        },
+        {
+          "type": "color_scheme",
+          "id": "overlay_color_scheme",
+          "label": "t:shared.settings.color_scheme.label",
+          "default": "scheme_4"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "label": "t:shared.settings.overlay.overlay_opacity.label",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 20,
+          "info": "t:shared.settings.overlay.overlay_opacity.info"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

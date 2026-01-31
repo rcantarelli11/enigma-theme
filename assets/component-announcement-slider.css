@@ -1,0 +1,85 @@
+:root{
+  --js-mobile:(max-width: 719.9px);
+  --js-tablet:(min-width: 720px);
+  --js-below-small-desktop:(max-width: 1023.9px);
+  --js-small-desktop:(min-width: 1024px);
+  --js-desktop:(min-width: 1440px);
+  --js-max-page-width:(min-width: 1600px);
+}
+announcement-slider{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow-y:hidden;
+  --button-margin:var(--spacing-250);
+}
+@media (min-width: 720px){
+announcement-slider{
+    --button-margin:var(--spacing-800)
+}
+  }
+.announcement-slider__nav-button .icon{
+    --icon-width:12px;
+    --icon-height:12px;
+  }
+.announcement-slider__nav-button[name="prev"]{
+    margin-right:var(--button-margin);
+  }
+.announcement-slider__nav-button[name="next"]{
+    margin-left:var(--button-margin);
+  }
+.announcement-slider__slider{
+  display:grid;
+  grid-template-columns:1fr;
+  align-items:center;
+  --animation-delay:240ms;
+}
+.announcement-slider__slider[data-slide-direction="up"]{
+    --transform-incoming:20px;
+    --transform-outgoing:-20px;
+  }
+.announcement-slider__slider[data-slide-direction="down"]{
+    --transform-incoming:-20px;
+    --transform-outgoing:20px;
+  }
+.announcement-slider__slider > *{
+    grid-row-start:1;
+    grid-column-start:1;
+    opacity:0;
+  }
+.no-js .announcement-slider__slider > *{
+      opacity:1;
+    }
+.announcement-slider__slider > *[data-slide-active="false"]{
+      pointer-events:none;
+    }
+.announcement-slider__slider > *[data-slide-active="false"][data-slide-outgoing="false"]{
+      opacity:0;
+      transition:opacity var(--animation-delay) ease-out;
+    }
+.announcement-slider__slider > *[data-slide-active="true"]{
+      opacity:1;
+      animation:announcement-slider-rollin var(--animation-delay) ease-in;
+      transition:opacity var(--animation-delay) ease-in;
+    }
+.announcement-slider__slider > *[data-slide-active="false"][data-slide-outgoing="true"]{
+      opacity:0;
+      animation:announcement-slider-rollout var(--animation-delay) ease-out;
+      transition:opacity var(--animation-delay) ease-out;
+    }
+@keyframes announcement-slider-rollin{
+  0%{
+    transform:translateY(var(--transform-incoming));
+  }
+  100%{
+    transform:translateY(0px);
+  }
+}
+@keyframes announcement-slider-rollout{
+  0%{
+    transform:translateY(0px);
+  }
+  100%{
+    transform:translateY(var(--transform-outgoing));
+  }
+}

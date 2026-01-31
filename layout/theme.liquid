@@ -1,0 +1,121 @@
+<!doctype html>
+
+<!--
+  --------------------------------------------------------------------
+  #  Eclipse v4.0.0
+  #  Documentation: https://help.fluorescent.co/eclipse
+  #  Purchase: https://themes.shopify.com/themes/eclipse
+  #  A product by Fluorescent: https://fluorescent.co/
+  --------------------------------------------------------------------
+-->
+
+{% liquid
+  if settings.corner_rounding_card > 0
+    assign cards_are_rounded = true
+  else
+    assign cards_are_rounded = false
+  endif
+
+  if settings.corner_rounding_image_thumbnail > 0
+    assign image_thumbnails_are_rounded = true
+  else
+    assign image_thumbnails_are_rounded = false
+  endif
+%}
+
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    {%- liquid
+      render 'standard-page-meta'
+      render 'standard-link-elements'
+      render 'standard-title-tag'
+      render 'social-meta-tags'
+
+      # TODO: Investigate the order of these - does setup happen first so that the document classes
+      # can be dealt with as soon as possible? We're thinking that setting vars should be first so
+      # that fonts can be handled right away and poossibly avoid a flash.
+      #
+      # We might need to break things up in addition to reordering.
+      render 'theme-setup'
+      render 'theme-setting-vars'
+      render 'theme-globals'
+
+      if request.design_mode
+        render 'inline-scripts', load_all: true
+      endif
+
+      echo content_for_header
+    -%}
+          <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+/>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Enigma Custom Theme CSS -->
+    {{ 'enigma.css' | asset_url | stylesheet_tag }}
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+      <!-- Google Tag Manager -->
+      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      
+      })(window,document,'script','dataLayer','GTM-WP3HWH4W');</script>
+  </head>
+
+  <body class="template-{{ request.page_type | handle }} image-thumbnails-are-rounded--{{ image_thumbnails_are_rounded }} cards-are-rounded--{{ cards_are_rounded }}">
+    <a href="#main" class="header__skip-to-content btn btn--style-outline" tabindex="1">
+      {{ 'general.accessibility.skip_to_content' | t }}
+    </a>
+
+    <div class="page">
+      {% if settings.enable_page_transitions -%}
+        {% render 'page-transition-overlay' %}
+      {%- endif %}
+
+      {% sections 'header-group' %}
+      {% sections 'overlay-group' %}
+
+      <div class="header-overlay" data-header-overlay>
+        <div class="header-overlay__inner"></div>
+      </div>
+
+      <main id="main" class="main">
+        {{ content_for_layout }}
+      </main>
+
+      {% sections 'footer-group' %}
+
+      {% render 'flash-alert' %}
+
+      {%- render 'enigma-cart-drawer' -%}
+    </div>
+  </body>
+
+  <script defer="defer" src="{{ 'global-disclosure.js' | asset_url }}"></script>
+  <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WP3HWH4W"
+
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  {%- comment -%}
+    Suggested approach to defer non-critical CSS.
+      - https://web.dev/articles/defer-non-critical-css
+  {%- endcomment -%}
+  <link
+    rel="preload"
+    fetchpriority="low"
+    href="{{ 'theme-deferred.css' | asset_url }}"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  >
+  <noscript><link rel="stylesheet" href="{{ 'theme-deferred.css' | asset_url }}"></noscript>
+</html>

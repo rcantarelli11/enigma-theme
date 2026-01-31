@@ -1,0 +1,118 @@
+{%- liquid
+  comment
+    Renders a "price-range" type filter.
+
+    Required parameters:
+      - filter: { Object } The filter object.
+  endcomment
+
+  capture filter_label_handle
+    echo filter.label | handle
+  endcapture
+
+  capture filter_value_label_handle
+    echo value.label | handle
+  endcapture
+
+  capture filter_id
+    echo 'filter--[[label]]-[[value]]' | replace: '[[label]]', filter_label_handle | replace: '[[value]]', filter_value_label_handle
+  endcapture
+
+  assign min_value = filter.min_value.value | default: 0 | divided_by: 100
+  assign max_value = filter.max_value.value | default: filter.range_max | divided_by: 100
+  assign range_max = filter.range_max | divided_by: 100 | ceil
+-%}
+
+<div id="{{ filter.param_name }}" class="filter-group filter-group--price-range" js-filter-group>
+  <price-range class="filter-item filter-item--price-range">
+    <div class="price-filter__inputs">
+      {%- capture currency_symbol -%}
+       <span class="price-filter-input-currency fs-body-100">{{ cart.currency.symbol }}</span>
+      {%- endcapture -%}
+
+      <div class="price-filter-input-wrapper">
+        <label for="{{ filter_id }}__min-input" class="visually-hidden">
+          {{- 'shared.filtering_and_sorting.min' | t -}}
+        </label>
+
+        {{ currency_symbol }}
+
+        <input
+          type="number"
+          id="{{ filter_id }}__min-input"
+          class="price-filter-input price-filter-input--from ta-r"
+          name="{{ filter.min_value.param_name }}"
+          value="{%- if min_value != 0 -%}{{ min_value }}{%- endif -%}"
+          min="0"
+          max="{{ range_max }}"
+          placeholder="0"
+          aria-label="{{ 'shared.filtering_and_sorting.min' | t }}"
+          js-from-input
+          data-input-type="min"
+        >
+      </div>
+
+      <span class="price-filter-input__separator">{{ 'shared.filtering_and_sorting.to' | t }}</span>
+
+      <div class="price-filter-input-wrapper">
+        <label for="{{ filter_id }}__max-input" class="visually-hidden">
+          {{- 'shared.filtering_and_sorting.max' | t -}}
+        </label>
+
+        {{ currency_symbol }}
+
+        <input
+          type="number"
+          id="{{ filter_id }}__max-input"
+          class="price-filter-input price-filter-input--max ta-r"
+          name="{{ filter.max_value.param_name }}"
+          value="{%- if max_value != range_max -%}{{ max_value }}{%- endif -%}"
+          min="0"
+          max="{{ range_max }}"
+          placeholder="{{ range_max }}"
+          aria-label="{{ 'shared.filtering_and_sorting.max' | t }}"
+          js-to-input
+          data-input-type="max"
+        >
+      </div>
+    </div>
+
+    <div class="price-filter__slider">
+      <label for="{{ filter_id }}__min-slider-input" class="visually-hidden">
+        {{- 'shared.filtering_and_sorting.min' | t -}}
+      </label>
+      <input
+        type="range"
+        id="{{ filter_id }}__min-slider-input"
+        class="price-filter-slider-input price-filter-slider-input--from"
+        value="{{ min_value }}"
+        min="0"
+        max="{{ range_max }}"
+        tabindex="-1"
+        js-from-slider
+        data-input-type="min"
+      >
+
+      <label for="{{ filter_id }}__to-slider-input" class="visually-hidden">
+        {{- 'shared.filtering_and_sorting.max' | t -}}
+      </label>
+      <input
+        type="range"
+        id="{{ filter_id }}__to-slider-input"
+        class="price-filter-slider-input price-filter-slider-input--to"
+        value="{{ max_value }}"
+        min="0"
+        max="{{ range_max }}"
+        tabindex="-1"
+        js-to-slider
+        data-input-type="max"
+      >
+    </div>
+
+    {%- capture highest_price -%}{{ range_max | times: 100 | money_without_trailing_zeros }}{%- endcapture -%}
+
+    <span class="price-filter__caption fs-body-100">
+      {{- 'shared.filtering_and_sorting.highest_price_html' | t: price: highest_price -}}
+    </span>
+  </price-range>
+</div>

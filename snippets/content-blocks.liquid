@@ -1,0 +1,54 @@
+{%- liquid
+  comment
+    Renders a section's content blocks within a loop.
+
+    Required parameters:
+      - blocks: { Object } The associated block objects.
+
+    Optional parameters:
+      - alignment: { String } The horizontal alignment of the content (for heading, button, image, and video player block). Can be:
+        - "left"
+        - "center"
+        - "right"
+      - content_over_banner: { Boolean: false } Whether blocks will be displayed over a banner image or video.
+      - animate_heading: { Boolean: false } Whether the heading block should animate.
+      - animate_text: { Boolean: false } Whether the blocks with text should animate.
+  endcomment
+
+  assign content_over_banner = content_over_banner | default: false, allow_false: true
+  # A Watcher only needs to be set if content isn't over a banner (which already has it's own watcher)
+  assign setup_visibility_watcher = false
+  if content_over_banner == false and animate_heading or animate_text
+    assign setup_visibility_watcher = true
+  endif
+
+  capture class_name
+    echo 'content-blocks'
+
+    if alignment
+      echo ' '
+      echo 'content-blocks--alignment-' | append: alignment
+    endif
+  endcapture
+-%}
+
+{%- if setup_visibility_watcher -%}
+  {% render 'inline-scripts', script_name: 'visibility-watcher' %}
+  <visibility-watcher data-watch-child-selector=".content-blocks">
+{%- endif -%}
+
+<div class="{{ class_name }}">
+  {%- for block in blocks -%}
+    {%- render 'content-block',
+      block: block,
+      animate_heading: animate_heading,
+      animate_text: animate_text,
+      forloop: forloop,
+      alignment: alignment
+    -%}
+  {%- endfor -%}
+</div>
+
+{%- if setup_visibility_watcher -%}
+  </visibility-watcher>
+{%- endif -%}

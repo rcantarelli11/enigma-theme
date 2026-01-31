@@ -1,0 +1,34 @@
+{%- liquid
+  comment
+    Renders a chip element.
+
+    Required parameters:
+      - value: { String } The chip value.
+
+    Optional parameters:
+      - selected: { Boolean: false } Whether the swatch is selected (active).
+      - disabled: { Boolean: false } Whether the swatch is disabled.
+  endcomment
+
+  capture chip_class
+    echo 'chip ff-body fs-body-100'
+
+    if selected
+      echo ' chip--selected'
+    endif
+  endcapture
+-%}
+
+<button
+  type="button"
+  class="{{ chip_class }}"
+  js-chip
+  js-variant-button
+  {%- if disabled %}
+    disabled
+  {%- endif %}
+
+  aria-label="{{ value }}"
+>
+  {{- value -}}
+</button>

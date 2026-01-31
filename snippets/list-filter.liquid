@@ -1,0 +1,58 @@
+{%- liquid
+  comment
+    Renders a "list" filter type.
+
+    Required parameters:
+      - filter: { Object } The filter object.
+      - swatch_variant_options: { Object } An array of swatch variant options (based on
+          'settings.swatch_variant_options').
+      - custom_swatch_color_key_map: { Object } An array of custom swatch color keys (names).
+      - custom_swatch_color_value_map: { Object } An array of custom swatch color values (HEX values).
+  endcomment
+
+  assign filter_type = 'checkbox'
+
+  if settings.enable_filter_swatches
+    if filter.presentation == 'swatch'
+      assign filter_type = 'swatch'
+    else
+      capture downcased_label
+        echo filter.label | downcase | strip
+      endcapture
+
+      for option in swatch_variant_options
+        capture option_name
+          echo option | downcase | strip
+        endcapture
+
+        if option_name == downcased_label
+          assign filter_type = 'swatch'
+          break
+        endif
+      endfor
+    endif
+  endif
+-%}
+
+<ul
+  id="{{ filter.param_name }}"
+  class="
+    filter-group
+    filter-group--type-{{ filter_type }}
+    {%- if filter_type == 'swatch' %}
+      filter-group--swatch-layout-{{ settings.filter_swatch_layout }}
+    {%- endif -%}
+  "
+  js-filter-group
+>
+  {%- for value in filter.values -%}
+    {%- render 'filter-item',
+      type: filter_type,
+      filter: filter,
+      value: value,
+      label: value.label,
+      custom_swatch_color_key_map: custom_swatch_color_key_map,
+      custom_swatch_color_value_map: custom_swatch_color_value_map
+    -%}
+  {%- endfor -%}
+</ul>

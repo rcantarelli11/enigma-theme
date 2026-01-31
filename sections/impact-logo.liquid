@@ -1,0 +1,261 @@
+{% liquid
+  if template.name == 'index'
+    capture animation_attributes
+      if section.settings.enable_parallax_on_scroll
+        echo "js-parallax-on-scroll='true'"
+      endif
+
+      case section.settings.fade_effect
+        when 'full_fade'
+          echo "js-opacity-on-scroll='true'"
+        when 'bottom_top_fade'
+          echo "js-fade-bottom-on-scroll='true'"
+        when 'top_bottom_fade'
+          echo "js-fade-top-on-scroll='true'"
+      endcase
+    endcapture
+
+    capture impact_logo_vars
+      if section.settings.logo_width == 'custom-width'
+        echo '--impact-logo-width: [[impact_logo_custom_width]]px;' | replace: '[[impact_logo_custom_width]]', section.settings.logo_custom_width
+      elsif section.settings.logo_width == 'full-width'
+        echo '--impact-logo-width: 100%;'
+      endif
+
+      echo '--impact-logo-top-padding: [[top_padding]]px;' | replace: '[[top_padding]]', section.settings.top_padding
+      echo '--impact-logo-bottom-padding: [[bottom_padding]]px;' | replace: '[[bottom_padding]]', section.settings.bottom_padding
+      echo '--impact-logo-top-padding-mobile: [[top_padding]]px;' | replace: '[[top_padding]]', section.settings.top_padding_mobile
+      echo '--impact-logo-bottom-padding-mobile: [[bottom_padding]]px;' | replace: '[[bottom_padding]]', section.settings.bottom_padding_mobile
+      echo '--color-background: [[background]];' | replace: '[[background]]', section.settings.color_scheme.settings.background
+      echo '--color-text: [[color_text]];' | replace: '[[color_text]]', section.settings.color_scheme.settings.text
+      echo '--color-text-transparent: [[color_text_transparent]];' | replace: '[[color_text_transparent]]', section.settings.color_scheme.settings.background
+      echo '--color-accent: [[color_accent]];' | replace: '[[color_accent]]', section.settings.color_scheme.settings.accent
+      echo '--color-accent-foreground: [[accent_foreground]];' | replace: '[[accent_foreground]]', section.settings.color_scheme.settings.accent_foreground
+    endcapture
+
+    capture impact_logo_not_set
+      if section.settings.logo == blank
+        echo 'data-impact-logo-not-set="true"'
+      endif
+    endcapture
+  endif
+
+  capture logo_sizes
+    echo '(max-width: [[lw]]px) [[lw]]px' | replace: '[[lw]]', section.settings.logo_custom_width
+  endcapture
+%}
+
+{%- capture custom_placeholder -%}
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1197 203" class="image visible">
+    <g fill="currentColor" fill-rule="evenodd">
+      <path fill-rule="nonzero" d="M111.5 71a18.5 18.5 0 1 0 0-37 18.5 18.5 0 0 0 0 37Z"/>
+      <path d="M68 3h24c10 0 18.2 0 24.7.5 6.7.6 12.6 1.8 18 4.5A46.2 46.2 0 0 1 155 28.2c2.8 5.5 4 11.4 4.5 18.1.5 6.5.5 14.6.5 24.6v24.2c0 10 0 18-.5 24.6a47.4 47.4 0 0 1-4.5 18 46.2 46.2 0 0 1-20.2 20.3c-5.5 2.8-11.4 4-18.1 4.5-6.5.5-14.6.5-24.6.5H67.9c-10 0-18 0-24.6-.5a47.4 47.4 0 0 1-18-4.5A46.2 46.2 0 0 1 5 137.8c-2.8-5.5-4-11.4-4.5-18.1-.5-6.5-.5-14.6-.5-24.6V70.9c0-10 0-18 .5-24.6.6-6.7 1.8-12.6 4.5-18A46.2 46.2 0 0 1 25.2 8c5.5-2.8 11.4-4 18.1-4.5C49.8 3 57.9 3 67.9 3ZM44.7 22c-5.6.4-8.8 1.2-11.2 2.5a27.7 27.7 0 0 0-12.1 12 29.7 29.7 0 0 0-2.6 11.3c-.4 5.7-.4 13-.4 23.5V89l8.9-10.7A21.5 21.5 0 0 1 59 76.8l33.2 33.1 14.5-14.5a21.5 21.5 0 0 1 32 1.8l2.7 3.3V71.3c0-10.5 0-17.8-.4-23.5-.5-5.6-1.3-8.8-2.6-11.2a27.7 27.7 0 0 0-12-12.1 29.7 29.7 0 0 0-11.3-2.6c-5.7-.4-13-.4-23.5-.4H68.3c-10.5 0-17.8 0-23.5.4ZM19 118.1v-1l.5-.6L41.6 90a3 3 0 0 1 4.5-.2l39.7 39.7a9.2 9.2 0 0 0 13 0l21-21a3 3 0 0 1 4.7.2l14.9 18.7-.9 2a27.7 27.7 0 0 1-12 12.1 29.7 29.7 0 0 1-11.3 2.6c-5.7.4-13 .4-23.5.4H68.3c-10.5 0-17.8 0-23.5-.4-5.6-.5-8.8-1.3-11.2-2.6a27.7 27.7 0 0 1-12.1-12 29.7 29.7 0 0 1-2.6-11.3Z"/>
+      <path fill-rule="nonzero" d="M1182 55a67 67 0 0 1 14.6 43.1 67 67 0 0 1-14.5 43.4c-9.7 11.9-24.4 17.9-44.2 17.9-19.7 0-34.5-6-44.2-18a66.8 66.8 0 0 1-14.5-43.3 67 67 0 0 1 14.5-43c9.7-12.2 24.5-18.3 44.2-18.3 19.8 0 34.5 6 44.2 18.2Zm-44.2 7.2a24 24 0 0 0-20.3 9.4c-4.8 6.2-7.1 15-7.1 26.5 0 11.6 2.3 20.4 7 26.7a24 24 0 0 0 20.4 9.4c8.8 0 15.5-3.1 20.2-9.4a43 43 0 0 0 7.1-26.7c0-11.5-2.3-20.3-7-26.5a23.8 23.8 0 0 0-20.3-9.4ZM995.4 175.5c3.2 2.7 8.7 4.1 16.3 4.1 10.8 0 18-3.6 21.7-10.8a55 55 0 0 0 3.6-23.4V138c-2.9 4.9-6 8.6-9.3 11-6 4.6-13.7 6.9-23.3 6.9a44.3 44.3 0 0 1-35.4-15.5 63.2 63.2 0 0 1-13-42.2c0-17 4.2-31.4 12.7-43a42 42 0 0 1 36.2-17.5c5.7 0 10.8 1 15 2.7 7.4 3 13.3 8.5 17.8 16.6V40.5h29.2v109c0 14.8-2.5 26-7.5 33.5-8.6 13-25 19.4-49.4 19.4a67.2 67.2 0 0 1-36-8.7 31.9 31.9 0 0 1-15.3-25.8h32.7a14 14 0 0 0 4 7.6Zm-5-59.3a22 22 0 0 0 21.9 14.5c7 0 13-2.6 17.8-7.9 4.8-5.3 7.2-13.8 7.2-25.4 0-10.9-2.3-19.2-7-24.9A22.4 22.4 0 0 0 1012 64c-10.5 0-17.8 5-21.8 14.8a52.6 52.6 0 0 0-3.1 19.5 44 44 0 0 0 3.3 17.9Zm-55-61.2a67 67 0 0 1 14.5 43.1 67 67 0 0 1-14.5 43.4c-9.7 11.9-24.4 17.9-44.2 17.9-19.7 0-34.4-6-44.1-18a66.8 66.8 0 0 1-14.6-43.3 67 67 0 0 1 14.6-43c9.7-12.2 24.4-18.3 44.1-18.3 19.8 0 34.5 6 44.2 18.2Zm-44.3 7.2a24 24 0 0 0-20.3 9.4c-4.7 6.2-7 15-7 26.5 0 11.6 2.3 20.4 7 26.7a24 24 0 0 0 20.3 9.4c8.8 0 15.6-3.1 20.3-9.4 4.7-6.3 7-15.1 7-26.7 0-11.5-2.3-20.3-7-26.5a23.8 23.8 0 0 0-20.3-9.4ZM718.7 0h32.4v127.4h77v28H718.7zM647 68.2c-12 0-20.1 4-24.3 11.8a46 46 0 0 0-3.4 20.5v54.9H589v-115h28.7v20.1a63.5 63.5 0 0 1 12.1-15.7 33 33 0 0 1 23.3-7l2.6.1v30.8a81.5 81.5 0 0 0-8.6-.5Zm-107.3 70.9-2.1 3.2a41.6 41.6 0 0 1-17.7 13.3 46 46 0 0 1-15.4 2.3c-17 0-28.5-6.1-34.4-18.3-3.3-6.8-5-16.7-5-29.9V40.5H496v69.2c0 6.6.8 11.5 2.3 14.8 2.8 5.8 8.2 8.7 16.2 8.7 10.2 0 17.3-4.1 21-12.4a45 45 0 0 0 3-17.8V40.5H569v114.9h-29.2V139ZM438.5 55A67 67 0 0 1 453 98.1a67 67 0 0 1-14.5 43.4c-9.7 11.9-24.4 17.9-44.2 17.9-19.7 0-34.5-6-44.2-18a66.8 66.8 0 0 1-14.5-43.3 67 67 0 0 1 14.5-43c9.7-12.2 24.5-18.3 44.2-18.3 19.8 0 34.5 6 44.2 18.2Zm-44.3 7.2c-8.8 0-15.6 3.1-20.3 9.4a43 43 0 0 0-7.1 26.5c0 11.6 2.4 20.4 7 26.7a24.1 24.1 0 0 0 20.4 9.4c8.8 0 15.5-3.1 20.2-9.4a43.7 43.7 0 0 0 7.1-26.7c0-11.5-2.4-20.3-7-26.5a23.8 23.8 0 0 0-20.3-9.4ZM351.2 0l-52 97v58.4h-32.4V97L213 0h38.3l32.2 67.7L314.4 0z"/>
+    </g>
+  </svg>
+{%- endcapture -%}
+
+{% if section.settings.visibility != 'never' %}
+  {% if template.name == 'index' %}
+    {{ 'component-impact-logo.css' | asset_url | stylesheet_tag }}
+    {%- render 'inline-scripts', script_name: 'impact-logo' -%}
+
+    <impact-logo
+      data-section-id="{{ section.id }}"
+      data-enable-impact-logo="{{ section.settings.visibility }}"
+      data-impact-logo-transparent="{{ section.settings.enable_transparent_logo }}"
+      data-impact-logo-alignment="{{ section.settings.logo_alignment }}"
+      style="{{ impact_logo_vars }}"
+      {{ animation_attributes }}
+    >
+      <div class="impact-logo__image-container" {{ impact_logo_not_set }}>
+        {%- render 'image', image: section.settings.logo, sizes: logo_sizes, custom_placeholder: custom_placeholder -%}
+      </div>
+    </impact-logo>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "t:sections.impact_logo.name",
+  "class": "impact-logo",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:sections.impact_logo.settings.paragraph.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:sections.impact_logo.settings.logo.label"
+    },
+    {
+      "type": "radio",
+      "id": "visibility",
+      "label": "t:sections.impact_logo.settings.visibility.label",
+      "options": [
+        {
+          "value": "all-screens",
+          "label": "t:sections.impact_logo.settings.visibility.options.all_screens"
+        },
+        {
+          "value": "large-screens",
+          "label": "t:sections.impact_logo.settings.visibility.options.large_screens"
+        }
+      ],
+      "default": "all-screens"
+    },
+    {
+      "type": "radio",
+      "id": "logo_width",
+      "label": "t:sections.impact_logo.settings.logo_width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:sections.impact_logo.settings.logo_width.options.page_width"
+        },
+        {
+          "value": "full-width",
+          "label": "t:sections.impact_logo.settings.logo_width.options.full_width"
+        },
+        {
+          "value": "custom-width",
+          "label": "t:sections.impact_logo.settings.logo_width.options.custom_width"
+        }
+      ],
+      "default": "full-width"
+    },
+    {
+      "type": "range",
+      "id": "logo_custom_width",
+      "label": "t:sections.impact_logo.settings.logo_custom_width.label",
+      "min": 250,
+      "max": 1200,
+      "step": 10,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "radio",
+      "id": "logo_alignment",
+      "label": "t:sections.impact_logo.settings.logo_alignment.label",
+      "info": "t:sections.impact_logo.settings.logo_alignment.info",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.impact_logo.settings.logo_alignment.options.left"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.impact_logo.settings.logo_alignment.options.center"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.impact_logo.settings.logo_alignment.options.right"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.impact_logo.settings.transparent_logo.header.content",
+      "info": "t:sections.impact_logo.settings.transparent_logo.header.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_transparent_logo",
+      "label": "t:sections.impact_logo.settings.transparent_logo.enable.label",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:sections.impact_logo.settings.animation.header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_parallax_on_scroll",
+      "label": "t:sections.impact_logo.settings.animation.enable_parallax_on_scroll.label",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "fade_effect",
+      "label": "t:sections.impact_logo.settings.animation.fade_effect.label",
+      "options": [
+        {
+          "value": "full_fade",
+          "label": "t:sections.impact_logo.settings.animation.fade_effect.options.full_fade"
+        },
+        {
+          "value": "bottom_top_fade",
+          "label": "t:sections.impact_logo.settings.animation.fade_effect.options.bottom_top_fade"
+        },
+        {
+          "value": "top_bottom_fade",
+          "label": "t:sections.impact_logo.settings.animation.fade_effect.options.top_bottom_fade"
+        },
+        {
+          "value": "disabled",
+          "label": "t:sections.impact_logo.settings.animation.fade_effect.options.disabled"
+        }
+      ],
+      "default": "top_bottom_fade"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.impact_logo.settings.section.header.content"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:sections.impact_logo.settings.section.top_padding.label",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:sections.impact_logo.settings.section.bottom_padding.label",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "top_padding_mobile",
+      "label": "t:sections.impact_logo.settings.section.top_padding_mobile.label",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding_mobile",
+      "label": "t:sections.impact_logo.settings.section.bottom_padding_mobile.label",
+      "min": 0,
+      "max": 80,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "header"
+    ]
+  }
+}
+{% endschema %}

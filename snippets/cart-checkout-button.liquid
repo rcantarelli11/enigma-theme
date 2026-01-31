@@ -1,0 +1,38 @@
+{% liquid
+  comment
+    Renders Cart Checkout button
+
+    Optional parameters:
+      - form_id: { String: null } The cart form's ID so that we can attach the button
+          to the form while having it live outside of it.
+  endcomment
+%}
+
+{%- liquid
+  capture button_label
+    render 'icon-utility', icon: 'padlock', width: 15, height: 20
+    echo 'cart.general.checkout' | t
+  endcapture
+
+  capture button_attributes
+    echo 'name="checkout"'
+    echo ' id="checkout"'
+    echo ' value="Checkout"'
+
+    if form_id
+      echo ' form="'
+      echo form_id
+      echo '"'
+    endif
+  endcapture
+-%}
+
+{%- render 'button',
+  label: button_label,
+  class: 'cart-checkout-button',
+  linkless_type: 'submit',
+  require_link: false,
+  button_attributes: button_attributes,
+  wrapper_class: 'cart-checkout-button-wrapper',
+  button_width: 'full'
+-%}

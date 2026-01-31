@@ -1,0 +1,239 @@
+{% liquid
+  assign block_count = section.blocks.size
+
+  if block_count == 0 or section.settings.show_on_homepage_only and template.name != 'index'
+    break
+  endif
+%}
+
+{% if request.design_mode %}
+  <script>
+    // This is done here AND in the JS so it's responsive in the theme editor before the JS is loaded
+    document.documentElement.setAttribute(
+      'data-enable-sticky-announcement-bar',
+      '{{ section.settings.enable_sticky_announcement_bar }}',
+    )
+
+    // Remove the announcement bar when the section is unloaded
+    // this block of code doesn't get re-rendered on each update of the section
+    // so we keep the event listener around instead of removing after the operation.
+    document.addEventListener('shopify:section:unload', (event) => {
+      if (event.detail.sectionId === '{{ section.id }}') {
+        document.querySelector('announcement-bar[data-section-id="{{section.id}}"]')?.remove()
+      }
+    })
+  </script>
+{% endif %}
+
+{% capture announcements %}
+  {% for block in section.blocks %}
+    <div class="announcement-bar__item" {{ block.shopify_attributes }}>
+      {%- if block.settings.text_mobile != blank -%}
+        <div class="announcement-bar__text--mobile rte">
+          {{- block.settings.text_mobile -}}
+        </div>
+      {%- endif -%}
+
+      <div class="announcement-bar__text--desktop rte">
+        {{- block.settings.text -}}
+      </div>
+    </div>
+  {% endfor %}
+{% endcapture %}
+
+{% if block_count > 1 and section.settings.style == 'slideshow' %}
+  {% capture announcements %}
+    {% render 'announcement-slider',
+      slider_items: announcements,
+      autoplay: section.settings.slideshow_enable_autoplay,
+      autoplay_delay: section.settings.slideshow_autoplay_delay,
+    %}
+  {% endcapture %}
+{% elsif section.settings.style == 'scrolling-text' %}
+  {% capture announcements %}
+    {% render 'scrolling-content',
+      content: announcements,
+      duration: section.settings.scrolling_text_duration,
+      direction: section.settings.scrolling_text_direction,
+      gap: 83
+    %}
+  {% endcapture %}
+{% endif %}
+
+<announcement-bar
+  data-section-id="{{ section.id }}"
+  class="ff-body {{ section.settings.text_size }}"
+  data-enable-sticky-announcement-bar="{{ section.settings.enable_sticky_announcement_bar }}"
+  data-style="{{ section.settings.style }}"
+  data-item-count="{{ section.blocks.size }}"
+  style="
+    --color-background: {{ section.settings.color_scheme.settings.background }};
+    --color-text: {{ section.settings.color_scheme.settings.text }};
+    {% if section.settings.color_scheme.settings.background_gradient != blank -%}
+      background: {{ section.settings.color_scheme.settings.background_gradient }};
+    {%- endif %}
+  "
+>
+  {{ announcements }}
+</announcement-bar>
+
+{% schema %}
+{
+  "name": "t:sections.announcement_bar.name",
+  "class": "announcement-bar-wrapper",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_homepage_only",
+      "label": "t:sections.announcement_bar.settings.show_on_homepage_only.label",
+      "default": true
+    },
+    {
+      "id": "enable_sticky_announcement_bar",
+      "type": "select",
+      "label": "t:sections.announcement_bar.settings.enable_sticky_announcement_bar.label",
+      "info": "t:sections.announcement_bar.settings.enable_sticky_announcement_bar.info",
+      "options": [
+        {
+          "value": "never",
+          "label": "t:sections.announcement_bar.settings.enable_sticky_announcement_bar.options.never"
+        },
+        {
+          "value": "desktop",
+          "label": "t:sections.announcement_bar.settings.enable_sticky_announcement_bar.options.desktop"
+        },
+        {
+          "value": "mobile",
+          "label": "t:sections.announcement_bar.settings.enable_sticky_announcement_bar.options.mobile"
+        },
+        {
+          "value": "desktop-and-mobile",
+          "label": "t:sections.announcement_bar.settings.enable_sticky_announcement_bar.options.both"
+        }
+      ],
+      "default": "never"
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "t:sections.announcement_bar.settings.text_size.label",
+      "options": [
+        {
+          "value": "fs-body-50",
+          "label": "t:sections.announcement_bar.settings.text_size.options.small"
+        },
+        {
+          "value": "fs-body-75",
+          "label": "t:sections.announcement_bar.settings.text_size.options.medium"
+        },
+        {
+          "value": "fs-body-100",
+          "label": "t:sections.announcement_bar.settings.text_size.options.large"
+        }
+      ],
+      "default": "fs-body-75"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.announcement_bar.settings.style.label",
+      "options": [
+        {
+          "value": "slideshow",
+          "label": "t:sections.announcement_bar.settings.style.options.slideshow"
+        },
+        {
+          "value": "scrolling-text",
+          "label": "t:sections.announcement_bar.settings.style.options.scrolling_text"
+        }
+      ],
+      "default": "scrolling-text"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.announcement_bar.settings.slideshow.header.content",
+      "info": "t:sections.announcement_bar.settings.slideshow.header.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "slideshow_enable_autoplay",
+      "label": "t:sections.announcement_bar.settings.slideshow.enable_autoplay.label",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "slideshow_autoplay_delay",
+      "label": "t:sections.announcement_bar.settings.slideshow.autoplay_delay.label",
+      "min": 4,
+      "max": 15,
+      "step": 1,
+      "default": 4,
+      "unit": "s"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.announcement_bar.settings.scrolling_text.header.content",
+      "info": "t:sections.announcement_bar.settings.scrolling_text.header.info"
+    },
+    {
+      "type": "range",
+      "id": "scrolling_text_duration",
+      "label": "t:sections.announcement_bar.settings.scrolling_text.duration.label",
+      "min": 5,
+      "max": 45,
+      "step": 1,
+      "default": 10,
+      "unit": "s"
+    },
+    {
+      "type": "select",
+      "id": "scrolling_text_direction",
+      "label": "t:sections.announcement_bar.settings.scrolling_text.direction.label",
+      "options": [
+        {
+          "value": "normal",
+          "label": "t:sections.announcement_bar.settings.scrolling_text.direction.option.left"
+        },
+        {
+          "value": "reverse",
+          "label": "t:sections.announcement_bar.settings.scrolling_text.direction.option.right"
+        }
+      ],
+      "default": "normal"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement_bar.blocks.announcement.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "t:sections.announcement_bar.blocks.announcement.settings.text.label",
+          "default": "Free standard shipping and returns on all orders"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "text_mobile",
+          "label": "t:sections.announcement_bar.blocks.announcement.settings.text_mobile.label"
+        }
+      ]
+    }
+  ],
+  "default": {
+    "blocks": [
+      {
+        "type": "announcement"
+      }
+    ]
+  }
+}
+{% endschema %}

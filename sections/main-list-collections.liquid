@@ -1,0 +1,316 @@
+{{ 'component-main-list-collections.css' | asset_url | stylesheet_tag }}
+{{ 'component-collection-item.css' | asset_url | stylesheet_tag }}
+{{ 'component-pagination.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  # Note: it is not possible to sort the collection and paginate
+  # https://github.com/Shopify/dawn/issues/1996
+  if section.settings.collections_to_show == 'selected'
+    assign collections = section.settings.selected_collections
+  endif
+
+  assign column_count_mobile = section.settings.column_count_mobile
+  assign column_count_desktop = section.settings.column_count_desktop
+  assign column_count_tablet = column_count_desktop | at_most: 3
+
+  capture image_sizes
+    render 'get-grid-image-sizes', section_width: section.settings.width, desktop_column_count: column_count_desktop, tablet_column_count: column_count_tablet, mobile_column_count: column_count_mobile
+  endcapture
+
+  assign per_page = column_count_desktop | times: section.settings.row_count
+-%}
+
+{%- paginate collections by per_page -%}
+  <div
+    class="
+      list-collections
+      page
+      section
+      {% if settings.enable_section_animations and section.settings.section_style_enable_animation %}
+        animation
+        animation--list-collections
+      {% endif %}
+    "
+    style="
+      --column-count-mobile: {{ column_count_mobile }};
+      --column-count-desktop: {{ column_count_desktop }};
+      {% render 'settings-section-padding' %}
+      {% render 'color-scheme-to-vars', color_scheme: section.settings.color_scheme %}
+    "
+    data-section-id="{{ section.id }}"
+    data-section-type="list-collections"
+  >
+    <div class="section-inner section-inner--width-{{ section.settings.width }}">
+      <div class="list-collections__inner page__inner">
+        <header class="list-collections__header page__header ta-c content-blocks">
+          {% if section.settings.show_page_title %}
+            <h1 class="list-collections__header-heading ff-heading fs-heading-display-3">
+              {{ page_title }}
+            </h1>
+          {% endif %}
+          {% if section.settings.header_text != blank %}
+            <p class="list-collections__header-text">{{ section.settings.header_text }}</p>
+          {% endif %}
+        </header>
+        <div
+          class="
+            list-collections__grid standard-grid
+            standard-grid--with-count-based-gaps
+            standard-grid--with-matching-row-gaps
+            standard-grid--mobile-{{ column_count_mobile }}-column
+            standard-grid--desktop-{{ column_count_desktop }}-column
+          "
+          style="
+            {% render 'color-scheme-to-vars', color_scheme: section.settings.collection_item_color_scheme %}
+            --overlay-opacity: {{ section.settings.overlay_opacity }}%;
+          "
+        >
+          {% for collection in collections -%}
+            {% render 'collection-item',
+              coll: collection,
+              image_source: section.settings.image_source,
+              image_aspect_ratio: section.settings.image_aspect_ratio,
+              image_sizes: image_sizes,
+              index: forloop.index
+            -%}
+          {%- else -%}
+            {% for i in (1..per_page) -%}
+              {% render 'collection-item',
+                image_source: section.settings.image_source,
+                image_aspect_ratio: section.settings.image_aspect_ratio,
+                image_sizes: image_sizes,
+                index: forloop.index
+              -%}
+            {%- endfor %}
+          {%- endfor %}
+        </div>
+
+        <div class="pagination-wrapper">
+          {%- liquid
+            if paginate.pages > 1
+              render 'pagination', paginate: paginate, resource_string: 'general.pagination.products'
+            endif
+          -%}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endpaginate -%}
+
+{% schema %}
+{
+  "name": "t:sections.main_list_collections.name",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_1"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection_list.settings.header.header.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_page_title",
+      "label": "t:sections.collection_list.settings.header.show_page_title.label",
+      "info": "t:sections.collection_list.settings.header.show_page_title.info",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "header_text",
+      "label": "t:sections.collection_list.settings.header.header_text.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection_list.settings.collection_list.header.content"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:sections.collection_list.settings.collection_list.paragraph.content"
+    },
+    {
+      "type": "select",
+      "id": "collections_to_show",
+      "label": "t:sections.collection_list.settings.collection_list.collections_to_show.label",
+      "options": [
+        {
+          "value": "all",
+          "label": "t:sections.collection_list.settings.collection_list.collections_to_show.options.all"
+        },
+        {
+          "value": "selected",
+          "label": "t:sections.collection_list.settings.collection_list.collections_to_show.options.selected"
+        }
+      ]
+    },
+    {
+      "type": "collection_list",
+      "id": "selected_collections",
+      "label": "t:sections.collection_list.settings.collection_list.selected_collections.label"
+    },
+    {
+      "id": "column_count_desktop",
+      "type": "select",
+      "label": "t:shared.settings.standard_grid.column_count_desktop.label",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "id": "column_count_mobile",
+      "type": "select",
+      "label": "t:shared.settings.standard_grid.column_count_mobile.label",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "row_count",
+      "label": "t:sections.collection_list.settings.collection_list.row_count.label",
+      "info": "t:sections.collection_list.settings.collection_list.row_count.info",
+      "min": 3,
+      "max": 10,
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection_list.settings.collection_tiles.header.content"
+    },
+    {
+      "type": "select",
+      "id": "image_source",
+      "label": "t:sections.collection_list.settings.collection_tiles.image_source.label",
+      "info": "t:sections.collection_list.settings.collection_tiles.image_source.info",
+      "options": [
+        {
+          "value": "collection_image",
+          "label": "t:sections.collection_list.settings.collection_tiles.image_source.options.collection_image"
+        },
+        {
+          "value": "first_product_image",
+          "label": "t:sections.collection_list.settings.collection_tiles.image_source.options.first_product_image"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "t:shared.settings.aspect_ratio.labels.image",
+      "options": [
+        {
+          "value": "natural",
+          "label": "t:shared.settings.aspect_ratio.options.natural"
+        },
+        {
+          "value": "portrait",
+          "label": "t:shared.settings.aspect_ratio.options.portrait"
+        },
+        {
+          "value": "portrait-alt",
+          "label": "t:shared.settings.aspect_ratio.options.portrait_alt"
+        },
+        {
+          "value": "square",
+          "label": "t:shared.settings.aspect_ratio.options.square"
+        },
+        {
+          "value": "landscape-alt",
+          "label": "t:shared.settings.aspect_ratio.options.landscape_alt"
+        },
+        {
+          "value": "landscape",
+          "label": "t:shared.settings.aspect_ratio.options.landscape"
+        }
+      ],
+      "default": "natural"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection_list.settings.collection_tile_overlay.header.content"
+    },
+    {
+      "type": "color_scheme",
+      "id": "collection_item_color_scheme",
+      "label": "t:shared.settings.color_scheme.label",
+      "default": "scheme_4"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:shared.settings.overlay.overlay_opacity.label",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 20,
+      "info": "t:shared.settings.overlay.overlay_opacity.info"
+    },
+    {
+      "type": "header",
+      "content": "t:shared.settings.section_settings.header.content"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:shared.settings.section_settings.width.label",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:shared.settings.section_settings.width.options.page_width"
+        },
+        {
+          "value": "full-width-padded",
+          "label": "t:shared.settings.section_settings.width.options.full_width_padded_simplified_language"
+        }
+      ],
+      "info": "t:shared.settings.section_settings.width.info",
+      "default": "page-width"
+    },
+    {
+      "type": "range",
+      "id": "top_padding",
+      "label": "t:shared.settings.section_settings.top_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "bottom_padding",
+      "label": "t:shared.settings.section_settings.bottom_padding.label",
+      "min": 0,
+      "max": 120,
+      "step": 10,
+      "unit": "px",
+      "default": 50
+    }
+  ]
+}
+{% endschema %}

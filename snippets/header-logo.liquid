@@ -1,0 +1,46 @@
+{% liquid
+  if logo != blank or transparent_logo != blank and transparent_header_enabled
+    assign has_logo = true
+  else
+    assign has_logo = false
+  endif
+
+  capture logo_sizes
+    echo '(max-width: 960px) [[mlw]]px, [[lw]]px' | replace: '[[mlw]]', logo_width_mobile | replace: '[[lw]]', logo_width
+  endcapture
+
+  if request.page_type == 'index' or request.page_type == 'password'
+    assign logo_tag = 'h1'
+  else
+    assign logo_tag = 'span'
+  endif
+-%}
+
+<{{ logo_tag }} class="header__logo">
+  <a
+    class="header__logo-link"
+    href="{{ routes.root_url }}"
+    {% if has_logo -%}
+      aria-label="{{ shop.name }}"
+    {%- endif %}
+  >
+    {% if has_logo -%}
+      <div class="header__logo-wrapper scrollbars-hidden">
+        {% if transparent_logo != blank and transparent_header_enabled -%}
+          {% render 'image',
+            image: transparent_logo,
+            class: 'logo--transparent',
+            sizes: logo_sizes,
+            prioritize_loading: true
+          %}
+        {%- endif %}
+
+        {%- if logo != blank -%}
+          {%- render 'image', image: logo, class: 'logo--regular', sizes: logo_sizes, prioritize_loading: true -%}
+        {%- endif %}
+      </div>
+    {%- else -%}
+      <span class="header__logo-text ff-heading fs-heading-4-base nowrap scrollbars-hidden">{{ shop.name }}</span>
+    {%- endif %}
+  </a>
+</{{ logo_tag }}>

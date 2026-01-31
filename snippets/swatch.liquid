@@ -1,0 +1,135 @@
+{%- liquid
+  comment
+    Renders a swatch element.
+
+    Required parameters:
+      - value: { String } The swatch value.
+      - custom_swatch_color_key_map: { Object } An array of custom color keys (names).
+      - custom_swatch_color_value_map: { Object } An array of custom color values (HEX values).
+
+    Optional parameters:
+      - color: { String } The swatch color (HEX value).
+      - image_url: { String } The swatch image URL (should be generated with the 'image_url' filter).
+      - shape: { String: 'round' } The swatch shape. Can be:
+        - 'rectangle'
+        - 'round'
+        - 'square'
+      - size: { Number: 20 } The swatch size (in pixels). This represents the size of the inner circle
+          in the un-hovered/un-selected state.
+      - selected: { Boolean: false } Whether the swatch is selected (active).
+      - disabled: { Boolean: false } Whether the swatch is disabled.
+      - show_tooltip: { Boolean: true } Whether to show a tooltip on hover.
+      - is_variant_swatch: { Boolean: false } Whether the swatch is being rendered as part of product
+          form variant selection.
+  endcomment
+
+  assign shape = shape | default: 'round'
+  assign size = size | default: 20
+  assign image_size = size | times: 2 | append: 'x'
+  assign show_tooltip = show_tooltip | default: true, allow_false: true
+  assign is_variant_swatch = is_variant_swatch | default: false, allow_false: true
+
+  # Swatch wrapper
+  capture swatch_wrapper_class
+    echo 'swatch-wrapper'
+
+    if size >= 30
+      echo ' swatch-wrapper--increased-offset'
+    endif
+  endcapture
+
+  capture swatch_wrapper_styles
+    # Unitless value is needed for CSS calculations
+    echo '--swatch-size: [[size]]px;' | replace: '[[size]]', size
+    echo ' --swatch-size-unitless: [[size]];' | replace: '[[size]]', size
+  endcapture
+
+  # Swatch
+  capture swatch_class
+    echo 'swatch swatch--shape-[[shape]]' | replace: '[[shape]]', shape
+
+    if selected
+      echo ' swatch--selected'
+    endif
+  endcapture
+
+  # Swatch inner
+  capture swatch_inner_styles
+    # Custom colors are downcased
+    assign downcased_value = value | downcase
+
+    # Color
+    if color != blank and color != null
+      echo 'background-color: [[color]];' | replace: '[[color]]', color
+    elsif custom_swatch_color_key_map contains downcased_value
+      # Look for custom color
+      for color_name in custom_swatch_color_key_map
+        if color_name == downcased_value
+          echo ' background-color: [[ccv]];' | replace: '[[ccv]]', custom_swatch_color_value_map[forloop.index0]
+          break
+        endif
+      endfor
+    else
+      # Downcase and remove spaces from value to create a CSS color
+      assign formatted_value = value | downcase | replace: ' ', ''
+      echo 'background-color: [[fv]];' | replace: '[[fv]]', formatted_value
+    endif
+
+    # Image
+    capture image_url
+      # Swatch image
+      if image_url != blank and image_url != null
+        echo image_url
+      else
+        # Uploaded image
+        capture color_image_name
+          capture value_handle
+            echo value | handle
+          endcapture
+
+          echo '[[vh]].png' | replace: '[[vh]]', value_handle
+        endcapture
+
+        if images[color_image_name] != blank
+          echo color_image_name | file_img_url: image_size
+        endif
+      endif
+    endcapture
+
+    if image_url != blank
+      echo ' background-image: url([[iu]]);' | replace: '[[iu]]', image_url
+      echo ' background-position: center; background-size: cover;'
+    endif
+  endcapture
+-%}
+
+<div
+  class="{{ swatch_wrapper_class }}"
+  style="{{ swatch_wrapper_styles }}"
+>
+  <button
+    type="button"
+    class="{{ swatch_class }}"
+    data-value="{{ value }}"
+    aria-label="{{ value }}"
+    js-swatch
+
+    {%- if is_variant_swatch %}
+      js-variant-button
+    {%- endif -%}
+
+    {%- if disabled %}
+      disabled
+    {%- endif %}
+
+    aria-label="{{ value }}"
+  >
+    <span class="swatch__inner" style="{{ swatch_inner_styles }}"></span>
+
+    <span class="swatch__inner-disabled-strikethrough"></span>
+
+    {%- if show_tooltip -%}
+      <label class="swatch__tooltip fs-body-60" role="tooltip">{{ value }}</label>
+    {%- endif -%}
+  </button>
+</div>

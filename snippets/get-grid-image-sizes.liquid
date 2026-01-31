@@ -1,0 +1,153 @@
+{%- liquid
+  comment
+    Renders a string for a grid item's image's 'sizes' attribute depending on the column and width settings.
+    With support for images that span multiple columns like promo images.
+
+    Required parameters:
+      - section_width: { String } The width of the section. Can be:
+        - 'page-width'
+        - 'full-width'
+        - 'full-width-padded'
+      - desktop_column_count: { Number } The number of columns in the grid the image is part of, at the 'small-desktop' breakpoint (and above).
+      - tablet_column_count: { Number: 1 } The number of columns in the grid the image is part of, at the 'tablet' breakpoint.
+      - mobile_column_count: { Number: 1 } The number of columns in the grid the image is part of, at the mobile breakpoint.
+
+    Optional parameters:
+      - desktop_grid_width: { Number: 100 } The grid's desktop width as a percentage of the feature it's in.
+      - tablet_grid_width: { Number: 100 } The grid's tablet width as a percentage of the feature it's in.
+      - mobile_grid_width: { Number: 100 } The grid's mobile width as a percentage of the feature it's in.
+      - desktop_tile_span_column_count: { Number: 1 } The number of columns an image spans within a grid for desktop.
+      - tablet_tile_span_column_count: { Number: 1 } The number of columns an image spans within a grid for tablet.
+      - mobile_tile_span_column_count: { Number: 1 } The number of columns an image spans within a grid for mobile.
+  endcomment
+
+  # TODO
+  # - Add breaktpoint control so that the size range can be more accurate when desktop and mobile images use separate image snippets
+  #   - get-tile-image-sizes does this
+  # - Add more granular control for when section width is page-width and a grid is not full width within
+  #   - shop the look with grid product listings takes up 50% of the section width as default
+
+  #
+  # Desktop
+  #
+  assign desktop_column_count = desktop_column_count | plus: 0
+  assign desktop_grid_width = desktop_grid_width | default: 100
+  assign desktop_tile_span_column_count = desktop_tile_span_column_count | default: 1
+  assign desktop_gap_count = desktop_column_count | minus: 1
+
+  # Desktop view width
+  if section_width == 'page-width'
+    assign desktop_grid_view_width = '1600px'
+  else
+    assign desktop_grid_view_width = desktop_grid_width | append: 'vw'
+  endif
+
+  # Desktop gutter width totals
+  assign desktop_gutter_width_total = '(2 * 40px)'
+  assign small_desktop_gutter_width_total = '(2 * 32px)'
+
+  # Desktop grid gap vars and widths totals
+  case desktop_column_count
+    when 2
+      assign desktop_gap_var = '28px'
+      assign small_desktop_gap_var = '24px'
+    when 3
+      assign desktop_gap_var = '28px'
+      assign small_desktop_gap_var = '28px'
+    when 4
+      assign desktop_gap_var = '28px'
+      assign small_desktop_gap_var = '28px'
+  endcase
+
+  assign desktop_column_gap_width_total = '([[dgc]] * [[dgv]])' | replace: '[[dgc]]', desktop_gap_count | replace: '[[dgv]]', desktop_gap_var
+  assign small_desktop_column_gap_width_total = '([[dgc]] * [[sdgv]])' | replace: '[[dgc]]', desktop_gap_count | replace: '[[sdgv]]', small_desktop_gap_var
+
+  # Desktop final string build
+  if desktop_tile_span_column_count == desktop_column_count
+    # Matching count means full width, only accounts for gutter
+    echo '(min-width: 1600px) calc([[dgvw]] - [[dgwt]]), ' | replace: '[[dgvw]]', desktop_grid_view_width | replace: '[[dgwt]]', desktop_gutter_width_total
+    echo '(min-width: 1440px) calc(100vw - [[dgwt]]), ' | replace: '[[dgwt]]', desktop_gutter_width_total
+    echo '(min-width: 1024px) calc(100vw - [[sdgwt]]), ' | replace: '[[sdgwt]]', small_desktop_gutter_width_total
+  else
+    if desktop_tile_span_column_count == 1
+      # One = no span so output should just be a single column width
+      echo '(min-width: 1600px) calc(([[dgvw]] - [[dcgwt]]) / [[dcc]]), ' | replace: '[[dgvw]]', desktop_grid_view_width | replace: '[[dcgwt]]', desktop_column_gap_width_total | replace: '[[dcc]]', desktop_column_count
+      echo '(min-width: 1440px) calc((100vw - [[dgwt]] - [[dcgwt]]) / [[dcc]]), ' | replace: '[[dgwt]]', desktop_gutter_width_total | replace: '[[dcgwt]]', desktop_column_gap_width_total | replace: '[[dcc]]', desktop_column_count
+      echo '(min-width: 1024px) calc((100vw - [[sdgwt]] - [[sdcgwt]]) / [[dcc]]), ' | replace: '[[sdgwt]]', small_desktop_gutter_width_total | replace: '[[sdcgwt]]', small_desktop_column_gap_width_total | replace: '[[dcc]]', desktop_column_count
+    elsif desktop_tile_span_column_count > 1
+      # Spanning images need to account for gaps being added back in
+      assign desktop_gap_multiplier = '[[dgv]]' | replace: '[[dgv]]', desktop_gap_var
+      assign small_desktop_gap_multiplier = '[[sdgv]]' | replace: '[[sdgv]]', small_desktop_gap_var
+
+      # Gap multiplier value to account for more than 2 gaps covered by a spanning tile
+      if desktop_tile_span_column_count == 3
+        assign desktop_gap_multiplier = desktop_gap_multiplier | prepend: '(' | append: ' * 2)'
+        assign small_desktop_gap_multiplier = small_desktop_gap_multiplier | prepend: '(' | append: ' * 2)'
+      endif
+
+      echo '(min-width: 1600px) calc((([[dgvw]] - [[dgwt]] - [[dcgwt]]) / [[dcc]]) * [[dtscc]] + [[dgm]]), ' | replace: '[[dgvw]]', desktop_grid_view_width | replace: '[[dgwt]]', desktop_gutter_width_total | replace: '[[dcgwt]]', desktop_column_gap_width_total | replace: '[[dcc]]', desktop_column_count | replace: '[[dtscc]]', desktop_tile_span_column_count | replace: '[[dgm]]', desktop_gap_multiplier
+      echo '(min-width: 1440px) calc(((100vw - [[dgwt]] - [[dcgwt]]) / [[dcc]]) * [[dtscc]] + [[dgm]]), ' | replace: '[[dgwt]]', desktop_gutter_width_total | replace: '[[dcgwt]]', desktop_column_gap_width_total | replace: '[[dcc]]', desktop_column_count | replace: '[[dtscc]]', desktop_tile_span_column_count | replace: '[[dgm]]', desktop_gap_multiplier
+      echo '(min-width: 1024px) calc(((100vw - [[sdgwt]] - [[sdcgwt]]) / [[dcc]]) * [[dtscc]] + [[sdgm]]), ' | replace: '[[sdgwt]]', small_desktop_gutter_width_total | replace: '[[sdcgwt]]', small_desktop_column_gap_width_total | replace: '[[dcc]]', desktop_column_count | replace: '[[dtscc]]', desktop_tile_span_column_count | replace: '[[sdgm]]', small_desktop_gap_multiplier
+    endif
+  endif
+
+  #
+  # Tablet
+  #
+  assign tablet_column_count = tablet_column_count | default: 1 | plus: 0
+  assign tablet_grid_width = tablet_grid_width | default: 100
+  assign tablet_tile_span_column_count = tablet_tile_span_column_count | default: 1
+  assign tablet_gap_count = tablet_column_count | minus: 1
+
+  # Tablet grid width
+  assign tablet_grid_view_width = tablet_grid_width | append: 'vw'
+
+  # Tablet gutter width totals
+  assign tablet_gutter_width_total = '(2 * 20px)'
+
+  # Tablet grid gap vars and widths totals
+  case tablet_column_count
+    when 2
+      assign tablet_gap_var = '20px'
+    when 3
+      assign tablet_gap_var = '20px'
+    when 4
+      assign tablet_gap_var = '[[gridGap4ColumnTablet]]'
+  endcase
+
+  assign tablet_column_gap_width_total = '([[tgc]] * [[tgv]])' | replace: '[[tgc]]', tablet_gap_count | replace: '[[tgv]]', tablet_gap_var
+
+  # Tablet final string build
+  if tablet_tile_span_column_count == tablet_column_count
+    # Matching count means full width, only accounts for gutter
+    echo '(min-width: 720px) calc([[tgvw]] - [[tgwt]]), ' | replace: '[[tgvw]]', tablet_grid_view_width | replace: '[[tgwt]]', tablet_gutter_width_total
+  else
+    if tablet_tile_span_column_count == 1
+      # One = no span so output should just be a single column width
+      echo '(min-width: 720px) calc(([[tgvw]] - [[tgwt]] - [[tcgwt]]) / [[tcc]]), ' | replace: '[[tgvw]]', tablet_grid_view_width | replace: '[[tgwt]]', tablet_gutter_width_total | replace: '[[tcgwt]]', tablet_column_gap_width_total | replace: '[[tcc]]', tablet_column_count
+    elsif tablet_tile_span_column_count > 1
+      # Spanning images need to account for gaps being added back in
+      assign tablet_gap_multiplier = '[[tgv]]' | replace: '[[tgv]]', tablet_gap_var
+      echo '(min-width: 720px) calc((([[tgvw]] - [[tgwt]] - [[tcgwt]]) / [[tcc]]) * [[ttscc]] + [[tgm]]), ' | replace: '[[tgvw]]', tablet_grid_view_width | replace: '[[tgwt]]', tablet_gutter_width_total | replace: '[[tcgwt]]', tablet_column_gap_width_total | replace: '[[tcc]]', tablet_column_count | replace: '[[ttscc]]', tablet_tile_span_column_count | replace: '[[tgm]]', tablet_gap_multiplier
+    endif
+  endif
+
+  #
+  # Mobile
+  #
+  assign mobile_column_count = mobile_column_count | default: 1 | plus: 0
+  assign mobile_grid_width = mobile_grid_width | default: 100
+  assign mobile_tile_span_column_count = mobile_tile_span_column_count | default: 1
+  assign mobile_gap_count = mobile_column_count | minus: 1
+  assign mobile_grid_view_width = mobile_grid_width | append: 'vw'
+
+  # Mobile gutter width totals
+  assign mobile_gutter_width_total = '(2 * 20px)'
+
+  # Mobile final string build
+  if mobile_column_count == 1 or mobile_tile_span_column_count == mobile_column_count
+    echo '(max-width: 719.9px) calc([[mgvw]] - [[mgwt]]), 100vw' | replace: '[[mgvw]]', mobile_grid_view_width | replace: '[[mgwt]]', mobile_gutter_width_total
+  elsif mobile_column_count > 1 and mobile_tile_span_column_count == 1
+    echo '(max-width: 719.9px) calc(([[mgvw]] - [[mgwt]] - 16px) / [[mcc]]), 100vw' | replace: '[[mgvw]]', mobile_grid_view_width | replace: '[[mgwt]]', mobile_gutter_width_total | replace: '[[mcc]]', mobile_column_count
+  endif
+-%}

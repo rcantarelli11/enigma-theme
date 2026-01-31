@@ -1,0 +1,156 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "color_scheme": "scheme_2",
+        "show_blog_title": true,
+        "show_category_filters": true,
+        "show_category_filter_counts": false,
+        "articles_per_page": 10,
+        "number_of_columns": "3",
+        "grid_image_aspect_ratio": "square",
+        "show_author": false,
+        "show_published_date": false,
+        "show_article_tags": true,
+        "show_excerpt": true,
+        "show_read_more_button": false,
+        "button_style": "outline",
+        "enable_scrolling_hover_text": true,
+        "scroll_duration": 10,
+        "scroll_direction": "normal",
+        "feature_first_article": false,
+        "overlay_color_scheme": "",
+        "overlay_opacity": 20,
+        "heading_font_size": 5,
+        "heading_mobile_font_size": 5,
+        "width": "page-width",
+        "top_padding": 80,
+        "bottom_padding": 60
+      }
+    },
+    "reviews_banner_Lk6P4L": {
+      "type": "reviews-banner",
+      "blocks": {
+        "reviews_LWmM9B": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_TjYfyb": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_J848jX": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_fxgXb6": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_369rYY": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_DjCqGz": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_XEmaQA": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Work great as it is supposed too. Been useing brand for years.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_VkBUWg": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“It tastes good and mixes well. I didn't have any issues with it and will likely order again.”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        },
+        "reviews_cfNfgy": {
+          "type": "Reviews",
+          "settings": {
+            "devrevText": "",
+            "devrevBody": "“Lean protein powder, low sodium, low sugar, inexpensive, trastes great, great product!”",
+            "devrevName": "",
+            "devrevVerify": false
+          }
+        }
+      },
+      "block_order": [
+        "reviews_LWmM9B",
+        "reviews_TjYfyb",
+        "reviews_J848jX",
+        "reviews_fxgXb6",
+        "reviews_369rYY",
+        "reviews_DjCqGz",
+        "reviews_XEmaQA",
+        "reviews_VkBUWg",
+        "reviews_cfNfgy"
+      ],
+      "settings": {
+        "devBg": "",
+        "devTitle": "YOUR JOURNEY SIMPLIFIED WITH",
+        "c_sec_stars_show": false,
+        "devrevText": "ENIGMA",
+        "devUrl": "",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "c_revs_Bg": "#ffffff",
+        "c_show_read_more": false,
+        "c_show_rev_arr": false,
+        "c_show_rev_dots": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "reviews_banner_Lk6P4L"
+  ]
+}

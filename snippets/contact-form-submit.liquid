@@ -1,0 +1,25 @@
+{%- liquid
+  comment
+    Renders a "Submit" block for the contact form.
+
+    Required parameters:
+      - block: { Object } The associated block.
+  endcomment
+
+  if block.settings.full_width
+    assign block_width = 'full-width'
+    assign button_width = 'full'
+  else
+    assign block_width = 'half-width'
+    assign button_width = 'regular'
+  endif
+-%}
+
+<div class="contact-form__element contact-form__element--{{ block_width }}" {{ block.shopify_attributes }}>
+  {%- render 'button',
+    label: block.settings.label,
+    button_width: button_width,
+    button_alignment: 'left',
+    linkless_type: 'submit'
+  -%}
+</div>

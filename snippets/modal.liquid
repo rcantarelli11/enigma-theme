@@ -1,0 +1,61 @@
+{% liquid
+  comment
+    Renders a dialog element with given content and configuration.
+
+        Required parameters:
+        - name: { String } The unique name of the dialog.
+        - content: { String } The html content of the dialog.
+
+        Optional parameters:
+          - class: { String } A custom class to be added to the dialog.
+          - close_button: { Boolean: false } Whether to add a close button to the dialog.
+          - color: { String } The color scheme to apply to the dialog. Can be:
+    `      - 'popup-modal'
+           - 'drawer'`
+          - backdrop: { Boolean: false } Whether to add a backdrop to the dialog.
+          - backdrop_dismiss: { Boolean: false } Whether to dismiss the dialog when the backdrop is clicked.
+          - blur_dismiss: { Boolean: false } Whether to dismiss the dialog when dialog is no longer focused.
+          - scroll_lock: { Boolean: false } Whether to lock the scroll when the dialog is open on all screen sizes.
+          - mobile_only_scroll_lock: { Boolean: false } Whether to lock the scroll when the dialog is open below small desktop screen sizes.
+          - reusable: { Boolean: false } Whether the dialog container can be reused for multiple content source. When 'true', content
+              is provided through CustomEvent detail object, and is cleared on close.
+          - aria_label: { String } A string to be used for the aria-label attribute.
+          - aria_description: { String } A string to be used for the aria-description attribute.
+          - omit_inner: { Boolean: false } Whether to omit the 'dialog-inner' element.
+  endcomment
+-%}
+
+<dialog
+  class="{% if color %}color-{{ color }}{% endif %} {{ class }}"
+  data-fluco-dialog="{{ name }}"
+  data-fluco-dialog-backdrop="{{ backdrop | default: false }}"
+  data-fluco-dialog-backdrop-dismiss="{{ backdrop_dismiss | default: false }}"
+  data-fluco-dialog-blur-dismiss="{{ blur_dismiss | default: false }}"
+  data-fluco-dialog-scroll-lock="{{ scroll_lock | default: false }}"
+  data-fluco-dialog-mobile-scroll-lock="{{ mobile_only_scroll_lock | default: false }}"
+  data-fluco-dialog-reusable="{{ reusable | default: false }}"
+  {%- if aria_label %}
+    aria-label="{{ aria_label | escape }}"
+  {%- endif %}
+  {%- if aria_description %}
+    aria-description="{{ aria_description }}"
+  {%- endif -%}
+>
+  {%- liquid
+    capture dialog_content
+      if close_button
+        render 'modal-close-button'
+      endif
+
+      echo content
+    endcapture
+  -%}
+
+  {%- if omit_inner -%}
+    {{ dialog_content }}
+  {%- else -%}
+    <div class="dialog-inner">
+      {{ dialog_content }}
+    </div>
+  {%- endif -%}
+</dialog>

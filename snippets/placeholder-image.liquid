@@ -1,0 +1,63 @@
+{%- liquid
+  comment
+    Renders a placeholder image.
+
+    Optional parameters:
+      - class: { String } A custom class to be applied to the placeholder image.
+      - attributes: { String } Custom HTML attributes to be applied to the placeholder image.
+      - aspect_ratio: { String } The aspect ratio of the placeholder.
+      - natural_fallback_ratio { String } The aspect ratio to use when aspect_ratio is "natural".
+      - placeholder_name: { String } The name of the Shopify placeholder SVG to used.
+      - placeholder_natural_fallback_ratio: { String } The aspect ratio used for the placeholder when aspect_ratio is 'natural'.
+      - style: { String } The style applied via style attribute.
+      - allowed_to_round: { Boolean: false } When true, image will match global image rounding config
+
+    Note: It is not possible to insert an onload attribute so we create the start of the opening tag manually and then strip it from the shopify helper
+  endcomment
+
+  assign allowed_to_round = allowed_to_round | default: false, allow_false: true
+
+  if aspect_ratio == blank or aspect_ratio == 'natural'
+    if natural_fallback_ratio != blank
+      assign placeholder_aspect_ratio = natural_fallback_ratio
+    else
+      assign placeholder_aspect_ratio = 'square'
+    endif
+  else
+    assign placeholder_aspect_ratio = aspect_ratio
+  endif
+
+  capture placeholder_class
+    if class != blank
+      echo 'image placeholder-image visible [[c]]' | replace: '[[c]]', class
+    else
+      echo 'image placeholder-image visible'
+    endif
+
+    if allowed_to_round
+      echo ' image--rounded'
+    endif
+  endcapture
+
+  capture aspect_ratio_attribute
+    echo 'data-aspect-ratio="[[ar]]"' | replace: '[[ar]]', placeholder_aspect_ratio
+  endcapture
+
+  capture opening_tag_with_aspect_ratio
+    echo '<svg [[attr]] ' | replace: '[[attr]]', aspect_ratio_attribute
+  endcapture
+-%}
+<svg
+  {%- if style %}
+    style="{{ style }}"
+  {% endif -%}
+  {%- if attributes != blank %}
+    {{ attributes }}
+  {%- endif %}
+  {{
+  placeholder_name
+  | default: 'image'
+  | placeholder_svg_tag: placeholder_class
+  | replace: '<svg ', opening_tag_with_aspect_ratio
+  | replace: '<svg', ""
+}}

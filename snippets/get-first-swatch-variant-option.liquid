@@ -1,0 +1,36 @@
+{%- liquid
+  comment
+    Renders the option name of the first variant option that matches with the swatch
+    variant options setting.
+
+    Required parameters:
+      - prod: { Object } The associated product.
+      - swatch_variant_options: { Object } An array of swatch variant options (based on
+          'settings.swatch_variant_options').
+  endcomment
+
+  assign found_option = blank
+
+  for option in prod.options
+    capture option_name
+      echo option | downcase
+    endcapture
+
+    for swatch_option in swatch_variant_options
+      capture swatch_option_name
+        echo swatch_option | downcase | strip
+      endcapture
+
+      if swatch_option_name == option_name
+        assign found_option = option_name
+        break
+      endif
+    endfor
+
+    if found_option != blank
+      break
+    endif
+  endfor
+
+  echo found_option | strip_newlines
+-%}

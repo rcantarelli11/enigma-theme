@@ -1,0 +1,80 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "top_padding": 80,
+        "bottom_padding": 50
+      }
+    },
+    "image_hero_g4fTMT": {
+      "type": "image-hero",
+      "blocks": {
+        "spacer_e4DmKF": {
+          "type": "spacer",
+          "settings": {
+            "space": 39,
+            "space_mobile": 25
+          }
+        },
+        "divider_YCyGfV": {
+          "type": "divider",
+          "settings": {
+            "thickness": 1,
+            "space_above": 0,
+            "space_below": 20,
+            "space_above_mobile": 0,
+            "space_below_mobile": 20
+          }
+        },
+        "heading_j9rFfy": {
+          "type": "heading",
+          "settings": {
+            "heading": "Coming SOOn",
+            "heading_font_size": 8,
+            "heading_tag": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "spacer_e4DmKF",
+        "divider_YCyGfV",
+        "heading_j9rFfy"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "image": "shopify://shop_images/Bundle_-_BANNER.webp",
+        "background_link": "",
+        "custom_desktop_height": "450px",
+        "custom_mobile_height": "350px",
+        "content_width": 1000,
+        "text_position_desktop": "center_center",
+        "text_position_mobile": "center_center",
+        "overlay_color_scheme": "",
+        "overlay_opacity": 20,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "width": "full-width",
+        "top_padding": 0,
+        "bottom_padding": 0
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_hero_g4fTMT"
+  ]
+}

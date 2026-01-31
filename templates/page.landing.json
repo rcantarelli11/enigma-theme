@@ -1,0 +1,169 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_1",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "top_padding": 80,
+        "bottom_padding": 60
+      }
+    },
+    "rich_text": {
+      "type": "rich-text",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Heading",
+            "heading_font_size": 8,
+            "heading_tag": "h1"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "text_font_size": 3
+          }
+        }
+      },
+      "block_order": ["overline", "heading", "text"],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "text_alignment": "center",
+        "top_padding": 100,
+        "bottom_padding": 0
+      }
+    },
+    "multi_column": {
+      "type": "multi-column",
+      "blocks": {
+        "column_item_1": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "heading": "Column item",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_link": "",
+            "button_label": "Button"
+          }
+        },
+        "column_item_2": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "heading": "Column item",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_link": "",
+            "button_label": "Button"
+          }
+        },
+        "column_item_3": {
+          "type": "column-item",
+          "settings": {
+            "display_media": true,
+            "media_full_height": true,
+            "heading": "Column item",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "button_link": "",
+            "button_label": "Button"
+          }
+        }
+      },
+      "block_order": ["column_item_1", "column_item_2", "column_item_3"],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "section_header_heading": "",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "",
+        "section_header_link_url": "",
+        "section_header_link_label": "",
+        "column_spacing": "small",
+        "column_count_desktop": "3",
+        "column_count_mobile": "1",
+        "enable_slider_on_desktop": false,
+        "enable_slider_on_mobile": false,
+        "show_slider_indicator": false,
+        "text_alignment": "left",
+        "heading_font_size": 2,
+        "heading_mobile_font_size": 2,
+        "item_title_heading_tag": "h3",
+        "text_font_size": 3,
+        "button_style": "solid",
+        "media_aspect_ratio": "portrait-alt",
+        "media_position": "above_content",
+        "width": "full-width-padded",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "settings": {
+            "text": "Overline"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Subscribe to our Emails",
+            "heading_font_size": 3,
+            "heading_tag": "h2"
+          }
+        },
+        "textf": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Include a short sentence describing what someone can expect from your newsletter.</p>",
+            "text_font_size": 3
+          }
+        },
+        "email_form": {
+          "type": "email-form",
+          "settings": {}
+        }
+      },
+      "block_order": ["overline", "heading", "textf", "email_form"],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "content_max_width": 500,
+        "banner_height_type": "adapt",
+        "custom_desktop_height": "450px",
+        "custom_mobile_height": "450px",
+        "text_alignment": "top_left",
+        "overlay_color_scheme": "",
+        "overlay_opacity": 40,
+        "image_animation": "iris",
+        "width": "page-width",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    }
+  },
+  "order": ["main", "rich_text", "multi_column", "newsletter"]
+}

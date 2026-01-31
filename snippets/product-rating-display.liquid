@@ -1,0 +1,62 @@
+{%- liquid
+  comment
+    Renders a product rating display.
+
+    Required parameters:
+      - prod: { Object } The associated product object.
+      - stars_layout: { String } The layout to use for the stars. Can be:
+        - 'default': Five stars.
+        - 'single': Single star.
+      - text_display: { String } What text to display. Can be:
+        - 'rating-and-count': The rating value, and the number of reviews.
+        - 'rating': The rating value.
+        - 'count': The number of reviews.
+  endcomment
+-%}
+
+{%- if prod.metafields.reviews.rating -%}
+  <div class="product-rating">
+    <div class="product-rating__stars">
+      {%- liquid
+        if stars_layout == 'single-icon'
+          render 'icon-utility', icon: 'star', width: 14, height: 14
+        else
+          # Note: Shopify's documentation doesn't make it obvious that you need to use
+          #   'value.rating' to get a usable version of the rating value. If you use
+          #   just 'value' performing any math will result in 0.
+          assign rating = prod.metafields.reviews.rating.value.rating
+          assign scale_min = prod.metafields.reviews.rating.value.scale_min | floor
+          assign scale_max = prod.metafields.reviews.rating.value.scale_max | floor
+          assign rating_floor = rating | floor
+          assign rating_remainder = rating | minus: rating_floor
+          assign rating_ceiling = rating | ceil
+          assign empty_star_count = scale_max | minus: rating_ceiling
+
+          for i in (scale_min..rating_floor)
+            render 'icon-utility', icon: 'star', width: 14, height: 14
+          endfor
+
+          if rating_remainder > 0
+            render 'icon-utility', icon: 'star-half', width: 14, height: 14
+          endif
+
+          if prod.metafields.reviews.rating.value != prod.metafields.reviews.rating.value.scale_max
+            for i in (1..empty_star_count)
+              render 'icon-utility', icon: 'star-empty', width: 14, height: 14
+            endfor
+          endif
+        endif
+      -%}
+    </div>
+
+    {%- if text_display contains 'rating' -%}
+      <div class="product-rating__rating">{{ prod.metafields.reviews.rating.value.rating | round: 1 }}</div>
+    {%- endif -%}
+
+    {%- if text_display contains 'count' -%}
+      <div class="product-rating__count">
+        {{ 'collections.general.rating_count' | t: count: prod.metafields.reviews.rating_count }}
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

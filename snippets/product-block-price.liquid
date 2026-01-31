@@ -1,0 +1,122 @@
+{%- liquid
+  comment
+    Renders the 'Price' product block.
+
+    Required parameters:
+      - prod: { Object } The current product object required for ShopPay snippet.
+      - variant: { Object } The current variant object.
+
+    Optional parameters:
+      - is_featured: { Boolean } Whether the section is a Featured product.
+      - block: { Object } The Price block object.
+      - product_price_display: { HTML } The rendered price HTML from the product-price-display snippet.
+  endcomment
+
+  if variant != blank
+    assign has_discount = false
+    assign has_unit_price = false
+
+    if variant.compare_at_price > variant.price
+      assign has_discount = true
+
+      # price discount
+      assign discount_format = block.settings.discount_format
+      assign discount = variant.compare_at_price | minus: variant.price
+
+      if discount_format contains 'percent'
+        assign discount = discount | times: 100 | divided_by: variant.compare_at_price | round
+      elsif discount_format contains 'dollar'
+        assign discount = variant.compare_at_price | minus: variant.price
+      endif
+
+      # sale badge discount
+      assign sale_badge_format = block.settings.sale_badge_format
+      assign sale_badge_discount = variant.compare_at_price | minus: variant.price
+
+      if sale_badge_format contains 'percent'
+        assign sale_badge_discount = sale_badge_discount | times: 100 | divided_by: variant.compare_at_price | round
+      elsif sale_badge_format contains 'dollar'
+        assign sale_badge_discount = variant.compare_at_price | minus: variant.price
+      endif
+    endif
+
+    if variant.unit_price_measurement
+      assign has_unit_price = true
+    endif
+  endif
+
+  assign badge_alignment = block.settings.badge_alignment
+-%}
+
+{%- capture price_badge -%}
+  {%- if variant.available == false and block.settings.show_sold_out_badge -%}
+    <div class="price-and-payments__badges badge-alignment--{{ badge_alignment }}">
+      <span class="price-and-payments__sold-out-badge badge badge--sold-out fs-body-75">
+        {{- 'products.general.sold_out' | t -}}
+      </span>
+   </div>
+
+  {%- elsif has_discount and block.settings.show_sale_badge -%}
+    <div class="price-and-payments__badges badge-alignment--{{ badge_alignment }}">
+      {%- render 'discount-display',
+        display_type: 'badge',
+        discount_format: block.settings.sale_badge_format,
+        discount_amount: sale_badge_discount,
+        discount_varies: false
+      -%}
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+<div
+  class="product-details__price-and-payments"
+  style="--bottom-spacing: {{ block.settings.bottom_padding | default: 32 }}px;"
+  js-product-block
+  js-product-block-allowed-in-quickview
+  js-product-block-price
+  {{ block.shopify_attributes }}
+>
+  <div class="price__container">
+    {%- if variant != blank -%}
+      {%- if badge_alignment == 'above' -%}
+        {{ price_badge }}
+      {%- endif -%}
+
+      <div class="price__wrapper">
+        {%- if badge_alignment == 'left' -%}
+          {{ price_badge }}
+        {%- endif -%}
+
+        {{ product_price_display }}
+
+        {%- if badge_alignment == 'right' -%}
+          {{ price_badge }}
+        {%- endif -%}
+
+        {%- if has_discount and block.settings.show_discount -%}
+          {%- render 'discount-display',
+            display_type: 'text',
+            discount_format: discount_format,
+            discount_amount: discount,
+            discount_varies: false
+          -%}
+        {%- endif -%}
+      </div>
+
+      {%- if has_unit_price -%}
+        {%- render 'unit-price-display',
+          unit_price: variant.unit_price,
+          unit_price_measurement_value: variant.unit_price_measurement.reference_value,
+          unit_price_measurement_unit: variant.unit_price_measurement.reference_unit
+        -%}
+      {%- endif -%}
+
+    {%- else -%}
+      {{ product_price_display }}
+    {%- endif -%}
+  </div>
+
+  {%- if block.settings.show_shop_pay -%}
+    {%- render 'shop-pay-payment-terms', prod: prod -%}
+  {%- endif -%}
+</div>

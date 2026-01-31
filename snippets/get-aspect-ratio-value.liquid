@@ -1,0 +1,25 @@
+{%- liquid
+  comment
+    Renders an aspect ratio value based on an aspect ratio name.
+
+    Required parameters:
+      - aspect_ratio: { String } The aspect ratio name.
+  endcomment
+
+  case aspect_ratio
+    when 'portrait'
+      echo 2.0 | divided_by: 3.0 | round: 3
+    when 'portrait-alt'
+      echo 4.0 | divided_by: 5.0 | round: 3
+    when 'square'
+      echo 1
+    when 'landscape'
+      echo 3.0 | divided_by: 2.0 | round: 3
+    when 'landscape-alt'
+      echo 5.0 | divided_by: 4.0 | round: 3
+    when 'landscape-wide'
+      echo 16.0 | divided_by: 9.0 | round: 3
+    when 'landscape-ultrawide'
+      echo 21.0 | divided_by: 9.0 | round: 3
+  endcase
+-%}

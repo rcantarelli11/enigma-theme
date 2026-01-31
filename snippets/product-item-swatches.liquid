@@ -1,0 +1,109 @@
+{%- liquid
+  comment
+    Renders the product item swatches.
+
+    Required parameters:
+      - prod: { Object } The associated product.
+      - is_sibling_swatches: { Boolean: false } Whether the swatches are for sibling products.
+      - sibling_products: { Object } An array of the sibling products.
+      - swatch_variant_option: { String } The variant option name associated with swatches.
+      - custom_swatch_color_key_map: { Object } An array of custom color keys (names).
+      - custom_swatch_color_value_map: { Object } An array of custom color values (HEX values).
+  endcomment
+  assign is_sibling_swatches = is_sibling_swatches | default: false, allow_false: true
+
+  if is_sibling_swatches
+    assign total_swatches = sibling_products.size
+  else
+    assign total_swatches = prod.options_by_name[swatch_variant_option].values.size
+  endif
+
+  case settings.product_listing_swatch_size
+    when 'small'
+      assign swatch_size = 20
+      assign max_swatches = 6
+    when 'medium'
+      assign swatch_size = 30
+      assign max_swatches = 5
+    when 'large'
+      assign swatch_size = 40
+      assign max_swatches = 4
+    when 'x-large'
+      assign swatch_size = 50
+      assign max_swatches = 3
+  endcase
+
+  assign swatch_image_size = swatch_size | times: 2
+  assign has_overflow = false
+
+  if total_swatches > max_swatches
+    assign has_overflow = true
+    assign overflow_amount = total_swatches | minus: max_swatches
+  endif
+-%}
+
+<div class="product-item__swatches">
+  {%- if is_sibling_swatches -%}
+    {%- for sibling_product in sibling_products limit: max_swatches -%}
+      {%- liquid
+        if settings.enable_sibling_product_image_swatches
+          assign sibling_product_featured_media = sibling_product.featured_media | image_url: width: swatch_image_size
+        endif
+
+        assign swatch_selected = false
+
+        if sibling_product == prod
+          assign swatch_selected = true
+        endif
+      -%}
+
+      {%- render 'swatch',
+        value: sibling_product.metafields.eclipse.sibling_option_name,
+        custom_swatch_color_key_map: custom_swatch_color_key_map,
+        custom_swatch_color_value_map: custom_swatch_color_value_map,
+        image_url: sibling_product_featured_media,
+        size: swatch_size,
+        selected: swatch_selected
+      -%}
+    {%- endfor -%}
+  {%- else -%}
+    {%- for value in prod.options_by_name[swatch_variant_option].values limit: max_swatches -%}
+      {% liquid
+        if value.swatch.image
+          capture swatch_image_url
+            echo value.swatch.image | image_url: width: swatch_image_size
+          endcapture
+        endif
+      %}
+      {%- render 'swatch',
+        value: value,
+        custom_swatch_color_key_map: custom_swatch_color_key_map,
+        custom_swatch_color_value_map: custom_swatch_color_value_map,
+        color: value.swatch.color,
+        image_url: swatch_image_url,
+        size: swatch_size
+      -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if has_overflow -%}
+    {%- # If quick shopping isn't enabled, the overflow button should just link to the product page -%}
+    {%- if settings.enable_quick_shopping -%}
+      <button
+        type="button"
+        class="product-item__swatch-overflow fs-body-25"
+        js-product-listing-swatch-overflow
+      >
+        +{{ overflow_amount }}
+      </button>
+    {%- else -%}
+      <a
+        href="{{ prod.url }}"
+        class="product-item__swatch-overflow fs-body-25"
+        js-product-listing-swatch-overflow
+      >
+        +{{ overflow_amount }}
+      </a>
+    {%- endif -%}
+  {%- endif -%}
+</div>

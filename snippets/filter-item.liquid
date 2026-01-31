@@ -1,0 +1,56 @@
+{%- liquid
+  comment
+    Renders a single filter item.
+
+    Required parameters:
+      - type: { String } The filter item type. Can be:
+        - 'checkbox'
+        - 'swatch'
+        - 'switch'
+      - filter: { Object } The filter object.
+      - value: { Object } The filter value.
+      - label: { String } The filter value label.
+
+    Optional parameters:
+      - custom_swatch_color_key_map: { Object } An array of custom swatch color keys (names).
+      - custom_swatch_color_value_map: { Object } An array of custom swatch color values (HEX values).
+  endcomment
+
+  if value.count > 0
+    assign disabled = false
+  else
+    assign disabled = true
+  endif
+-%}
+
+<li class="filter-item filter-item--type-{{ type }} {%- if disabled %} filter-item--disabled{%- endif -%}">
+  {%- capture filter_value_label -%}
+    <span class="filter-item-label">
+      <span class="label-text">{{ label }}</span>
+      <span class="label-count">({{ value.count }})</span>
+    </span>
+  {%- endcapture -%}
+
+  {%- liquid
+    capture filter_label_handle
+      echo filter.label | handle
+    endcapture
+
+    capture filter_value_label_handle
+      echo value.label | handle
+    endcapture
+
+    capture filter_id
+      echo 'filter--[[label]]-[[value]]' | replace: '[[label]]', filter_label_handle | replace: '[[value]]', filter_value_label_handle
+    endcapture
+
+    case type
+      when 'checkbox'
+        render 'input-checkbox', id: filter_id, name: value.param_name, value: value.value, label: filter_value_label, checked: value.active, disabled: disabled
+      when 'swatch'
+        render 'filter-item-swatch', value: value, label: label, id: filter_id, custom_swatch_color_key_map: custom_swatch_color_key_map, custom_swatch_color_value_map: custom_swatch_color_value_map, disabled: disabled
+      when 'switch'
+        render 'input-switch', id: filter_id, name: value.param_name, value: value.value, label: label, checked: value.active, disabled: disabled
+    endcase
+  -%}
+</li>

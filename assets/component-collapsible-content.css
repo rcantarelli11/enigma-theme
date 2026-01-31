@@ -1,0 +1,82 @@
+:root{
+  --js-mobile:(max-width: 719.9px);
+  --js-tablet:(min-width: 720px);
+  --js-below-small-desktop:(max-width: 1023.9px);
+  --js-small-desktop:(min-width: 1024px);
+  --js-desktop:(min-width: 1440px);
+  --js-max-page-width:(min-width: 1600px);
+}
+.section.collapsible-content details{
+    -webkit-tap-highlight-color:transparent;
+  }
+.collapsible-content_accordion:not(:last-child){
+  border-bottom:1px solid var(--color-lines-and-borders);
+}
+.collapsible-content_group-header{
+  padding:0;
+  padding-top:var(--spacing-900);
+  padding-bottom:var(--spacing-350);
+  border-bottom:1px solid var(--color-lines-and-borders);
+}
+.section-header + .collapsible-content_group-header{
+    padding-top:var(--spacing-500);
+  }
+.collapsible-content_row .collapsible-content-row_content{
+    padding-bottom:var(--spacing-450);
+  }
+.collapsible-content_row-title{
+  display:flex;
+  align-items:center;
+  gap:var(--spacing-150);
+  pointer-events:none;
+  font-size:var(--mobile-row-heading-text-size);
+}
+@media (min-width: 720px){
+.collapsible-content_row-title{
+    font-size:var(--desktop-row-heading-text-size)
+}
+  }
+.collapsible-content_row-icon{
+  flex-shrink:0;
+  width:36px;
+  height:36px;
+  border-radius:36px;
+  background-color:var(--color-text-alpha-10);
+  color:var(--color-text);
+  position:relative;
+  transition:all var(--animation-timing-300) var(--ease-out-quart);
+}
+.collapsible-content_row-summary:hover .collapsible-content_row-icon{
+    transform:scale(1.1);
+    background-color:var(--color-text);
+    color:var(--color-background);
+  }
+.collapsible-content_row-icon .icon{
+    position:absolute;
+    left:10px;
+    top:10px;
+    transition:all var(--animation-timing-300) var(--ease-out-quart);
+  }
+.collapsible-content_row-icon .icon.icon--minus{
+    opacity:0;
+  }
+.collapsible-content_row[open] .collapsible-content_row-icon .icon.icon--plus{
+      opacity:0;
+      transform:rotate(90deg);
+    }
+.collapsible-content_row[open] .collapsible-content_row-icon .icon.icon--minus{
+      opacity:1;
+    }
+.collapsible-content_row-summary{
+  padding-top:var(--spacing-300);
+  padding-bottom:var(--spacing-300);
+}
+@media (min-width: 720px){
+.collapsible-content_row-summary{
+    padding-top:var(--spacing-400);
+    padding-bottom:var(--spacing-400)
+}
+  }
+.collapsible-content_footer-button{
+  margin-top:var(--spacing-500);
+}

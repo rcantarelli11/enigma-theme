@@ -1,0 +1,18 @@
+{% liquid
+  comment
+    Renders an "Overline" text block.
+
+    Required parameters:
+      - block: { Object } The associated block object.
+      - animate: { Boolean } Apply animation class to potentially animate
+  endcomment
+-%}
+
+{% if block.settings.text != blank -%}
+  <div
+    class="content-block content-block--overline ff-overline fs-overline rte {%- if animate %} animation-overline{%- endif -%}"
+    {{ block.shopify_attributes }}
+  >
+    {{ block.settings.text }}
+  </div>
+{%- endif %}

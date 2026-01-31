@@ -1,0 +1,53 @@
+<script>
+  flu = window.flu || {}
+  flu.chunks = {
+    photoswipe: "{{ 'photoswipe-chunk.js' | asset_url }}",
+  }
+  flu.cartType = {{ settings.cart_type | json }};
+</script>
+
+{%- liquid
+  # Set the following line to true to use the unminified javascript file theme.js
+  assign useUnminThemeJS = false
+  assign theme_js_url = 'theme.min.js' | asset_url
+
+  if useUnminThemeJS
+    assign theme_js_url = 'theme.js' | asset_url
+  endif
+
+  echo '<script type="module" src="[[tju]]"></script>' | replace: '[[tju]]', theme_js_url
+
+  # Set the following line to true to import custom-events.js
+  assign useCustomEvents = false
+
+  if useCustomEvents
+    assign custom_event_js_url = 'custom-events.js' | asset_url
+    echo '<script type="module" src="[[ceju]]" defer></script>' | replace: '[[ceju]]', custom_event_js_url
+  endif
+
+  if template contains 'customers'
+    assign shopify_common_js_url = 'shopify_common.js' | shopify_asset_url
+    echo '<script type="module" src="[[scju]]" defer></script>' | replace: '[[scju]]', shopify_common_js_url
+  endif
+-%}
+
+<script defer>
+  var defineVH = function () {
+    document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px')
+  }
+
+  window.addEventListener('resize', defineVH)
+  window.addEventListener('orientationchange', defineVH)
+  defineVH()
+</script>
+
+{%- liquid
+  echo 'theme.css' | asset_url | stylesheet_tag: preload: true
+
+  # Set the following line to true to import custom.css
+  assign useCustomCSS = false
+
+  if useCustomCSS
+    echo 'custom.css' | asset_url | stylesheet_tag: preload: true
+  endif
+-%}

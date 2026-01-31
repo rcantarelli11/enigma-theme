@@ -1,0 +1,290 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_hero_yMEjd3": {
+      "type": "image-hero",
+      "blocks": {
+        "heading_haeF9Y": {
+          "type": "heading",
+          "settings": {
+            "heading": "Contact ENIGMA®",
+            "heading_font_size": 6,
+            "heading_tag": "h2"
+          }
+        },
+        "button_KYAwQa": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_link": "",
+            "button_label": "Button",
+            "button_style": "solid"
+          }
+        }
+      },
+      "block_order": [
+        "heading_haeF9Y",
+        "button_KYAwQa"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "image": "shopify://shop_images/Blog_Suplements_-_1440px_width_x_500px_height.webp",
+        "background_link": "",
+        "custom_desktop_height": "350px",
+        "custom_mobile_height": "350px",
+        "content_width": 500,
+        "text_position_desktop": "center_center",
+        "text_position_mobile": "center_center",
+        "overlay_color_scheme": "",
+        "overlay_opacity": 20,
+        "enable_text_animation": true,
+        "image_animation": "iris",
+        "width": "full-width",
+        "top_padding": 0,
+        "bottom_padding": 0
+      }
+    },
+    "contact_form": {
+      "type": "contact-form",
+      "blocks": {
+        "text_input": {
+          "type": "text-input",
+          "settings": {
+            "label": "Name",
+            "required": false,
+            "width": "half-width"
+          }
+        },
+        "email": {
+          "type": "email",
+          "settings": {
+            "label": "Email",
+            "width": "half-width"
+          }
+        },
+        "phone": {
+          "type": "phone",
+          "settings": {
+            "label": "Phone",
+            "required": false,
+            "width": "full-width"
+          }
+        },
+        "text_area": {
+          "type": "text-area",
+          "settings": {
+            "label": "Message",
+            "required": false,
+            "input_height": 180,
+            "width": "full-width"
+          }
+        },
+        "submit": {
+          "type": "submit",
+          "settings": {
+            "label": "Submit",
+            "full_width": false
+          }
+        }
+      },
+      "block_order": [
+        "text_input",
+        "email",
+        "phone",
+        "text_area",
+        "submit"
+      ],
+      "settings": {
+        "color_scheme": "scheme_2",
+        "center_content": true,
+        "overline": "",
+        "heading": "Contact",
+        "heading_font_size": 5,
+        "heading_tag": "h3",
+        "text": "<p>Your details are safe and protected with us.</p>",
+        "text_font_size": 3,
+        "show_recaptcha_terms": true,
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "content_alignment": "left",
+        "top_padding": 60,
+        "bottom_padding": 60
+      }
+    },
+    "collapsible_content": {
+      "type": "collapsible-content",
+      "blocks": {
+        "group_1_heading": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Group Heading"
+          }
+        },
+        "group_1_row_1": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "general-checkmark",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "group_1_row_2": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "general-checkmark",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "group_1_row_3": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "general-checkmark",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "group_2_heading": {
+          "type": "heading",
+          "settings": {
+            "heading_text": "Group Heading"
+          }
+        },
+        "group_2_row_1": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "general-checkmark",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "group_2_row_2": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "general-checkmark",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        },
+        "group_2_row_3": {
+          "type": "row",
+          "settings": {
+            "expand_by_default": false,
+            "icon": "general-checkmark",
+            "heading": "Frequently asked question",
+            "text": "<p>This is an example of a response that you might give. It's good to be as thorough as possible in responses as that has a tendency to improve trust overall.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "group_1_heading",
+        "group_1_row_1",
+        "group_1_row_2",
+        "group_1_row_3",
+        "group_2_heading",
+        "group_2_row_1",
+        "group_2_row_2",
+        "group_2_row_3"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_5",
+        "section_header_heading": "Collapsible Content",
+        "section_header_heading_tag": "h2",
+        "section_header_text": "Find answers to common questions.",
+        "section_header_link_url": "",
+        "section_header_link_label": "Learn more",
+        "row_heading_font": "body",
+        "row_heading_text_size": 3,
+        "button_link": "",
+        "button_label": "",
+        "button_style": "solid",
+        "width": "narrow",
+        "top_padding": 100,
+        "bottom_padding": 50
+      }
+    },
+    "main_page": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "color_scheme": "",
+        "content_width": "custom-width",
+        "custom_width": 650,
+        "top_padding": 80,
+        "bottom_padding": 60
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "blocks": {
+        "overline": {
+          "type": "overline",
+          "settings": {
+            "text": "join us"
+          }
+        },
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Subscribe to our Emails",
+            "heading_font_size": 3,
+            "heading_tag": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Subscribe to get updates about our run clubs and races. Be the first to hear about our sales and limited edition products!</p>",
+            "text_font_size": 3
+          }
+        },
+        "email_form": {
+          "type": "email-form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "overline",
+        "heading",
+        "text",
+        "email_form"
+      ],
+      "disabled": true,
+      "settings": {
+        "color_scheme": "scheme_5",
+        "content_max_width": 500,
+        "banner_height_type": "custom",
+        "custom_desktop_height": "60vh",
+        "custom_mobile_height": "60vh",
+        "text_alignment": "center_center",
+        "overlay_color_scheme": "scheme_2",
+        "overlay_opacity": 30,
+        "image_animation": "iris",
+        "width": "full-width-padded",
+        "top_padding": 20,
+        "bottom_padding": 60
+      }
+    }
+  },
+  "order": [
+    "image_hero_yMEjd3",
+    "contact_form",
+    "collapsible_content",
+    "main_page",
+    "newsletter"
+  ]
+}
