@@ -53,15 +53,21 @@
     @media (min-width: 768px) { .container { padding: 0 48px; } }
 
     /* ── Animations ── */
-    [data-reveal] { opacity: 0; transform: translateY(48px); }
-    [data-reveal].visible {
-      opacity: 1; transform: translateY(0);
-      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
     }
-    .delay-1 { transition-delay: 0.1s !important; }
-    .delay-2 { transition-delay: 0.2s !important; }
-    .delay-3 { transition-delay: 0.3s !important; }
-    .delay-4 { transition-delay: 0.4s !important; }
+    [data-reveal].visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    [data-reveal][data-delay="1"] { transition-delay: 0.1s; }
+    [data-reveal][data-delay="2"] { transition-delay: 0.2s; }
+    [data-reveal][data-delay="3"] { transition-delay: 0.3s; }
+    [data-reveal][data-delay="4"] { transition-delay: 0.4s; }
+    /* Fallback: if JS fails, show everything */
+    .no-js [data-reveal] { opacity: 1; transform: none; }
 
     /* ── Announcement Bar ── */
     .announcement {
@@ -819,9 +825,9 @@
   <!-- Hero -->
   <section class="hero">
     <p class="hero__eyebrow" data-reveal>The Complete Performance System</p>
-    <h1 class="hero__title" data-reveal class="delay-1">The complete<br><em>performance cycle</em></h1>
-    <p class="hero__sub" data-reveal class="delay-2">Five pillars. One system. Every phase of your training optimized with clinically-dosed, fully transparent formulas.</p>
-    <div class="hero__actions" data-reveal class="delay-3">
+    <h1 class="hero__title" data-reveal data-delay="1">The complete<br><em>performance cycle</em></h1>
+    <p class="hero__sub" data-reveal data-delay="2">Five pillars. One system. Every phase of your training optimized with clinically-dosed, fully transparent formulas.</p>
+    <div class="hero__actions" data-reveal data-delay="3">
       <a href="#products" class="btn btn-primary">
         Shop the Collection
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
@@ -947,15 +953,15 @@
           <div class="trust-item__number">100%</div>
           <div class="trust-item__label">Label Transparency</div>
         </div>
-        <div class="trust-item" data-reveal class="delay-1">
+        <div class="trust-item" data-reveal data-delay="1">
           <div class="trust-item__number">0</div>
           <div class="trust-item__label">Artificial Colors</div>
         </div>
-        <div class="trust-item" data-reveal class="delay-2">
+        <div class="trust-item" data-reveal data-delay="2">
           <div class="trust-item__number">3rd Party</div>
           <div class="trust-item__label">Tested & Verified</div>
         </div>
-        <div class="trust-item" data-reveal class="delay-3">
+        <div class="trust-item" data-reveal data-delay="3">
           <div class="trust-item__number">USA</div>
           <div class="trust-item__label">Manufactured</div>
         </div>
@@ -986,7 +992,7 @@
             </div>
           </div>
         </article>
-        <article class="product-card" data-reveal class="delay-1">
+        <article class="product-card" data-reveal data-delay="1">
           <div class="product-card__image">
             <div class="product-card__placeholder">E</div>
           </div>
@@ -999,7 +1005,7 @@
             </div>
           </div>
         </article>
-        <article class="product-card" data-reveal class="delay-2">
+        <article class="product-card" data-reveal data-delay="2">
           <div class="product-card__image">
             <div class="product-card__placeholder">E</div>
           </div>
@@ -1025,7 +1031,7 @@
             </div>
           </div>
         </article>
-        <article class="product-card" data-reveal class="delay-1">
+        <article class="product-card" data-reveal data-delay="1">
           <div class="product-card__image">
             <span class="product-card__tag">New</span>
             <div class="product-card__placeholder">E</div>
@@ -1039,7 +1045,7 @@
             </div>
           </div>
         </article>
-        <article class="product-card" data-reveal class="delay-2">
+        <article class="product-card" data-reveal data-delay="2">
           <div class="product-card__image">
             <span class="product-card__tag">Save 15%</span>
             <div class="product-card__placeholder">E</div>
@@ -1096,7 +1102,7 @@
             </div>
           </div>
         </div>
-        <div class="philosophy__visual" data-reveal class="delay-2">
+        <div class="philosophy__visual" data-reveal data-delay="2">
           <div class="philosophy__visual-text">E</div>
         </div>
       </div>
@@ -1110,7 +1116,7 @@
       <blockquote class="testimonial__quote" data-reveal>
         "The cleanest, most effective supplements I've ever used. You can taste and feel the difference when there's nothing to hide."
       </blockquote>
-      <p class="testimonial__attr" data-reveal class="delay-1">— Verified Athlete</p>
+      <p class="testimonial__attr" data-reveal data-delay="1">— Verified Athlete</p>
     </div>
   </section>
 
@@ -1138,8 +1144,8 @@
     <div class="container">
       <p class="section-label" data-reveal>Ready?</p>
       <h2 class="cta-section__heading" data-reveal>Fuel every phase of your training</h2>
-      <p class="cta-section__sub" data-reveal class="delay-1">The complete performance system, built for those who demand more.</p>
-      <a href="#products" class="cta-section__btn" data-reveal class="delay-2">Shop the Collection</a>
+      <p class="cta-section__sub" data-reveal data-delay="1">The complete performance system, built for those who demand more.</p>
+      <a href="#products" class="cta-section__btn" data-reveal data-delay="2">Shop the Collection</a>
     </div>
   </section>
 
@@ -1187,13 +1193,28 @@
   </footer>
 
   <script>
-    // Scroll reveal
+    // Scroll reveal — aggressive: trigger early, never re-hide
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // once visible, stay visible
+        }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px 50px 0px' });
+    
+    // Observe all reveal elements
     document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+    
+    // Safety net: if elements are already in viewport on load, reveal immediately
+    requestAnimationFrame(() => {
+      document.querySelectorAll('[data-reveal]:not(.visible)').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 100) {
+          el.classList.add('visible');
+        }
+      });
+    });
 
     // Cycle Wheel interaction
     function showPhase(index) {
