@@ -246,6 +246,7 @@ body {
   position: relative;
   min-height: 500px;
   will-change: transform, opacity;
+  overflow: visible;
 }
 .dot-grid {
   position: absolute;
@@ -329,13 +330,19 @@ body {
 }
 .wheel-node.active .wheel-node-label { color: rgba(20, 184, 166, 0.7); }
 
-/* Pentagon positions (top center starting, clockwise) */
-.wheel-node:nth-child(1) { top: -10px; left: 50%; transform: translateX(-50%); }
-.wheel-node:nth-child(2) { top: 25%; right: -16px; }
-.wheel-node:nth-child(3) { bottom: 2%; right: 10%; }
-.wheel-node:nth-child(4) { bottom: 2%; left: 10%; }
-.wheel-node:nth-child(5) { top: 25%; left: -16px; }
-.wheel-node:nth-child(1).active { transform: translateX(-50%) scale(1.12); }
+/* Pentagon positions — calculated from center (220,220) radius 190px
+   Node 1 (top):     220 + 190*sin(0°),   220 - 190*cos(0°)   = 220, 30
+   Node 2 (top-R):   220 + 190*sin(72°),  220 - 190*cos(72°)  = 401, 161
+   Node 3 (bot-R):   220 + 190*sin(144°), 220 - 190*cos(144°) = 332, 374
+   Node 4 (bot-L):   220 + 190*sin(216°), 220 - 190*cos(216°) = 108, 374
+   Node 5 (top-L):   220 + 190*sin(288°), 220 - 190*cos(288°) = 39, 161
+   Subtract half node size (40px) for centering */
+.wheel-node:nth-child(1) { top: -10px; left: 180px; }
+.wheel-node:nth-child(2) { top: 121px; left: 361px; }
+.wheel-node:nth-child(3) { top: 334px; left: 292px; }
+.wheel-node:nth-child(4) { top: 334px; left: 68px; }
+.wheel-node:nth-child(5) { top: 121px; left: -1px; }
+.wheel-node.active { transform: scale(1.12); }
 
 /* Connector lines */
 .wheel-connectors {

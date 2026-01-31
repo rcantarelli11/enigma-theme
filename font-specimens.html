@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enigma — Font Specimens (Dark BG)</title>
+<style>
+  @import url('https://api.fontshare.com/v2/css?f[]=zodiak@400,700&f[]=boska@400,700&f[]=cabinet-grotesk@400,700,800&f[]=satoshi@400,500,700&f[]=general-sans@400,500,700&f[]=clash-display@400,600,700&f[]=gambarino@400&f[]=melodrama@400,700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0A0A0A;
+    color: #F0F0F0;
+    font-family: 'General Sans', sans-serif;
+    padding: 60px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .page-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #14B8A6;
+    margin-bottom: 8px;
+  }
+
+  .page-heading {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 48px;
+    color: #F0F0F0;
+  }
+
+  .option {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 48px;
+    margin-bottom: 40px;
+    background: rgba(255,255,255,0.03);
+    transition: border-color 0.3s;
+  }
+  .option:hover {
+    border-color: rgba(20, 184, 166, 0.3);
+  }
+
+  .option-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #14B8A6;
+    margin-bottom: 24px;
+    font-weight: 600;
+  }
+
+  .specimen-hero {
+    font-size: 72px;
+    line-height: 1.05;
+    margin-bottom: 16px;
+    color: #F0F0F0;
+  }
+
+  .specimen-sub {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #888;
+    margin-bottom: 32px;
+    max-width: 600px;
+  }
+
+  .specimen-body {
+    font-size: 18px;
+    line-height: 1.7;
+    color: #aaa;
+    max-width: 700px;
+    margin-bottom: 24px;
+  }
+
+  .specimen-cta {
+    display: inline-block;
+    padding: 14px 32px;
+    background: #14B8A6;
+    color: #0A0A0A;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+
+  .font-info {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .font-info dt {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #666;
+    margin-bottom: 4px;
+  }
+
+  .font-info dd {
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  .divider {
+    text-align: center;
+    padding: 40px 0;
+    color: #333;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  /* OPTION A: Reckless (Displaay) + Saans (Displaay) */
+  .opt-a .specimen-hero { font-family: 'Zodiak', serif; font-weight: 700; }
+  .opt-a .specimen-sub { font-family: 'General Sans', sans-serif; font-weight: 400; }
+  .opt-a .specimen-body { font-family: 'General Sans', sans-serif; }
+  .opt-a .specimen-cta { font-family: 'General Sans', sans-serif; }
+
+  /* OPTION B: Gambarino + Cabinet Grotesk */
+  .opt-b .specimen-hero { font-family: 'Gambarino', serif; font-weight: 400; }
+  .opt-b .specimen-sub { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 400; }
+  .opt-b .specimen-body { font-family: 'Cabinet Grotesk', sans-serif; }
+  .opt-b .specimen-cta { font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700; }
+
+  /* OPTION C: Boska + Satoshi */
+  .opt-c .specimen-hero { font-family: 'Boska', serif; font-weight: 700; }
+  .opt-c .specimen-sub { font-family: 'Satoshi', sans-serif; font-weight: 400; }
+  .opt-c .specimen-body { font-family: 'Satoshi', sans-serif; }
+  .opt-c .specimen-cta { font-family: 'Satoshi', sans-serif; font-weight: 700; }
+
+  /* OPTION D: Melodrama + General Sans */
+  .opt-d .specimen-hero { font-family: 'Melodrama', serif; font-weight: 400; }
+  .opt-d .specimen-sub { font-family: 'General Sans', sans-serif; font-weight: 400; }
+  .opt-d .specimen-body { font-family: 'General Sans', sans-serif; }
+  .opt-d .specimen-cta { font-family: 'General Sans', sans-serif; font-weight: 700; }
+
+  /* OPTION E: Clash Display + Satoshi (current baseline) */
+  .opt-e .specimen-hero { font-family: 'Clash Display', sans-serif; font-weight: 600; }
+  .opt-e .specimen-sub { font-family: 'Satoshi', sans-serif; font-weight: 400; }
+  .opt-e .specimen-body { font-family: 'Satoshi', sans-serif; }
+  .opt-e .specimen-cta { font-family: 'Satoshi', sans-serif; font-weight: 700; }
+
+  .note {
+    background: rgba(20, 184, 166, 0.08);
+    border: 1px solid rgba(20, 184, 166, 0.2);
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin-top: 60px;
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1.6;
+  }
+  .note strong { color: #14B8A6; }
+</style>
+</head>
+<body>
+
+<p class="page-title">Typography Scouting — Enigma</p>
+<h1 class="page-heading">Font Specimens on Dark</h1>
+
+<!-- OPTION A -->
+<div class="option opt-a">
+  <p class="option-label">Option A — Zodiak (Fontshare) + General Sans</p>
+  <h2 class="specimen-hero">Train. Recover.<br>Repeat.</h2>
+  <p class="specimen-sub">5 phases. One cycle. Clean nutrition engineered for every stage of your training.</p>
+  <p class="specimen-body">No Proprietary Blends. No Mystery Powders. No BS. Every ingredient, every dose — right on the label. We don't hide behind blends because we don't need to.</p>
+  <a class="specimen-cta" href="#">Shop The Cycle →</a>
+  <dl class="font-info">
+    <div><dt>Headlines</dt><dd>Zodiak Bold</dd></div>
+    <div><dt>Body</dt><dd>General Sans Regular</dd></div>
+    <div><dt>Vibe</dt><dd>Editorial, sturdy serif — newspaper meets luxury</dd></div>
+    <div><dt>License</dt><dd>Free (Fontshare ITF FFL)</dd></div>
+  </dl>
+</div>
+
+<!-- OPTION B -->
+<div class="option opt-b">
+  <p class="option-label">Option B — Gambarino (Fontshare) + Cabinet Grotesk</p>
+  <h2 class="specimen-hero">Train. Recover.<br>Repeat.</h2>
+  <p class="specimen-sub">5 phases. One cycle. Clean nutrition engineered for every stage of your training.</p>
+  <p class="specimen-body">No Proprietary Blends. No Mystery Powders. No BS. Every ingredient, every dose — right on the label. We don't hide behind blends because we don't need to.</p>
+  <a class="specimen-cta" href="#">Shop The Cycle →</a>
+  <dl class="font-info">
+    <div><dt>Headlines</dt><dd>Gambarino Regular</dd></div>
+    <div><dt>Body</dt><dd>Cabinet Grotesk</dd></div>
+    <div><dt>Vibe</dt><dd>Elegant calligraphic serif — Aesop/Byredo territory</dd></div>
+    <div><dt>License</dt><dd>Free (Fontshare ITF FFL)</dd></div>
+  </dl>
+</div>
+
+<!-- OPTION C -->
+<div class="option opt-c">
+  <p class="option-label">Option C — Boska (Fontshare) + Satoshi</p>
+  <h2 class="specimen-hero">Train. Recover.<br>Repeat.</h2>
+  <p class="specimen-sub">5 phases. One cycle. Clean nutrition engineered for every stage of your training.</p>
+  <p class="specimen-body">No Proprietary Blends. No Mystery Powders. No BS. Every ingredient, every dose — right on the label. We don't hide behind blends because we don't need to.</p>
+  <a class="specimen-cta" href="#">Shop The Cycle →</a>
+  <dl class="font-info">
+    <div><dt>Headlines</dt><dd>Boska Bold</dd></div>
+    <div><dt>Body</dt><dd>Satoshi Regular</dd></div>
+    <div><dt>Vibe</dt><dd>High-contrast display serif — editorial, bold, confident</dd></div>
+    <div><dt>License</dt><dd>Free (Fontshare ITF FFL)</dd></div>
+  </dl>
+</div>
+
+<!-- OPTION D -->
+<div class="option opt-d">
+  <p class="option-label">Option D — Melodrama (Fontshare) + General Sans</p>
+  <h2 class="specimen-hero">Train. Recover.<br>Repeat.</h2>
+  <p class="specimen-sub">5 phases. One cycle. Clean nutrition engineered for every stage of your training.</p>
+  <p class="specimen-body">No Proprietary Blends. No Mystery Powders. No BS. Every ingredient, every dose — right on the label. We don't hide behind blends because we don't need to.</p>
+  <a class="specimen-cta" href="#">Shop The Cycle →</a>
+  <dl class="font-info">
+    <div><dt>Headlines</dt><dd>Melodrama Regular</dd></div>
+    <div><dt>Body</dt><dd>General Sans</dd></div>
+    <div><dt>Vibe</dt><dd>Dramatic display + clean sans — tension and contrast</dd></div>
+    <div><dt>License</dt><dd>Free (Fontshare ITF FFL)</dd></div>
+  </dl>
+</div>
+
+<!-- OPTION E (baseline) -->
+<div class="option opt-e">
+  <p class="option-label">Option E (Baseline) — Clash Display + Satoshi</p>
+  <h2 class="specimen-hero">Train. Recover.<br>Repeat.</h2>
+  <p class="specimen-sub">5 phases. One cycle. Clean nutrition engineered for every stage of your training.</p>
+  <p class="specimen-body">No Proprietary Blends. No Mystery Powders. No BS. Every ingredient, every dose — right on the label. We don't hide behind blends because we don't need to.</p>
+  <a class="specimen-cta" href="#">Shop The Cycle →</a>
+  <dl class="font-info">
+    <div><dt>Headlines</dt><dd>Clash Display Semibold</dd></div>
+    <div><dt>Body</dt><dd>Satoshi Regular</dd></div>
+    <div><dt>Vibe</dt><dd>Geometric modern — solid but common</dd></div>
+    <div><dt>License</dt><dd>Free (Pangram Pangram)</dd></div>
+  </dl>
+</div>
+
+<div class="note">
+  <strong>Premium paid options (not shown — need license):</strong><br>
+  • <strong>GT Super</strong> (Grilli Type) — warm editorial serif, used by top editorial brands. ~$150+ per style.<br>
+  • <strong>Canela</strong> (Commercial Type) — soft luxury serif, Aesop vibes. ~$75+ per style.<br>
+  • <strong>Reckless</strong> (Displaay) — expressive high-contrast serif with 9 families including condensed/wide. Trial fonts available.<br>
+  • <strong>Teodor</strong> (Displaay) — sharp, refined serif with 16 styles. Trial available.<br>
+  • <strong>Söhne Breit</strong> (Klim) — wide authoritative sans, Stripe-tier. ~$50+ per style.<br><br>
+  If Renato wants to invest in a paid typeface, GT Super or Reckless would put Enigma in a completely different league. Both have free trial fonts for testing.
+</div>
+
+</body>
+</html>
