@@ -24,12 +24,15 @@
 
 ## Color System
 
-### Base Palette
-- **Background (Dark):** `#1A1A1A` — dark charcoal/stone (NOT pure black)
-- **Background (Light sections):** `#F5F2ED` — warm off-white/cream
-- **Text Primary:** `#F5F2ED` on dark / `#1A1A1A` on light
-- **Text Secondary:** `#8A8580` — warm gray
+### Base Palette — Stone Tones (WARM, never pure black or white)
+- **Background (Dark Stone):** `#2C2926` — warm dark stone
+- **Background (Mid Stone):** `#3D3832` — medium stone for variation
+- **Background (Light Stone):** `#E8E2D9` — warm light stone
+- **Background (Cream):** `#F5F0E8` — lightest warm tone
+- **Text Primary:** `#F5F0E8` on dark / `#2C2926` on light
+- **Text Secondary:** `#9C9590` — warm stone gray
 - **Brand Accent:** `#2DD4BF` — Enigma teal (used sparingly — CTAs, links, hover states)
+- **NEVER use:** Pure black (#000) or pure white (#FFF) — always stone tones
 
 ### Pillar Color Accents
 Each pillar gets a subtle color shift in background/accent during the scroll experience:
@@ -82,11 +85,13 @@ These are NOT full backgrounds — they're subtle accent glows, gradient hints, 
 - "Clinically Dosed" / "No Proprietary Blends" / "Third Party Tested"
 - Small, repeated throughout — not one big trust section
 
-### Scribble Usage Rules
-- MAX 2-3 scribble elements per viewport
-- Always in brand teal or pillar accent color
-- Used for: underlines, circles, arrows, small annotations
-- NOT used for: backgrounds, large decorative elements, logos
+### Scribble Usage Rules — USE GENEROUSLY
+- 3-5 scribble elements per viewport (more than typical — this is a differentiator)
+- Always in brand teal, pillar accent color, or warm stone gray
+- Used for: underlines on key headlines, circles around stats/numbers, arrows pointing to CTAs, hand-drawn badges ("clinically dosed", "no fillers"), ingredient callout markers, section dividers, decorative accents between sections
+- Scribbles make it fun, engaging, and appeal to a broader audience (especially women)
+- NOT used for: replacing the logo, overwhelming product images
+- Think: playful confidence, not messy
 
 ---
 
