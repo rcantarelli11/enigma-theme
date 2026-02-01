@@ -1,41 +1,40 @@
-# Enigma Homepage — Section Copy
+# Enigma Homepage — Section Copy (v2 — Fun, Playful, Approachable)
+
+**TONE GUIDE:** Fun, playful, confident. NOT try-hard athlete. NOT gym bro. Think: your smart friend who happens to know a lot about supplements and makes it fun. Welcoming to everyone — especially people who are NOT hardcore fitness people but want great products. Scribble energy = the brand personality.
 
 ---
 
-## SECTION 1: Hero (Full Viewport, Dark)
+## SECTION 1: Hero (Full Viewport, Dark Stone)
 
 **Headline:**
-Your body runs in cycles.
-Your nutrition should too.
+Your body runs in *cycles.*
+So should your nutrition.
 
 **Subhead:**
-Five pillars. One system. Built for athletes who refuse to guess.
+Five pillars. One system. Zero guesswork. (Finally.)
 
-**CTA:** Explore The Cycle →
+**CTA:** See how it works →
 
-*Design notes: "cycles" gets a scribble underline. Dark cinematic background. Slow pan video of all 5 products in dark studio lighting. Bold serif headline. Subhead in clean sans.*
+*"cycles" gets a scribble underline. Playful scribble arrow pointing to the CTA button.*
 
 ---
 
 ## SECTION 2: The Enigma Cycle — Scroll Experience
 
-*Design: Horizontal scroll-lock. Each pillar takes over the full viewport. Subtle color accent shifts per pillar. Product fades in with parallax. Scribble icon for each pillar.*
-
 ### Pillar 1: ⚡ ENERGY
 **Kicker:** Phase 01 — Ignite
 
 **Headline:**
-The session starts here.
+That "let's go" feeling.
+Bottled.
 
 **Body:**
-Before the first rep, before the warm-up — your body needs a signal. Not a sugar rush. Not a jittery mess. A clean, focused ignition.
+You know the vibe — you show up, you're ready, everything clicks. That's not random. That's your pre workout actually doing its job.
 
-Enigma Pre Workout delivers clinical doses of citrulline, beta-alanine, and caffeine. No proprietary blends. No filler. Just the ingredients that actually work, at the doses that actually matter.
+Ours has citrulline, beta-alanine, and caffeine at the doses that research says actually work. Not a mystery blend. Not a heart-attack-in-a-scoop. Just clean energy that hits right.
 
-**Product:** Enigma Pre Workout
-**Micro-stat:** 6g Citrulline | 3.2g Beta-Alanine | 200mg Caffeine
-
-*Color accent: Warm Orange #F97316*
+**Stats:** 6g Citrulline · 3.2g Beta-Alanine · 200mg Caffeine
+*Scribble circle around "200mg" with hand-drawn annotation: "the sweet spot"*
 
 ---
 
@@ -43,17 +42,16 @@ Enigma Pre Workout delivers clinical doses of citrulline, beta-alanine, and caff
 **Kicker:** Phase 02 — Sustain
 
 **Headline:**
-Water isn't enough.
+Water is great.
+It's just not enough.
 
 **Body:**
-Halfway through, your muscles are pulling electrolytes faster than water can replace them. Cramping. Fatigue. The wall.
+Halfway through your workout (or honestly, just a hot Tuesday), your body is burning through electrolytes way faster than water alone can fix. That's when things get crampy and sad.
 
-Enigma Hydration replaces what sweat takes — sodium, potassium, magnesium — in a formula that actually tastes like something you'd drink. Zero sugar. Full electrolyte profile. Because performance dies when hydration drops.
+Our hydration powder has the full electrolyte lineup — sodium, potassium, magnesium — and it actually tastes good. Zero sugar. Mix it, drink it, feel the difference.
 
-**Product:** Enigma Hydration Powder
-**Micro-stat:** Full Electrolyte Profile | Zero Sugar | Light Citrus
-
-*Color accent: Cool Blue #3B82F6*
+**Stats:** Full Electrolytes · Zero Sugar · Actually Tastes Good
+*Scribble underline on "actually tastes good"*
 
 ---
 
@@ -61,17 +59,16 @@ Enigma Hydration replaces what sweat takes — sodium, potassium, magnesium — 
 **Kicker:** Phase 03 — Rebuild
 
 **Headline:**
-The work doesn't end when you rack the weight.
+Your muscles did the work.
+Give them something worth it.
 
 **Body:**
-Muscle breakdown happens during the session. Muscle growth happens after. The window matters, and what you put in it matters more.
+Here's the thing — your body doesn't grow during the workout. It grows after. So what you put in afterwards kind of matters a lot.
 
-Enigma Protein is clean whey isolate — 25g protein per serving, minimal ingredients, no bloating, no chalky aftertaste. Just rebuild fuel that your body actually absorbs.
+Clean whey isolate. 25g protein. Minimal ingredients. No weird aftertaste that makes you question your life choices. Just protein that does protein things.
 
-**Product:** Enigma Whey Protein
-**Micro-stat:** 25g Protein | Whey Isolate | Minimal Ingredients
-
-*Color accent: Warm Cream #F5D5A0*
+**Stats:** 25g Protein · Whey Isolate · No Weird Aftertaste
+*Scribble arrow pointing to stats with "that's it. that's the list."*
 
 ---
 
@@ -79,17 +76,16 @@ Enigma Protein is clean whey isolate — 25g protein per serving, minimal ingred
 **Kicker:** Phase 04 — Strengthen
 
 **Headline:**
-The most studied supplement in history. For a reason.
+The most researched supplement ever.
+(And it actually lives up to it.)
 
 **Body:**
-Creatine isn't a trend. It's decades of research pointing to the same conclusion: it works. More power output. Faster recovery between sets. Better performance over time.
+Creatine has been studied more than basically any other supplement in existence. The verdict? It works. More strength. Better recovery. Consistent results over time.
 
-Enigma Creatine is pure creatine monohydrate — 5g per serving. No loading phase needed. No fancy formulas. Just the compound that's earned its reputation.
+Ours is pure creatine monohydrate — 5g per scoop. No loading phase drama. No fancy proprietary formula with a trademarked name. Just the thing that works.
 
-**Product:** Enigma Creatine Monohydrate
-**Micro-stat:** 5g Creatine Monohydrate | Micronized | Unflavored
-
-*Color accent: Bold Red #EF4444*
+**Stats:** 5g Creatine Monohydrate · Micronized · Unflavored
+*Scribble badge: "science's favorite supplement" with small drawn beaker*
 
 ---
 
@@ -97,86 +93,85 @@ Enigma Creatine is pure creatine monohydrate — 5g per serving. No loading phas
 **Kicker:** Phase 05 — Reset
 
 **Headline:**
-Growth happens when you rest.
+Rest isn't lazy.
+It's where the magic happens.
 
 **Body:**
-Cortisol is the silent killer of gains. Stress accumulates. Sleep suffers. Recovery stalls. And tomorrow's session pays the price.
+Your body can't rebuild if it's stressed out all the time. Cortisol (the stress hormone) messes with your sleep, your recovery, and honestly your whole vibe.
 
-Enigma Ashwagandha uses KSM-66® — the most clinically validated ashwagandha extract. It lowers cortisol, improves sleep quality, and helps your body actually recover. So when the alarm goes off, you're ready for Phase 01 again.
+KSM-66® ashwagandha is the most clinically studied version out there. It helps lower cortisol, improves sleep, and gets your body ready to do it all again tomorrow. Recovery isn't optional — it's the whole point.
 
-**Product:** Enigma Ashwagandha (KSM-66®)
-**Micro-stat:** KSM-66® | 600mg | Clinically Validated
-
-*Color accent: Sage Green #6DA37E*
+**Stats:** KSM-66® · 600mg · Clinically Validated
+*Scribble underline on "the whole point" + small drawn moon/stars*
 
 ---
 
 ## SECTION 3: The Complete Cycle — Bundle Reveal
 
-*Design: Scroll unlocks after Pillar 5. All 5 products animate into a circular wheel formation around the Enigma logo. The cycle is complete.*
-
 **Headline:**
-The complete system.
+The whole system.
+(Not five random things in a cart.)
 
 **Subhead:**
-Five pillars working together. Not five random supplements — one connected cycle engineered for athletes who train every day.
+Five pillars that actually work together. Energy → Hydration → Protein → Creatine → Recovery → repeat. It's a cycle, not a shopping spree.
 
-Most brands sell you a product. We built you a system.
+Most brands sell you products. We built you a system that makes sense.
 
 **CTA:** Build Your Cycle →
-
-*Opens bundle builder where you can select which pillars you want. Default = all 5 at a bundled discount.*
+*Scribble arrow looping in a circle around the CTA*
 
 ---
 
 ## SECTION 4: Why Enigma (Trust Section)
 
-*Design: Light background section. Clean grid. Scribble accent circles around numbers.*
-
 **Headline:**
-What we don't do matters more.
+What we *don't* put in matters just as much.
+
+*"don't" gets a scribble circle*
 
 **Three Columns:**
 
-**No Proprietary Blends**
-Every ingredient. Every dose. Printed on the label. If a brand hides behind "proprietary blend," they're hiding something.
+**No Proprietary Blends** ✋
+Every ingredient. Every dose. Right there on the label. If a brand won't tell you what's inside, that's a red flag, not a feature.
 
-**No Fillers, No Fluff**
-We don't pad formulas to look impressive. If an ingredient doesn't have clinical evidence at the dose we use, it's not in the product.
+**No Fillers, No Fluff** 🧹
+We don't pad formulas to look impressive on the back panel. If an ingredient doesn't have clinical evidence at the dose we use? It doesn't get in.
 
-**No Marketing Gimmicks**
-No "1000% of your daily value" headlines. No before/after scams. Just transparent nutrition for people who actually read the label.
+**No Marketing BS** 🎯
+No "1000% of your daily value!!!" headlines. No before/after photos from two different lighting setups. Just real products for people who actually read the label (and people who want to start).
+
+*Scribble checkmarks next to each column header*
 
 ---
 
 ## SECTION 5: Individual Products
 
-*Design: Clean product grid. Dark cards on light background. Big product images. Minimal text.*
-
 **Section Headline:**
 Shop by pillar.
+(Or just get the whole cycle. We won't judge.)
 
-*Grid of all 5 products with pillar icon, product name, one-line description, price, and "Add to Cart" CTA.*
+*Scribble arrow pointing down to the product grid*
 
 ---
 
-## SECTION 6: The Enigma Standard (Brand Story Teaser)
+## SECTION 6: Brand Story Teaser
 
 **Headline:**
-Built by athletes. Tested by science. Trusted by people who read labels.
+We started Enigma because we were tired of supplements that look great and do nothing.
 
 **Body:**
-Enigma started because we got tired of supplements that looked impressive and delivered nothing. We read the research. We dosed clinically. We put everything on the label. That's it. That's the brand.
+So we read the research. Dosed everything clinically. Put every single ingredient on the label. Made it taste good. And made the brand actually fun — because taking care of yourself shouldn't feel like homework.
 
-**CTA:** Read Our Story →
+That's it. That's the brand.
+
+**CTA:** Read the full story →
 
 ---
 
 ## SECTION 7: Footer CTA
 
 **Headline:**
-Start your cycle.
+Ready to start your cycle?
 
-**CTA:** Shop Now →
-
-*Scribble arrow pointing to button.*
+**CTA:** Let's go →
+*Big scribble arrow pointing to button + small drawn sparkles*
