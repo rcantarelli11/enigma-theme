@@ -3,452 +3,308 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENIGMA - Your body runs in cycles. So should your nutrition.</title>
+    <title>Enigma - Your body runs in cycles. So should your nutrition.</title>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
     <style>
+        /* CSS Custom Properties */
         :root {
-            /* Light-first cloud color system */
-            --cloud: #F0EFEB;
-            --warm-cloud: #EAE6DE;
-            --light-stone: #E0DAD0;
-            --dark-stone: #2C2926;
-            --text-primary: #2C2926;
-            --text-secondary: #7A756E;
-            --brand-accent: #2DD4BF;
-            
-            /* Legacy colors for compatibility */
-            --text-primary-dark: #F5F0E8;
-            --text-primary-light: #2C2926;
-            
-            /* Pillar accent colors */
+            --bg-primary: #12141D;
+            --bg-secondary: #1E2029;
+            --bg-tertiary: #20232F;
+            --text-primary: #F5F0E8;
+            --text-secondary: #9C9590;
+            --accent-teal: #2DD4BF;
             --energy: #F97316;
             --hydration: #3B82F6;
             --protein: #F5D5A0;
             --creatine: #EF4444;
             --ashwagandha: #6DA37E;
-            
-            /* Typography */
-            --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Inter', sans-serif;
-            
-            /* Current pillar color (for transitions) */
-            --current-pillar-color: var(--energy);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
+
         body {
-            font-family: var(--font-sans);
-            background-color: var(--cloud);
+            background: var(--bg-primary);
             color: var(--text-primary);
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+            font-weight: 300;
             line-height: 1.6;
+            overflow-x: hidden;
         }
-        
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            line-height: 1.2;
+        }
+
         /* Header */
-        .header {
+        header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(240, 239, 235, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(44, 41, 38, 0.1);
             padding: 1rem 2rem;
+            background: rgba(18, 20, 29, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
-        
+
         .header-content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        .logo img {
-            height: 32px;
-            width: auto;
+
+        .logo {
+            height: 40px;
         }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: var(--text-secondary);
+
+        .nav-cta {
+            background: var(--accent-teal);
+            color: var(--bg-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
             text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
-        
-        .nav-links a:hover {
-            color: var(--brand-accent);
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 212, 191, 0.3);
         }
-        
-        /* Hero Section - Stays dark for contrast */
+
+        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, var(--dark-stone) 0%, #3D3832 100%);
-            position: relative;
-            overflow: hidden;
-            padding: 0 2rem;
-        }
-        
-        .hero-content {
             text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: radial-gradient(ellipse at center, rgba(45, 212, 191, 0.1) 0%, var(--bg-primary) 70%);
+        }
+
+        .hero-content {
             max-width: 800px;
-            z-index: 2;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1.5rem;
             position: relative;
         }
-        
-        .hero-logo {
-            margin-bottom: 2rem;
-            opacity: 0.9;
+
+        .hero h1 .cycles {
+            position: relative;
+            display: inline-block;
         }
-        
-        .hero-logo img {
-            height: 48px;
-            width: auto;
-            filter: brightness(0) invert(1);
+
+        .hero h1 .cycles::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent-teal);
+            border-radius: 2px;
+            animation: drawUnderline 2s ease-out 1s both;
         }
-        
-        .hero-headline {
-            font-family: var(--font-serif);
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary-dark);
+
+        @keyframes drawUnderline {
+            from { width: 0; }
+            to { width: 100%; }
         }
-        
+
         .hero-subhead {
             font-size: 1.25rem;
             color: var(--text-secondary);
-            margin-bottom: 3rem;
-            font-weight: 500;
+            margin-bottom: 2rem;
+            font-weight: 400;
         }
-        
-        .cta-button {
+
+        .hero-cta {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            background: var(--brand-accent);
-            color: var(--dark-stone);
+            background: var(--accent-teal);
+            color: var(--bg-primary);
             padding: 1rem 2rem;
-            border-radius: 8px;
+            border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1.1rem;
             transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .cta-button:hover {
-            background: #26C7B4;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(45, 212, 191, 0.3);
-        }
-        
-        /* Hero product showcase */
-        .hero-products {
-            position: absolute;
-            right: 5%;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 300px;
-            height: 300px;
-        }
-        
-        .hero-product-circle {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 3px solid rgba(245, 240, 232, 0.2);
-            transition: all 0.3s ease;
-        }
-        
-        .hero-product-circle:hover {
-            transform: scale(1.1);
-            border-color: var(--brand-accent);
-        }
-        
-        .hero-product-circle img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .hero-product-circle:nth-child(1) {
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .hero-product-circle:nth-child(2) {
-            top: 20%;
-            right: 0;
-        }
-        
-        .hero-product-circle:nth-child(3) {
-            bottom: 20%;
-            right: 10%;
-        }
-        
-        .hero-product-circle:nth-child(4) {
-            bottom: 20%;
-            left: 10%;
-        }
-        
-        .hero-product-circle:nth-child(5) {
-            top: 20%;
-            left: 0;
-        }
-        
-        /* Enhanced hero scribbles */
-        .hero-scribble-1 {
-            position: absolute;
-            top: 15%;
-            left: 8%;
-            width: 120px;
-            height: 60px;
-        }
-        
-        .hero-scribble-2 {
-            position: absolute;
-            bottom: 25%;
-            right: 12%;
-            width: 100px;
-            height: 80px;
-        }
-        
-        .hero-scribble-3 {
-            position: absolute;
-            top: 30%;
-            left: 15%;
-            width: 80px;
-            height: 40px;
-        }
-        
-        .hero-arrow {
-            position: absolute;
-            bottom: 15%;
-            left: 50%;
-            transform: translateX(-50%) rotate(15deg);
-            width: 100px;
-            height: 60px;
-        }
-        
-        /* Intro Section */
-        .intro {
-            padding: 8rem 2rem;
-            background: var(--warm-cloud);
-            text-align: center;
             position: relative;
         }
-        
-        .intro-content {
-            max-width: 600px;
-            margin: 0 auto;
+
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(45, 212, 191, 0.4);
         }
-        
-        .intro h2 {
-            font-family: var(--font-serif);
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            color: var(--text-primary);
+
+        /* Wavy Divider */
+        .wavy-divider {
+            width: 100%;
+            height: 100px;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .intro p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            line-height: 1.8;
+
+        .wavy-divider svg {
+            width: 120%;
+            height: 100%;
+            animation: wave 6s ease-in-out infinite;
         }
-        
-        .section-divider {
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px;
-            height: 40px;
+
+        @keyframes wave {
+            0%, 100% { transform: translateX(-5%); }
+            50% { transform: translateX(0); }
         }
-        
-        /* Pillars Container */
-        .pillars-container {
+
+        /* Pillars Section */
+        .pillars-section {
             position: relative;
             height: 100vh;
             overflow: hidden;
         }
-        
-        .pillars-track {
+
+        .pillars-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
             display: flex;
             width: 500vw;
-            height: 100%;
-            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            will-change: transform;
+            transition: transform 0.3s ease;
         }
-        
+
         .pillar {
             width: 100vw;
-            height: 100%;
+            height: 100vh;
             display: flex;
             align-items: center;
-            padding: 0 4rem;
+            padding: 4rem;
             position: relative;
-            background: var(--cloud);
-            transition: background 0.6s ease;
+            transition: all 0.5s ease;
         }
-        
-        .pillar.active {
-            background: color-mix(in srgb, var(--current-pillar-color) 12%, var(--cloud));
-        }
-        
+
         .pillar-content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
-            width: 100%;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
             align-items: center;
+            width: 100%;
         }
-        
+
         .pillar-text {
-            padding-right: 2rem;
+            z-index: 2;
         }
-        
-        .pillar-phase {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--current-pillar-color);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-        }
-        
-        .pillar-title {
-            font-family: var(--font-serif);
-            font-size: 3rem;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            position: relative;
-        }
-        
-        .pillar-body {
-            font-size: 1.2rem;
-            line-height: 1.8;
+
+        .chapter-number {
+            font-size: 1rem;
             color: var(--text-secondary);
-            margin-bottom: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-        
+
+        .chapter-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .pillar-headline {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-teal);
+            font-weight: 400;
+        }
+
+        .pillar-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
         .pillar-stats {
             display: flex;
+            gap: 2rem;
             flex-wrap: wrap;
-            gap: 1.5rem;
             margin-bottom: 2rem;
         }
-        
-        .stat-item {
-            display: flex;
-            flex-direction: column;
+
+        .stat {
             position: relative;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
             color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
+            font-size: 0.95rem;
         }
-        
-        .stat-value {
+
+        .stat.highlighted {
+            color: var(--text-primary);
             font-weight: 600;
-            color: var(--current-pillar-color);
-            font-size: 1rem;
         }
-        
+
         .pillar-image {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative;
+            text-align: center;
         }
-        
-        .product-image {
+
+        .pillar-image img {
             max-width: 400px;
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 20px 40px rgba(44, 41, 38, 0.15));
-            transition: transform 0.3s ease;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+            transition: transform 0.5s ease;
         }
-        
-        .product-image:hover {
-            transform: translateY(-10px) scale(1.02);
+
+        .pillar:hover .pillar-image img {
+            transform: scale(1.05) rotate(-2deg);
         }
-        
-        /* Pillar decorative elements */
-        .pillar-decoration {
-            position: absolute;
-            pointer-events: none;
+
+        /* Pillar-specific backgrounds */
+        .pillar.energy {
+            background: radial-gradient(ellipse at center, rgba(249, 115, 22, 0.1) 0%, var(--bg-primary) 70%);
         }
-        
-        .energy-lightning {
-            top: 20%;
-            right: 10%;
-            width: 60px;
-            height: 80px;
+
+        .pillar.hydration {
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1) 0%, var(--bg-primary) 70%);
         }
-        
-        .hydration-drop {
-            bottom: 30%;
-            left: 15%;
-            width: 40px;
-            height: 50px;
+
+        .pillar.protein {
+            background: radial-gradient(ellipse at center, rgba(245, 213, 160, 0.1) 0%, var(--bg-primary) 70%);
         }
-        
-        .protein-spark {
-            top: 25%;
-            left: 20%;
-            width: 50px;
-            height: 50px;
+
+        .pillar.creatine {
+            background: radial-gradient(ellipse at center, rgba(239, 68, 68, 0.1) 0%, var(--bg-primary) 70%);
         }
-        
-        .creatine-star {
-            bottom: 20%;
-            right: 15%;
-            width: 60px;
-            height: 60px;
+
+        .pillar.ashwagandha {
+            background: radial-gradient(ellipse at center, rgba(109, 163, 126, 0.1) 0%, var(--bg-primary) 70%);
         }
-        
-        .ashwagandha-moon {
-            top: 30%;
-            right: 20%;
-            width: 70px;
-            height: 70px;
-        }
-        
-        /* Progress indicators */
-        .pillar-progress {
+
+        /* Progress dots */
+        .progress-dots {
             position: fixed;
             bottom: 2rem;
             left: 50%;
@@ -457,1095 +313,823 @@
             gap: 1rem;
             z-index: 100;
         }
-        
+
         .progress-dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: rgba(44, 41, 38, 0.3);
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
+            cursor: pointer;
         }
-        
+
         .progress-dot.active {
-            background: var(--current-pillar-color);
+            background: var(--accent-teal);
             transform: scale(1.2);
         }
-        
-        /* Cycle Reveal */
-        .cycle-reveal {
-            padding: 8rem 2rem;
-            background: var(--light-stone);
-            text-align: center;
-            position: relative;
-        }
-        
-        .cycle-reveal-logo {
-            margin-bottom: 2rem;
-            opacity: 0.8;
-        }
-        
-        .cycle-reveal-logo img {
-            height: 40px;
-            width: auto;
-        }
-        
-        .cycle-reveal h2 {
-            font-family: var(--font-serif);
-            font-size: 3rem;
-            margin-bottom: 2rem;
-            color: var(--text-primary);
-        }
-        
-        .cycle-reveal p {
-            font-size: 1.3rem;
-            color: var(--text-secondary);
-            margin-bottom: 4rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .cycle-wheel {
-            width: 400px;
-            height: 400px;
-            margin: 0 auto 4rem;
-            position: relative;
-        }
-        
-        .wheel-product {
+
+        /* Scribbles */
+        .scribble-underline {
             position: absolute;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--light-stone);
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            pointer-events: none;
+        }
+
+        .scribble-circle {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: calc(100% + 30px);
+            height: calc(100% + 30px);
+            pointer-events: none;
+        }
+
+        .scribble-annotation {
+            position: absolute;
+            top: -2rem;
+            right: -1rem;
+            font-style: italic;
+            font-size: 0.85rem;
+            color: var(--accent-teal);
+            transform: rotate(-5deg);
+        }
+
+        .scribble-badge {
+            position: absolute;
+            bottom: -1rem;
+            right: -2rem;
+            background: var(--accent-teal);
+            color: var(--bg-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transform: rotate(5deg);
+        }
+
+        /* Cycle Reveal Section */
+        .cycle-reveal {
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 0.8rem;
             text-align: center;
-            animation: float 3s ease-in-out infinite;
-            overflow: hidden;
+            padding: 4rem 2rem;
+            background: var(--bg-secondary);
         }
-        
-        .wheel-product img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+
+        .cycle-content {
+            max-width: 800px;
         }
-        
-        .wheel-product:nth-child(1) {
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            animation-delay: 0s;
+
+        .cycle-content h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
         }
-        
-        .wheel-product:nth-child(2) {
-            top: 20%;
-            right: 0;
-            animation-delay: 0.6s;
-        }
-        
-        .wheel-product:nth-child(3) {
-            bottom: 20%;
-            right: 10%;
-            animation-delay: 1.2s;
-        }
-        
-        .wheel-product:nth-child(4) {
-            bottom: 20%;
-            left: 10%;
-            animation-delay: 1.8s;
-        }
-        
-        .wheel-product:nth-child(5) {
-            top: 20%;
-            left: 0;
-            animation-delay: 2.4s;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .cycle-sparkles {
-            position: absolute;
-            top: 10%;
-            right: 20%;
-            width: 80px;
-            height: 80px;
-        }
-        
-        /* Bundle Builder */
-        .bundle-builder {
-            padding: 8rem 2rem;
-            background: var(--warm-cloud);
-            position: relative;
-        }
-        
-        .bundle-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        
-        .bundle-builder h2 {
-            font-family: var(--font-serif);
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: var(--text-primary);
-        }
-        
-        .bundle-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        .bundle-product {
-            background: var(--cloud);
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-            border: 2px solid transparent;
-            box-shadow: 0 4px 12px rgba(44, 41, 38, 0.08);
-        }
-        
-        .bundle-product:hover {
-            transform: translateY(-5px);
-            border-color: var(--brand-accent);
-            box-shadow: 0 8px 25px rgba(44, 41, 38, 0.12);
-        }
-        
-        .bundle-product img {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-        }
-        
-        .bundle-product h3 {
-            color: var(--text-primary);
-        }
-        
-        .bundle-product p {
+
+        .cycle-content p {
+            font-size: 1.25rem;
             color: var(--text-secondary);
         }
-        
-        .bundle-discount {
-            background: var(--brand-accent);
-            color: var(--dark-stone);
-            padding: 1rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            margin: 2rem 0;
-            display: inline-block;
-        }
-        
-        .bundle-scribbles {
-            position: absolute;
-            bottom: 10%;
-            left: 10%;
-            width: 100px;
-            height: 60px;
-        }
-        
+
         /* Trust Section */
         .trust-section {
-            padding: 8rem 2rem;
-            background: var(--cloud);
-            color: var(--text-primary);
-            position: relative;
+            padding: 6rem 2rem;
+            background: var(--bg-primary);
         }
-        
+
         .trust-content {
             max-width: 1200px;
             margin: 0 auto;
             text-align: center;
         }
-        
-        .trust-section h2 {
-            font-family: var(--font-serif);
+
+        .trust-content h2 {
             font-size: 2.5rem;
-            margin-bottom: 4rem;
-            color: var(--text-primary);
+            margin-bottom: 3rem;
         }
-        
+
         .trust-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 3rem;
         }
-        
+
         .trust-item {
-            text-align: center;
-            position: relative;
+            padding: 2rem;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            transition: transform 0.3s ease;
         }
-        
+
+        .trust-item:hover {
+            transform: translateY(-10px);
+        }
+
         .trust-item h3 {
-            font-size: 1.3rem;
+            font-size: 1.5rem;
             margin-bottom: 1rem;
-            color: var(--text-primary);
+            color: var(--accent-teal);
         }
-        
-        .trust-item p {
-            color: var(--text-secondary);
-            line-height: 1.8;
+
+        /* Bundle Section */
+        .bundle-section {
+            padding: 6rem 2rem;
+            background: var(--bg-tertiary);
         }
-        
-        .trust-check {
-            position: absolute;
-            top: -10px;
-            right: 20%;
-            width: 30px;
-            height: 30px;
+
+        .bundle-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
         }
-        
+
+        .bundle-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .flavor-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .flavor-option {
+            padding: 1rem;
+            background: var(--bg-primary);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .flavor-option:hover,
+        .flavor-option.selected {
+            border-color: var(--accent-teal);
+            transform: translateY(-5px);
+        }
+
+        .bundle-cta {
+            background: var(--accent-teal);
+            color: var(--bg-primary);
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .bundle-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(45, 212, 191, 0.4);
+        }
+
         /* Product Grid */
         .product-grid {
-            padding: 8rem 2rem;
-            background: var(--light-stone);
-            position: relative;
+            padding: 6rem 2rem;
+            background: var(--bg-primary);
         }
-        
-        .product-grid-content {
-            max-width: 1400px;
+
+        .grid-content {
+            max-width: 1200px;
             margin: 0 auto;
         }
-        
-        .product-grid h2 {
-            font-family: var(--font-serif);
-            font-size: 2.5rem;
+
+        .grid-content h2 {
             text-align: center;
-            margin-bottom: 4rem;
-            color: var(--text-primary);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
         }
-        
-        .products-grid {
+
+        .products {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
-        
+
         .product-card {
-            background: var(--cloud);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            box-shadow: 0 4px 12px rgba(44, 41, 38, 0.08);
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
         }
-        
+
         .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 30px rgba(44, 41, 38, 0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
-        
+
         .product-card img {
             width: 100%;
-            height: 250px;
-            object-fit: cover;
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 1.5rem;
         }
-        
-        .product-card-content {
-            padding: 1.5rem;
-        }
-        
+
         .product-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
         }
-        
-        .product-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        .product-grid-decoration {
-            position: absolute;
-            top: 20%;
-            right: 5%;
-            width: 120px;
-            height: 100px;
-        }
-        
+
         /* Footer */
-        .footer {
+        footer {
             padding: 4rem 2rem;
-            background: var(--warm-cloud);
             text-align: center;
-            position: relative;
+            background: var(--bg-secondary);
         }
-        
-        .footer h2 {
-            font-family: var(--font-serif);
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            color: var(--text-primary);
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
         }
-        
-        .footer p {
-            color: var(--text-secondary);
+
+        .footer-content h2 {
+            font-size: 2.5rem;
             margin-bottom: 2rem;
         }
-        
-        .footer-squiggles {
-            position: absolute;
-            bottom: 20%;
-            left: 15%;
-            width: 100px;
-            height: 60px;
-        }
-        
-        /* SVG Scribbles */
-        .scribble {
-            pointer-events: none;
-            z-index: 10;
-        }
-        
-        .scribble-inline {
-            position: relative;
+
+        .footer-cta {
+            background: var(--accent-teal);
+            color: var(--bg-primary);
+            padding: 1.5rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
             display: inline-block;
-            vertical-align: baseline;
+            transition: all 0.3s ease;
         }
-        
-        .scribble-underline {
-            position: absolute;
-            bottom: -6px;
-            left: 0;
-            width: 100%;
-            height: 12px;
+
+        .footer-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(45, 212, 191, 0.4);
         }
-        
-        .scribble-circle {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .scribble-circle svg {
-            position: absolute;
-            top: -8px;
-            left: -10px;
-            width: calc(100% + 20px);
-            height: calc(100% + 16px);
-        }
-        
-        .scribble-annotation {
-            display: block;
-            margin-top: 4px;
-            font-family: var(--font-sans);
-            font-size: 0.7rem;
-            font-style: italic;
-            color: var(--text-secondary);
-            opacity: 0.8;
-        }
-        
-        .scribble path {
-            stroke-dasharray: 200;
-            stroke-dashoffset: 200;
-            animation: draw 2s ease-out forwards;
-        }
-        
-        @keyframes draw {
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-        
-        /* Responsive Design */
+
+        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .hero-products {
-                display: none;
-            }
-            
-            .pillars-container {
-                display: block;
+            .pillars-section {
                 height: auto;
             }
-            
-            .pillars-track {
+
+            .pillars-container {
+                position: static;
+                height: auto;
                 display: block;
                 width: 100%;
             }
-            
+
             .pillar {
                 width: 100%;
-                height: 100vh;
+                height: auto;
+                min-height: 100vh;
                 scroll-snap-align: start;
             }
-            
+
             .pillar-content {
                 grid-template-columns: 1fr;
                 gap: 2rem;
                 text-align: center;
             }
-            
-            .pillar-text {
-                padding-right: 0;
-                order: 2;
+
+            .progress-dots {
+                display: none;
             }
-            
-            .pillar-image {
-                order: 1;
+
+            header {
+                padding: 1rem;
             }
-            
+
             .hero {
-                padding: 0 1rem;
+                padding: 1rem;
             }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .cycle-graphic {
-                display: none;
-            }
-            
-            .pillar-decoration,
-            .section-divider,
-            .cycle-sparkles,
-            .bundle-scribbles,
-            .trust-check,
-            .product-grid-decoration,
-            .footer-squiggles {
-                display: none;
+
+            .pillar {
+                padding: 2rem 1rem;
             }
         }
-        
+
+        /* Accessibility */
         @media (prefers-reduced-motion: reduce) {
-            .pillars-track {
-                display: block;
-            }
-            
-            .pillar {
-                width: 100%;
-                height: auto;
-                min-height: 100vh;
-            }
-            
-            * {
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
+            }
+
+            .pillars-container {
+                position: static !important;
+                height: auto !important;
+                display: block !important;
+                width: 100% !important;
+            }
+
+            .pillar {
+                width: 100% !important;
+                height: auto !important;
+            }
+        }
+
+        /* SVG Animations */
+        .draw-on {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawOn 2s ease-out forwards;
+        }
+
+        @keyframes drawOn {
+            to {
+                stroke-dashoffset: 0;
             }
         }
     </style>
 </head>
 <body>
-    <header class="header">
+    <!-- Header -->
+    <header>
         <div class="header-content">
-            <a href="#" class="logo"><img src="assets/logo-horizontal-dark-bg-light.svg" alt="Enigma" style="height: 36px; width: auto;"></a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#pillars">The System</a></li>
-                    <li><a href="#products">Products</a></li>
-                    <li><a href="#bundle">Bundle</a></li>
-                    <li><a href="#trust">Why Us</a></li>
-                </ul>
-            </nav>
+            <img src="assets/logo-horizontal-dark.svg" alt="Enigma" class="logo">
+            <a href="#bundle" class="nav-cta">Shop Now</a>
         </div>
     </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <div class="hero-logo">
-                    <img src="assets/logo-horizontal-dark.svg" alt="Enigma">
-                </div>
-                <h1 class="hero-headline">Your body runs in <span class="scribble-inline">cycles<svg class="scribble scribble-underline" viewBox="0 0 80 12"><path d="M5,8 Q20,2 40,8 T75,8" stroke="#2DD4BF" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></span>. So should your nutrition.</h1>
-                <p class="hero-subhead">Five pillars. One system. Zero guesswork.</p>
-                <a href="#pillars" class="cta-button">
-                    See how it works →
-                </a>
-            </div>
-            
-            <!-- Hero Product Circle -->
-            <div class="hero-products">
-                <div class="hero-product-circle">
-                    <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy">
-                </div>
-                <div class="hero-product-circle">
-                    <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration">
-                </div>
-                <div class="hero-product-circle">
-                    <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Protein">
-                </div>
-                <div class="hero-product-circle">
-                    <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine">
-                </div>
-                <div class="hero-product-circle">
-                    <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Recovery">
-                </div>
-            </div>
-            
-            <!-- Enhanced Hero Scribbles -->
-            <svg class="scribble hero-scribble-1" viewBox="0 0 120 60">
-                <path d="M10,30 Q30,10 60,30 Q90,50 110,30" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <circle cx="20" cy="20" r="3" fill="#2DD4BF" opacity="0.6"/>
-                <circle cx="100" cy="40" r="2" fill="#2DD4BF" opacity="0.8"/>
-            </svg>
-            
-            <svg class="scribble hero-scribble-2" viewBox="0 0 100 80">
-                <path d="M20,40 L40,20 L60,60 L80,40" stroke="#F97316" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                <path d="M30,50 Q50,35 70,50" stroke="#F97316" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            </svg>
-            
-            <svg class="scribble hero-scribble-3" viewBox="0 0 80 40">
-                <circle cx="40" cy="20" r="15" stroke="#3B82F6" stroke-width="2" fill="none"/>
-                <path d="M25,20 Q40,10 55,20" stroke="#3B82F6" stroke-width="1.5" fill="none"/>
-            </svg>
-            
-            <svg class="scribble hero-arrow" viewBox="0 0 100 60">
-                <path d="M20,30 Q50,10 80,30" stroke="#2DD4BF" stroke-width="3" fill="none" stroke-linecap="round"/>
-                <path d="M70,25 L80,30 L70,35" stroke="#2DD4BF" stroke-width="3" fill="none" stroke-linecap="round"/>
-            </svg>
-        </section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your body runs in <span class="cycles">cycles</span>. So should your nutrition.</h1>
+            <p class="hero-subhead">Five pillars. One system. Zero guesswork.</p>
+            <a href="#pillars" class="hero-cta">
+                See how it works →
+            </a>
+        </div>
+    </section>
 
-        <!-- Section Dividers -->
-        <div style="position: relative; height: 40px; background: linear-gradient(to bottom, var(--dark-stone) 0%, var(--warm-cloud) 100%);">
-            <svg class="scribble section-divider" viewBox="0 0 200 40">
-                <path d="M20,20 Q60,5 100,20 Q140,35 180,20" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
+    <!-- Wavy Divider -->
+    <div class="wavy-divider">
+        <svg viewBox="0 0 1200 100" preserveAspectRatio="none">
+            <path d="M0,50 Q300,10 600,50 T1200,50 L1200,100 L0,100 Z" 
+                  fill="none" 
+                  stroke="#2DD4BF" 
+                  stroke-width="2" 
+                  opacity="0.3"/>
+        </svg>
+    </div>
+
+    <!-- Pillars Section -->
+    <section class="pillars-section" id="pillars">
+        <div class="pillars-container">
+            <!-- Chapter 1 - Energy -->
+            <div class="pillar energy" data-pillar="0">
+                <div class="pillar-content">
+                    <div class="pillar-text">
+                        <div class="chapter-number">Chapter 1 — Ignite</div>
+                        <h2 class="chapter-title">Energy</h2>
+                        <p class="pillar-headline">That 'let's go' feeling. Bottled.</p>
+                        <p class="pillar-description">
+                            You know when you walk into the gym and everything just clicks? That's not luck. 
+                            That's your pre workout doing its job. We put in citrulline, beta-alanine, and caffeine 
+                            at doses that actually match the research. Every ingredient on the label. Every dose visible. 
+                            No mystery powder.
+                        </p>
+                        <div class="pillar-stats">
+                            <span class="stat">6g Citrulline</span>
+                            <span class="stat">3.2g Beta-Alanine</span>
+                            <span class="stat highlighted">
+                                <span style="position: relative;">
+                                    200mg Caffeine
+                                    <svg class="scribble-circle" viewBox="0 0 120 80">
+                                        <ellipse cx="60" cy="40" rx="55" ry="35" 
+                                               fill="none" stroke="#F97316" stroke-width="2" 
+                                               class="draw-on"/>
+                                    </svg>
+                                    <span class="scribble-annotation">the sweet spot</span>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="pillar-image">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Enigma Energy">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 2 - Hydration -->
+            <div class="pillar hydration" data-pillar="1">
+                <div class="pillar-content">
+                    <div class="pillar-text">
+                        <div class="chapter-number">Chapter 2 — Sustain</div>
+                        <h2 class="chapter-title">Hydration</h2>
+                        <p class="pillar-headline">Water is great. It's just not enough.</p>
+                        <p class="pillar-description">
+                            About halfway through any real effort, your body burns through electrolytes way faster 
+                            than water can replace. That's when the cramps show up and everything starts dragging. 
+                            This has sodium, potassium, and magnesium. Full profile. Zero sugar. And it tastes like 
+                            something you'd actually want to drink, which honestly shouldn't be rare but 
+                            <span style="position: relative; display: inline-block;">
+                                here we are
+                                <svg class="scribble-underline" viewBox="0 0 100 8">
+                                    <path d="M5,4 Q50,1 95,4" fill="none" stroke="#3B82F6" stroke-width="2" class="draw-on"/>
+                                </svg>
+                                <span class="scribble-annotation">for real</span>
+                            </span>.
+                        </p>
+                        <div class="pillar-stats">
+                            <span class="stat">Full Electrolytes</span>
+                            <span class="stat">Zero Sugar</span>
+                            <span class="stat">Tastes good (for real)</span>
+                        </div>
+                    </div>
+                    <div class="pillar-image">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Enigma Hydration">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 3 - Protein -->
+            <div class="pillar protein" data-pillar="2">
+                <div class="pillar-content">
+                    <div class="pillar-text">
+                        <div class="chapter-number">Chapter 3 — Rebuild</div>
+                        <h2 class="chapter-title">Protein</h2>
+                        <p class="pillar-headline">Your muscles did the work. Give them something worth it.</p>
+                        <p class="pillar-description">
+                            Here's the thing. Your body doesn't grow during the workout. It grows after. 
+                            So what you eat afterwards matters. A lot. Clean whey isolate. 25g protein. 
+                            Short ingredient list. No chalk taste. No bloating. Just protein doing protein things.
+                        </p>
+                        <div class="pillar-stats">
+                            <span class="stat">25g Protein</span>
+                            <span class="stat">Whey Isolate</span>
+                            <span class="stat" style="position: relative;">
+                                Short ingredient list
+                                <svg style="position: absolute; top: -10px; right: -40px; width: 60px; height: 20px;" viewBox="0 0 60 20">
+                                    <path d="M5,15 L25,5 L45,10" fill="none" stroke="#F5D5A0" stroke-width="2" class="draw-on"/>
+                                    <path d="M40,8 L45,10 L43,15" fill="none" stroke="#F5D5A0" stroke-width="2" class="draw-on"/>
+                                </svg>
+                                <span style="position: absolute; top: -35px; right: -80px; font-style: italic; font-size: 0.85rem; color: #F5D5A0;">that's it. that's the list.</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="pillar-image">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Enigma Protein">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 4 - Creatine -->
+            <div class="pillar creatine" data-pillar="3">
+                <div class="pillar-content">
+                    <div class="pillar-text">
+                        <div class="chapter-number">Chapter 4 — Strengthen</div>
+                        <h2 class="chapter-title">Creatine</h2>
+                        <p class="pillar-headline">The most researched supplement ever. And it lives up to it.</p>
+                        <p class="pillar-description">
+                            Creatine has more studies behind it than basically anything else you can buy in a supplement store. 
+                            More strength, better recovery, real results that show up over weeks. This is pure creatine monohydrate. 
+                            5g per scoop. No loading phase, no proprietary formula with a trademarked name. Just the compound 
+                            that earned its reputation the old-fashioned way.
+                        </p>
+                        <div class="pillar-stats">
+                            <span class="stat">5g Creatine Monohydrate</span>
+                            <span class="stat">Micronized</span>
+                            <span class="stat" style="position: relative;">
+                                Unflavored
+                                <span class="scribble-badge">science's favorite supplement 🧪</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="pillar-image">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Enigma Creatine">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter 5 - Ashwagandha -->
+            <div class="pillar ashwagandha" data-pillar="4">
+                <div class="pillar-content">
+                    <div class="pillar-text">
+                        <div class="chapter-number">Chapter 5 — Reset</div>
+                        <h2 class="chapter-title">Ashwagandha</h2>
+                        <p class="pillar-headline">Rest isn't lazy. It's where the <span style="position: relative; display: inline-block;">magic happens<svg class="scribble-underline" viewBox="0 0 100 8"><path d="M5,4 Q50,7 95,4" fill="none" stroke="#6DA37E" stroke-width="2" class="draw-on"/></svg></span>.</p>
+                        <p class="pillar-description">
+                            Cortisol messes with everything. Your sleep, your recovery, your mood. When stress stays elevated, 
+                            your body can't rebuild properly. Tomorrow's workout pays for today's stress. KSM-66 is the most 
+                            studied ashwagandha extract available. It helps bring cortisol down, improves sleep quality, 
+                            and gets your body ready to start the cycle again.
+                        </p>
+                        <div class="pillar-stats">
+                            <span class="stat">KSM-66</span>
+                            <span class="stat">600mg</span>
+                            <span class="stat">Clinically studied</span>
+                        </div>
+                        <svg style="position: absolute; bottom: 2rem; right: 2rem; width: 30px; height: 30px;" viewBox="0 0 30 30">
+                            <path d="M15,5 Q10,15 15,25 Q20,15 15,5" fill="none" stroke="#6DA37E" stroke-width="2" class="draw-on"/>
+                            <circle cx="15" cy="8" r="2" fill="#6DA37E"/>
+                        </svg>
+                    </div>
+                    <div class="pillar-image">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Enigma Ashwagandha">
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Pillars Experience -->
-        <section class="pillars-container" id="pillars">
-            <div class="pillars-track" id="pillarsTrack">
-                <!-- Pillar 1: Energy -->
-                <div class="pillar" data-pillar="energy" data-color="#F97316">
-                    <div class="pillar-content">
-                        <div class="pillar-text">
-                            <div class="pillar-phase">Phase 01 — Ignite</div>
-                            <h2 class="pillar-title">That <span class="scribble-inline">'let's go'<svg class="scribble scribble-underline" viewBox="0 0 150 12"><path d="M5,8 Q40,2 75,8 T145,8" stroke="#F97316" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></span> feeling. Bottled.</h2>
-                            <p class="pillar-body">You know when you walk into the gym and everything just clicks? That's not luck. That's your pre workout doing its job.</p>
-                            <p class="pillar-body">We put in citrulline, beta-alanine, and caffeine at doses that actually match the research. Every ingredient on the label. Every dose visible. No mystery powder.</p>
-                            <div class="pillar-stats">
-                                <div class="stat-item">
-                                    <div class="stat-label">Citrulline</div>
-                                    <div class="stat-value">6g</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Beta-Alanine</div>
-                                    <div class="stat-value">3.2g</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Caffeine</div>
-                                    <div class="stat-value"><span class="scribble-circle">200mg<svg class="scribble" viewBox="0 0 80 40"><ellipse cx="40" cy="20" rx="36" ry="16" stroke="#F97316" stroke-width="2" fill="none" stroke-dasharray="200" stroke-dashoffset="200" style="animation: draw 2s ease-out 0.5s forwards"/></svg></span></div>
-                                    <span class="scribble-annotation">the sweet spot ↑</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pillar-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy Pre-Workout" class="product-image">
-                        </div>
-                    </div>
-                    <!-- Energy Lightning Bolt -->
-                    <svg class="pillar-decoration energy-lightning scribble" viewBox="0 0 60 80">
-                        <path d="M30,10 L20,35 L35,35 L25,70" stroke="#F97316" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="45" cy="20" r="2" fill="#F97316" opacity="0.6"/>
-                        <circle cx="50" cy="60" r="1.5" fill="#F97316" opacity="0.8"/>
-                    </svg>
-                </div>
+        <!-- Progress Dots -->
+        <div class="progress-dots">
+            <div class="progress-dot active" data-pillar="0"></div>
+            <div class="progress-dot" data-pillar="1"></div>
+            <div class="progress-dot" data-pillar="2"></div>
+            <div class="progress-dot" data-pillar="3"></div>
+            <div class="progress-dot" data-pillar="4"></div>
+        </div>
+    </section>
 
-                <!-- Pillar 2: Hydration -->
-                <div class="pillar" data-pillar="hydration" data-color="#3B82F6">
-                    <div class="pillar-content">
-                        <div class="pillar-text">
-                            <div class="pillar-phase">Phase 02 — Sustain</div>
-                            <h2 class="pillar-title">Water is great. It's just <span class="scribble-inline">not enough<svg class="scribble scribble-underline" viewBox="0 0 120 12"><path d="M5,8 Q30,2 60,8 T115,8" stroke="#3B82F6" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></span>.</h2>
-                            <p class="pillar-body">About halfway through any real effort, your body burns through electrolytes way faster than water can replace. That's when the cramps show up and everything starts dragging.</p>
-                            <p class="pillar-body">This has sodium, potassium, and magnesium. Full profile. Zero sugar. And it tastes like something you'd actually want to drink, which honestly shouldn't be rare but here we are.</p>
-                            <div class="pillar-stats">
-                                <div class="stat-item">
-                                    <div class="stat-label">Electrolytes</div>
-                                    <div class="stat-value">Full profile</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Sugar</div>
-                                    <div class="stat-value">Zero</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Taste</div>
-                                    <div class="stat-value">Good <span class="scribble-inline">(for real)<svg class="scribble scribble-underline" viewBox="0 0 80 12"><path d="M5,8 Q20,2 40,8 T75,8" stroke="#3B82F6" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pillar-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration Electrolytes" class="product-image">
-                        </div>
-                    </div>
-                    <!-- Hydration Water Drop -->
-                    <svg class="pillar-decoration hydration-drop scribble" viewBox="0 0 40 50">
-                        <path d="M20,45 Q10,35 10,25 Q10,15 20,5 Q30,15 30,25 Q30,35 20,45 Z" stroke="#3B82F6" stroke-width="2" fill="none"/>
-                        <circle cx="18" cy="25" r="2" fill="#3B82F6" opacity="0.3"/>
-                        <circle cx="5" cy="15" r="1" fill="#3B82F6" opacity="0.6"/>
-                    </svg>
-                </div>
+    <!-- Wavy Divider -->
+    <div class="wavy-divider">
+        <svg viewBox="0 0 1200 100" preserveAspectRatio="none">
+            <path d="M0,50 Q300,90 600,50 T1200,50 L1200,100 L0,100 Z" 
+                  fill="none" 
+                  stroke="#2DD4BF" 
+                  stroke-width="2" 
+                  opacity="0.3"/>
+        </svg>
+    </div>
 
-                <!-- Pillar 3: Protein -->
-                <div class="pillar" data-pillar="protein" data-color="#F5D5A0">
-                    <div class="pillar-content">
-                        <div class="pillar-text">
-                            <div class="pillar-phase">Phase 03 — Rebuild</div>
-                            <h2 class="pillar-title">Your muscles did the work. Give them <span class="scribble-inline">something worth it<svg class="scribble scribble-underline" viewBox="0 0 180 12"><path d="M5,8 Q45,2 90,8 T175,8" stroke="#F5D5A0" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></span>.</h2>
-                            <p class="pillar-body">Here's the thing. Your body doesn't grow during the workout. It grows after. So what you eat afterwards matters. A lot.</p>
-                            <p class="pillar-body">Clean whey isolate. 25g protein. Short ingredient list. No chalk taste. No bloating. Just protein doing protein things.</p>
-                            <div class="pillar-stats">
-                                <div class="stat-item">
-                                    <div class="stat-label">Protein</div>
-                                    <div class="stat-value">25g</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Source</div>
-                                    <div class="stat-value">Whey Isolate</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Aftertaste</div>
-                                    <div class="stat-value">None</div>
-                                </div>
-                            </div>
-                            <span class="scribble-annotation">that's it. that's the list. →</span>
-                        </div>
-                        <div class="pillar-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Protein Powder" class="product-image">
-                        </div>
-                    </div>
-                    <!-- Protein Spark -->
-                    <svg class="pillar-decoration protein-spark scribble" viewBox="0 0 50 50">
-                        <path d="M25,5 L30,20 L45,15 L35,25 L40,40 L25,30 L10,40 L15,25 L5,15 L20,20 Z" stroke="#F5D5A0" stroke-width="2" fill="none" stroke-linejoin="round"/>
-                        <circle cx="35" cy="35" r="1.5" fill="#F5D5A0" opacity="0.7"/>
-                    </svg>
-                </div>
-
-                <!-- Pillar 4: Creatine -->
-                <div class="pillar" data-pillar="creatine" data-color="#EF4444">
-                    <div class="pillar-content">
-                        <div class="pillar-text">
-                            <div class="pillar-phase">Phase 04 — Strengthen</div>
-                            <h2 class="pillar-title">The most <span class="scribble-inline">researched<svg class="scribble scribble-underline" viewBox="0 0 120 12"><path d="M5,8 Q30,2 60,8 T115,8" stroke="#EF4444" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></span> supplement ever. And it lives up to it.</h2>
-                            <p class="pillar-body">Creatine has more studies behind it than basically anything else you can buy in a supplement store. More strength, better recovery, real results that show up over weeks.</p>
-                            <p class="pillar-body">This is pure creatine monohydrate. 5g per scoop. No loading phase, no proprietary formula with a trademarked name. Just the compound that earned its reputation the old-fashioned way.</p>
-                            <div class="pillar-stats">
-                                <div class="stat-item">
-                                    <div class="stat-label">Dosage</div>
-                                    <div class="stat-value">5g</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Type</div>
-                                    <div class="stat-value">Monohydrate</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Form</div>
-                                    <div class="stat-value">Micronized</div>
-                                </div>
-                            </div>
-                            <span class="scribble-annotation">science's favorite supplement 🧪</span>
-                        </div>
-                        <div class="pillar-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine Monohydrate" class="product-image">
-                        </div>
-                    </div>
-                    <!-- Creatine Star -->
-                    <svg class="pillar-decoration creatine-star scribble" viewBox="0 0 60 60">
-                        <path d="M30,5 L35,20 L50,15 L40,25 L55,30 L40,35 L50,45 L35,40 L30,55 L25,40 L10,45 L20,35 L5,30 L20,25 L10,15 L25,20 Z" stroke="#EF4444" stroke-width="2" fill="none" stroke-linejoin="round"/>
-                        <circle cx="30" cy="30" r="3" stroke="#EF4444" stroke-width="1" fill="none"/>
-                    </svg>
-                </div>
-
-                <!-- Pillar 5: Ashwagandha -->
-                <div class="pillar" data-pillar="ashwagandha" data-color="#6DA37E">
-                    <div class="pillar-content">
-                        <div class="pillar-text">
-                            <div class="pillar-phase">Phase 05 — Reset</div>
-                            <h2 class="pillar-title">Rest isn't lazy. It's where the <span class="scribble-inline">magic happens<svg class="scribble scribble-underline" viewBox="0 0 150 12"><path d="M5,8 Q40,2 75,8 T145,8" stroke="#6DA37E" stroke-width="2.5" fill="none" stroke-linecap="round"/></svg></span>.</h2>
-                            <p class="pillar-body">Cortisol messes with everything. Your sleep, your recovery, your mood. When stress stays elevated, your body can't rebuild properly. Tomorrow's workout pays for today's stress.</p>
-                            <p class="pillar-body">KSM-66 is the most studied ashwagandha extract available. It helps bring cortisol down, improves sleep quality, and gets your body ready to start the cycle again.</p>
-                            <div class="pillar-stats">
-                                <div class="stat-item">
-                                    <div class="stat-label">Extract</div>
-                                    <div class="stat-value">KSM-66</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Dosage</div>
-                                    <div class="stat-value">600mg</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-label">Research</div>
-                                    <div class="stat-value">Clinically studied</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="pillar-image">
-                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Ashwagandha KSM-66" class="product-image">
-                        </div>
-                    </div>
-                    <!-- Ashwagandha Moon/Zen -->
-                    <svg class="pillar-decoration ashwagandha-moon scribble" viewBox="0 0 70 70">
-                        <circle cx="35" cy="35" r="30" stroke="#6DA37E" stroke-width="2" fill="none"/>
-                        <path d="M15,35 Q35,15 55,35 Q35,55 15,35" stroke="#6DA37E" stroke-width="1.5" fill="none"/>
-                        <circle cx="25" cy="25" r="2" fill="#6DA37E" opacity="0.4"/>
-                        <circle cx="45" cy="45" r="2" fill="#6DA37E" opacity="0.4"/>
-                        <circle cx="10" cy="20" r="1" fill="#6DA37E" opacity="0.6"/>
-                    </svg>
-                </div>
-            </div>
-            
-            <!-- Progress Indicators -->
-            <div class="pillar-progress">
-                <div class="progress-dot active" data-pillar="0"></div>
-                <div class="progress-dot" data-pillar="1"></div>
-                <div class="progress-dot" data-pillar="2"></div>
-                <div class="progress-dot" data-pillar="3"></div>
-                <div class="progress-dot" data-pillar="4"></div>
-            </div>
-        </section>
-
-        <!-- Cycle Reveal -->
-        <section class="cycle-reveal">
-            <div class="cycle-reveal-logo">
-                <img src="assets/logo-icon-cyan.png" alt="Enigma" style="height: 60px; width: auto;">
-            </div>
+    <!-- Cycle Reveal -->
+    <section class="cycle-reveal">
+        <div class="cycle-content">
             <h2>The whole system.</h2>
             <p>Not five random things in a cart.</p>
-            <div class="cycle-wheel">
-                <div class="wheel-product">
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section">
+        <div class="trust-content">
+            <h2>What we don't put in matters just as much.</h2>
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <h3>No proprietary blends</h3>
+                    <p>Every ingredient and dose is on the label. No hiding behind "proprietary formulas."</p>
+                </div>
+                <div class="trust-item">
+                    <h3>No filler</h3>
+                    <p>Just the active ingredients that do the work. Nothing else.</p>
+                </div>
+                <div class="trust-item">
+                    <h3>No marketing tricks</h3>
+                    <p>No inflated serving sizes to make numbers look bigger. Honest dosing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bundle Section -->
+    <section class="bundle-section" id="bundle">
+        <div class="bundle-content">
+            <h2>Choose Your Flavors</h2>
+            <div class="flavor-selector">
+                <div class="flavor-option selected">
+                    <h4>Berry Blast</h4>
+                    <p>Energy + Hydration</p>
+                </div>
+                <div class="flavor-option">
+                    <h4>Citrus Storm</h4>
+                    <p>Energy + Hydration</p>
+                </div>
+                <div class="flavor-option">
+                    <h4>Tropical Punch</h4>
+                    <p>Energy + Hydration</p>
+                </div>
+                <div class="flavor-option">
+                    <h4>Vanilla Cream</h4>
+                    <p>Protein</p>
+                </div>
+                <div class="flavor-option">
+                    <h4>Chocolate</h4>
+                    <p>Protein</p>
+                </div>
+                <div class="flavor-option">
+                    <h4>Strawberry</h4>
+                    <p>Protein</p>
+                </div>
+            </div>
+            <a href="#" class="bundle-cta">Start Your Cycle - $149</a>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section class="product-grid">
+        <div class="grid-content">
+            <h2>Shop by Pillar</h2>
+            <div class="products">
+                <div class="product-card">
                     <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy">
+                    <h3>Energy</h3>
+                    <p>Pre-workout that actually works</p>
                 </div>
-                <div class="wheel-product">
+                <div class="product-card">
                     <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration">
+                    <h3>Hydration</h3>
+                    <p>Electrolytes that taste good</p>
                 </div>
-                <div class="wheel-product">
+                <div class="product-card">
                     <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Protein">
+                    <h3>Protein</h3>
+                    <p>Clean whey, short list</p>
                 </div>
-                <div class="wheel-product">
+                <div class="product-card">
                     <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine">
+                    <h3>Creatine</h3>
+                    <p>Pure monohydrate</p>
                 </div>
-                <div class="wheel-product">
-                    <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Recovery">
-                </div>
-            </div>
-            <a href="#bundle" class="cta-button">Build Your Bundle →</a>
-            
-            <!-- Cycle Sparkles -->
-            <svg class="cycle-sparkles scribble" viewBox="0 0 80 80">
-                <path d="M40,10 L42,25 L55,20 L45,30 L60,35 L45,40 L55,50 L42,45 L40,60 L38,45 L25,50 L35,40 L20,35 L35,30 L25,20 L38,25 Z" stroke="#2DD4BF" stroke-width="1.5" fill="none"/>
-                <circle cx="20" cy="15" r="2" fill="#2DD4BF" opacity="0.6"/>
-                <circle cx="65" cy="60" r="1.5" fill="#2DD4BF" opacity="0.8"/>
-                <circle cx="15" cy="65" r="1" fill="#2DD4BF" opacity="0.7"/>
-            </svg>
-        </section>
-
-        <!-- Bundle Builder -->
-        <section class="bundle-builder" id="bundle">
-            <div class="bundle-content">
-                <h2>The whole system. Not five random things in a cart.</h2>
-                <div class="bundle-grid">
-                    <div class="bundle-product">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy">
-                        <h3>Energy</h3>
-                        <p>Pre-workout that works</p>
-                    </div>
-                    <div class="bundle-product">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration">
-                        <h3>Hydration</h3>
-                        <p>Better than water</p>
-                    </div>
-                    <div class="bundle-product">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Protein">
-                        <h3>Protein</h3>
-                        <p>Clean whey isolate</p>
-                    </div>
-                    <div class="bundle-product">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine">
-                        <h3>Creatine</h3>
-                        <p>Most researched ever</p>
-                    </div>
-                    <div class="bundle-product">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Ashwagandha">
-                        <h3>Recovery</h3>
-                        <p>KSM-66 ashwagandha</p>
-                    </div>
-                </div>
-                <div class="bundle-discount">Save 25% on the complete cycle</div>
-                <a href="#" class="cta-button">Get The System →</a>
-            </div>
-            
-            <!-- Bundle Scribbles -->
-            <svg class="bundle-scribbles scribble" viewBox="0 0 100 60">
-                <path d="M10,30 Q30,10 50,30 Q70,50 90,30" stroke="#F97316" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <circle cx="25" cy="45" r="2" fill="#F97316" opacity="0.5"/>
-                <circle cx="75" cy="15" r="1.5" fill="#F97316" opacity="0.7"/>
-            </svg>
-        </section>
-
-        <!-- Trust Section -->
-        <section class="trust-section" id="trust">
-            <div class="trust-content">
-                <h2>What we don't put in matters just as much.</h2>
-                <div class="trust-grid">
-                    <div class="trust-item">
-                        <h3>No Proprietary Blends</h3>
-                        <p>You see exactly what you're getting. Every ingredient. Every dose. No hiding behind fancy names.</p>
-                        <svg class="trust-check scribble" viewBox="0 0 30 30">
-                            <path d="M5,15 L12,22 L25,8" stroke="#6DA37E" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div class="trust-item">
-                        <h3>No Artificial Fillers</h3>
-                        <p>If it doesn't help your performance or recovery, it's not in there. Simple as that.</p>
-                        <svg class="trust-check scribble" viewBox="0 0 30 30">
-                            <path d="M5,15 L12,22 L25,8" stroke="#6DA37E" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <div class="trust-item">
-                        <h3>No Overpromising</h3>
-                        <p>We tell you what it does. Not what we wish it did. Real results from real ingredients.</p>
-                        <svg class="trust-check scribble" viewBox="0 0 30 30">
-                            <path d="M5,15 L12,22 L25,8" stroke="#6DA37E" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
+                <div class="product-card">
+                    <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Ashwagandha">
+                    <h3>Ashwagandha</h3>
+                    <p>KSM-66 extract</p>
                 </div>
             </div>
-        </section>
-
-        <!-- Product Grid -->
-        <section class="product-grid" id="products">
-            <div class="product-grid-content">
-                <h2>Shop by pillar. Or just get the whole cycle. Either way.</h2>
-                <div class="products-grid">
-                    <div class="product-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy Pre-Workout">
-                        <div class="product-card-content">
-                            <h3>Energy Pre-Workout</h3>
-                            <p>6g Citrulline, 3.2g Beta-Alanine, 200mg Caffeine</p>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration Electrolytes">
-                        <div class="product-card-content">
-                            <h3>Hydration Electrolytes</h3>
-                            <p>Full electrolyte profile, zero sugar, tastes good</p>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Protein Powder">
-                        <div class="product-card-content">
-                            <h3>Whey Isolate Protein</h3>
-                            <p>25g protein per serving, clean ingredient list</p>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine Monohydrate">
-                        <div class="product-card-content">
-                            <h3>Creatine Monohydrate</h3>
-                            <p>5g micronized creatine, unflavored, proven</p>
-                        </div>
-                    </div>
-                    <div class="product-card">
-                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Ashwagandha Recovery">
-                        <div class="product-card-content">
-                            <h3>KSM-66 Ashwagandha</h3>
-                            <p>600mg clinically studied extract for recovery</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Product Grid Decoration -->
-            <svg class="product-grid-decoration scribble" viewBox="0 0 120 100">
-                <path d="M20,50 Q40,20 60,50 Q80,80 100,50" stroke="#3B82F6" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <circle cx="30" cy="30" r="3" stroke="#3B82F6" stroke-width="1.5" fill="none"/>
-                <circle cx="90" cy="70" r="2" fill="#3B82F6" opacity="0.6"/>
-                <path d="M10,20 L20,10 L30,20" stroke="#3B82F6" stroke-width="2" fill="none" stroke-linecap="round"/>
-            </svg>
-        </section>
-    </main>
+        </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <h2>Ready to start your cycle?</h2>
-        <p>Your body runs in cycles. Now your nutrition can too.</p>
-        <a href="#" class="cta-button">Get Started →</a>
-        
-        <!-- Footer Squiggles -->
-        <svg class="footer-squiggles scribble" viewBox="0 0 100 60">
-            <path d="M10,30 Q30,10 50,30 T90,30" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <circle cx="20" cy="45" r="2" fill="#2DD4BF" opacity="0.5"/>
-            <circle cx="80" cy="45" r="1.5" fill="#2DD4BF" opacity="0.7"/>
-        </svg>
+    <footer>
+        <div class="footer-content">
+            <h2>Ready to start your cycle?</h2>
+            <a href="#bundle" class="footer-cta">Let's go →</a>
+        </div>
     </footer>
 
     <script>
-        // Horizontal scroll experience
-        class PillarScroll {
+        // Horizontal scroll functionality
+        class HorizontalScroll {
             constructor() {
-                this.track = document.getElementById('pillarsTrack');
-                this.pillars = document.querySelectorAll('.pillar');
-                this.progressDots = document.querySelectorAll('.progress-dot');
-                this.container = document.querySelector('.pillars-container');
                 this.currentPillar = 0;
+                this.totalPillars = 5;
                 this.isScrolling = false;
-                this.isMobile = window.innerWidth < 768;
+                this.pillarsContainer = document.querySelector('.pillars-container');
+                this.progressDots = document.querySelectorAll('.progress-dot');
+                this.isMobile = window.innerWidth <= 768;
                 
-                // Color mapping
-                this.pillarColors = {
-                    energy: '#F97316',
-                    hydration: '#3B82F6',
-                    protein: '#F5D5A0',
-                    creatine: '#EF4444',
-                    ashwagandha: '#6DA37E'
-                };
-                
-                this.init();
-            }
-            
-            init() {
-                if (!this.isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-                    this.setupDesktopScroll();
-                } else {
-                    this.setupMobileScroll();
+                if (!this.isMobile && this.pillarsContainer) {
+                    this.init();
                 }
-                
-                this.setupProgressDots();
-                this.updatePillarColors();
-                
-                // Handle resize
-                window.addEventListener('resize', () => {
-                    const wasMobile = this.isMobile;
-                    this.isMobile = window.innerWidth < 768;
-                    if (wasMobile !== this.isMobile) {
-                        location.reload(); // Reload for simplicity
-                    }
-                });
             }
-            
-            setupDesktopScroll() {
-                // Wheel event
-                this.container.addEventListener('wheel', (e) => {
-                    e.preventDefault();
-                    
-                    if (this.isScrolling) return;
-                    
-                    const direction = e.deltaY > 0 ? 1 : -1;
-                    this.scrollToPillar(this.currentPillar + direction);
-                });
+
+            init() {
+                // Wheel event for desktop scroll
+                document.addEventListener('wheel', (e) => this.handleScroll(e), { passive: false });
                 
-                // Touch events
+                // Touch events for mobile-like behavior on desktop
                 let startY = 0;
-                
-                this.container.addEventListener('touchstart', (e) => {
+                document.addEventListener('touchstart', (e) => {
                     startY = e.touches[0].clientY;
                 });
                 
-                this.container.addEventListener('touchend', (e) => {
+                document.addEventListener('touchmove', (e) => {
                     if (this.isScrolling) return;
                     
-                    const endY = e.changedTouches[0].clientY;
-                    const deltaY = startY - endY;
-                    
+                    const deltaY = startY - e.touches[0].clientY;
                     if (Math.abs(deltaY) > 50) {
-                        const direction = deltaY > 0 ? 1 : -1;
-                        this.scrollToPillar(this.currentPillar + direction);
+                        this.handleScrollDirection(deltaY > 0 ? 1 : -1);
+                    }
+                }, { passive: false });
+
+                // Progress dot clicks
+                this.progressDots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        this.goToPillar(index);
+                    });
+                });
+
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        this.handleScrollDirection(1);
+                    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        this.handleScrollDirection(-1);
                     }
                 });
+
+                // Initialize first state
+                this.updateView();
             }
-            
-            setupMobileScroll() {
-                // Enable vertical scroll with snap
-                document.body.style.overflowY = 'auto';
-                this.container.style.height = 'auto';
-                this.container.style.scrollSnapType = 'y mandatory';
+
+            handleScroll(e) {
+                if (this.isScrolling) {
+                    e.preventDefault();
+                    return;
+                }
+
+                // Check if we're in the pillars section
+                const pillarsSection = document.querySelector('.pillars-section');
+                const rect = pillarsSection.getBoundingClientRect();
                 
-                this.pillars.forEach(pillar => {
-                    pillar.style.scrollSnapAlign = 'start';
-                    pillar.style.height = '100vh';
-                });
-                
-                // Intersection observer for mobile
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            const index = Array.from(this.pillars).indexOf(entry.target);
-                            this.currentPillar = index;
-                            this.updateProgressDots();
-                            this.updatePillarColors();
-                        }
-                    });
-                }, { threshold: 0.5 });
-                
-                this.pillars.forEach(pillar => observer.observe(pillar));
+                if (rect.top <= 0 && rect.bottom >= window.innerHeight) {
+                    e.preventDefault();
+                    this.handleScrollDirection(e.deltaY > 0 ? 1 : -1);
+                }
             }
-            
-            scrollToPillar(index) {
-                if (index < 0 || index >= this.pillars.length) return;
+
+            handleScrollDirection(direction) {
+                if (this.isScrolling) return;
+
+                const newPillar = this.currentPillar + direction;
                 
+                if (newPillar >= 0 && newPillar < this.totalPillars) {
+                    this.goToPillar(newPillar);
+                } else if (newPillar < 0) {
+                    // Allow scrolling up to previous section
+                    this.exitToTop();
+                } else if (newPillar >= this.totalPillars) {
+                    // Allow scrolling down to next section
+                    this.exitToBottom();
+                }
+            }
+
+            goToPillar(index) {
                 this.isScrolling = true;
                 this.currentPillar = index;
-                
-                const translateX = -(index * 100);
-                this.track.style.transform = `translateX(${translateX}vw)`;
-                
-                this.updateProgressDots();
-                this.updatePillarColors();
+                this.updateView();
                 
                 setTimeout(() => {
                     this.isScrolling = false;
-                }, 600);
+                }, 500);
             }
-            
-            updateProgressDots() {
+
+            updateView() {
+                if (this.pillarsContainer) {
+                    const translateX = -this.currentPillar * 100;
+                    this.pillarsContainer.style.transform = `translateX(${translateX}vw)`;
+                }
+
+                // Update progress dots
                 this.progressDots.forEach((dot, index) => {
                     dot.classList.toggle('active', index === this.currentPillar);
                 });
+
+                // Update pillar colors/themes
+                document.body.className = '';
+                const pillars = ['energy', 'hydration', 'protein', 'creatine', 'ashwagandha'];
+                document.body.classList.add(pillars[this.currentPillar]);
             }
-            
-            updatePillarColors() {
-                const pillar = this.pillars[this.currentPillar];
-                const pillarType = pillar.dataset.pillar;
-                const color = this.pillarColors[pillarType];
-                
-                document.documentElement.style.setProperty('--current-pillar-color', color);
-                
-                // Update active pillar
-                this.pillars.forEach(p => p.classList.remove('active'));
-                pillar.classList.add('active');
+
+            exitToTop() {
+                const heroSection = document.querySelector('.hero');
+                heroSection.scrollIntoView({ behavior: 'smooth' });
             }
-            
-            setupProgressDots() {
-                this.progressDots.forEach((dot, index) => {
-                    dot.addEventListener('click', () => {
-                        this.scrollToPillar(index);
+
+            exitToBottom() {
+                const cycleSection = document.querySelector('.cycle-reveal');
+                cycleSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    
+                    // Trigger draw-on animations for scribbles
+                    const scribbles = entry.target.querySelectorAll('.draw-on');
+                    scribbles.forEach((scribble, index) => {
+                        setTimeout(() => {
+                            scribble.style.animation = `drawOn 2s ease-out forwards`;
+                        }, index * 300);
                     });
-                });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize horizontal scroll (desktop only)
+            if (window.innerWidth > 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                new HorizontalScroll();
             }
-        }
-        
-        // Scribble animations
-        function animateScribbles() {
-            const scribbles = document.querySelectorAll('.scribble path');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.animation = 'draw 2s ease-out forwards';
-                    }
-                });
-            });
-            
-            scribbles.forEach(scribble => {
-                observer.observe(scribble);
-            });
-        }
-        
-        // Smooth scrolling for anchor links
-        function setupSmoothScrolling() {
+
+            // Observe sections for animations
+            const sections = document.querySelectorAll('section, .pillar');
+            sections.forEach(section => observer.observe(section));
+
+            // Smooth scrolling for anchor links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -1558,51 +1142,37 @@
                     }
                 });
             });
-        }
-        
-        // Initialize everything when DOM is ready
-        document.addEventListener('DOMContentLoaded', () => {
-            // Add small delay for images to load
-            setTimeout(() => {
-                new PillarScroll();
-                animateScribbles();
-                setupSmoothScrolling();
-            }, 100);
-        });
-        
-        // Handle bundle product interactions
-        document.addEventListener('DOMContentLoaded', () => {
-            const bundleProducts = document.querySelectorAll('.bundle-product');
-            const selectedProducts = new Set();
-            
-            bundleProducts.forEach(product => {
-                product.addEventListener('click', () => {
-                    product.classList.toggle('selected');
-                    const productName = product.querySelector('h3').textContent;
-                    
-                    if (product.classList.contains('selected')) {
-                        selectedProducts.add(productName);
-                    } else {
-                        selectedProducts.delete(productName);
-                    }
-                    
-                    updateBundlePrice();
+
+            // Flavor selector interaction
+            const flavorOptions = document.querySelectorAll('.flavor-option');
+            flavorOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    flavorOptions.forEach(opt => opt.classList.remove('selected'));
+                    option.classList.add('selected');
                 });
             });
-            
-            function updateBundlePrice() {
-                const discount = document.querySelector('.bundle-discount');
-                if (selectedProducts.size === 5) {
-                    discount.textContent = 'Complete System - Save 25%';
-                    discount.style.background = '#2DD4BF';
-                } else if (selectedProducts.size >= 3) {
-                    discount.textContent = `${selectedProducts.size} Products - Save 15%`;
-                    discount.style.background = '#F97316';
-                } else {
-                    discount.textContent = 'Select 3+ for discount';
-                    discount.style.background = '#9C9590';
-                }
+        });
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768) {
+                // Reset to mobile layout
+                document.querySelector('.pillars-container').style.transform = 'none';
             }
+        });
+
+        // Preload images
+        const imageUrls = [
+            'https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312',
+            'https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154',
+            'https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989',
+            'https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358',
+            'https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382'
+        ];
+
+        imageUrls.forEach(url => {
+            const img = new Image();
+            img.src = url;
         });
     </script>
 </body>
