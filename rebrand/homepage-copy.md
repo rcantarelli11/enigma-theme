@@ -1,177 +1,153 @@
-# Enigma Homepage — Section Copy (v2 — Fun, Playful, Approachable)
+# Enigma Homepage Copy (v3 — human voice, zero AI patterns)
 
-**TONE GUIDE:** Fun, playful, confident. NOT try-hard athlete. NOT gym bro. Think: your smart friend who happens to know a lot about supplements and makes it fun. Welcoming to everyone — especially people who are NOT hardcore fitness people but want great products. Scribble energy = the brand personality.
+Tone: Fun. Playful. Like texting a friend who knows their stuff. Short sentences mixed with longer ones. Opinions welcome. No corporate. No gym bro. No AI slop.
 
 ---
 
-## SECTION 1: Hero (Full Viewport, Dark Stone)
+## SECTION 1: Hero
 
-**Headline:**
 Your body runs in *cycles.*
 So should your nutrition.
 
-**Subhead:**
-Five pillars. One system. Zero guesswork. (Finally.)
+Five pillars. One system. Zero guesswork.
 
-**CTA:** See how it works →
+See how it works →
 
-*"cycles" gets a scribble underline. Playful scribble arrow pointing to the CTA button.*
-
----
-
-## SECTION 2: The Enigma Cycle — Scroll Experience
-
-### Pillar 1: ⚡ ENERGY
-**Kicker:** Phase 01 — Ignite
-
-**Headline:**
-That "let's go" feeling.
-Bottled.
-
-**Body:**
-You know the vibe — you show up, you're ready, everything clicks. That's not random. That's your pre workout actually doing its job.
-
-Ours has citrulline, beta-alanine, and caffeine at the doses that research says actually work. Not a mystery blend. Not a heart-attack-in-a-scoop. Just clean energy that hits right.
-
-**Stats:** 6g Citrulline · 3.2g Beta-Alanine · 200mg Caffeine
-*Scribble circle around "200mg" with hand-drawn annotation: "the sweet spot"*
+*scribble underline on "cycles" + playful arrow to the button*
 
 ---
 
-### Pillar 2: 💧 HYDRATION
-**Kicker:** Phase 02 — Sustain
+## SECTION 2: The Cycle
 
-**Headline:**
-Water is great.
-It's just not enough.
+### Phase 01 — Ignite (Pre Workout)
 
-**Body:**
-Halfway through your workout (or honestly, just a hot Tuesday), your body is burning through electrolytes way faster than water alone can fix. That's when things get crampy and sad.
+That "let's go" feeling. Bottled.
 
-Our hydration powder has the full electrolyte lineup — sodium, potassium, magnesium — and it actually tastes good. Zero sugar. Mix it, drink it, feel the difference.
+You know when you walk into the gym and everything just clicks? That's not luck. That's your pre workout doing its job.
 
-**Stats:** Full Electrolytes · Zero Sugar · Actually Tastes Good
-*Scribble underline on "actually tastes good"*
+We put in citrulline, beta-alanine, and caffeine at doses that actually match the research. Every ingredient on the label. Every dose visible. No mystery powder.
 
----
+6g Citrulline · 3.2g Beta-Alanine · 200mg Caffeine
 
-### Pillar 3: 🥛 PROTEIN
-**Kicker:** Phase 03 — Rebuild
-
-**Headline:**
-Your muscles did the work.
-Give them something worth it.
-
-**Body:**
-Here's the thing — your body doesn't grow during the workout. It grows after. So what you put in afterwards kind of matters a lot.
-
-Clean whey isolate. 25g protein. Minimal ingredients. No weird aftertaste that makes you question your life choices. Just protein that does protein things.
-
-**Stats:** 25g Protein · Whey Isolate · No Weird Aftertaste
-*Scribble arrow pointing to stats with "that's it. that's the list."*
+*scribble circle on "200mg" with annotation: "the sweet spot"*
 
 ---
 
-### Pillar 4: 💪 CREATINE
-**Kicker:** Phase 04 — Strengthen
+### Phase 02 — Sustain (Hydration)
 
-**Headline:**
-The most researched supplement ever.
-(And it actually lives up to it.)
+Water is great. It's just not enough.
 
-**Body:**
-Creatine has been studied more than basically any other supplement in existence. The verdict? It works. More strength. Better recovery. Consistent results over time.
+About halfway through any real effort, your body burns through electrolytes way faster than water can replace. That's when the cramps show up and everything starts dragging.
 
-Ours is pure creatine monohydrate — 5g per scoop. No loading phase drama. No fancy proprietary formula with a trademarked name. Just the thing that works.
+This has sodium, potassium, and magnesium. Full profile. Zero sugar. And it tastes like something you'd actually want to drink, which honestly shouldn't be rare but here we are.
 
-**Stats:** 5g Creatine Monohydrate · Micronized · Unflavored
-*Scribble badge: "science's favorite supplement" with small drawn beaker*
+Full Electrolytes · Zero Sugar · Tastes good (for real)
+
+*scribble underline on "for real"*
 
 ---
 
-### Pillar 5: 🧘 ASHWAGANDHA
-**Kicker:** Phase 05 — Reset
+### Phase 03 — Rebuild (Protein)
 
-**Headline:**
-Rest isn't lazy.
-It's where the magic happens.
+Your muscles did the work. Give them something worth it.
 
-**Body:**
-Your body can't rebuild if it's stressed out all the time. Cortisol (the stress hormone) messes with your sleep, your recovery, and honestly your whole vibe.
+Here's the thing. Your body doesn't grow during the workout. It grows after. So what you eat afterwards matters. A lot.
 
-KSM-66® ashwagandha is the most clinically studied version out there. It helps lower cortisol, improves sleep, and gets your body ready to do it all again tomorrow. Recovery isn't optional — it's the whole point.
+Clean whey isolate. 25g protein. Short ingredient list. No chalk taste. No bloating. Just protein doing protein things.
 
-**Stats:** KSM-66® · 600mg · Clinically Validated
-*Scribble underline on "the whole point" + small drawn moon/stars*
+25g Protein · Whey Isolate · Short ingredient list
+
+*scribble arrow with "that's it. that's the list."*
 
 ---
 
-## SECTION 3: The Complete Cycle — Bundle Reveal
+### Phase 04 — Strengthen (Creatine)
 
-**Headline:**
+The most researched supplement ever. And it lives up to it.
+
+Creatine has more studies behind it than basically anything else you can buy in a supplement store. More strength, better recovery, real results that show up over weeks.
+
+This is pure creatine monohydrate. 5g per scoop. No loading phase, no proprietary formula with a trademarked name. Just the compound that earned its reputation the old-fashioned way.
+
+5g Creatine Monohydrate · Micronized · Unflavored
+
+*scribble badge: "science's favorite" with a small drawn beaker*
+
+---
+
+### Phase 05 — Reset (Ashwagandha)
+
+Rest isn't lazy. It's where the magic happens.
+
+Cortisol messes with everything. Your sleep, your recovery, your mood. When stress stays elevated, your body can't rebuild properly. Tomorrow's workout pays for today's stress.
+
+KSM-66 is the most studied ashwagandha extract available. It helps bring cortisol down, improves sleep quality, and gets your body ready to start the cycle again.
+
+KSM-66 · 600mg · Clinically studied
+
+*scribble underline on "the magic happens" + small drawn moon*
+
+---
+
+## SECTION 3: The Full Cycle (Bundle Reveal)
+
 The whole system.
-(Not five random things in a cart.)
+Not five random things in a cart.
 
-**Subhead:**
-Five pillars that actually work together. Energy → Hydration → Protein → Creatine → Recovery → repeat. It's a cycle, not a shopping spree.
+Five products that actually connect. Energy feeds the workout. Hydration sustains it. Protein rebuilds after. Creatine strengthens over time. Ashwagandha resets you for tomorrow. Then you start again.
 
-Most brands sell you products. We built you a system that makes sense.
+Most supplement brands sell you individual products and hope you figure it out. We built the system for you.
 
-**CTA:** Build Your Cycle →
-*Scribble arrow looping in a circle around the CTA*
+Build Your Cycle →
+
+*scribble arrow looping in a circle around the button*
 
 ---
 
-## SECTION 4: Why Enigma (Trust Section)
+## SECTION 4: Why Enigma
 
-**Headline:**
 What we *don't* put in matters just as much.
 
-*"don't" gets a scribble circle*
+*scribble circle on "don't"*
 
-**Three Columns:**
+**No proprietary blends.**
+Every ingredient and every dose printed on the label. If a brand hides what's inside, they're hiding it for a reason.
 
-**No Proprietary Blends** ✋
-Every ingredient. Every dose. Right there on the label. If a brand won't tell you what's inside, that's a red flag, not a feature.
+**No filler ingredients.**
+We don't pad formulas to make the label look longer. If something doesn't have evidence at the dose we use, it doesn't get in.
 
-**No Fillers, No Fluff** 🧹
-We don't pad formulas to look impressive on the back panel. If an ingredient doesn't have clinical evidence at the dose we use? It doesn't get in.
+**No marketing tricks.**
+No "1000% daily value!" headlines. No transformation photos with different lighting. Just real products for people who care what they're putting in their body.
 
-**No Marketing BS** 🎯
-No "1000% of your daily value!!!" headlines. No before/after photos from two different lighting setups. Just real products for people who actually read the label (and people who want to start).
-
-*Scribble checkmarks next to each column header*
+*scribble checkmarks next to each*
 
 ---
 
-## SECTION 5: Individual Products
+## SECTION 5: Shop
 
-**Section Headline:**
 Shop by pillar.
-(Or just get the whole cycle. We won't judge.)
+Or just get the whole cycle. Either way.
 
-*Scribble arrow pointing down to the product grid*
-
----
-
-## SECTION 6: Brand Story Teaser
-
-**Headline:**
-We started Enigma because we were tired of supplements that look great and do nothing.
-
-**Body:**
-So we read the research. Dosed everything clinically. Put every single ingredient on the label. Made it taste good. And made the brand actually fun — because taking care of yourself shouldn't feel like homework.
-
-That's it. That's the brand.
-
-**CTA:** Read the full story →
+*scribble arrow pointing down*
 
 ---
 
-## SECTION 7: Footer CTA
+## SECTION 6: Brand Story
 
-**Headline:**
+We started Enigma because we kept buying supplements that looked great and did nothing.
+
+So we read the research. Dosed everything based on actual studies. Put every ingredient on the label. Made it taste good. And made the brand fun, because taking care of yourself shouldn't feel like a chore.
+
+That's the whole story.
+
+Read more about us →
+
+---
+
+## SECTION 7: Footer
+
 Ready to start your cycle?
 
-**CTA:** Let's go →
-*Big scribble arrow pointing to button + small drawn sparkles*
+Let's go →
+
+*scribble arrow + small drawn sparkles*
