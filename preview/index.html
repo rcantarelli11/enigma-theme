@@ -1,2160 +1,1282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Enigma — The Complete Performance System</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      /* CASH'S NEW STONE DESIGN SYSTEM - Exact values */
-      --color-bg: #2C2926; /* Dark stone */
-      --color-bg-secondary: #3D3832; /* Mid stone - for variation */
-      --color-bg-light: #E8E2D9; /* Light stone */
-      --color-cream: #F5F0E8; /* Lightest warm tone */
-      --color-bg-card: rgba(245, 240, 232, 0.03);
-      --color-border: rgba(245, 240, 232, 0.06);
-      --color-text: #F5F0E8; /* Text primary on dark */
-      --color-text-dark: #2C2926; /* Text primary on light */
-      --color-text-muted: #9C9590; /* Text secondary */
-      --color-text-subtle: rgba(245, 240, 232, 0.3);
-      --color-accent: #14b8a6;
-      --color-accent-hover: #0d9488;
-      --color-accent-glow: rgba(20, 184, 166, 0.15);
-      --color-accent-bright: #2dd4bf;
-      --color-success: #10b981;
-      --color-glass: rgba(245, 240, 232, 0.04);
-      --color-glass-border: rgba(245, 240, 232, 0.08);
-      
-      /* Pillar accent colors */
-      --color-energy: #F97316;
-      --color-hydration: #3B82F6; 
-      --color-protein: #F5D5A0;
-      --color-creatine: #EF4444;
-      --color-ashwagandha: #6DA37E;
-      
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-heading: 'Playfair Display', Georgia, serif;
-      --radius: 12px;
-      --radius-lg: 20px;
-      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-smooth: cubic-bezier(0.4, 0, 0, 1);
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: var(--font-body);
-      background: var(--color-bg);
-      color: var(--color-text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
-    @media (min-width: 768px) { .container { padding: 0 40px; } }
-
-    /* ========== SCROLL REVEAL ========== */
-    [data-reveal] { opacity: 0; will-change: transform, opacity; }
-    [data-reveal="up"] { transform: translateY(60px); }
-    [data-reveal="down"] { transform: translateY(-60px); }
-    [data-reveal="left"] { transform: translateX(-60px); }
-    [data-reveal="right"] { transform: translateX(60px); }
-    [data-reveal="scale"] { transform: scale(0.92); }
-    [data-reveal="fade"] { transform: none; }
-    [data-reveal].revealed {
-      opacity: 1;
-      transform: translateY(0) translateX(0) scale(1);
-      transition: opacity 1s var(--ease-out), transform 1.2s var(--ease-out);
-    }
-    [data-stagger] > [data-reveal].revealed {
-      transition-delay: calc(var(--stagger-index, 0) * 120ms);
-    }
-
-    /* ========== SCRIBBLE ANIMATIONS ========== */
-    .scribble {
-      position: absolute;
-      pointer-events: none;
-      z-index: 2;
-    }
-    .scribble svg {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-    .scribble path {
-      fill: none;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      animation: draw-scribble 2s ease-out forwards;
-    }
-    @keyframes draw-scribble {
-      to { stroke-dashoffset: 0; }
-    }
-    .scribble--underline {
-      bottom: -8px;
-      left: -4px;
-      right: -4px;
-      height: 20px;
-    }
-    .scribble--circle {
-      top: -12px;
-      left: -12px;
-      right: -12px;
-      bottom: -12px;
-    }
-    .scribble--arrow {
-      width: 60px;
-      height: 40px;
-    }
-    .scribble--star {
-      width: 30px;
-      height: 30px;
-      top: -15px;
-      right: -15px;
-    }
-
-    /* ========== ENHANCED SCRIBBLE SYSTEM (3-5 per viewport) ========== */
-    .scribble--divider {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 30px;
-      z-index: 1;
-    }
-    .scribble--squiggle {
-      position: absolute;
-      width: 80px;
-      height: 25px;
-      z-index: 2;
-    }
-    .scribble--checkmark {
-      position: absolute;
-      width: 25px;
-      height: 20px;
-      top: -5px;
-      left: -30px;
-    }
-    .scribble--highlight-box {
-      position: absolute;
-      top: -8px;
-      left: -8px;
-      right: -8px;
-      bottom: -8px;
-      z-index: 1;
-    }
-    .scribble--burst {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      top: -20px;
-      right: -20px;
-    }
-    .scribble--connector {
-      position: absolute;
-      width: 100px;
-      height: 50px;
-    }
-    .scribble--badge-accent {
-      position: absolute;
-      width: 60px;
-      height: 30px;
-      top: -15px;
-      left: -30px;
-    }
-    .scribble--price-circle {
-      position: absolute;
-      top: -12px;
-      left: -12px;
-      right: -12px;
-      bottom: -12px;
-    }
-    
-    /* Staggered animation delays for visual interest */
-    .scribble:nth-child(1) path { animation-delay: 0.2s; }
-    .scribble:nth-child(2) path { animation-delay: 0.5s; }
-    .scribble:nth-child(3) path { animation-delay: 0.8s; }
-    .scribble:nth-child(4) path { animation-delay: 1.1s; }
-    .scribble:nth-child(5) path { animation-delay: 1.4s; }
-    
-    /* Section-specific scribbles */
-    .hero-scribbles { position: relative; z-index: 2; }
-    .intro-scribbles { position: relative; z-index: 1; }
-    .bundle-scribbles { position: relative; z-index: 1; }
-    .trust-scribbles { position: relative; z-index: 1; }
-
-    /* ========== ANNOUNCEMENT BAR ========== */
-    .announcement-bar {
-      background: rgba(20, 184, 166, 0.06);
-      border-bottom: 1px solid rgba(20, 184, 166, 0.08);
-      padding: 10px 0;
-      text-align: center;
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: var(--color-accent-bright);
-      letter-spacing: 0.04em;
-    }
-
-    /* ========== HEADER ========== */
-    .header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 20px 0;
-      background: rgba(44, 41, 38, 0.6); /* Dark stone with transparency */
-      backdrop-filter: blur(24px) saturate(1.2);
-      border-bottom: 1px solid rgba(245, 240, 232, 0.03);
-      transition: all 0.5s var(--ease-smooth);
-    }
-    .header.scrolled { 
-      padding: 14px 0; 
-      background: rgba(44, 41, 38, 0.85); /* Dark stone */
-    }
-    .header__inner { display: flex; align-items: center; justify-content: space-between; }
-    .header__logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      transition: opacity 0.3s;
-    }
-    .header__logo:hover { opacity: 0.8; }
-    .header__logo-mark {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, var(--color-accent-bright), var(--color-accent));
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-heading);
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--color-bg);
-    }
-    .header__logo-text {
-      font-family: var(--font-heading); 
-      font-size: 1.5rem; 
-      font-weight: 700;
-      letter-spacing: 0.04em; 
-      color: var(--color-text);
-    }
-    .header__nav { display: flex; gap: 36px; }
-    .header__nav a {
-      font-size: 0.8125rem; font-weight: 500; color: var(--color-text-muted);
-      letter-spacing: 0.02em; transition: color 0.3s; position: relative;
-    }
-    .header__nav a::after {
-      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
-      background: var(--color-accent-bright); transition: width 0.4s var(--ease-out);
-    }
-    .header__nav a:hover { color: var(--color-text); }
-    .header__nav a:hover::after { width: 100%; }
-    .header__cart {
-      font-size: 0.8125rem; font-weight: 500; color: var(--color-text-muted);
-      display: flex; align-items: center; gap: 8px; transition: color 0.3s;
-    }
-    .header__cart:hover { color: var(--color-text); }
-    @media (max-width: 768px) { .header__nav { display: none; } }
-
-    /* ========== BUTTONS ========== */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      font-weight: 600; font-size: 0.9375rem; font-family: var(--font-body);
-      border: none; border-radius: var(--radius);
-      transition: all 0.4s var(--ease-out);
-      white-space: nowrap; cursor: pointer; text-decoration: none;
-      position: relative; overflow: hidden;
-    }
-    .btn::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(245, 240, 232, 0.1) 0%, transparent 50%);
-      opacity: 0; transition: opacity 0.3s;
-    }
-    .btn:hover::before { opacity: 1; }
-    .btn-lg { padding: 16px 40px; }
-    .btn-primary {
-      background: var(--color-accent); color: white;
-      box-shadow: 0 0 30px rgba(20,184,166,0.15), 0 4px 20px rgba(0,0,0,0.3);
-    }
-    .btn-primary:hover {
-      background: var(--color-accent-hover);
-      box-shadow: 0 0 50px rgba(20,184,166,0.25), 0 8px 32px rgba(0,0,0,0.4);
-      transform: translateY(-3px);
-    }
-    .btn-ghost {
-      background: transparent; color: var(--color-text-muted);
-      border: 1px solid var(--color-border);
-    }
-    .btn-ghost:hover {
-      color: var(--color-text); border-color: rgba(20,184,166,0.3);
-      background: rgba(20,184,166,0.05); transform: translateY(-2px);
-    }
-
-    /* ========== CYCLE HERO ========== */
-    .cycle-hero {
-      position: relative; min-height: 100vh;
-      display: flex; align-items: center;
-      padding: 140px 0 100px; overflow: hidden;
-    }
-    .cycle-hero__bg { position: absolute; inset: 0; z-index: 0; }
-    .cycle-hero__gradient-1 {
-      position: absolute; top: 30%; right: -15%; width: 1000px; height: 1000px;
-      background: radial-gradient(circle, rgba(20,184,166,0.07) 0%, transparent 65%);
-      animation: gradient-drift 15s ease-in-out infinite alternate;
-    }
-    .cycle-hero__gradient-2 {
-      position: absolute; bottom: -20%; left: -10%; width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(20,184,166,0.04) 0%, transparent 70%);
-      animation: gradient-drift 20s ease-in-out infinite alternate-reverse;
-    }
-    @keyframes gradient-drift {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(30px, -20px) scale(1.08); }
-    }
-    .cycle-hero__grain {
-      position: absolute; inset: 0; opacity: 0.02;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-    .cycle-hero__layout {
-      position: relative; z-index: 1;
-      display: grid; grid-template-columns: 1fr; gap: 60px; align-items: center;
-    }
-    @media (min-width: 960px) { .cycle-hero__layout { grid-template-columns: 1fr 1fr; gap: 80px; } }
-
-    .cycle-hero__badge {
-      display: inline-flex; padding: 10px 22px;
-      background: rgba(20,184,166,0.06); border: 1px solid rgba(20,184,166,0.12);
-      border-radius: 100px; font-size: 0.75rem; font-weight: 600;
-      color: var(--color-accent-bright); letter-spacing: 0.08em; text-transform: uppercase;
-      margin-bottom: 28px; backdrop-filter: blur(8px);
-      position: relative;
-    }
-    /* Scribble star near badge */
-    .cycle-hero__badge::after {
-      content: '';
-      position: absolute;
-      top: -15px;
-      right: -15px;
-      width: 30px;
-      height: 30px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15,2 L18,12 L28,15 L18,18 L15,28 L12,18 L2,15 L12,12 Z' stroke='%232dd4bf' stroke-width='2' fill='none' stroke-dasharray='200' stroke-dashoffset='200'/%3E%3C/svg%3E") no-repeat center;
-      animation: draw-star 2.5s ease-out 1s forwards;
-      z-index: 3;
-    }
-    @keyframes draw-star {
-      to { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15,2 L18,12 L28,15 L18,18 L15,28 L12,18 L2,15 L12,12 Z' stroke='%232dd4bf' stroke-width='2' fill='none' stroke-dasharray='200' stroke-dashoffset='0'/%3E%3C/svg%3E"); }
-    }
-    
-    .cycle-hero__title {
-      font-family: var(--font-heading);
-      font-size: clamp(3rem, 5.5vw, 4.75rem);
-      font-weight: 700; line-height: 1.02; letter-spacing: -0.02em;
-      position: relative;
-    }
-    .cycle-hero__title .title-line { display: block; overflow: hidden; }
-    .cycle-hero__title .title-line span {
-      display: inline-block; transform: translateY(110%);
-      animation: title-rise 1s var(--ease-out) forwards;
-    }
-    .cycle-hero__title .title-line:nth-child(2) span { animation-delay: 0.1s; }
-    .cycle-hero__title .title-line:nth-child(3) span { animation-delay: 0.2s; }
-    /* Scribble underline on "Performance" */
-    .cycle-hero__title .title-line:nth-child(2) {
-      position: relative;
-    }
-    .cycle-hero__title .title-line:nth-child(2)::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      right: 0;
-      height: 20px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,15 Q50,5 100,12 T200,10 T290,8' stroke='%232dd4bf' stroke-width='3' fill='none' stroke-dasharray='500' stroke-dashoffset='500'/%3E%3C/svg%3E") no-repeat center;
-      animation: draw-underline 2s ease-out 1.5s forwards;
-    }
-    @keyframes draw-underline {
-      to { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,15 Q50,5 100,12 T200,10 T290,8' stroke='%232dd4bf' stroke-width='3' fill='none' stroke-dasharray='500' stroke-dashoffset='0'/%3E%3C/svg%3E"); }
-    }
-    @keyframes title-rise { to { transform: translateY(0); } }
-
-    .cycle-hero__subtitle {
-      margin-top: 28px;
-      font-size: clamp(1.0625rem, 1.8vw, 1.25rem);
-      color: var(--color-text-muted); line-height: 1.7;
-      max-width: 460px; font-weight: 300;
-      opacity: 0; animation: fade-up 1s var(--ease-out) 0.4s forwards;
-    }
-    .cycle-hero__actions {
-      margin-top: 44px; display: flex; flex-wrap: wrap; gap: 16px;
-      opacity: 0; animation: fade-up 1s var(--ease-out) 0.55s forwards;
-      position: relative;
-    }
-    /* Scribble arrow pointing to CTA */
-    .cycle-hero__actions::before {
-      content: '';
-      position: absolute;
-      top: -40px;
-      right: 20px;
-      width: 60px;
-      height: 40px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 60 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,30 Q30,10 50,15 M45,10 L50,15 L45,20' stroke='%232dd4bf' stroke-width='2.5' fill='none' stroke-dasharray='100' stroke-dashoffset='100'/%3E%3C/svg%3E") no-repeat center;
-      animation: draw-arrow 1.5s ease-out 2s forwards;
-    }
-    @keyframes draw-arrow {
-      to { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 60 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,30 Q30,10 50,15 M45,10 L50,15 L45,20' stroke='%232dd4bf' stroke-width='2.5' fill='none' stroke-dasharray='100' stroke-dashoffset='0'/%3E%3C/svg%3E"); }
-    }
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ========== CYCLE WHEEL ========== */
-    .cycle-wheel {
-      position: relative; width: 100%; max-width: 520px;
-      aspect-ratio: 1; margin: 0 auto;
-      opacity: 0; animation: wheel-enter 1.5s var(--ease-out) 0.3s forwards;
-    }
-    @keyframes wheel-enter {
-      from { opacity: 0; transform: scale(0.85) rotate(-10deg); }
-      to { opacity: 1; transform: scale(1) rotate(0deg); }
-    }
-    .cycle-wheel__ring { position: absolute; inset: 0; width: 100%; height: 100%; }
-    .cycle-orbit-dot {
-      position: absolute; top: 50%; left: 50%; width: 6px; height: 6px;
-      margin: -3px 0 0 -3px; border-radius: 50%;
-      background: var(--color-accent-bright);
-      box-shadow: 0 0 12px var(--color-accent-bright), 0 0 30px rgba(20,184,166,0.3);
-      offset-path: circle(200px); offset-distance: 0%;
-      animation: orbit 8s linear infinite;
-    }
-    @keyframes orbit { to { offset-distance: 100%; } }
-    .cycle-wheel__progress {
-      stroke-dasharray: 1257; stroke-dashoffset: 1257;
-      animation: ring-draw 2.5s var(--ease-out) 0.6s forwards;
-    }
-    @keyframes ring-draw { to { stroke-dashoffset: 0; } }
-    .cycle-wheel__connections line {
-      stroke-dasharray: 200; stroke-dashoffset: 200;
-      animation: line-draw 1.5s var(--ease-out) forwards;
-    }
-    .cycle-wheel__connections line:nth-child(1) { animation-delay: 1.2s; }
-    .cycle-wheel__connections line:nth-child(2) { animation-delay: 1.35s; }
-    .cycle-wheel__connections line:nth-child(3) { animation-delay: 1.5s; }
-    .cycle-wheel__connections line:nth-child(4) { animation-delay: 1.65s; }
-    .cycle-wheel__connections line:nth-child(5) { animation-delay: 1.8s; }
-    @keyframes line-draw { to { stroke-dashoffset: 0; } }
-
-    .cycle-node {
-      position: absolute; width: 88px; height: 88px;
-      border: none; background: rgba(245, 240, 232, 0.02);
-      border-radius: 50%; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-      transition: all 0.5s var(--ease-out); z-index: 2;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle)));
-      backdrop-filter: blur(4px); border: 1px solid rgba(245, 240, 232, 0.04);
-    }
-    @media (max-width: 600px) {
-      .cycle-node { width: 68px; height: 68px;
-        transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-145px) rotate(calc(-1 * var(--angle)));
-      }
-    }
-    .cycle-node__glow {
-      position: absolute; inset: -16px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(20,184,166,0.3) 0%, transparent 70%);
-      opacity: 0; transition: opacity 0.5s var(--ease-out); filter: blur(4px);
-    }
-    .cycle-node:hover .cycle-node__glow,
-    .cycle-node.active .cycle-node__glow,
-    .cycle-node.auto-active .cycle-node__glow { opacity: 1; }
-    .cycle-node:hover, .cycle-node.active, .cycle-node.auto-active {
-      background: rgba(20,184,166,0.08); border-color: rgba(20,184,166,0.2);
-      box-shadow: 0 0 40px rgba(20,184,166,0.15);
-    }
-    .cycle-node__icon {
-      font-size: 1.75rem; line-height: 1;
-      transition: all 0.5s var(--ease-out); filter: grayscale(0.4) brightness(0.8);
-    }
-    .cycle-node:hover .cycle-node__icon,
-    .cycle-node.active .cycle-node__icon,
-    .cycle-node.auto-active .cycle-node__icon { filter: grayscale(0) brightness(1); transform: scale(1.2); }
-    .cycle-node__label {
-      font-size: 0.625rem; font-weight: 600; color: var(--color-text-subtle);
-      letter-spacing: 0.06em; text-transform: uppercase;
-      transition: color 0.4s; white-space: nowrap;
-    }
-    .cycle-node:hover .cycle-node__label,
-    .cycle-node.active .cycle-node__label,
-    .cycle-node.auto-active .cycle-node__label { color: var(--color-accent-bright); }
-    .cycle-node { opacity: 0; }
-    .cycle-node[data-phase="0"] { animation: node-pop 0.8s var(--ease-out) 0.9s both; }
-    .cycle-node[data-phase="1"] { animation: node-pop 0.8s var(--ease-out) 1.05s both; }
-    .cycle-node[data-phase="2"] { animation: node-pop 0.8s var(--ease-out) 1.2s both; }
-    .cycle-node[data-phase="3"] { animation: node-pop 0.8s var(--ease-out) 1.35s both; }
-    .cycle-node[data-phase="4"] { animation: node-pop 0.8s var(--ease-out) 1.5s both; }
-    @keyframes node-pop {
-      from { opacity: 0; transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-160px) rotate(calc(-1 * var(--angle))) scale(0); }
-      to { opacity: 1; transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-200px) rotate(calc(-1 * var(--angle))) scale(1); }
-    }
-    @media (max-width: 600px) {
-      @keyframes node-pop {
-        from { opacity: 0; transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-110px) rotate(calc(-1 * var(--angle))) scale(0); }
-        to { opacity: 1; transform: translate(-50%,-50%) rotate(var(--angle)) translateY(-145px) rotate(calc(-1 * var(--angle))) scale(1); }
-      }
-    }
-    .cycle-wheel__center {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      text-align: center; z-index: 1; width: 140px; height: 140px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 50%; background: radial-gradient(circle, rgba(20,184,166,0.04) 0%, transparent 70%);
-      border: 1px solid rgba(20,184,166,0.06);
-    }
-    .cycle-center__default {
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      transition: all 0.5s var(--ease-out);
-    }
-    .cycle-center__text { font-family: var(--font-heading); font-size: 0.875rem; color: var(--color-text-subtle); font-style: italic; }
-    .cycle-center__detail {
-      position: absolute; display: flex; flex-direction: column; align-items: center; gap: 4px;
-      opacity: 0; transform: scale(0.9); transition: all 0.4s var(--ease-out); pointer-events: none;
-    }
-    .cycle-center__detail.visible { opacity: 1; transform: scale(1); pointer-events: auto; }
-    .cycle-detail__icon { font-size: 1.75rem; }
-    .cycle-detail__name { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600; }
-    .cycle-detail__desc { font-size: 0.7rem; color: var(--color-text-muted); max-width: 130px; line-height: 1.4; }
-    .cycle-wheel__particles { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-    .cycle-particle { position: absolute; border-radius: 50%; background: var(--color-accent-bright); opacity: 0; }
-    .cycle-particle--sm { width: 2px; height: 2px; animation: pdrift 6s ease-in-out infinite; }
-    .cycle-particle--md { width: 3px; height: 3px; animation: pdrift 5s ease-in-out infinite; }
-    .cycle-particle--lg { width: 4px; height: 4px; animation: pdrift 7s ease-in-out infinite; box-shadow: 0 0 8px var(--color-accent-bright); }
-    @keyframes pdrift {
-      0% { opacity: 0; transform: translate(0,0) scale(0); }
-      15% { opacity: 0.5; transform: translate(5px,-15px) scale(1); }
-      85% { opacity: 0.15; transform: translate(-10px,-50px) scale(0.6); }
-      100% { opacity: 0; transform: translate(-5px,-65px) scale(0); }
-    }
-    @media (max-width: 959px) {
-      .cycle-hero__layout { text-align: center; }
-      .cycle-hero__subtitle { margin-left: auto; margin-right: auto; }
-      .cycle-hero__actions { justify-content: center; }
-      .cycle-hero__visual { order: -1; max-width: 420px; margin: 0 auto; }
-    }
-
-    /* ========== CYCLE INTRO ========== */
-    .cycle-intro {
-      padding: 120px 0 40px;
-      text-align: center;
-    }
-    .cycle-intro__title {
-      font-family: var(--font-heading);
-      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-      font-weight: 700; line-height: 1.1;
-      max-width: 700px; margin: 0 auto;
-      position: relative;
-    }
-    /* Scribble circle around "cycles" */
-    .cycle-intro__title::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 120px;
-      height: 80px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='60' cy='40' rx='50' ry='30' stroke='%232dd4bf' stroke-width='2' fill='none' stroke-dasharray='300' stroke-dashoffset='300'/%3E%3C/svg%3E") no-repeat center;
-      animation: draw-circle 2s ease-out 0.5s forwards;
-      pointer-events: none;
-      z-index: 2;
-    }
-    @keyframes draw-circle {
-      to { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='60' cy='40' rx='50' ry='30' stroke='%232dd4bf' stroke-width='2' fill='none' stroke-dasharray='300' stroke-dashoffset='0'/%3E%3C/svg%3E"); }
-    }
-    .cycle-intro__desc {
-      margin-top: 24px;
-      font-size: 1.0625rem; color: var(--color-text-muted);
-      line-height: 1.75; font-weight: 300;
-      max-width: 640px; margin-left: auto; margin-right: auto;
-    }
-
-    /* ========== PILLAR HORIZONTAL SCROLL ========== */
-    .pillars-experience {
-      position: relative;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .pillars-track {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      display: flex;
-      width: 500vw; /* 5 pillars × 100vw each */
-      transform: translateX(0);
-      transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-    .pillar-slide {
-      width: 100vw;
-      height: 100vh;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    /* Pillar backgrounds with accent colors */
-    .pillar-slide:nth-child(1) { background: linear-gradient(135deg, var(--color-bg) 0%, rgba(249, 115, 22, 0.03) 100%); }
-    .pillar-slide:nth-child(2) { background: linear-gradient(135deg, var(--color-bg) 0%, rgba(59, 130, 246, 0.03) 100%); }
-    .pillar-slide:nth-child(3) { background: linear-gradient(135deg, var(--color-bg) 0%, rgba(245, 213, 160, 0.03) 100%); }
-    .pillar-slide:nth-child(4) { background: linear-gradient(135deg, var(--color-bg) 0%, rgba(239, 68, 68, 0.03) 100%); }
-    .pillar-slide:nth-child(5) { background: linear-gradient(135deg, var(--color-bg) 0%, rgba(109, 163, 126, 0.03) 100%); }
-    
-    .pillar-slide__content {
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 40px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 100px;
-      align-items: center;
-    }
-    .pillar-slide:nth-child(even) .pillar-slide__content { 
-      direction: rtl; 
-    }
-    .pillar-slide:nth-child(even) .pillar-slide__content > * { 
-      direction: ltr; 
-    }
-    
-    .pillar-content {
-      max-width: 460px;
-    }
-    .pillar-phase-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      position: relative;
-    }
-    .pillar-phase-tag::before {
-      content: '';
-      position: absolute;
-      top: -15px;
-      right: -25px;
-      width: 40px;
-      height: 25px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 40 25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5,20 Q15,5 35,15' stroke='%232dd4bf' stroke-width='2.5' fill='none' stroke-dasharray='50' stroke-dashoffset='50'/%3E%3C/svg%3E") no-repeat center;
-      animation: draw-accent 1.5s ease-out 0.5s forwards;
-    }
-    @keyframes draw-accent {
-      to { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 40 25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5,20 Q15,5 35,15' stroke='%232dd4bf' stroke-width='2.5' fill='none' stroke-dasharray='50' stroke-dashoffset='0'/%3E%3C/svg%3E"); }
-    }
-    .pillar-phase-icon { font-size: 1.5rem; }
-    .pillar-phase-num {
-      width: 32px; height: 32px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700;
-      border: 1px solid rgba(20,184,166,0.2); color: var(--color-accent-bright);
-      background: rgba(20,184,166,0.06);
-    }
-    .pillar-phase-label {
-      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--color-accent-bright);
-    }
-    .pillar-phase-time {
-      font-size: 0.75rem; color: var(--color-text-subtle);
-      font-weight: 400; letter-spacing: 0;
-      text-transform: none;
-      margin-left: 8px;
-      padding-left: 12px;
-      border-left: 1px solid var(--color-border);
-    }
-    .pillar-title {
-      font-family: var(--font-heading);
-      font-size: clamp(2.5rem, 4.5vw, 3.75rem);
-      font-weight: 700;
-      line-height: 1.05;
-      margin-bottom: 24px;
-      position: relative;
-    }
-    .pillar-subtitle {
-      font-size: 1.125rem;
-      color: var(--color-text-muted);
-      line-height: 1.65;
-      font-weight: 300;
-      margin-bottom: 20px;
-    }
-    .pillar-description {
-      font-size: 1.0625rem;
-      color: var(--color-text-muted);
-      line-height: 1.75;
-      font-weight: 300;
-    }
-    .pillar-features {
-      list-style: none;
-      margin-top: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .pillar-feature {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.9375rem;
-      color: var(--color-text-muted);
-      transition: color 0.3s;
-    }
-    .pillar-feature:hover { color: var(--color-text); }
-    .pillar-feature-check {
-      width: 20px; height: 20px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 50%; background: rgba(20,184,166,0.1);
-    }
-    .pillar-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 32px;
-      font-size: 0.9375rem;
-      font-weight: 600;
-      color: var(--color-accent-bright);
-      transition: all 0.4s var(--ease-out);
-      position: relative;
-    }
-    .pillar-cta::after {
-      content: '';
-      position: absolute;
-      bottom: -2px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--color-accent-bright);
-      transition: width 0.4s var(--ease-out);
-    }
-    .pillar-cta:hover {
-      gap: 14px;
-      color: var(--color-text);
-    }
-    .pillar-cta:hover::after { width: calc(100% - 30px); }
-    
-    .pillar-visual {
-      position: relative;
-      border-radius: 20px;
-      overflow: hidden;
-      aspect-ratio: 4/5;
-      background: var(--color-bg-secondary);
-      transition: transform 0.8s var(--ease-out);
-    }
-    .pillar-visual:hover { transform: scale(1.02); }
-    .pillar-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(145deg, var(--color-bg-secondary) 0%, rgba(20,184,166,0.04) 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    .pillar-placeholder::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 40%, rgba(20,184,166,0.06) 100%);
-      animation: shimmer 3s ease-in-out infinite alternate;
-    }
-    @keyframes shimmer { 0% { opacity: 0.3; } 100% { opacity: 0.8; } }
-    .pillar-placeholder-icon {
-      font-size: 6rem;
-      opacity: 0.3;
-      position: relative;
-      z-index: 1;
-    }
-    .pillar-glow {
-      position: absolute;
-      bottom: -30%;
-      left: 5%;
-      width: 90%;
-      height: 70%;
-      background: radial-gradient(ellipse, rgba(20,184,166,0.08) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: -1;
-      filter: blur(20px);
-    }
-    
-    /* Progress dots */
-    .pillars-progress {
-      position: fixed;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 12px;
-      z-index: 100;
-    }
-    .progress-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 2px solid var(--color-text-subtle);
-      background: transparent;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    .progress-dot.active {
-      background: var(--color-accent-bright);
-      border-color: var(--color-accent-bright);
-      box-shadow: 0 0 20px rgba(45, 212, 191, 0.4);
-    }
-    
-    /* Mobile fallback */
-    @media (max-width: 767px) {
-      .pillars-experience {
-        height: auto;
-        overflow: visible;
-      }
-      .pillars-track {
-        position: static;
-        height: auto;
-        display: block;
-        width: 100%;
-        transform: none !important;
-      }
-      .pillar-slide {
-        width: 100%;
-        height: auto;
-        min-height: 100vh;
-        scroll-snap-align: start;
-        padding: 60px 0;
-      }
-      .pillar-slide__content {
-        grid-template-columns: 1fr;
-        gap: 40px;
-        text-align: center;
-        padding: 0 24px;
-      }
-      .pillars-progress {
-        display: none;
-      }
-    }
-    
-    /* Reduced motion fallback */
-    @media (prefers-reduced-motion: reduce) {
-      .pillars-track {
-        transition: none;
-      }
-      .pillar-visual {
-        transition: none;
-      }
-      .pillar-visual:hover {
-        transform: none;
-      }
-    }
-
-    /* ========== BUNDLE BUILDER ========== */
-    .bundle-builder { 
-      padding: 60px 0 40px; 
-      background: var(--color-bg);
-    }
-    .bundle-builder__header { text-align: center; margin-bottom: 56px; }
-    .bundle-builder__eyebrow {
-      font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--color-accent-bright);
-    }
-    .bundle-builder__title {
-      font-family: var(--font-heading);
-      font-size: clamp(2.25rem, 4vw, 3.5rem); font-weight: 700;
-      margin-top: 16px; line-height: 1.08;
-      position: relative;
-    }
-    /* Scribble underline on "Complete" */
-    .bundle-builder__title::after {
-      content: '';
-      position: absolute;
-      bottom: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 20px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,15 Q50,8 100,12 T190,10' stroke='%232dd4bf' stroke-width='2.5' fill='none' stroke-dasharray='300' stroke-dashoffset='300'/%3E%3C/svg%3E") no-repeat center;
-      animation: draw-builder-underline 2s ease-out 0.5s forwards;
-    }
-    @keyframes draw-builder-underline {
-      to { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,15 Q50,8 100,12 T190,10' stroke='%232dd4bf' stroke-width='2.5' fill='none' stroke-dasharray='300' stroke-dashoffset='0'/%3E%3C/svg%3E"); }
-    }
-    .bundle-builder__desc {
-      margin-top: 16px; font-size: 1rem; color: var(--color-text-muted);
-      max-width: 520px; margin-left: auto; margin-right: auto;
-      line-height: 1.65; font-weight: 300;
-    }
-    .bundle-builder__grid {
-      display: grid; grid-template-columns: 1fr; gap: 40px;
-    }
-    @media (min-width: 900px) {
-      .bundle-builder__grid { grid-template-columns: 1fr 380px; gap: 48px; }
-    }
-
-    /* Steps */
-    .bundle-steps { display: flex; flex-direction: column; gap: 16px; }
-    .bundle-step {
-      background: var(--color-glass);
-      border: 1px solid var(--color-border);
-      border-radius: 16px; padding: 24px 28px;
-      transition: all 0.4s var(--ease-out);
-      position: relative;
-    }
-    .bundle-step:hover { border-color: var(--color-glass-border); background: rgba(245, 242, 237, 0.05); }
-    .bundle-step__header {
-      display: flex; align-items: center; gap: 16px;
-    }
-    .bundle-step__icon-wrap {
-      position: relative; width: 44px; height: 44px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(20,184,166,0.06); border-radius: 12px;
-      border: 1px solid rgba(20,184,166,0.1);
-    }
-    .bundle-step__icon { font-size: 1.25rem; }
-    .bundle-step__check {
-      position: absolute; top: -6px; right: -6px;
-      width: 18px; height: 18px; border-radius: 50%;
-      background: var(--color-accent); color: white;
-      font-size: 0.625rem; display: flex; align-items: center; justify-content: center;
-      font-weight: 700; opacity: 0; transform: scale(0);
-      transition: all 0.4s var(--ease-out);
-    }
-    .bundle-step__check.visible { opacity: 1; transform: scale(1); }
-    .bundle-step__phase {
-      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--color-text-subtle);
-    }
-    .bundle-step__name {
-      font-size: 1rem; font-weight: 600; color: var(--color-text); margin-top: 2px;
-      position: relative;
-    }
-    /* Add scribble circles around product names */
-    .bundle-step:nth-child(3) .bundle-step__name::after {
-      content: '';
-      position: absolute;
-      top: -8px;
-      left: -8px;
-      right: -8px;
-      bottom: -8px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='50' cy='20' rx='45' ry='15' stroke='%23F5D5A0' stroke-width='2' fill='none' stroke-dasharray='200' stroke-dashoffset='200'/%3E%3C/svg%3E") no-repeat center;
-      animation: draw-product-circle 1.5s ease-out 1s forwards;
-      pointer-events: none;
-    }
-    @keyframes draw-product-circle {
-      to { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cellipse cx='50' cy='20' rx='45' ry='15' stroke='%23F5D5A0' stroke-width='2' fill='none' stroke-dasharray='200' stroke-dashoffset='0'/%3E%3C/svg%3E"); }
-    }
-    .bundle-step__price {
-      margin-left: auto; font-family: var(--font-heading);
-      font-size: 1.125rem; font-weight: 600; color: var(--color-text-muted);
-      position: relative;
-    }
-    /* Scribble star near "clinically dosed" elements */
-    .bundle-step:nth-child(4) .bundle-step__price::after {
-      content: 'clinically dosed';
-      position: absolute;
-      top: -25px;
-      right: -10px;
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: var(--color-success);
-      background: rgba(16, 185, 129, 0.08);
-      padding: 4px 8px;
-      border-radius: 12px;
-      border: 1px solid rgba(16, 185, 129, 0.12);
-      white-space: nowrap;
-      pointer-events: none;
-    }
-    .bundle-step:nth-child(4)::before {
-      content: '';
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      width: 20px;
-      height: 20px;
-      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,1 L12,7 L18,10 L12,13 L10,19 L8,13 L2,10 L8,7 Z' stroke='%232dd4bf' stroke-width='1.5' fill='none' stroke-dasharray='100' stroke-dashoffset='100'/%3E%3C/svg%3E") no-repeat center;
-      animation: draw-step-star 1.5s ease-out 1.5s forwards;
-      pointer-events: none;
-    }
-    @keyframes draw-step-star {
-      to { background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,1 L12,7 L18,10 L12,13 L10,19 L8,13 L2,10 L8,7 Z' stroke='%232dd4bf' stroke-width='1.5' fill='none' stroke-dasharray='100' stroke-dashoffset='0'/%3E%3C/svg%3E"); }
-    }
-
-    /* Flavor pills */
-    .bundle-step__flavors {
-      display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap;
-    }
-    .flavor-pill {
-      padding: 8px 18px; border-radius: 100px;
-      background: rgba(245, 240, 232, 0.04); border: 1px solid var(--color-border);
-      color: var(--color-text-muted); font-size: 0.8125rem; font-weight: 500;
-      font-family: var(--font-body); cursor: pointer;
-      transition: all 0.3s var(--ease-out);
-    }
-    .flavor-pill:hover {
-      border-color: rgba(20,184,166,0.2); color: var(--color-text);
-      background: rgba(20,184,166,0.04);
-    }
-    .flavor-pill.selected {
-      border-color: var(--color-accent); color: var(--color-accent-bright);
-      background: rgba(20,184,166,0.08);
-      box-shadow: 0 0 16px rgba(20,184,166,0.1);
-    }
-
-    /* Single-option items */
-    .bundle-step__single {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-top: 12px; padding-top: 12px;
-      border-top: 1px solid rgba(245, 240, 232, 0.04);
-    }
-    .bundle-step__single-tag {
-      font-size: 0.8125rem; color: var(--color-text-subtle); font-weight: 400;
-    }
-    .bundle-step__single-included {
-      font-size: 0.75rem; font-weight: 600; color: var(--color-success);
-      background: rgba(16,185,129,0.08); padding: 4px 12px; border-radius: 100px;
-      border: 1px solid rgba(16,185,129,0.12);
-    }
-
-    /* Summary Sidebar */
-    .bundle-summary__card {
-      position: sticky; top: 100px;
-      background: linear-gradient(145deg, rgba(20,184,166,0.05) 0%, rgba(20,184,166,0.01) 100%);
-      border: 1px solid rgba(20,184,166,0.1);
-      border-radius: 20px; padding: 36px 32px;
-      transition: border-color 0.5s;
-    }
-    .bundle-summary__card:hover { border-color: rgba(20,184,166,0.18); }
-    .bundle-summary__title {
-      font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700;
-      margin-bottom: 24px;
-    }
-    .summary-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid rgba(245, 240, 232, 0.04);
-      font-size: 0.875rem;
-    }
-    .summary-item:last-child { border-bottom: none; }
-    .summary-flavor {
-      color: var(--color-text-muted); font-weight: 400; font-size: 0.8125rem;
-      transition: color 0.3s;
-    }
-    .bundle-summary__divider {
-      height: 1px; background: var(--color-border); margin: 16px 0;
-    }
-    .summary-price-row {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 0.875rem; color: var(--color-text-muted); padding: 6px 0;
-    }
-    .summary-retail { text-decoration: line-through; }
-    .summary-discount { color: var(--color-success); }
-    .summary-total {
-      font-size: 1.125rem; font-weight: 700; color: var(--color-text);
-      padding: 10px 0 0;
-    }
-    .summary-final {
-      font-family: var(--font-heading); font-size: 1.5rem;
-    }
-    .bundle-summary__cta {
-      width: 100%; margin-top: 24px; padding: 18px;
-    }
-    .bundle-summary__trust {
-      margin-top: 20px; display: flex; flex-direction: column; gap: 8px;
-      font-size: 0.75rem; color: var(--color-text-subtle);
-    }
-    .bundle-summary__trust span { display: flex; align-items: center; gap: 6px; }
-
-    /* Button pulse on complete */
-    @keyframes btn-pulse {
-      0% { box-shadow: 0 0 30px rgba(20,184,166,0.15), 0 4px 20px rgba(0,0,0,0.3); }
-      50% { box-shadow: 0 0 50px rgba(20,184,166,0.3), 0 4px 30px rgba(0,0,0,0.4); }
-      100% { box-shadow: 0 0 30px rgba(20,184,166,0.15), 0 4px 20px rgba(0,0,0,0.3); }
-    }
-    .bundle-summary__cta.all-selected { animation: btn-pulse 2s ease-in-out infinite; }
-
-    /* ========== BRAND STRIP ========== */
-    .brand-strip {
-      padding: 120px 0;
-      text-align: center;
-      position: relative;
-      background: var(--color-bg);
-    }
-    .brand-strip::before {
-      content: ''; position: absolute; top: 0; left: 10%; right: 10%;
-      height: 1px; background: linear-gradient(90deg, transparent, var(--color-border), transparent);
-    }
-    .brand-strip::after {
-      content: ''; position: absolute; bottom: 0; left: 10%; right: 10%;
-      height: 1px; background: linear-gradient(90deg, transparent, var(--color-border), transparent);
-    }
-    .brand-strip__title {
-      font-family: var(--font-heading);
-      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-      font-weight: 700; line-height: 1.1;
-      max-width: 700px; margin: 0 auto;
-    }
-    .brand-strip__desc {
-      margin-top: 24px; font-size: 1.0625rem; color: var(--color-text-muted);
-      line-height: 1.75; font-weight: 300;
-      max-width: 600px; margin-left: auto; margin-right: auto;
-    }
-
-    /* ========== BOTTOM CTA ========== */
-    .bottom-cta {
-      padding: 100px 0 120px;
-      text-align: center;
-      background: var(--color-bg);
-    }
-    .bottom-cta__title {
-      font-family: var(--font-heading);
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      font-weight: 700; line-height: 1.05;
-    }
-    .bottom-cta__btn { margin-top: 36px; }
-
-    /* ========== FOOTER ========== */
-    .footer {
-      padding: 56px 0; border-top: 1px solid rgba(245, 240, 232, 0.04); text-align: center;
-      background: var(--color-bg);
-    }
-    .footer__text { font-size: 0.8125rem; color: var(--color-text-subtle); letter-spacing: 0.02em; }
-
-    /* ========== CURSOR GLOW ========== */
-    .cursor-glow {
-      position: fixed; width: 400px; height: 400px;
-      border-radius: 50%; pointer-events: none; z-index: 0;
-      background: radial-gradient(circle, rgba(20,184,166,0.03) 0%, transparent 70%);
-      transform: translate(-50%, -50%); transition: opacity 0.3s;
-      will-change: left, top;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="cursor-glow" id="cursorGlow"></div>
-
-  <!-- Announcement Bar -->
-  <div class="announcement-bar">
-    Free shipping on The Full Cycle Bundle &nbsp;·&nbsp; Save 20% when you complete your cycle
-  </div>
-
-  <!-- Header -->
-  <header class="header" id="header">
-    <div class="container">
-      <div class="header__inner">
-        <a href="/" class="header__logo">
-          <div class="header__logo-mark">E</div>
-          <span class="header__logo-text">ENIGMA</span>
-        </a>
-        <nav class="header__nav">
-          <a href="#pillars">The Cycle</a>
-          <a href="#bundle">The Bundle</a>
-          <a href="#">Our Story</a>
-        </nav>
-        <a href="#" class="header__cart">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-          Cart (0)
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- ========== HERO ========== -->
-  <section class="cycle-hero">
-    <div class="cycle-hero__bg">
-      <div class="cycle-hero__gradient-1"></div>
-      <div class="cycle-hero__gradient-2"></div>
-      <div class="cycle-hero__grain"></div>
-    </div>
-    <div class="container">
-      <div class="cycle-hero__layout">
-        <div class="cycle-hero__copy hero-scribbles">
-          <span class="cycle-hero__badge">The Enigma Cycle
-            <!-- Scribble accent around badge -->
-            <div class="scribble scribble--badge-accent" style="animation-delay: 0.8s;">
-              <svg viewBox="0 0 60 30" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5,20 Q20,5 35,18 Q50,8 55,15" stroke="#2dd4bf" stroke-width="2" fill="none"/>
-              </svg>
-            </div>
-          </span>
-          <h1 class="cycle-hero__title">
-            <span class="title-line">
-              <span>Your body runs in cycles.
-                <!-- Scribble circle around "cycles" -->
-                <div class="scribble scribble--circle" style="animation-delay: 1.2s;">
-                  <svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-                    <ellipse cx="50" cy="25" rx="40" ry="20" stroke="#2dd4bf" stroke-width="2.5" fill="none"/>
-                  </svg>
-                </div>
-              </span>
-            </span>
-            <span class="title-line">
-              <span>Your nutrition should too.
-                <!-- Enhanced underline scribble -->
-                <div class="scribble scribble--underline" style="animation-delay: 1.5s;">
-                  <svg viewBox="0 0 400 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M10,15 Q80,5 150,12 T300,8 Q350,12 390,10" stroke="#2dd4bf" stroke-width="3" fill="none"/>
-                  </svg>
-                </div>
-              </span>
-            </span>
-          </h1>
-          <p class="cycle-hero__subtitle">Five pillars. One system. Zero guesswork. (Finally.)
-            <!-- Scribble checkmark near "Finally" -->
-            <div class="scribble scribble--checkmark" style="animation-delay: 2s;">
-              <svg viewBox="0 0 25 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3,10 L9,16 L22,3" stroke="#2dd4bf" stroke-width="2.5" fill="none"/>
-              </svg>
-            </div>
-          </p>
-          <div class="cycle-hero__actions">
-            <a href="#pillars" class="btn btn-primary btn-lg" style="position: relative;">
-              See how it works →
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <!-- Enhanced arrow pointing to CTA -->
-              <div class="scribble scribble--arrow" style="top: -45px; right: -20px; animation-delay: 2.5s;">
-                <svg viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10,35 Q30,15 50,25 Q65,18 70,22 M65,17 L70,22 L65,27" stroke="#F97316" stroke-width="2.5" fill="none"/>
-                </svg>
-              </div>
-              <!-- Burst accent -->
-              <div class="scribble scribble--burst" style="animation-delay: 3s;">
-                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M20,5 L22,15 L32,20 L22,25 L20,35 L18,25 L8,20 L18,15 Z M15,8 L25,12 M25,28 L15,32 M12,15 L28,25" stroke="#2dd4bf" stroke-width="2" fill="none"/>
-                </svg>
-              </div>
-            </a>
-            <a href="#bundle" class="btn btn-ghost btn-lg" style="position: relative;">
-              Build Your Cycle →
-              <!-- Squiggle under secondary CTA -->
-              <div class="scribble scribble--squiggle" style="bottom: -8px; left: 10px; animation-delay: 2.8s;">
-                <svg viewBox="0 0 80 25" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5,15 Q25,8 45,15 Q65,22 75,15" stroke="#9C9590" stroke-width="2" fill="none"/>
-                </svg>
-              </div>
-            </a>
-          </div>
-        </div>
-
-        <div class="cycle-hero__visual">
-          <div class="cycle-wheel" id="cycleWheel">
-            <svg class="cycle-wheel__ring" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="250" cy="250" r="220" fill="none" stroke="rgba(245,240,232,0.015)" stroke-width="1"/>
-              <circle cx="250" cy="250" r="200" fill="none" stroke="rgba(245,240,232,0.04)" stroke-width="1"/>
-              <circle cx="250" cy="250" r="200" fill="none" stroke="url(#tealGrad)" stroke-width="1.5" class="cycle-wheel__progress"/>
-              <circle cx="250" cy="250" r="180" fill="none" stroke="rgba(245,240,232,0.02)" stroke-width="0.5"/>
-              <g class="cycle-wheel__connections">
-                <line x1="250" y1="50" x2="440" y2="138" stroke="rgba(20,184,166,0.06)" stroke-width="0.5"/>
-                <line x1="440" y1="138" x2="368" y2="362" stroke="rgba(20,184,166,0.06)" stroke-width="0.5"/>
-                <line x1="368" y1="362" x2="132" y2="362" stroke="rgba(20,184,166,0.06)" stroke-width="0.5"/>
-                <line x1="132" y1="362" x2="60" y2="138" stroke="rgba(20,184,166,0.06)" stroke-width="0.5"/>
-                <line x1="60" y1="138" x2="250" y2="50" stroke="rgba(20,184,166,0.06)" stroke-width="0.5"/>
-              </g>
-              <defs>
-                <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.6"/>
-                  <stop offset="50%" stop-color="#2dd4bf" stop-opacity="0.8"/>
-                  <stop offset="100%" stop-color="#14b8a6" stop-opacity="0.6"/>
-                </linearGradient>
-              </defs>
-            </svg>
-            <div class="cycle-orbit-dot"></div>
-            <button class="cycle-node" data-phase="0" style="--angle: 270deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">⚡</span><span class="cycle-node__label">Energy</span></button>
-            <button class="cycle-node" data-phase="1" style="--angle: 342deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">💧</span><span class="cycle-node__label">Hydration</span></button>
-            <button class="cycle-node" data-phase="2" style="--angle: 54deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">🥛</span><span class="cycle-node__label">Protein</span></button>
-            <button class="cycle-node" data-phase="3" style="--angle: 126deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">💪</span><span class="cycle-node__label">Creatine</span></button>
-            <button class="cycle-node" data-phase="4" style="--angle: 198deg;"><span class="cycle-node__glow"></span><span class="cycle-node__icon">🧘</span><span class="cycle-node__label">Ashwagandha</span></button>
-            <div class="cycle-wheel__center" id="cycleCenter">
-              <div class="cycle-center__default" id="centerDefault">
-                <div class="header__logo-mark" style="width: 40px; height: 40px; font-size: 1.5rem;">E</div>
-                <span class="cycle-center__text">The Cycle</span>
-              </div>
-              <div class="cycle-center__detail" id="cycleDetail">
-                <span class="cycle-detail__icon" id="detailIcon"></span>
-                <span class="cycle-detail__name" id="detailName"></span>
-                <span class="cycle-detail__desc" id="detailDesc"></span>
-              </div>
-            </div>
-            <div class="cycle-wheel__particles" id="cycleParticles"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== CYCLE INTRO ========== -->
-  <section class="cycle-intro intro-scribbles">
-    <div class="container">
-      <!-- Section divider scribble -->
-      <div class="scribble scribble--divider" style="top: -15px;">
-        <svg viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10,15 Q50,8 100,15 T190,12" stroke="#2dd4bf" stroke-width="2" fill="none"/>
-          <circle cx="100" cy="15" r="3" fill="#2dd4bf"/>
-        </svg>
-      </div>
-      
-      <h2 class="cycle-intro__title" data-reveal="up" style="position: relative;">
-        Your Body Runs in Cycles.<br>Your Nutrition Should Too.
-        <!-- Enhanced circle around "Cycles" -->
-        <div class="scribble scribble--circle" style="top: -5px; left: 45%; width: 120px; height: 60px; animation-delay: 0.5s;">
-          <svg viewBox="0 0 120 60" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="60" cy="30" rx="55" ry="25" stroke="#2dd4bf" stroke-width="2.5" fill="none"/>
-          </svg>
-        </div>
-        <!-- Star accent -->
-        <div class="scribble scribble--star" style="top: 10px; right: 20%; animation-delay: 1s;">
-          <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15,3 L17,12 L26,15 L17,18 L15,27 L13,18 L4,15 L13,12 Z" stroke="#F97316" stroke-width="2" fill="none"/>
-          </svg>
-        </div>
-      </h2>
-      
-      <p class="cycle-intro__desc" data-reveal="up" style="position: relative;">
-        Five products that actually connect. Energy feeds the workout. Hydration sustains it. Protein rebuilds after. Creatine strengthens over time. Ashwagandha resets you for tomorrow. Then you start again.
-        <!-- Highlight box around "We built a system" -->
-        <span style="position: relative; display: inline;">
-          <div class="scribble scribble--highlight-box" style="animation-delay: 1.2s;">
-            <svg viewBox="0 0 180 35" xmlns="http://www.w3.org/2000/svg">
-              <rect x="5" y="5" width="170" height="25" stroke="#2dd4bf" stroke-width="2" fill="none" rx="5"/>
-            </svg>
-          </div>
-        </span>
-        <!-- Arrow connector -->
-        <div class="scribble scribble--connector" style="bottom: -30px; right: 30%; animation-delay: 1.5s;">
-          <svg viewBox="0 0 100 50" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10,40 Q50,20 85,30 M80,25 L85,30 L80,35" stroke="#9C9590" stroke-width="2" fill="none"/>
-          </svg>
-        </div>
-      </p>
-    </div>
-  </section>
-
-  <!-- ========== PILLARS HORIZONTAL SCROLL EXPERIENCE ========== -->
-  <section class="pillars-experience" id="pillars">
-    <div class="pillars-track" id="pillarsTrack">
-      
-      <!-- Pillar 1: Energy -->
-      <div class="pillar-slide" data-pillar="0">
-        <div class="pillar-slide__content">
-          <div class="pillar-content">
-            <div class="pillar-phase-tag">
-              <span class="pillar-phase-icon">⚡</span>
-              <span class="pillar-phase-num">01</span>
-              <div>
-                <span class="pillar-phase-label">Energy</span>
-                <span class="pillar-phase-time">Pre-Training · 15–20 min before</span>
-              </div>
-            </div>
-            <h2 class="pillar-title" style="position: relative;">
-              That "let's go" feeling. Bottled.
-              <!-- Underline accent for pillar title -->
-              <div class="scribble scribble--underline" style="animation-delay: 0.3s;">
-                <svg viewBox="0 0 300 20" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M10,12 Q100,6 200,12 Q250,18 290,12" stroke="#F97316" stroke-width="2.5" fill="none"/>
-                </svg>
-              </div>
-            </h2>
-            <p class="pillar-description" style="position: relative;">
-              You know when you walk into the gym and everything just clicks? That's not luck. That's your pre workout doing its job. We put in citrulline, beta-alanine, and caffeine at doses that actually match the research.
-              <!-- Checkmark near key benefit -->
-              <div class="scribble scribble--checkmark" style="top: 0; left: -35px; animation-delay: 0.8s;">
-                <svg viewBox="0 0 25 20" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M3,10 L9,16 L22,3" stroke="#F97316" stroke-width="2" fill="none"/>
-                </svg>
-              </div>
-            </p>
-            <ul class="pillar-features">
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>200mg caffeine (the sweet spot)</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Every ingredient on the label</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>No mystery powder</li>
-            </ul>
-            <a href="#" class="pillar-cta">Shop Energy <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="pillar-visual">
-            <div class="pillar-placeholder"><span class="pillar-placeholder-icon">⚡</span></div>
-            <div class="pillar-glow"></div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Pillar 2: Hydration -->
-      <div class="pillar-slide" data-pillar="1">
-        <div class="pillar-slide__content">
-          <div class="pillar-content">
-            <div class="pillar-phase-tag">
-              <span class="pillar-phase-icon">💧</span>
-              <span class="pillar-phase-num">02</span>
-              <div>
-                <span class="pillar-phase-label">Hydration</span>
-                <span class="pillar-phase-time">During Training</span>
-              </div>
-            </div>
-            <h2 class="pillar-title" style="position: relative;">
-              Water isn't enough.
-              <!-- Circle accent around "isn't enough" -->
-              <div class="scribble scribble--circle" style="top: -8px; right: 0; width: 150px; height: 50px; animation-delay: 0.4s;">
-                <svg viewBox="0 0 150 50" xmlns="http://www.w3.org/2000/svg">
-                  <ellipse cx="75" cy="25" rx="70" ry="20" stroke="#3B82F6" stroke-width="2.5" fill="none"/>
-                </svg>
-              </div>
-            </h2>
-            <p class="pillar-description" style="position: relative;">
-              About halfway through any real effort, your body burns through electrolytes way faster than water can replace. That's when the cramps show up. Sodium, potassium, magnesium. Zero sugar. And it actually tastes good.
-              <!-- Burst accent near key differentiator -->
-              <div class="scribble scribble--burst" style="top: 20px; right: -25px; animation-delay: 0.9s;">
-                <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M20,8 L22,18 L32,20 L22,22 L20,32 L18,22 L8,20 L18,18 Z" stroke="#3B82F6" stroke-width="2" fill="none"/>
-                </svg>
-              </div>
-            </p>
-            <ul class="pillar-features">
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Full electrolyte profile</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Zero sugar</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Tastes good (for real)</li>
-            </ul>
-            <a href="#" class="pillar-cta">Shop Hydration <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="pillar-visual">
-            <div class="pillar-placeholder"><span class="pillar-placeholder-icon">💧</span></div>
-            <div class="pillar-glow"></div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Pillar 3: Protein -->
-      <div class="pillar-slide" data-pillar="2">
-        <div class="pillar-slide__content">
-          <div class="pillar-content">
-            <div class="pillar-phase-tag">
-              <span class="pillar-phase-icon">🥛</span>
-              <span class="pillar-phase-num">03</span>
-              <div>
-                <span class="pillar-phase-label">Protein</span>
-                <span class="pillar-phase-time">Post-Training · Within 30 min</span>
-              </div>
-            </div>
-            <h2 class="pillar-title">Your muscles did the work. Give them something worth it.</h2>
-            <p class="pillar-description">Your body doesn't grow during the workout. It grows after. So what you eat afterwards matters. A lot. Clean whey isolate. 25g protein. Short ingredient list. No chalk taste.</p>
-            <ul class="pillar-features">
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>25g protein</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Whey isolate</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>No weird aftertaste</li>
-            </ul>
-            <a href="#" class="pillar-cta">Shop Protein <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="pillar-visual">
-            <div class="pillar-placeholder"><span class="pillar-placeholder-icon">🥛</span></div>
-            <div class="pillar-glow"></div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Pillar 4: Creatine -->
-      <div class="pillar-slide" data-pillar="3">
-        <div class="pillar-slide__content">
-          <div class="pillar-content">
-            <div class="pillar-phase-tag">
-              <span class="pillar-phase-icon">💪</span>
-              <span class="pillar-phase-num">04</span>
-              <div>
-                <span class="pillar-phase-label">Creatine</span>
-                <span class="pillar-phase-time">Daily</span>
-              </div>
-            </div>
-            <h2 class="pillar-title">The most researched supplement ever. And it lives up to it.</h2>
-            <p class="pillar-description">Creatine has more studies behind it than basically anything else you can buy. More strength, better recovery, real results over weeks. Pure creatine monohydrate. 5g per scoop. No loading phase, no proprietary formula.</p>
-            <ul class="pillar-features">
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>5g creatine monohydrate</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Micronized</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Unflavored</li>
-            </ul>
-            <a href="#" class="pillar-cta">Shop Creatine <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="pillar-visual">
-            <div class="pillar-placeholder"><span class="pillar-placeholder-icon">💪</span></div>
-            <div class="pillar-glow"></div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Pillar 5: Ashwagandha -->
-      <div class="pillar-slide" data-pillar="4">
-        <div class="pillar-slide__content">
-          <div class="pillar-content">
-            <div class="pillar-phase-tag">
-              <span class="pillar-phase-icon">🧘</span>
-              <span class="pillar-phase-num">05</span>
-              <div>
-                <span class="pillar-phase-label">Ashwagandha</span>
-                <span class="pillar-phase-time">Evening · Daily</span>
-              </div>
-            </div>
-            <h2 class="pillar-title">Rest isn't lazy. It's where the magic happens.</h2>
-            <p class="pillar-description">Cortisol messes with everything. Your sleep, your recovery, your mood. KSM-66 is the most studied ashwagandha extract available. It helps bring cortisol down, improves sleep, and gets your body ready to start the cycle again.</p>
-            <ul class="pillar-features">
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>KSM-66® Ashwagandha</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Cortisol management</li>
-              <li class="pillar-feature"><span class="pillar-feature-check"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M13.5 4.5L6 12L2.5 8.5" stroke="#14b8a6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Better sleep, better growth</li>
-            </ul>
-            <a href="#" class="pillar-cta">Shop Ashwagandha <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-          </div>
-          <div class="pillar-visual">
-            <div class="pillar-placeholder"><span class="pillar-placeholder-icon">🧘</span></div>
-            <div class="pillar-glow"></div>
-          </div>
-        </div>
-      </div>
-      
-    </div>
-    
-    <!-- Progress dots -->
-    <div class="pillars-progress" id="pillarsProgress">
-      <div class="progress-dot active" data-pillar="0"></div>
-      <div class="progress-dot" data-pillar="1"></div>
-      <div class="progress-dot" data-pillar="2"></div>
-      <div class="progress-dot" data-pillar="3"></div>
-      <div class="progress-dot" data-pillar="4"></div>
-    </div>
-  </section>
-
-  <!-- ========== BUNDLE BUILDER ========== -->
-  <section class="bundle-builder bundle-scribbles" id="bundle">
-    <!-- Section transition scribble -->
-    <div class="scribble scribble--divider" style="top: -20px;">
-      <svg viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10,20 Q50,5 100,15 T190,10" stroke="#2dd4bf" stroke-width="2.5" fill="none"/>
-        <circle cx="50" cy="12" r="2" fill="#2dd4bf"/>
-        <circle cx="150" cy="12" r="2" fill="#2dd4bf"/>
-      </svg>
-    </div>
-    
-    <div class="container">
-      <div class="bundle-builder__header" data-reveal="up" style="position: relative;">
-        <span class="bundle-builder__eyebrow" style="position: relative;">
-          Build Your Cycle
-          <!-- Badge accent scribble -->
-          <div class="scribble scribble--squiggle" style="top: -15px; left: 50%; transform: translateX(-50%); animation-delay: 0.3s;">
-            <svg viewBox="0 0 80 25" xmlns="http://www.w3.org/2000/svg">
-              <path d="M5,18 Q25,8 45,18 Q65,25 75,18" stroke="#2dd4bf" stroke-width="2" fill="none"/>
-            </svg>
-          </div>
-        </span>
-        <h2 class="bundle-builder__title" style="position: relative;">
-          The whole system.
-          <!-- Enhanced title underline with multiple elements -->
-          <div class="scribble scribble--underline" style="animation-delay: 0.6s;">
-            <svg viewBox="0 0 350 25" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15,18 Q80,8 150,15 T320,12" stroke="#2dd4bf" stroke-width="3" fill="none"/>
-              <path d="M20,22 Q85,12 155,19 T325,16" stroke="#2dd4bf" stroke-width="1.5" fill="none" opacity="0.6"/>
-            </svg>
-          </div>
-        </h2>
-        <p class="bundle-builder__desc" style="position: relative;">
-          Not five random things in a cart. Five products that connect into one cycle. Pick your flavors, grab the bundle discount.
-          <!-- Arrow pointing to steps -->
-          <div class="scribble scribble--arrow" style="bottom: -40px; left: 30%; animation-delay: 1s;">
-            <svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
-              <path d="M10,30 Q30,10 50,18 M45,13 L50,18 L45,23" stroke="#9C9590" stroke-width="2" fill="none"/>
-            </svg>
-          </div>
-        </p>
-      </div>
-
-      <div class="bundle-builder__grid" data-reveal="up">
-        <!-- Phase Steps -->
-        <div class="bundle-steps">
-          <!-- Step 1: Energy — $29 -->
-          <div class="bundle-step" data-step="0" style="position: relative;">
-            <!-- Accent scribble for first product -->
-            <div class="scribble scribble--squiggle" style="top: -10px; right: 20px; animation-delay: 0.5s;">
-              <svg viewBox="0 0 60 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5,15 Q20,8 35,15 Q50,22 55,15" stroke="#F97316" stroke-width="2" fill="none"/>
-              </svg>
-            </div>
-            <div class="bundle-step__header">
-              <div class="bundle-step__icon-wrap">
-                <span class="bundle-step__icon">⚡</span>
-                <span class="bundle-step__check" id="check0">✓</span>
-              </div>
-              <div>
-                <div class="bundle-step__phase">Phase 1</div>
-                <div class="bundle-step__name" style="position: relative;">
-                  Energy Powder
-                  <!-- Circle accent around product name -->
-                  <div class="scribble scribble--highlight-box" style="animation-delay: 1s;">
-                    <svg viewBox="0 0 140 35" xmlns="http://www.w3.org/2000/svg">
-                      <ellipse cx="70" cy="17" rx="65" ry="12" stroke="#F97316" stroke-width="1.5" fill="none"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div class="bundle-step__price" style="position: relative;">
-                $29
-                <!-- Price circle accent -->
-                <div class="scribble scribble--price-circle" style="animation-delay: 1.3s;">
-                  <svg viewBox="0 0 40 30" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="20" cy="15" r="15" stroke="#F97316" stroke-width="1.5" fill="none"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div class="bundle-step__flavors">
-              <button class="flavor-pill selected" data-step="0" data-flavor="Fruit Punch">Fruit Punch</button>
-              <button class="flavor-pill" data-step="0" data-flavor="Guava Berry">Guava Berry</button>
-              <button class="flavor-pill" data-step="0" data-flavor="Lychee Splash">Lychee Splash</button>
-              <button class="flavor-pill" data-step="0" data-flavor="Melon Creamsicle">Melon Creamsicle</button>
-              <button class="flavor-pill" data-step="0" data-flavor="Strawberry Shortcake">Strawberry Shortcake</button>
-              <button class="flavor-pill" data-step="0" data-flavor="Yuzu">Yuzu</button>
-              <button class="flavor-pill" data-step="0" data-flavor="Cotton Candy">Cotton Candy</button>
-            </div>
-          </div>
-
-          <!-- Step 2: Hydration — $27 -->
-          <div class="bundle-step" data-step="1">
-            <div class="bundle-step__header">
-              <div class="bundle-step__icon-wrap">
-                <span class="bundle-step__icon">💧</span>
-                <span class="bundle-step__check" id="check1">✓</span>
-              </div>
-              <div>
-                <div class="bundle-step__phase">Phase 2</div>
-                <div class="bundle-step__name">Hydration Powder</div>
-              </div>
-              <div class="bundle-step__price">$27</div>
-            </div>
-            <div class="bundle-step__flavors">
-              <button class="flavor-pill selected" data-step="1" data-flavor="Lemonade">Lemonade</button>
-              <button class="flavor-pill" data-step="1" data-flavor="Lychee">Lychee</button>
-              <button class="flavor-pill" data-step="1" data-flavor="Matcha Green Tea">Matcha Green Tea</button>
-              <button class="flavor-pill" data-step="1" data-flavor="Passion Fruit">Passion Fruit</button>
-              <button class="flavor-pill" data-step="1" data-flavor="Peach Mango">Peach Mango</button>
-            </div>
-          </div>
-
-          <!-- Step 3: Protein — $44 -->
-          <div class="bundle-step" data-step="2" style="position: relative;">
-            <!-- Star burst for premium product -->
-            <div class="scribble scribble--burst" style="top: -15px; right: -10px; animation-delay: 0.7s;">
-              <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20,5 L22,15 L32,20 L22,25 L20,35 L18,25 L8,20 L18,15 Z M15,8 L25,12 M25,28 L15,32" stroke="#F5D5A0" stroke-width="2" fill="none"/>
-              </svg>
-            </div>
-            <div class="bundle-step__header">
-              <div class="bundle-step__icon-wrap">
-                <span class="bundle-step__icon">🥛</span>
-                <span class="bundle-step__check" id="check2">✓</span>
-              </div>
-              <div>
-                <div class="bundle-step__phase">Phase 3</div>
-                <div class="bundle-step__name" style="position: relative;">
-                  Advanced 100% Whey Protein Isolate
-                  <!-- Enhanced highlight for premium naming -->
-                  <div class="scribble scribble--highlight-box" style="animation-delay: 1.2s;">
-                    <svg viewBox="0 0 320 35" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="5" y="5" width="310" height="25" stroke="#F5D5A0" stroke-width="2" fill="none" rx="8" stroke-dasharray="5,3"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-              <div class="bundle-step__price">$44</div>
-            </div>
-            <div class="bundle-step__flavors">
-              <button class="flavor-pill selected" data-step="2" data-flavor="Chocolate">Chocolate</button>
-              <button class="flavor-pill" data-step="2" data-flavor="Vanilla">Vanilla</button>
-            </div>
-          </div>
-
-          <!-- Step 4: Creatine — $26 -->
-          <div class="bundle-step" data-step="3">
-            <div class="bundle-step__header">
-              <div class="bundle-step__icon-wrap">
-                <span class="bundle-step__icon">💪</span>
-                <span class="bundle-step__check visible" id="check3">✓</span>
-              </div>
-              <div>
-                <div class="bundle-step__phase">Phase 4</div>
-                <div class="bundle-step__name">Creatine Monohydrate</div>
-              </div>
-              <div class="bundle-step__price">$26</div>
-            </div>
-            <div class="bundle-step__single">
-              <span class="bundle-step__single-tag">Unflavored · Pure Monohydrate</span>
-              <span class="bundle-step__single-included">Included</span>
-            </div>
-          </div>
-
-          <!-- Step 5: Ashwagandha — $19 -->
-          <div class="bundle-step" data-step="4">
-            <div class="bundle-step__header">
-              <div class="bundle-step__icon-wrap">
-                <span class="bundle-step__icon">🧘</span>
-                <span class="bundle-step__check visible" id="check4">✓</span>
-              </div>
-              <div>
-                <div class="bundle-step__phase">Phase 5</div>
-                <div class="bundle-step__name">Ashwagandha</div>
-              </div>
-              <div class="bundle-step__price">$19</div>
-            </div>
-            <div class="bundle-step__single">
-              <span class="bundle-step__single-tag">Natural Extract</span>
-              <span class="bundle-step__single-included">Included</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Summary Sidebar -->
-        <div class="bundle-summary" data-reveal="up">
-          <div class="bundle-summary__card">
-            <h3 class="bundle-summary__title">The Full Cycle</h3>
-            <div class="bundle-summary__items" id="summaryItems">
-              <div class="summary-item"><span>⚡ Energy</span><span class="summary-flavor" id="sf0">Fruit Punch</span></div>
-              <div class="summary-item"><span>💧 Hydration</span><span class="summary-flavor" id="sf1">Lemonade</span></div>
-              <div class="summary-item"><span>🥛 Protein</span><span class="summary-flavor" id="sf2">Chocolate</span></div>
-              <div class="summary-item"><span>💪 Creatine</span><span class="summary-flavor">Unflavored</span></div>
-              <div class="summary-item"><span>🧘 Ashwagandha</span><span class="summary-flavor">Natural Extract</span></div>
-            </div>
-            <div class="bundle-summary__divider"></div>
-            <div class="bundle-summary__pricing">
-              <div class="summary-price-row">
-                <span>Retail total</span>
-                <span class="summary-retail">$145.00</span>
-              </div>
-              <div class="summary-price-row summary-discount">
-                <span>Cycle discount (20%)</span>
-                <span>−$29.00</span>
-              </div>
-              <div class="bundle-summary__divider"></div>
-              <div class="summary-price-row summary-total">
-                <span>Your price</span>
-                <span class="summary-final">$116.00</span>
-              </div>
-            </div>
-            <button class="btn btn-primary btn-lg bundle-summary__cta" id="addToCartBtn">
-              Add Full Cycle to Cart
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="bundle-summary__trust">
-              <span>🚚 Free shipping</span>
-              <span>✅ 30-day guarantee</span>
-              <span>📋 Full transparency</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== BRAND STRIP ========== -->
-  <section class="brand-strip trust-scribbles">
-    <!-- Section divider with decorative elements -->
-    <div class="scribble scribble--divider" style="top: -25px;">
-      <svg viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10,20 Q50,8 100,15 T190,12" stroke="#2dd4bf" stroke-width="2.5" fill="none"/>
-        <circle cx="30" cy="15" r="2" fill="#2dd4bf"/>
-        <circle cx="100" cy="15" r="3" fill="#2dd4bf"/>
-        <circle cx="170" cy="13" r="2" fill="#2dd4bf"/>
-      </svg>
-    </div>
-    
-    <div class="container">
-      <h2 class="brand-strip__title" data-reveal="up" style="position: relative;">
-        What we don't put in matters just as much.
-        <!-- Emphasis underline -->
-        <div class="scribble scribble--underline" style="animation-delay: 0.5s;">
-          <svg viewBox="0 0 400 25" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15,18 Q100,8 200,15 T385,12" stroke="#2dd4bf" stroke-width="3.5" fill="none"/>
-          </svg>
-        </div>
-        <!-- Star accent for emphasis -->
-        <div class="scribble scribble--star" style="top: -10px; right: 10%; animation-delay: 0.8s;">
-          <svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15,3 L17,12 L26,15 L17,18 L15,27 L13,18 L4,15 L13,12 Z" stroke="#2dd4bf" stroke-width="2" fill="none"/>
-          </svg>
-        </div>
-      </h2>
-      <p class="brand-strip__desc" data-reveal="up" style="position: relative;">
-        Every Enigma product has a fully transparent label. Every ingredient, every dose — right there. We don't hide behind blends because we don't need to. When the formula is good, you don't need to hide what's in it.
-        <!-- Checkmarks for trust signals -->
-        <span style="position: absolute; top: 0; left: -40px;">
-          <div class="scribble scribble--checkmark" style="animation-delay: 1s;">
-            <svg viewBox="0 0 25 20" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3,10 L9,16 L22,3" stroke="#10b981" stroke-width="2.5" fill="none"/>
-            </svg>
-          </div>
-        </span>
-        <span style="position: absolute; top: 40px; right: 20%;">
-          <div class="scribble scribble--checkmark" style="animation-delay: 1.3s;">
-            <svg viewBox="0 0 25 20" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3,10 L9,16 L22,3" stroke="#10b981" stroke-width="2.5" fill="none"/>
-            </svg>
-          </div>
-        </span>
-        <!-- Highlight box around key phrase -->
-        <span style="position: relative; display: inline;">
-          <div class="scribble scribble--highlight-box" style="top: 35px; left: 30%; width: 200px; animation-delay: 1.6s;">
-            <svg viewBox="0 0 200 30" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="100" cy="15" rx="95" ry="10" stroke="#2dd4bf" stroke-width="2" fill="none"/>
-            </svg>
-          </div>
-        </span>
-      </p>
-    </div>
-  </section>
-
-  <!-- ========== BOTTOM CTA ========== -->
-  <section class="bottom-cta">
-    <div class="container">
-      <h2 class="bottom-cta__title" data-reveal="up" style="position: relative;">
-        Start Your Cycle.
-        <!-- Final emphasis underline -->
-        <div class="scribble scribble--underline" style="animation-delay: 0.3s;">
-          <svg viewBox="0 0 300 25" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20,18 Q80,8 150,15 T280,12" stroke="#2dd4bf" stroke-width="4" fill="none"/>
-            <path d="M25,22 Q85,12 155,19 T285,16" stroke="#2dd4bf" stroke-width="2" fill="none" opacity="0.5"/>
-          </svg>
-        </div>
-        <!-- Burst accents on both sides -->
-        <div class="scribble scribble--burst" style="top: -20px; left: -30px; animation-delay: 0.6s;">
-          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20,5 L22,15 L32,20 L22,25 L20,35 L18,25 L8,20 L18,15 Z" stroke="#F97316" stroke-width="2" fill="none"/>
-          </svg>
-        </div>
-        <div class="scribble scribble--burst" style="top: -20px; right: -30px; animation-delay: 0.9s;">
-          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20,5 L22,15 L32,20 L22,25 L20,35 L18,25 L8,20 L18,15 Z" stroke="#2dd4bf" stroke-width="2" fill="none"/>
-          </svg>
-        </div>
-      </h2>
-      <a href="#bundle" class="btn btn-primary btn-lg bottom-cta__btn" data-reveal="up" style="position: relative;">
-        Shop The Full Cycle Bundle
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <!-- Final call-to-action arrow -->
-        <div class="scribble scribble--arrow" style="top: -45px; right: -25px; animation-delay: 1.2s;">
-          <svg viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15,35 Q35,15 55,25 Q68,18 75,22 M70,17 L75,22 L70,27" stroke="#F97316" stroke-width="3" fill="none"/>
-            <circle cx="45" cy="22" r="2" fill="#F97316" opacity="0.7"/>
-          </svg>
-        </div>
-        <!-- Supporting squiggles -->
-        <div class="scribble scribble--squiggle" style="bottom: -15px; left: 20%; animation-delay: 1.5s;">
-          <svg viewBox="0 0 120 25" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5,18 Q30,8 60,18 Q90,25 115,18" stroke="#2dd4bf" stroke-width="2" fill="none"/>
-          </svg>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container">
-      <p class="footer__text">© 2026 Enigma. The Complete Performance System.</p>
-    </div>
-  </footer>
-
-  <script>
-    // ========== SCROLL REVEAL ==========
-    const revealObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) return;
-        const el = e.target;
-        const parent = el.closest('[data-stagger]');
-        if (parent) {
-          const siblings = [...parent.querySelectorAll('[data-reveal]')];
-          el.style.setProperty('--stagger-index', siblings.indexOf(el));
-        }
-        el.classList.add('revealed');
-        revealObs.unobserve(el);
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-    document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
-
-    // ========== PARALLAX ==========
-    const pEls = document.querySelectorAll('[data-parallax]');
-    let ticking = false;
-    function updateParallax() {
-      pEls.forEach(el => {
-        const speed = parseFloat(el.dataset.parallax);
-        const rect = el.getBoundingClientRect();
-        const offset = (rect.top + rect.height/2 - window.innerHeight/2) * speed;
-        el.style.transform = `translateY(${offset}px)`;
-      });
-      ticking = false;
-    }
-    window.addEventListener('scroll', () => { 
-      if (!ticking) { 
-        requestAnimationFrame(updateParallax); 
-        ticking = true; 
-      } 
-    }, { passive: true });
-
-    // ========== HEADER ==========
-    window.addEventListener('scroll', () => { 
-      document.getElementById('header').classList.toggle('scrolled', scrollY > 60); 
-    }, { passive: true });
-
-    // ========== CURSOR GLOW ==========
-    const glow = document.getElementById('cursorGlow');
-    let gx=0, gy=0, cx=0, cy=0;
-    document.addEventListener('mousemove', e => { gx=e.clientX; gy=e.clientY; });
-    (function anim() { 
-      cx+=(gx-cx)*0.08; 
-      cy+=(gy-cy)*0.08; 
-      glow.style.left=cx+'px'; 
-      glow.style.top=cy+'px'; 
-      requestAnimationFrame(anim); 
-    })();
-
-    // ========== CYCLE WHEEL ==========
-    const phases = [
-      { name:'Energy', icon:'⚡', desc:'That "let\'s go" feeling. Bottled.' },
-      { name:'Hydration', icon:'💧', desc:'Water isn\'t enough.' },
-      { name:'Protein', icon:'🥛', desc:'Your muscles did the work. Give them something worth it.' },
-      { name:'Creatine', icon:'💪', desc:'The most researched supplement ever. And it lives up to it.' },
-      { name:'Ashwagandha', icon:'🧘', desc:'Rest isn\'t lazy. It\'s where the magic happens.' }
-    ];
-    const nodes = document.querySelectorAll('.cycle-node');
-    const detail = document.getElementById('cycleDetail');
-    const dIcon = document.getElementById('detailIcon');
-    const dName = document.getElementById('detailName');
-    const dDesc = document.getElementById('detailDesc');
-    const cDef = document.getElementById('centerDefault');
-    let curAuto=0, interacting=false;
-
-    function show(i) { 
-      const p=phases[i]; 
-      dIcon.textContent=p.icon; 
-      dName.textContent=p.name; 
-      dDesc.textContent=p.desc; 
-      detail.classList.add('visible'); 
-      cDef.style.opacity='0'; 
-      cDef.style.transform='scale(0.8)'; 
-    }
-    function hide() { 
-      detail.classList.remove('visible'); 
-      cDef.style.opacity='1'; 
-      cDef.style.transform='scale(1)'; 
-    }
-
-    setInterval(() => { 
-      if (interacting) return; 
-      nodes.forEach(n=>n.classList.remove('auto-active')); 
-      nodes[curAuto]?.classList.add('auto-active'); 
-      show(curAuto); 
-      curAuto=(curAuto+1)%5; 
-    }, 3000);
-
-    nodes.forEach(n => {
-      const i = +n.dataset.phase;
-      n.addEventListener('mouseenter', () => { 
-        interacting=true; 
-        nodes.forEach(x=>x.classList.remove('auto-active','active')); 
-        n.classList.add('active'); 
-        show(i); 
-      });
-      n.addEventListener('mouseleave', () => { 
-        n.classList.remove('active'); 
-        hide(); 
-        setTimeout(()=>{interacting=false;},2000); 
-      });
-      n.addEventListener('click', () => { 
-        interacting=true; 
-        nodes.forEach(x=>x.classList.remove('active','auto-active')); 
-        n.classList.add('active'); 
-        show(i); 
-      });
-    });
-
-    // ========== PARTICLES ==========
-    const pc = document.getElementById('cycleParticles');
-    ['sm','md','lg','sm','md','sm','lg','sm','md','sm','sm','md','lg','sm','md','sm','sm','md'].forEach((s,i) => {
-      const p=document.createElement('div'); p.className=`cycle-particle cycle-particle--${s}`;
-      p.style.left=(15+Math.random()*70)+'%'; p.style.top=(15+Math.random()*70)+'%';
-      p.style.animationDelay=(Math.random()*6)+'s'; p.style.animationDuration=(4+Math.random()*4)+'s';
-      pc.appendChild(p);
-    });
-
-    // ========== PILLAR HORIZONTAL SCROLL ==========
-    const pillarsExperience = document.querySelector('.pillars-experience');
-    const pillarsTrack = document.getElementById('pillarsTrack');
-    const progressDots = document.querySelectorAll('.progress-dot');
-    let currentPillar = 0;
-    let isScrolling = false;
-    let scrollTimeout = null;
-    
-    // Intersection Observer for scroll-driven animation
-    const pillarsObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !entry.target.classList.contains('observed')) {
-          entry.target.classList.add('observed');
-          
-          // Get bounding rect to determine scroll progress within the section
-          const rect = entry.boundingRect;
-          const viewportHeight = window.innerHeight;
-          const sectionHeight = rect.height;
-          
-          // Calculate which pillar should be active based on scroll position
-          let targetPillar = 0;
-          if (rect.top <= 0) {
-            // Section is scrolling through viewport
-            const scrollProgress = Math.abs(rect.top) / (sectionHeight - viewportHeight);
-            targetPillar = Math.min(Math.floor(scrollProgress * 5), 4);
-          }
-          
-          updatePillarPosition(targetPillar);
-        }
-      });
-    }, { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] });
-    
-    // Only observe on desktop
-    if (window.innerWidth > 767) {
-      pillarsObserver.observe(pillarsExperience);
-      
-      // Scroll-driven horizontal movement
-      let ticking = false;
-      window.addEventListener('scroll', () => {
-        if (!ticking && window.innerWidth > 767) {
-          requestAnimationFrame(() => {
-            const rect = pillarsExperience.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENIGMA - Your body runs in cycles. So should your nutrition.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Warm stone color system */
+            --dark-stone: #2C2926;
+            --mid-stone: #3D3832;
+            --light-stone: #E8E2D9;
+            --cream: #F5F0E8;
+            --text-primary-dark: #F5F0E8;
+            --text-primary-light: #2C2926;
+            --text-secondary: #9C9590;
+            --brand-accent: #2DD4BF;
             
-            if (rect.top <= 0 && rect.bottom > viewportHeight) {
-              const scrollProgress = Math.abs(rect.top) / (rect.height - viewportHeight);
-              const targetPillar = Math.min(Math.floor(scrollProgress * 5), 4);
-              
-              if (targetPillar !== currentPillar) {
-                updatePillarPosition(targetPillar);
-              }
+            /* Pillar accent colors */
+            --energy: #F97316;
+            --hydration: #3B82F6;
+            --protein: #F5D5A0;
+            --creatine: #EF4444;
+            --ashwagandha: #6DA37E;
+            
+            /* Typography */
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Inter', sans-serif;
+            
+            /* Current pillar color (for transitions) */
+            --current-pillar-color: var(--energy);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--dark-stone);
+            color: var(--text-primary-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(44, 41, 38, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(229, 226, 217, 0.1);
+            padding: 1rem 2rem;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: var(--font-serif);
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: 0.1em;
+            color: var(--text-primary-dark);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--brand-accent);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--dark-stone) 0%, var(--mid-stone) 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 0 2rem;
+        }
+        
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .hero-headline {
+            font-family: var(--font-serif);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary-dark);
+        }
+        
+        .hero-subhead {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-weight: 500;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--brand-accent);
+            color: var(--dark-stone);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: #26C7B4;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(45, 212, 191, 0.3);
+        }
+        
+        /* Cycle graphic */
+        .cycle-graphic {
+            position: absolute;
+            right: -200px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 600px;
+            height: 600px;
+            opacity: 0.1;
+        }
+        
+        /* Scribble decorations for hero */
+        .hero-scribble-1 {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 100px;
+            height: 50px;
+        }
+        
+        .hero-scribble-2 {
+            position: absolute;
+            bottom: 20%;
+            right: 15%;
+            width: 80px;
+            height: 60px;
+        }
+        
+        /* Intro Section */
+        .intro {
+            padding: 8rem 2rem;
+            background: var(--mid-stone);
+            text-align: center;
+        }
+        
+        .intro-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .intro h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary-dark);
+        }
+        
+        .intro p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        /* Pillars Container */
+        .pillars-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .pillars-track {
+            display: flex;
+            width: 500vw;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            will-change: transform;
+        }
+        
+        .pillar {
+            width: 100vw;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 4rem;
+            position: relative;
+            background: var(--dark-stone);
+            transition: background 0.6s ease;
+        }
+        
+        .pillar.active {
+            background: color-mix(in srgb, var(--current-pillar-color) 5%, var(--dark-stone));
+        }
+        
+        .pillar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .pillar-text {
+            padding-right: 2rem;
+        }
+        
+        .pillar-phase {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--current-pillar-color);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        
+        .pillar-title {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary-dark);
+            position: relative;
+        }
+        
+        .pillar-body {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+        
+        .pillar-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: var(--current-pillar-color);
+            font-size: 1rem;
+        }
+        
+        .pillar-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .product-image {
+            max-width: 400px;
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+            transition: transform 0.3s ease;
+        }
+        
+        .product-image:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        /* Progress indicators */
+        .pillar-progress {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+        
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(245, 240, 232, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .progress-dot.active {
+            background: var(--current-pillar-color);
+            transform: scale(1.2);
+        }
+        
+        /* Cycle Reveal */
+        .cycle-reveal {
+            padding: 8rem 2rem;
+            background: var(--mid-stone);
+            text-align: center;
+            position: relative;
+        }
+        
+        .cycle-reveal h2 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary-dark);
+        }
+        
+        .cycle-reveal p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .cycle-wheel {
+            width: 400px;
+            height: 400px;
+            margin: 0 auto 4rem;
+            position: relative;
+        }
+        
+        .wheel-product {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--light-stone);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: var(--text-primary-light);
+            font-size: 0.8rem;
+            text-align: center;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .wheel-product:nth-child(1) {
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--energy);
+            animation-delay: 0s;
+        }
+        
+        .wheel-product:nth-child(2) {
+            top: 20%;
+            right: 0;
+            background: var(--hydration);
+            animation-delay: 0.6s;
+        }
+        
+        .wheel-product:nth-child(3) {
+            bottom: 20%;
+            right: 10%;
+            background: var(--protein);
+            animation-delay: 1.2s;
+        }
+        
+        .wheel-product:nth-child(4) {
+            bottom: 20%;
+            left: 10%;
+            background: var(--creatine);
+            animation-delay: 1.8s;
+        }
+        
+        .wheel-product:nth-child(5) {
+            top: 20%;
+            left: 0;
+            background: var(--ashwagandha);
+            animation-delay: 2.4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Bundle Builder */
+        .bundle-builder {
+            padding: 8rem 2rem;
+            background: var(--dark-stone);
+        }
+        
+        .bundle-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .bundle-builder h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--text-primary-dark);
+        }
+        
+        .bundle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .bundle-product {
+            background: var(--mid-stone);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .bundle-product:hover {
+            transform: translateY(-5px);
+            border-color: var(--brand-accent);
+        }
+        
+        .bundle-product img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+        
+        .bundle-discount {
+            background: var(--brand-accent);
+            color: var(--dark-stone);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 2rem 0;
+            display: inline-block;
+        }
+        
+        /* Trust Section */
+        .trust-section {
+            padding: 8rem 2rem;
+            background: var(--light-stone);
+            color: var(--text-primary-light);
+        }
+        
+        .trust-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .trust-section h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            margin-bottom: 4rem;
+            color: var(--text-primary-light);
+        }
+        
+        .trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+        
+        .trust-item {
+            text-align: center;
+        }
+        
+        .trust-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary-light);
+        }
+        
+        .trust-item p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        /* Product Grid */
+        .product-grid {
+            padding: 8rem 2rem;
+            background: var(--dark-stone);
+        }
+        
+        .product-grid-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .product-grid h2 {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 4rem;
+            color: var(--text-primary-dark);
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: var(--mid-stone);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .product-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .product-card-content {
+            padding: 1.5rem;
+        }
+        
+        .product-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary-dark);
+        }
+        
+        .product-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 4rem 2rem;
+            background: var(--mid-stone);
+            text-align: center;
+        }
+        
+        .footer h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary-dark);
+        }
+        
+        .footer p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+        
+        /* SVG Scribbles */
+        .scribble {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .scribble path {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: draw 2s ease-out forwards;
+        }
+        
+        @keyframes draw {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .pillars-container {
+                display: block;
+                height: auto;
             }
             
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
-    }
-    
-    function updatePillarPosition(pillarIndex) {
-      if (pillarIndex === currentPillar) return;
-      
-      currentPillar = pillarIndex;
-      const translateX = -pillarIndex * 100;
-      
-      // Apply transform with requestAnimationFrame for smoothness
-      requestAnimationFrame(() => {
-        if (pillarsTrack && window.innerWidth > 767) {
-          pillarsTrack.style.transform = `translateX(${translateX}vw)`;
+            .pillars-track {
+                display: block;
+                width: 100%;
+            }
+            
+            .pillar {
+                width: 100%;
+                height: 100vh;
+                scroll-snap-align: start;
+            }
+            
+            .pillar-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .pillar-text {
+                padding-right: 0;
+                order: 2;
+            }
+            
+            .pillar-image {
+                order: 1;
+            }
+            
+            .hero {
+                padding: 0 1rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .cycle-graphic {
+                display: none;
+            }
         }
         
-        // Update progress dots
-        progressDots.forEach((dot, i) => {
-          dot.classList.toggle('active', i === pillarIndex);
+        @media (prefers-reduced-motion: reduce) {
+            .pillars-track {
+                display: block;
+            }
+            
+            .pillar {
+                width: 100%;
+                height: auto;
+                min-height: 100vh;
+            }
+            
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">ENIGMA</a>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#pillars">The System</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#bundle">Bundle</a></li>
+                    <li><a href="#trust">Why Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-headline">Your body runs in cycles. So should your nutrition.</h1>
+                <p class="hero-subhead">Five pillars. One system. Zero guesswork.</p>
+                <a href="#pillars" class="cta-button">
+                    See how it works →
+                </a>
+            </div>
+            
+            <!-- Hero Scribbles -->
+            <svg class="scribble hero-scribble-1" viewBox="0 0 100 50">
+                <path d="M10,25 Q30,10 50,25 T90,25" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+            
+            <svg class="scribble hero-scribble-2" viewBox="0 0 80 60">
+                <circle cx="40" cy="30" r="25" stroke="#2DD4BF" stroke-width="2" fill="none"/>
+            </svg>
+            
+            <!-- Cycle Graphic -->
+            <svg class="cycle-graphic" viewBox="0 0 600 600">
+                <circle cx="300" cy="300" r="250" stroke="rgba(245, 240, 232, 0.1)" stroke-width="2" fill="none"/>
+                <circle cx="300" cy="50" r="30" fill="#F97316" opacity="0.3"/>
+                <circle cx="550" cy="200" r="30" fill="#3B82F6" opacity="0.3"/>
+                <circle cx="450" cy="500" r="30" fill="#F5D5A0" opacity="0.3"/>
+                <circle cx="150" cy="500" r="30" fill="#EF4444" opacity="0.3"/>
+                <circle cx="50" cy="200" r="30" fill="#6DA37E" opacity="0.3"/>
+            </svg>
+        </section>
+
+        <!-- Intro Section -->
+        <section class="intro">
+            <div class="intro-content">
+                <h2>Five pillars working together</h2>
+                <p>Not five random supplements. A system. Each pillar builds on the last. Each phase flows into the next. Your body in balance. Your nutrition in sync.</p>
+            </div>
+        </section>
+
+        <!-- Pillars Experience -->
+        <section class="pillars-container" id="pillars">
+            <div class="pillars-track" id="pillarsTrack">
+                <!-- Pillar 1: Energy -->
+                <div class="pillar" data-pillar="energy" data-color="#F97316">
+                    <div class="pillar-content">
+                        <div class="pillar-text">
+                            <div class="pillar-phase">Phase 01 — Ignite</div>
+                            <h2 class="pillar-title">That 'let's go' feeling. Bottled.</h2>
+                            <p class="pillar-body">You know when you walk into the gym and everything just clicks? That's not luck. That's your pre workout doing its job.</p>
+                            <div class="pillar-stats">
+                                <div class="stat-item">
+                                    <div class="stat-label">Citrulline</div>
+                                    <div class="stat-value">6g</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Beta-Alanine</div>
+                                    <div class="stat-value">3.2g</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Caffeine</div>
+                                    <div class="stat-value">200mg</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Scribble under key phrase -->
+                            <svg class="scribble" style="position: absolute; top: 120px; left: 200px; width: 150px; height: 20px;" viewBox="0 0 150 20">
+                                <path d="M5,15 Q40,5 75,15 T145,15" stroke="#F97316" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            </svg>
+                            
+                            <!-- Circle around stat -->
+                            <svg class="scribble" style="position: absolute; top: 280px; left: 50px; width: 60px; height: 60px;" viewBox="0 0 60 60">
+                                <circle cx="30" cy="30" r="25" stroke="#F97316" stroke-width="2" fill="none"/>
+                            </svg>
+                        </div>
+                        <div class="pillar-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy Pre-Workout" class="product-image">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pillar 2: Hydration -->
+                <div class="pillar" data-pillar="hydration" data-color="#3B82F6">
+                    <div class="pillar-content">
+                        <div class="pillar-text">
+                            <div class="pillar-phase">Phase 02 — Sustain</div>
+                            <h2 class="pillar-title">Water is great. It's just not enough.</h2>
+                            <p class="pillar-body">About halfway through any real effort, your body burns through electrolytes way faster than water can replace.</p>
+                            <div class="pillar-stats">
+                                <div class="stat-item">
+                                    <div class="stat-label">Electrolytes</div>
+                                    <div class="stat-value">Full spectrum</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Sugar</div>
+                                    <div class="stat-value">Zero</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Taste</div>
+                                    <div class="stat-value">Actually good</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Wavy underline -->
+                            <svg class="scribble" style="position: absolute; top: 120px; left: 150px; width: 120px; height: 15px;" viewBox="0 0 120 15">
+                                <path d="M5,10 Q30,3 60,10 T115,10" stroke="#3B82F6" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="pillar-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration Electrolytes" class="product-image">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pillar 3: Protein -->
+                <div class="pillar" data-pillar="protein" data-color="#F5D5A0">
+                    <div class="pillar-content">
+                        <div class="pillar-text">
+                            <div class="pillar-phase">Phase 03 — Rebuild</div>
+                            <h2 class="pillar-title">Your muscles did the work. Give them something worth it.</h2>
+                            <p class="pillar-body">Your body doesn't grow during the workout. It grows after. So what you eat afterwards matters. A lot.</p>
+                            <div class="pillar-stats">
+                                <div class="stat-item">
+                                    <div class="stat-label">Protein</div>
+                                    <div class="stat-value">25g</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Source</div>
+                                    <div class="stat-value">Whey Isolate</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Ingredients</div>
+                                    <div class="stat-value">Short list</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Star scribble -->
+                            <svg class="scribble" style="position: absolute; top: 80px; right: 50px; width: 30px; height: 30px;" viewBox="0 0 30 30">
+                                <path d="M15,2 L18,12 L28,15 L18,18 L15,28 L12,18 L2,15 L12,12 Z" stroke="#F5D5A0" stroke-width="2" fill="none" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="pillar-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Protein Powder" class="product-image">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pillar 4: Creatine -->
+                <div class="pillar" data-pillar="creatine" data-color="#EF4444">
+                    <div class="pillar-content">
+                        <div class="pillar-text">
+                            <div class="pillar-phase">Phase 04 — Strengthen</div>
+                            <h2 class="pillar-title">The most researched supplement ever. And it lives up to it.</h2>
+                            <p class="pillar-body">Creatine has more studies behind it than basically anything else you can buy. More strength, better recovery, real results over weeks.</p>
+                            <div class="pillar-stats">
+                                <div class="stat-item">
+                                    <div class="stat-label">Dosage</div>
+                                    <div class="stat-value">5g</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Type</div>
+                                    <div class="stat-value">Monohydrate</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Form</div>
+                                    <div class="stat-value">Micronized</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Arrow pointing to research claim -->
+                            <svg class="scribble" style="position: absolute; top: 60px; left: 300px; width: 40px; height: 30px;" viewBox="0 0 40 30">
+                                <path d="M5,25 Q20,5 35,15 L30,10 M35,15 L30,20" stroke="#EF4444" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="pillar-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine Monohydrate" class="product-image">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pillar 5: Ashwagandha -->
+                <div class="pillar" data-pillar="ashwagandha" data-color="#6DA37E">
+                    <div class="pillar-content">
+                        <div class="pillar-text">
+                            <div class="pillar-phase">Phase 05 — Reset</div>
+                            <h2 class="pillar-title">Rest isn't lazy. It's where the magic happens.</h2>
+                            <p class="pillar-body">Cortisol messes with everything. Your sleep, your recovery, your mood. KSM-66 is the most studied ashwagandha extract available.</p>
+                            <div class="pillar-stats">
+                                <div class="stat-item">
+                                    <div class="stat-label">Extract</div>
+                                    <div class="stat-value">KSM-66</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Dosage</div>
+                                    <div class="stat-value">600mg</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-label">Research</div>
+                                    <div class="stat-value">Clinically studied</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gentle wave under "magic happens" -->
+                            <svg class="scribble" style="position: absolute; top: 130px; left: 350px; width: 100px; height: 15px;" viewBox="0 0 100 15">
+                                <path d="M5,8 Q25,3 50,8 T95,8" stroke="#6DA37E" stroke-width="2" fill="none" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="pillar-image">
+                            <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Ashwagandha KSM-66" class="product-image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Indicators -->
+            <div class="pillar-progress">
+                <div class="progress-dot active" data-pillar="0"></div>
+                <div class="progress-dot" data-pillar="1"></div>
+                <div class="progress-dot" data-pillar="2"></div>
+                <div class="progress-dot" data-pillar="3"></div>
+                <div class="progress-dot" data-pillar="4"></div>
+            </div>
+        </section>
+
+        <!-- Cycle Reveal -->
+        <section class="cycle-reveal">
+            <h2>The whole system.</h2>
+            <p>Not five random things in a cart.</p>
+            <div class="cycle-wheel">
+                <div class="wheel-product">Energy</div>
+                <div class="wheel-product">Hydration</div>
+                <div class="wheel-product">Protein</div>
+                <div class="wheel-product">Creatine</div>
+                <div class="wheel-product">Recovery</div>
+            </div>
+            <a href="#bundle" class="cta-button">Build Your Bundle →</a>
+        </section>
+
+        <!-- Bundle Builder -->
+        <section class="bundle-builder" id="bundle">
+            <div class="bundle-content">
+                <h2>The whole system. Not five random things in a cart.</h2>
+                <div class="bundle-grid">
+                    <div class="bundle-product">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy">
+                        <h3>Energy</h3>
+                        <p>Pre-workout that works</p>
+                    </div>
+                    <div class="bundle-product">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration">
+                        <h3>Hydration</h3>
+                        <p>Better than water</p>
+                    </div>
+                    <div class="bundle-product">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Protein">
+                        <h3>Protein</h3>
+                        <p>Clean whey isolate</p>
+                    </div>
+                    <div class="bundle-product">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine">
+                        <h3>Creatine</h3>
+                        <p>Most researched ever</p>
+                    </div>
+                    <div class="bundle-product">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Ashwagandha">
+                        <h3>Recovery</h3>
+                        <p>KSM-66 ashwagandha</p>
+                    </div>
+                </div>
+                <div class="bundle-discount">Save 25% on the complete cycle</div>
+                <a href="#" class="cta-button">Get The System →</a>
+            </div>
+        </section>
+
+        <!-- Trust Section -->
+        <section class="trust-section" id="trust">
+            <div class="trust-content">
+                <h2>What we don't put in matters just as much.</h2>
+                <div class="trust-grid">
+                    <div class="trust-item">
+                        <h3>No Proprietary Blends</h3>
+                        <p>You see exactly what you're getting. Every ingredient. Every dose. No hiding behind fancy names.</p>
+                    </div>
+                    <div class="trust-item">
+                        <h3>No Artificial Fillers</h3>
+                        <p>If it doesn't help your performance or recovery, it's not in there. Simple as that.</p>
+                    </div>
+                    <div class="trust-item">
+                        <h3>No Overpromising</h3>
+                        <p>We tell you what it does. Not what we wish it did. Real results from real ingredients.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Grid -->
+        <section class="product-grid" id="products">
+            <div class="product-grid-content">
+                <h2>Shop by pillar. Or just get the whole cycle. Either way.</h2>
+                <div class="products-grid">
+                    <div class="product-card">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525842230-generated-label-image-3.jpg?v=1738169312" alt="Energy Pre-Workout">
+                        <div class="product-card-content">
+                            <h3>Energy Pre-Workout</h3>
+                            <p>6g Citrulline, 3.2g Beta-Alanine, 200mg Caffeine</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526345603-generated-label-image-4.jpg?v=1738169154" alt="Hydration Electrolytes">
+                        <div class="product-card-content">
+                            <h3>Hydration Electrolytes</h3>
+                            <p>Full electrolyte profile, zero sugar, tastes good</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736525607175-generated-label-image-0.jpg?v=1738168989" alt="Protein Powder">
+                        <div class="product-card-content">
+                            <h3>Whey Isolate Protein</h3>
+                            <p>25g protein per serving, clean ingredient list</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526533703-generated-label-image-0.jpg?v=1738169358" alt="Creatine Monohydrate">
+                        <div class="product-card-content">
+                            <h3>Creatine Monohydrate</h3>
+                            <p>5g micronized creatine, unflavored, proven</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://cdn.shopify.com/s/files/1/0736/7481/7794/files/1736526579178-generated-label-image-4.jpg?v=1738169382" alt="Ashwagandha Recovery">
+                        <div class="product-card-content">
+                            <h3>KSM-66 Ashwagandha</h3>
+                            <p>600mg clinically studied extract for recovery</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h2>Ready to start your cycle?</h2>
+        <p>Your body runs in cycles. Now your nutrition can too.</p>
+        <a href="#" class="cta-button">Get Started →</a>
+    </footer>
+
+    <script>
+        // Horizontal scroll experience
+        class PillarScroll {
+            constructor() {
+                this.track = document.getElementById('pillarsTrack');
+                this.pillars = document.querySelectorAll('.pillar');
+                this.progressDots = document.querySelectorAll('.progress-dot');
+                this.container = document.querySelector('.pillars-container');
+                this.currentPillar = 0;
+                this.isScrolling = false;
+                this.isMobile = window.innerWidth < 768;
+                
+                // Color mapping
+                this.pillarColors = {
+                    energy: '#F97316',
+                    hydration: '#3B82F6',
+                    protein: '#F5D5A0',
+                    creatine: '#EF4444',
+                    ashwagandha: '#6DA37E'
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                if (!this.isMobile && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    this.setupDesktopScroll();
+                } else {
+                    this.setupMobileScroll();
+                }
+                
+                this.setupProgressDots();
+                this.updatePillarColors();
+                
+                // Handle resize
+                window.addEventListener('resize', () => {
+                    const wasMobile = this.isMobile;
+                    this.isMobile = window.innerWidth < 768;
+                    if (wasobile !== this.isMobile) {
+                        location.reload(); // Reload for simplicity
+                    }
+                });
+            }
+            
+            setupDesktopScroll() {
+                // Wheel event
+                this.container.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    
+                    if (this.isScrolling) return;
+                    
+                    const direction = e.deltaY > 0 ? 1 : -1;
+                    this.scrollToPillar(this.currentPillar + direction);
+                });
+                
+                // Touch events
+                let startY = 0;
+                
+                this.container.addEventListener('touchstart', (e) => {
+                    startY = e.touches[0].clientY;
+                });
+                
+                this.container.addEventListener('touchend', (e) => {
+                    if (this.isScrolling) return;
+                    
+                    const endY = e.changedTouches[0].clientY;
+                    const deltaY = startY - endY;
+                    
+                    if (Math.abs(deltaY) > 50) {
+                        const direction = deltaY > 0 ? 1 : -1;
+                        this.scrollToPillar(this.currentPillar + direction);
+                    }
+                });
+            }
+            
+            setupMobileScroll() {
+                // Enable vertical scroll with snap
+                document.body.style.overflowY = 'auto';
+                this.container.style.height = 'auto';
+                this.container.style.scrollSnapType = 'y mandatory';
+                
+                this.pillars.forEach(pillar => {
+                    pillar.style.scrollSnapAlign = 'start';
+                    pillar.style.height = '100vh';
+                });
+                
+                // Intersection observer for mobile
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const index = Array.from(this.pillars).indexOf(entry.target);
+                            this.currentPillar = index;
+                            this.updateProgressDots();
+                            this.updatePillarColors();
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                this.pillars.forEach(pillar => observer.observe(pillar));
+            }
+            
+            scrollToPillar(index) {
+                if (index < 0 || index >= this.pillars.length) return;
+                
+                this.isScrolling = true;
+                this.currentPillar = index;
+                
+                const translateX = -(index * 100);
+                this.track.style.transform = `translateX(${translateX}vw)`;
+                
+                this.updateProgressDots();
+                this.updatePillarColors();
+                
+                setTimeout(() => {
+                    this.isScrolling = false;
+                }, 600);
+            }
+            
+            updateProgressDots() {
+                this.progressDots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentPillar);
+                });
+            }
+            
+            updatePillarColors() {
+                const pillar = this.pillars[this.currentPillar];
+                const pillarType = pillar.dataset.pillar;
+                const color = this.pillarColors[pillarType];
+                
+                document.documentElement.style.setProperty('--current-pillar-color', color);
+                
+                // Update active pillar
+                this.pillars.forEach(p => p.classList.remove('active'));
+                pillar.classList.add('active');
+            }
+            
+            setupProgressDots() {
+                this.progressDots.forEach((dot, index) => {
+                    dot.addEventListener('click', () => {
+                        this.scrollToPillar(index);
+                    });
+                });
+            }
+        }
+        
+        // Scribble animations
+        function animateScribbles() {
+            const scribbles = document.querySelectorAll('.scribble path');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'draw 2s ease-out forwards';
+                    }
+                });
+            });
+            
+            scribbles.forEach(scribble => {
+                observer.observe(scribble);
+            });
+        }
+        
+        // Smooth scrolling for anchor links
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // Initialize everything when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add small delay for images to load
+            setTimeout(() => {
+                new PillarScroll();
+                animateScribbles();
+                setupSmoothScrolling();
+            }, 100);
         });
         
-        // Update pillar accent glows based on current pillar
-        document.documentElement.style.setProperty('--current-pillar-color', getPillarColor(pillarIndex));
-      });
-    }
-    
-    function getPillarColor(index) {
-      const colors = ['#F97316', '#3B82F6', '#F5D5A0', '#EF4444', '#6DA37E'];
-      return colors[index] || '#2dd4bf';
-    }
-    
-    // Progress dot click handlers
-    progressDots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        updatePillarPosition(index);
-      });
-    });
-    
-    // Handle window resize for responsive behavior
-    window.addEventListener('resize', () => {
-      if (window.innerWidth <= 767) {
-        // Reset transforms on mobile
-        if (pillarsTrack) {
-          pillarsTrack.style.transform = 'translateX(0)';
-        }
-        pillarsObserver.unobserve(pillarsExperience);
-      } else if (window.innerWidth > 767) {
-        pillarsObserver.observe(pillarsExperience);
-        updatePillarPosition(currentPillar);
-      }
-    });
-
-    // ========== BUNDLE BUILDER ==========
-    const selections = ['Fruit Punch', 'Lemonade', 'Chocolate', 'Unflavored', 'Natural Extract'];
-    const flavorLabels = ['sf0', 'sf1', 'sf2'];
-
-    document.querySelectorAll('.flavor-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        const step = pill.dataset.step;
-        // Deselect siblings
-        document.querySelectorAll(`.flavor-pill[data-step="${step}"]`).forEach(p => p.classList.remove('selected'));
-        pill.classList.add('selected');
-        // Update selection
-        selections[step] = pill.dataset.flavor;
-        // Update summary
-        const label = document.getElementById(`sf${step}`);
-        if (label) {
-          label.style.transition = 'opacity 0.2s';
-          label.style.opacity = '0';
-          setTimeout(() => { 
-            label.textContent = pill.dataset.flavor; 
-            label.style.opacity = '1'; 
-          }, 200);
-        }
-        // Show check
-        const check = document.getElementById(`check${step}`);
-        if (check) check.classList.add('visible');
-        // Check if all selected
-        checkAllSelected();
-      });
-    });
-
-    // Show checks for pre-selected
-    [0,1,2].forEach(i => {
-      document.getElementById(`check${i}`)?.classList.add('visible');
-    });
-
-    function checkAllSelected() {
-      const allChecks = document.querySelectorAll('.bundle-step__check.visible');
-      const btn = document.getElementById('addToCartBtn');
-      if (allChecks.length >= 5) {
-        btn.classList.add('all-selected');
-      }
-    }
-    checkAllSelected();
-
-    // ========== SMOOTH ANCHOR ==========
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => { 
-        const t=document.querySelector(a.getAttribute('href')); 
-        if(t){
-          e.preventDefault();
-          t.scrollIntoView({behavior:'smooth',block:'start'});
-        } 
-      });
-    });
-    
-    // ========== PREFERS REDUCED MOTION ==========
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      // Disable smooth scrolling and animations for users who prefer reduced motion
-      document.documentElement.style.scrollBehavior = 'auto';
-      
-      // Disable pillar transitions
-      if (pillarsTrack) {
-        pillarsTrack.style.transition = 'none';
-      }
-    }
-  </script>
+        // Handle bundle product interactions
+        document.addEventListener('DOMContentLoaded', () => {
+            const bundleProducts = document.querySelectorAll('.bundle-product');
+            const selectedProducts = new Set();
+            
+            bundleProducts.forEach(product => {
+                product.addEventListener('click', () => {
+                    product.classList.toggle('selected');
+                    const productName = product.querySelector('h3').textContent;
+                    
+                    if (product.classList.contains('selected')) {
+                        selectedProducts.add(productName);
+                    } else {
+                        selectedProducts.delete(productName);
+                    }
+                    
+                    updateBundlePrice();
+                });
+            });
+            
+            function updateBundlePrice() {
+                const discount = document.querySelector('.bundle-discount');
+                if (selectedProducts.size === 5) {
+                    discount.textContent = 'Complete System - Save 25%';
+                    discount.style.background = '#2DD4BF';
+                } else if (selectedProducts.size >= 3) {
+                    discount.textContent = `${selectedProducts.size} Products - Save 15%`;
+                    discount.style.background = '#F97316';
+                } else {
+                    discount.textContent = 'Select 3+ for discount';
+                    discount.style.background = '#9C9590';
+                }
+            }
+        });
+    </script>
 </body>
 </html>
