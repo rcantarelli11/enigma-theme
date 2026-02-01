@@ -24,15 +24,16 @@
 
 ## Color System
 
-### Base Palette — Stone Tones (WARM, never pure black or white)
-- **Background (Dark Stone):** `#2C2926` — warm dark stone
-- **Background (Mid Stone):** `#3D3832` — medium stone for variation
-- **Background (Light Stone):** `#E8E2D9` — warm light stone
-- **Background (Cream):** `#F5F0E8` — lightest warm tone
-- **Text Primary:** `#F5F0E8` on dark / `#2C2926` on light
-- **Text Secondary:** `#9C9590` — warm stone gray
-- **Brand Accent:** `#2DD4BF` — Enigma teal (used sparingly — CTAs, links, hover states)
-- **NEVER use:** Pure black (#000) or pure white (#FFF) — always stone tones
+### Base Palette — Cloud/Stone Tones (LIGHT and airy, not dark and moody)
+- **Background (Cloud):** `#F0EFEB` — Pantone Cloud Dancer, primary background. Light, warm, airy.
+- **Background (Warm Cloud):** `#EAE6DE` — slightly warmer cloud for section variation
+- **Background (Light Stone):** `#E0DAD0` — warm stone for contrast sections
+- **Background (Dark Stone):** `#2C2926` — ONLY for hero section and select dark accent sections. Not the default.
+- **Text Primary:** `#2C2926` on light backgrounds / `#F0EFEB` on dark
+- **Text Secondary:** `#7A756E` — warm gray
+- **Brand Accent:** `#2DD4BF` — Enigma teal (CTAs, links, hover states)
+- **NEVER use:** Pure black (#000) or pure white (#FFF)
+- **DEFAULT is LIGHT.** Most sections should use cloud/warm cloud backgrounds. Dark stone is the exception, not the rule.
 
 ### Pillar Color Accents
 Each pillar gets a subtle color shift in background/accent during the scroll experience:
